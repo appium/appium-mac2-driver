@@ -558,7 +558,7 @@ static NSNumberFormatter *numberFormatter = nil;
         *error = [self.class compilationErrorWithQuery:originalQuery description:description];
         return nil;
       }
-      NSPredicate *value = [NSPredicate fb_formatSearchPredicate:token.asString];
+      NSPredicate *value = [NSPredicate fb_formatSearchPredicate:[NSPredicate predicateWithFormat:token.asString]];
       if ([token isKindOfClass:FBSelfPredicateToken.class]) {
         [predicates addObject:[[FBSelfPredicateItem alloc] initWithValue:value]];
       } else if ([token isKindOfClass:FBDescendantPredicateToken.class]) {

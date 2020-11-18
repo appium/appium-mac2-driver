@@ -16,8 +16,7 @@
 
 #import <XCTest/XCTest.h>
 
-#import "FBConfiguration.h"
-#import "FBWebServer.h"
+#import <WebDriverAgentLib/WebDriverAgentLib.h>
 
 @interface UITestingUITests : XCTestCase <FBWebServerDelegate>
 @end

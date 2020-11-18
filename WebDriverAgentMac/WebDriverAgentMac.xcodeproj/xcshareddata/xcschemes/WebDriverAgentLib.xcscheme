@@ -14,8 +14,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "71688ACF256465540007F55B"
-               BuildableName = "libWebDriverAgentLib.dylib"
+               BlueprintIdentifier = "7199B3AA2565B122000B5C51"
+               BuildableName = "WebDriverAgentLib.framework"
                BlueprintName = "WebDriverAgentLib"
                ReferencedContainer = "container:WebDriverAgentMac.xcodeproj">
             </BuildableReference>
@@ -60,8 +60,8 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "71688ACF256465540007F55B"
-            BuildableName = "libWebDriverAgentLib.dylib"
+            BlueprintIdentifier = "7199B3AA2565B122000B5C51"
+            BuildableName = "WebDriverAgentLib.framework"
             BlueprintName = "WebDriverAgentLib"
             ReferencedContainer = "container:WebDriverAgentMac.xcodeproj">
          </BuildableReference>

@@ -7,17 +7,17 @@
 		<key>WebDriverAgent.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<key>WebDriverAgentLib.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</dict>
 		<key>WebDriverAgentRunner.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -28,6 +28,11 @@
 			<true/>
 		</dict>
 		<key>71688B1325646A620007F55B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7199B3AA2565B122000B5C51</key>
 		<dict>
 			<key>primary</key>
 			<true/>
