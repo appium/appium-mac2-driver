@@ -209,7 +209,7 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
   }
 
   const xmlChar *indexPathKeyName = [self xmlCharPtrForInput:[kXMLIndexPathKey cStringUsingEncoding:NSUTF8StringEncoding]];
-  NSMutableArray<NSNumber *> *hashes = [NSMutableArray array];
+  NSMutableArray<NSString *> *hashes = [NSMutableArray array];
   for (NSInteger i = 0; i < nodeSet->nodeNr; i++) {
     xmlNodePtr currentNode = nodeSet->nodeTab[i];
     xmlChar *attrValue = xmlGetProp(currentNode, indexPathKeyName);
@@ -220,19 +220,23 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
 
     NSString *hash = [NSString stringWithCString:(const char *)attrValue
                                         encoding:NSUTF8StringEncoding];
-    [hashes addObject:@([hash integerValue])];
+    [hashes addObject:hash];
   }
   NSMutableArray<XCUIElement *> *matchingElements = [NSMutableArray array];
-  NSNumber *selfHash = @([(XCElementSnapshot *)rootSnapshot am_hash]);
+  NSString *selfHash = [(XCElementSnapshot *)rootSnapshot am_hash];
   if ([hashes containsObject:selfHash]) {
     [matchingElements addObject:rootElement];
     if (firstMatch) {
       return matchingElements.copy;
     }
   }
-  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"accessibilityElement.elementOrHash IN %@", firstMatch ? @[hashes.firstObject] : hashes];
+  NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(XCElementSnapshot *snapshot, NSDictionary *bindings) {
+    return [hashes containsObject:snapshot.am_hash];
+  }];
   [matchingElements addObjectsFromArray:[[rootElement descendantsMatchingType:XCUIElementTypeAny] matchingPredicate:predicate].am_allMatches];
-  return matchingElements.copy;
+  return firstMatch && matchingElements.count > 0
+    ? @[matchingElements.firstObject]
+    : matchingElements.copy;
 }
 
 + (int)xmlRepresentationWithRootElement:(id<XCUIElementSnapshot>)root
@@ -245,7 +249,7 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
     return rc;
   }
 
-  NSString *index = [NSString stringWithFormat:@"%lu", [(XCElementSnapshot *)root am_hash]];
+  NSString *index = [(XCElementSnapshot *)root am_hash];
   rc = [self writeXmlWithRootElement:root
                            indexPath:(query != nil ? index : nil)
                               writer:writer];
@@ -363,7 +367,7 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
   for (NSUInteger i = 0; i < [children count]; i++) {
     id<XCUIElementSnapshot> childSnapshot = [children objectAtIndex:i];
     NSString *newIndexPath = (indexPath != nil)
-      ? [indexPath stringByAppendingFormat:@"%lu", [(XCElementSnapshot *)childSnapshot am_hash]]
+      ? [(XCElementSnapshot *)childSnapshot am_hash]
       : nil;
     rc = [self writeXmlWithRootElement:childSnapshot
                              indexPath:newIndexPath

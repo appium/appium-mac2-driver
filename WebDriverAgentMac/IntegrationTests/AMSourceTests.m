@@ -14,17 +14,30 @@
  * limitations under the License.
  */
 
-#import "XCElementSnapshot+AMHash.h"
+#import <XCTest/XCTest.h>
 
-#import "XCAccessibilityElement.h"
-#import "XCElementSnapshot.h"
+#import "AMIntegrationTestCase.h"
+#import "XCUIApplication+AMXml.h"
 
-@implementation XCElementSnapshot (AMHash)
 
-- (NSString *)am_hash
+@interface AMSourceTests : AMIntegrationTestCase
+@end
+
+@implementation AMSourceTests
+
+- (void)setUp
 {
-  NSData *token = self.accessibilityElement.token;
-  return [token base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  [super setUp];
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    [self launchApplication];
+  });
+}
+
+- (void)testDescriptionRepresentation
+{
+  NSString *description = self.testedApplication.am_descriptionRepresentation;
+  XCTAssertTrue(description.length > 0);
 }
 
 @end

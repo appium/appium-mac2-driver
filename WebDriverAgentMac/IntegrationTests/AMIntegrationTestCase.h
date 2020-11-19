@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-#import "XCElementSnapshot+AMHash.h"
+#import <XCTest/XCTest.h>
+#import <WebDriverAgentLib/WebDriverAgentLib.h>
 
-#import "XCAccessibilityElement.h"
-#import "XCElementSnapshot.h"
+NS_ASSUME_NONNULL_BEGIN
 
-@implementation XCElementSnapshot (AMHash)
+@interface AMIntegrationTestCase : XCTestCase
 
-- (NSString *)am_hash
-{
-  NSData *token = self.accessibilityElement.token;
-  return [token base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-}
+@property (nonatomic, strong, readonly) XCUIApplication *testedApplication;
+
+/**
+ Launches application and resets side effects of testing like orientation etc.
+ */
+- (void)launchApplication;
 
 @end
+
+NS_ASSUME_NONNULL_END

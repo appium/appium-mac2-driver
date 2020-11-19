@@ -14,17 +14,33 @@
  * limitations under the License.
  */
 
-#import "XCElementSnapshot+AMHash.h"
+#import "AMIntegrationTestCase.h"
 
-#import "XCAccessibilityElement.h"
-#import "XCElementSnapshot.h"
+#import "FBConfiguration.h"
 
-@implementation XCElementSnapshot (AMHash)
+@interface AMIntegrationTestCase ()
+@property (nonatomic, strong) XCUIApplication *testedApplication;
+@end
 
-- (NSString *)am_hash
+@implementation AMIntegrationTestCase
+
+- (void)setUp
 {
-  NSData *token = self.accessibilityElement.token;
-  return [token base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  [super setUp];
+  FBConfiguration.sharedConfiguration.attributeKeyPathAnalysis = NO;
+  FBConfiguration.sharedConfiguration.automaticScreenshots = NO;
+  self.continueAfterFailure = NO;
+  self.testedApplication = [XCUIApplication new];
+}
+
+- (void)tearDown
+{
+  [super tearDown];
+}
+
+- (void)launchApplication
+{
+  [self.testedApplication launch];
 }
 
 @end

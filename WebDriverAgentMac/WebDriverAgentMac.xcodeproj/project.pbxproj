@@ -141,10 +141,28 @@
 		7199B3D02565B207000B5C51 /* CocoaAsyncSocket.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7199B3D32565B251000B5C51 /* WebDriverAgentLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */; };
 		7199B3D42565B25E000B5C51 /* WebDriverAgentLib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		71B00E8E2566D4BA0010DA73 /* AMIntegrationTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B00E8D2566D4BA0010DA73 /* AMIntegrationTestCase.m */; };
+		71B00E9B2566D7B00010DA73 /* WebDriverAgentLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */; };
+		71B00EA02566D9570010DA73 /* AMFindElementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B00E9F2566D9570010DA73 /* AMFindElementTests.m */; };
+		71B00EA62566DBAF0010DA73 /* AMSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B00EA52566DBAF0010DA73 /* AMSourceTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		7199B3D12565B243000B5C51 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 71688A8B256461ED0007F55B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7199B3AA2565B122000B5C51;
+			remoteInfo = WebDriverAgentLib;
+		};
+		71B00E902566D4BA0010DA73 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 71688A8B256461ED0007F55B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 71688A92256461ED0007F55B;
+			remoteInfo = WebDriverAgent;
+		};
+		71B00E972566D5AD0010DA73 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 71688A8B256461ED0007F55B /* Project object */;
 			proxyType = 1;
@@ -225,7 +243,6 @@
 		714CA7192566640900353B27 /* XCElementSnapshot+AMHash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCElementSnapshot+AMHash.h"; sourceTree = "<group>"; };
 		714CA71A2566640900353B27 /* XCElementSnapshot+AMHash.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCElementSnapshot+AMHash.m"; sourceTree = "<group>"; };
 		714CA721256664A800353B27 /* XCElementSnapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCElementSnapshot.h; sourceTree = "<group>"; };
-		714CA72E2566689500353B27 /* Xcode.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Xcode.app; path = ../../../../../Applications/Xcode.app; sourceTree = "<group>"; };
 		714CA732256668F600353B27 /* XCTAutomationSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTAutomationSupport.framework; path = Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework; sourceTree = DEVELOPER_DIR; };
 		7151ACE12564EF5F008B8B2A /* RouteRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouteRequest.m; sourceTree = "<group>"; };
 		7151ACE22564EF5F008B8B2A /* HTTPResponseProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPResponseProxy.m; sourceTree = "<group>"; };
@@ -311,8 +328,6 @@
 		71688AA1256461F00007F55B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71688AA2256461F00007F55B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		71688AA4256461F00007F55B /* WebDriverAgent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WebDriverAgent.entitlements; sourceTree = "<group>"; };
-		71688AAD256461F00007F55B /* WebDriverAgentTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebDriverAgentTests.m; sourceTree = "<group>"; };
-		71688AAF256461F00007F55B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71688AD2256465540007F55B /* WebDriverAgentLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebDriverAgentLib.h; sourceTree = "<group>"; };
 		71688AE2256466070007F55B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/MacOSX.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		71688B1425646A620007F55B /* WebDriverAgentRunner.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WebDriverAgentRunner.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -320,6 +335,12 @@
 		71688B1825646A620007F55B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WebDriverAgentLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7199B3AE2565B122000B5C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		71B00E8B2566D4B90010DA73 /* IntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		71B00E8D2566D4BA0010DA73 /* AMIntegrationTestCase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMIntegrationTestCase.m; sourceTree = "<group>"; };
+		71B00E8F2566D4BA0010DA73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		71B00E9C2566D7F10010DA73 /* AMIntegrationTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMIntegrationTestCase.h; sourceTree = "<group>"; };
+		71B00E9F2566D9570010DA73 /* AMFindElementTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMFindElementTests.m; sourceTree = "<group>"; };
+		71B00EA52566DBAF0010DA73 /* AMSourceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMSourceTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -347,6 +368,14 @@
 				7199B3CD2565B1CD000B5C51 /* XCTest.framework in Frameworks */,
 				7199B3CE2565B1E8000B5C51 /* CocoaAsyncSocket.framework in Frameworks */,
 				714CA733256668F700353B27 /* XCTAutomationSupport.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		71B00E882566D4B90010DA73 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71B00E9B2566D7B00010DA73 /* WebDriverAgentLib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,8 +472,8 @@
 			children = (
 				7199B3AC2565B122000B5C51 /* WebDriverAgentLib */,
 				71688A95256461ED0007F55B /* WebDriverAgent */,
-				71688AAC256461F00007F55B /* WebDriverAgentUnitTests */,
 				71688B1525646A620007F55B /* WebDriverAgentRunner */,
+				71B00E8C2566D4B90010DA73 /* IntegrationTests */,
 				71688A94256461ED0007F55B /* Products */,
 				71688AE1256466070007F55B /* Frameworks */,
 			);
@@ -456,6 +485,7 @@
 				71688A93256461ED0007F55B /* WebDriverAgent.app */,
 				71688B1425646A620007F55B /* WebDriverAgentRunner.xctest */,
 				7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */,
+				71B00E8B2566D4B90010DA73 /* IntegrationTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -476,20 +506,10 @@
 			path = WebDriverAgent;
 			sourceTree = "<group>";
 		};
-		71688AAC256461F00007F55B /* WebDriverAgentUnitTests */ = {
-			isa = PBXGroup;
-			children = (
-				71688AAD256461F00007F55B /* WebDriverAgentTests.m */,
-				71688AAF256461F00007F55B /* Info.plist */,
-			);
-			path = WebDriverAgentUnitTests;
-			sourceTree = "<group>";
-		};
 		71688AE1256466070007F55B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				714CA732256668F600353B27 /* XCTAutomationSupport.framework */,
-				714CA72E2566689500353B27 /* Xcode.app */,
 				714CA709256648A100353B27 /* libxml2.tbd */,
 				7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */,
 				71688AE2256466070007F55B /* XCTest.framework */,
@@ -636,6 +656,18 @@
 			path = WebDriverAgentLib;
 			sourceTree = "<group>";
 		};
+		71B00E8C2566D4B90010DA73 /* IntegrationTests */ = {
+			isa = PBXGroup;
+			children = (
+				71B00E9C2566D7F10010DA73 /* AMIntegrationTestCase.h */,
+				71B00E8D2566D4BA0010DA73 /* AMIntegrationTestCase.m */,
+				71B00E9F2566D9570010DA73 /* AMFindElementTests.m */,
+				71B00EA52566DBAF0010DA73 /* AMSourceTests.m */,
+				71B00E8F2566D4BA0010DA73 /* Info.plist */,
+			);
+			path = IntegrationTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -769,6 +801,25 @@
 			productReference = 7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		71B00E8A2566D4B90010DA73 /* IntegrationTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 71B00E922566D4BA0010DA73 /* Build configuration list for PBXNativeTarget "IntegrationTests" */;
+			buildPhases = (
+				71B00E872566D4B90010DA73 /* Sources */,
+				71B00E882566D4B90010DA73 /* Frameworks */,
+				71B00E892566D4B90010DA73 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				71B00E982566D5AD0010DA73 /* PBXTargetDependency */,
+				71B00E912566D4BA0010DA73 /* PBXTargetDependency */,
+			);
+			name = IntegrationTests;
+			productName = IntegrationTests;
+			productReference = 71B00E8B2566D4B90010DA73 /* IntegrationTests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -785,6 +836,10 @@
 					};
 					7199B3AA2565B122000B5C51 = {
 						CreatedOnToolsVersion = 12.1;
+					};
+					71B00E8A2566D4B90010DA73 = {
+						CreatedOnToolsVersion = 12.1;
+						TestTargetID = 71688A92256461ED0007F55B;
 					};
 				};
 			};
@@ -804,6 +859,7 @@
 				71688A92256461ED0007F55B /* WebDriverAgent */,
 				71688B1325646A620007F55B /* WebDriverAgentRunner */,
 				7199B3AA2565B122000B5C51 /* WebDriverAgentLib */,
+				71B00E8A2566D4B90010DA73 /* IntegrationTests */,
 			);
 		};
 /* End PBXProject section */
@@ -826,6 +882,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7199B3A92565B122000B5C51 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		71B00E892566D4B90010DA73 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -914,6 +977,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		71B00E872566D4B90010DA73 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71B00EA62566DBAF0010DA73 /* AMSourceTests.m in Sources */,
+				71B00E8E2566D4BA0010DA73 /* AMIntegrationTestCase.m in Sources */,
+				71B00EA02566D9570010DA73 /* AMFindElementTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -921,6 +994,16 @@
 			isa = PBXTargetDependency;
 			target = 7199B3AA2565B122000B5C51 /* WebDriverAgentLib */;
 			targetProxy = 7199B3D12565B243000B5C51 /* PBXContainerItemProxy */;
+		};
+		71B00E912566D4BA0010DA73 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 71688A92256461ED0007F55B /* WebDriverAgent */;
+			targetProxy = 71B00E902566D4BA0010DA73 /* PBXContainerItemProxy */;
+		};
+		71B00E982566D5AD0010DA73 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7199B3AA2565B122000B5C51 /* WebDriverAgentLib */;
+			targetProxy = 71B00E972566D5AD0010DA73 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1183,6 +1266,40 @@
 			};
 			name = Release;
 		};
+		71B00E932566D4BA0010DA73 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = IntegrationTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.appium.IntegrationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = WebDriverAgent;
+			};
+			name = Debug;
+		};
+		71B00E942566D4BA0010DA73 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = IntegrationTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.appium.IntegrationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = WebDriverAgent;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1218,6 +1335,15 @@
 			buildConfigurations = (
 				7199B3BD2565B123000B5C51 /* Debug */,
 				7199B3BE2565B123000B5C51 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		71B00E922566D4BA0010DA73 /* Build configuration list for PBXNativeTarget "IntegrationTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				71B00E932566D4BA0010DA73 /* Debug */,
+				71B00E942566D4BA0010DA73 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
