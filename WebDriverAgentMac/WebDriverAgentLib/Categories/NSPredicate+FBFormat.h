@@ -16,12 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Method used to normalize/verify NSPredicate expressions before passing them to WDA.
  Only expressions of NSKeyPathExpressionType are going to be verified.
- Allowed property names are only these declared in FBElement protocol (property names are received in runtime)
- and their shortcuts (without 'wd' prefix). All other property names are considered as unknown.
+ Allowed property names are only these declared in https://developer.apple.com/documentation/xctest/xcuielementattributes?language=objc
+ protocol. All other property names are considered as unknown.
  
  @param input predicate object received from user input
  @return formatted predicate
- @throw FBUnknownPredicateKeyException in case the given property name is not declared in FBElement protocol
+ @throw FBUnknownPredicateKeyException in case the given property name is not declared in the protocol
  */
 + (NSPredicate *)fb_formatSearchPredicate:(NSPredicate *)input;
 

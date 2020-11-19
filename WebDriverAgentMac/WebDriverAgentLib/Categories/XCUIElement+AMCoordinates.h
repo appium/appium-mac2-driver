@@ -14,13 +14,29 @@
  * limitations under the License.
  */
 
-#import "XCUIElement+AMHelpers.h"
+#import <XCTest/XCTest.h>
 
-@implementation XCUIElement (AMHelpers)
+NS_ASSUME_NONNULL_BEGIN
 
-- (XCUIElementQuery *)am_query
-{
-  return [self valueForKey:@"_query"];
-}
+@interface XCUIElement (AMCoordinates)
+
+/**
+ Transforms relative x and y coordinates into absolute element coordinate
+
+ @param x Relative left coordinate
+ @param y Relative top coordinate
+ @returns The resuiting coordinate instance
+ */
+- (XCUICoordinate *)am_coordinateWithX:(CGFloat)x andY:(CGFloat)y;
+
+/**
+ Transforms relative point into absolute element coordinate
+
+ @param point Relative top left coordinates
+ @returns The resuiting coordinate instance
+ */
+- (XCUICoordinate *)am_coordinateWithPoint:(CGPoint)point;
 
 @end
+
+NS_ASSUME_NONNULL_END

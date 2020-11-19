@@ -17,7 +17,6 @@
 #import "FBElementTypeTransformer.h"
 #import "NSString+FBXMLSafeString.h"
 #import "XCElementSnapshot+AMHash.h"
-#import "XCUIElement+AMHelpers.h"
 #import "XCUIElementQuery+AMHelpers.h"
 
 #ifdef __clang__

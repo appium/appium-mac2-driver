@@ -26,6 +26,8 @@
 #import "FBRuntimeUtils.h"
 #import "NSPredicate+FBFormat.h"
 #import "FBElementTypeTransformer.h"
+#import "XCUIElement+AMAttributes.h"
+#import "XCUIElement+AMCoordinates.h"
 #import "XCUIElement+FBTyping.h"
 
 @interface FBElementCommands ()
@@ -96,51 +98,21 @@
 {
   FBElementCache *elementCache = request.session.elementCache;
   XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
-  return FBResponseWithObject(AMCGRectToDict(element.frame));
+  return FBResponseWithObject(element.am_rect);
 }
 
 + (id<FBResponsePayload>)handleGetAttribute:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
   XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
-  NSString *attributeName = request.parameters[@"name"];
-  NSString *wdAttributeName = [FBElementUtils wdAttributeNameForAttributeName:attributeName];
-  if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, frame)]) {
-    return FBResponseWithObject(AMCGRectToDict(element.frame));
-  } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, elementType)]) {
-    return FBResponseWithObject([NSString stringWithFormat:@"%lu", element.elementType]);
-  } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, placeholderValue)]) {
-    return FBResponseWithObject(element.placeholderValue);
-  } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, verticalSizeClass)]) {
-    return FBResponseWithObject([NSString stringWithFormat:@"%lu", element.verticalSizeClass]);
-  } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, horizontalSizeClass)]) {
-    return FBResponseWithObject([NSString stringWithFormat:@"%lu", element.horizontalSizeClass]);
-  } else if ([wdAttributeName isEqualToString:@"enabled"]) {
-    return FBResponseWithObject(element.enabled ? @"true" : @"false");
-  } else if ([wdAttributeName isEqualToString:@"selected"]) {
-    return FBResponseWithObject(element.selected ? @"true" : @"false");
-  } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, label)]) {
-    return FBResponseWithObject(element.label);
-  } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, title)]) {
-    return FBResponseWithObject(element.title);
-  } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, value)]) {
-    return FBResponseWithObject([FBElementUtils stringValueWithValue:element.value]);
-  } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, identifier)]) {
-    return FBResponseWithObject(element.identifier);
-  }
-  // This should not happen
-  NSString *description = [NSString stringWithFormat:@"The attribute '%@' is unknown", attributeName];
-  @throw [NSException exceptionWithName:FBElementAttributeUnknownException
-                                 reason:description
-                               userInfo:@{}];
+  return [element am_wdAttributeValueWithName:(NSString *)request.parameters[@"name"]];
 }
 
 + (id<FBResponsePayload>)handleGetText:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
   XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
-  id value = element.value;
-  return FBResponseWithObject(nil == value ? element.label : [FBElementUtils stringValueWithValue:value]);
+  return FBResponseWithObject(element.am_text);
 }
 
 + (id<FBResponsePayload>)handleGetDisplayed:(FBRouteRequest *)request
@@ -154,7 +126,7 @@
 {
   FBElementCache *elementCache = request.session.elementCache;
   XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
-  return FBResponseWithObject([FBElementTypeTransformer stringWithElementType:element.elementType]);
+  return FBResponseWithObject(element.am_type);
 }
 
 + (id<FBResponsePayload>)handleGetSelected:(FBRouteRequest *)request
@@ -213,8 +185,7 @@
   CGFloat y = (CGFloat)[request.arguments[@"y"] doubleValue];
   CGFloat deltaX = (CGFloat)[request.arguments[@"deltaX"] doubleValue];
   CGFloat deltaY = (CGFloat)[request.arguments[@"deltaY"] doubleValue];
-  XCUICoordinate *coordinate = [self.class gestureCoordinateWithCoordinate:CGPointMake(x, y)
-                                                                   element:app];
+  XCUICoordinate *coordinate = [app am_coordinateWithX:x andY:y];
   [coordinate scrollByDeltaX:deltaX deltaY:deltaY];
   return FBResponseWithOK();
 }
@@ -227,8 +198,7 @@
   id y = request.arguments[@"y"];
   if (x != nil && y != nil) {
     CGPoint point = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
-    XCUICoordinate *coordinate = [self.class gestureCoordinateWithCoordinate:point
-                                                                     element:element];
+    XCUICoordinate *coordinate = [element am_coordinateWithPoint:point];
     [coordinate rightClick];
   } else {
     [element rightClick];
@@ -241,8 +211,7 @@
   XCUIApplication *app = request.session.currentApplication;
   CGFloat x = (CGFloat)[request.arguments[@"x"] doubleValue];
   CGFloat y = (CGFloat)[request.arguments[@"y"] doubleValue];
-  XCUICoordinate *coordinate = [self.class gestureCoordinateWithCoordinate:CGPointMake(x, y)
-                                                                   element:app];
+  XCUICoordinate *coordinate = [app am_coordinateWithX:x andY:y];
   [coordinate rightClick];
   return FBResponseWithOK();
 }
@@ -255,8 +224,7 @@
   id y = request.arguments[@"y"];
   if (x != nil && y != nil) {
     CGPoint point = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
-    XCUICoordinate *coordinate = [self.class gestureCoordinateWithCoordinate:point
-                                                                     element:element];
+    XCUICoordinate *coordinate = [element am_coordinateWithPoint:point];
     [coordinate hover];
   } else {
     [element hover];
@@ -269,8 +237,7 @@
   XCUIApplication *app = request.session.currentApplication;
   CGFloat x = (CGFloat)[request.arguments[@"x"] doubleValue];
   CGFloat y = (CGFloat)[request.arguments[@"y"] doubleValue];
-  XCUICoordinate *coordinate = [self.class gestureCoordinateWithCoordinate:CGPointMake(x, y)
-                                                                   element:app];
+  XCUICoordinate *coordinate = [app am_coordinateWithX:x andY:y];
   [coordinate hover];
   return FBResponseWithOK();
 }
@@ -296,9 +263,8 @@
 
 + (id<FBResponsePayload>)handleDoubleClickCoordinate:(FBRouteRequest *)request
 {
-  CGPoint doubleTapPoint = CGPointMake((CGFloat)[request.arguments[@"x"] doubleValue], (CGFloat)[request.arguments[@"y"] doubleValue]);
-  XCUICoordinate *doubleTapCoordinate = [self.class gestureCoordinateWithCoordinate:doubleTapPoint
-                                                                            element:request.session.currentApplication];
+  CGPoint point = CGPointMake((CGFloat)[request.arguments[@"x"] doubleValue], (CGFloat)[request.arguments[@"y"] doubleValue]);
+  XCUICoordinate *doubleTapCoordinate = [request.session.currentApplication am_coordinateWithPoint:point];
   [doubleTapCoordinate doubleClick];
   return FBResponseWithOK();
 }
@@ -313,9 +279,8 @@
 
 + (id<FBResponsePayload>)handleTouchAndHoldCoordinate:(FBRouteRequest *)request
 {
-  CGPoint touchPoint = CGPointMake((CGFloat)[request.arguments[@"x"] doubleValue], (CGFloat)[request.arguments[@"y"] doubleValue]);
-  XCUICoordinate *pressCoordinate = [self.class gestureCoordinateWithCoordinate:touchPoint
-                                                                        element:request.session.currentApplication];
+  CGPoint point = CGPointMake((CGFloat)[request.arguments[@"x"] doubleValue], (CGFloat)[request.arguments[@"y"] doubleValue]);
+  XCUICoordinate *pressCoordinate = [request.session.currentApplication am_coordinateWithPoint:point];
   [pressCoordinate pressForDuration:[request.arguments[@"duration"] doubleValue]];
   return FBResponseWithOK();
 }
@@ -338,10 +303,8 @@
   CGFloat endX = (CGFloat)[request.arguments[@"endX"] doubleValue];
   CGFloat endY = (CGFloat)[request.arguments[@"endY"] doubleValue];
   NSTimeInterval duration = [request.arguments[@"duration"] doubleValue];
-  XCUICoordinate *start = [self.class gestureCoordinateWithCoordinate:CGPointMake(startX, startY)
-                                                              element:app];
-  XCUICoordinate *end = [self.class gestureCoordinateWithCoordinate:CGPointMake(endX, endY)
-                                                            element:app];
+  XCUICoordinate *start = [app am_coordinateWithX:startX andY:startY];
+  XCUICoordinate *end = [app am_coordinateWithX:endX andY:endY];
   [start clickForDuration:duration thenDragToCoordinate:end];
   return FBResponseWithOK();
 }
@@ -379,45 +342,12 @@
   if (nil != velocityObj) {
     velocity = (CGFloat)[velocityObj doubleValue];
   }
-  XCUICoordinate *start = [self.class gestureCoordinateWithCoordinate:CGPointMake(startX, startY)
-                                                              element:app];
-  XCUICoordinate *end = [self.class gestureCoordinateWithCoordinate:CGPointMake(endX, endY)
-                                                            element:app];
+  XCUICoordinate *start = [app am_coordinateWithX:startX andY:startY];
+  XCUICoordinate *end = [app am_coordinateWithX:endX andY:endY];
   [start clickForDuration:duration
-             thenDragToCoordinate:end
+     thenDragToCoordinate:end
              withVelocity:velocity
       thenHoldForDuration:holdDuration];
-  return FBResponseWithOK();
-}
-
-+ (id<FBResponsePayload>)handleDragCoordinate:(FBRouteRequest *)request
-{
-  FBSession *session = request.session;
-  CGPoint startPoint = CGPointMake((CGFloat)[request.arguments[@"fromX"] doubleValue], (CGFloat)[request.arguments[@"fromY"] doubleValue]);
-  CGPoint endPoint = CGPointMake((CGFloat)[request.arguments[@"toX"] doubleValue], (CGFloat)[request.arguments[@"toY"] doubleValue]);
-  NSTimeInterval duration = [request.arguments[@"duration"] doubleValue];
-  XCUICoordinate *endCoordinate = [self.class gestureCoordinateWithCoordinate:endPoint
-                                                                      element:session.currentApplication];
-  XCUICoordinate *startCoordinate = [self.class gestureCoordinateWithCoordinate:startPoint
-                                                                        element:session.currentApplication];
-  [startCoordinate pressForDuration:duration thenDragToCoordinate:endCoordinate];
-  return FBResponseWithOK();
-}
-
-+ (id<FBResponsePayload>)handleDrag:(FBRouteRequest *)request
-{
-  FBSession *session = request.session;
-  FBElementCache *elementCache = session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
-  CGRect frame = element.frame;
-  CGPoint startPoint = CGPointMake((CGFloat)(frame.origin.x + [request.arguments[@"fromX"] doubleValue]), (CGFloat)(frame.origin.y + [request.arguments[@"fromY"] doubleValue]));
-  CGPoint endPoint = CGPointMake((CGFloat)(frame.origin.x + [request.arguments[@"toX"] doubleValue]), (CGFloat)(frame.origin.y + [request.arguments[@"toY"] doubleValue]));
-  NSTimeInterval duration = [request.arguments[@"duration"] doubleValue];
-  XCUICoordinate *endCoordinate = [self.class gestureCoordinateWithCoordinate:endPoint
-                                                                      element:session.currentApplication];
-  XCUICoordinate *startCoordinate = [self.class gestureCoordinateWithCoordinate:startPoint
-                                                                        element:session.currentApplication];
-  [startCoordinate pressForDuration:duration thenDragToCoordinate:endCoordinate];
   return FBResponseWithOK();
 }
 
@@ -429,9 +359,8 @@
   id y = request.arguments[@"y"];
   if (nil != x && nil != y) {
     CGPoint tapPoint = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
-    XCUICoordinate *tapCoordinate = [self.class gestureCoordinateWithCoordinate:tapPoint
-                                                                        element:element];
-    [tapCoordinate click];
+    XCUICoordinate *coordinate = [element am_coordinateWithPoint:tapPoint];
+    [coordinate click];
   } else {
     [element click];
   }
@@ -440,10 +369,9 @@
 
 + (id<FBResponsePayload>)handleClickCoordinate:(FBRouteRequest *)request
 {
-  CGPoint tapPoint = CGPointMake((CGFloat)[request.arguments[@"x"] doubleValue], (CGFloat)[request.arguments[@"y"] doubleValue]);
-  XCUICoordinate *tapCoordinate = [self.class gestureCoordinateWithCoordinate:tapPoint
-                                                                      element:request.session.currentApplication];
-  [tapCoordinate click];
+  CGPoint point = CGPointMake((CGFloat)[request.arguments[@"x"] doubleValue], (CGFloat)[request.arguments[@"y"] doubleValue]);
+  XCUICoordinate *coordinate = [request.session.currentApplication am_coordinateWithPoint:point];
+  [coordinate click];
   return FBResponseWithOK();
 }
 
@@ -476,21 +404,6 @@
   }
   NSString *screenshot = [screenshotData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
   return FBResponseWithObject(screenshot);
-}
-
-
-#pragma mark - Helpers
-
-/**
- Returns gesture coordinate based on the specified element.
-
- @param coordinate absolute coordinates based on the element
- @param element the element in the current application under test
- @return translated gesture coordinates ready to be passed to XCUICoordinate methods
- */
-+ (XCUICoordinate *)gestureCoordinateWithCoordinate:(CGPoint)coordinate element:(XCUIElement *)element
-{
-  return [element coordinateWithNormalizedOffset:CGVectorMake(coordinate.x, coordinate.y)];
 }
 
 @end

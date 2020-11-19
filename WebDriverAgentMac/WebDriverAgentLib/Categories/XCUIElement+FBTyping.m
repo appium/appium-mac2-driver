@@ -10,6 +10,7 @@
 #import "XCUIElement+FBTyping.h"
 
 #import "FBErrorBuilder.h"
+#import "XCUIElement+AMAttributes.h"
 
 #define MAX_CLEAR_RETRIES 2
 
@@ -43,8 +44,14 @@
         shouldClear:(BOOL)shouldClear
               error:(NSError **)error
 {
-  if (shouldClear && ![self fb_clearTextWithError:error]) {
-    return NO;
+  if (shouldClear) {
+    if (![self fb_clearTextWithError:error]) {
+      return NO;
+    }
+  } else {
+    if (!self.am_hasKeyboardInputFocus) {
+      [self click];
+    }
   }
   [self typeText:text];
   return YES;
@@ -52,6 +59,10 @@
 
 - (BOOL)fb_clearTextWithError:(NSError **)error
 {
+  if (!self.am_hasKeyboardInputFocus) {
+    [self click];
+  }
+
   id currentValue = self.value;
   if (nil != currentValue && ![currentValue isKindOfClass:NSString.class]) {
     return [[[FBErrorBuilder builder]
@@ -76,7 +87,7 @@
   NSUInteger preClearTextLength = [currentValue fb_visualLength];
   do {
     if (retry >= MAX_CLEAR_RETRIES - 1) {
-      // Last chance retry. Tripple-tap the field to select its content
+      // Last chance retry. Double-click the field to select its content
       [self doubleClick];
       [self typeText:backspaceDeleteSequence];
       return YES;

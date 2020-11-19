@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-#import <XCTest/XCTest.h>
+#import "XCUIElement+AMCoordinates.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@implementation XCUIElement (AMCoordinates)
 
-@interface XCUIElement (AMHelpers)
+- (XCUICoordinate *)am_coordinateWithX:(CGFloat)x andY:(CGFloat)y
+{
+  return [self coordinateWithNormalizedOffset:CGVectorMake(x, y)];
+}
 
-/**
- Retrieves the query object that identifies the current element
- */
-- (XCUIElementQuery *)am_query;
+- (XCUICoordinate *)am_coordinateWithPoint:(CGPoint)point
+{
+  return [self am_coordinateWithX:point.x andY:point.y];
+}
 
 @end
-
-NS_ASSUME_NONNULL_END

@@ -29,6 +29,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (NSArray<NSString *> *)wdAttributeNames;
 
+/**
+ Converts element's value attribute to a string representation
+
+ @param value the actual value
+ @return The string representation of the value
+ */
 + (nullable NSString *)stringValueWithValue:(nullable id)value;
 
 @end
