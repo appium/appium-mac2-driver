@@ -28,7 +28,7 @@
 
 + (void)verboseLog:(NSString *)message
 {
-  if (!FBConfiguration.verboseLoggingEnabled) {
+  if (!FBConfiguration.sharedConfiguration.verboseLoggingEnabled) {
     return;
   }
   [self log:message];
@@ -36,7 +36,7 @@
 
 + (void)verboseLogFmt:(NSString *)format, ...
 {
-  if (!FBConfiguration.verboseLoggingEnabled) {
+  if (!FBConfiguration.sharedConfiguration.verboseLoggingEnabled) {
     return;
   }
   va_list args;

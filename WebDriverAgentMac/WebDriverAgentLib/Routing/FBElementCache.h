@@ -33,6 +33,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (XCUIElement *)elementForUUID:(NSString *)uuidStr;
 
+/**
+ Deletes all previously cached objects
+ */
+- (void)reset;
+
 @end
 
 NS_ASSUME_NONNULL_END

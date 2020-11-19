@@ -14,37 +14,20 @@
  * limitations under the License.
  */
 
-#import <XCTest/XCTest.h>
+#import "XCUIApplication+AMXml.h"
 
-#import <WebDriverAgentLib/WebDriverAgentLib.h>
+#import "FBXPath.h"
 
-@interface UITestingUITests : XCTestCase <FBWebServerDelegate>
-@end
+@implementation XCUIApplication (AMXml)
 
-@implementation UITestingUITests
-
-+ (void)setUp
+- (NSString *)am_xmlRepresentation
 {
-  FBConfiguration.sharedConfiguration.attributeKeyPathAnalysis = NO;
-  FBConfiguration.sharedConfiguration.automaticScreenshots = NO;
-  [super setUp];
+  return [FBXPath xmlStringWithRootElement:self];
 }
 
-/**
- Never ending test used to start WebDriverAgent
- */
-- (void)testRunner
+- (NSString *)am_descriptionRepresentation
 {
-  FBWebServer *webServer = [[FBWebServer alloc] init];
-  webServer.delegate = self;
-  [webServer startServing];
-}
-
-#pragma mark - FBWebServerDelegate
-
-- (void)webServerDidRequestShutdown:(FBWebServer *)webServer
-{
-  [webServer stopServing];
+  return self.debugDescription;
 }
 
 @end

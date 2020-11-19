@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Returns available attributes names of an element
  
- @return list of attribute names
+ @return list of attribute names, basically memebers of XCUIElementAttributeName enum
  */
 + (NSArray<NSString *> *)wdAttributeNames;
 

@@ -83,7 +83,7 @@
   [self registerRouteHandlers:[self.class collectCommandHandlerClasses]];
   [self registerServerKeyRouteHandlers];
 
-  NSRange serverPortRange = FBConfiguration.bindingPortRange;
+  NSRange serverPortRange = FBConfiguration.sharedConfiguration.bindingPortRange;
   NSError *error;
   BOOL serverStarted = NO;
 

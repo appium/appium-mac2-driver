@@ -156,8 +156,8 @@
 {
   return FBResponseWithObject(
     @{
-      USE_FIRST_MATCH: @([FBConfiguration useFirstMatch]),
-      BOUND_ELEMENTS_BY_INDEX: @([FBConfiguration boundElementsByIndex]),
+      USE_FIRST_MATCH: @([FBConfiguration.sharedConfiguration useFirstMatch]),
+      BOUND_ELEMENTS_BY_INDEX: @([FBConfiguration.sharedConfiguration boundElementsByIndex]),
     }
   );
 }
@@ -167,10 +167,10 @@
   NSDictionary* settings = request.arguments[@"settings"];
 
   if (nil != [settings objectForKey:USE_FIRST_MATCH]) {
-    [FBConfiguration setUseFirstMatch:[[settings objectForKey:USE_FIRST_MATCH] boolValue]];
+    FBConfiguration.sharedConfiguration.useFirstMatch = [[settings objectForKey:USE_FIRST_MATCH] boolValue];
   }
   if (nil != [settings objectForKey:BOUND_ELEMENTS_BY_INDEX]) {
-    [FBConfiguration setBoundElementsByIndex:[[settings objectForKey:BOUND_ELEMENTS_BY_INDEX] boolValue]];
+    FBConfiguration.sharedConfiguration.boundElementsByIndex = [[settings objectForKey:BOUND_ELEMENTS_BY_INDEX] boolValue];
   }
 
   return [self handleGetSettings:request];

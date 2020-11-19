@@ -29,10 +29,11 @@
 
 + (id<FBResponsePayload>)handleGetScreenshot:(FBRouteRequest *)request
 {
-  NSError *error;
   NSData *screenshotData = [[[XCUIScreen mainScreen] screenshot] PNGRepresentation];
   if (nil == screenshotData) {
-    return FBResponseWithStatus([FBCommandStatus unableToCaptureScreenErrorWithMessage:error.description traceback:nil]);
+    NSString *message = @"Cannot take a screenshot of the main screen";
+    return FBResponseWithStatus([FBCommandStatus unableToCaptureScreenErrorWithMessage:message
+                                                                             traceback:nil]);
   }
   NSString *screenshot = [screenshotData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
   return FBResponseWithObject(screenshot);

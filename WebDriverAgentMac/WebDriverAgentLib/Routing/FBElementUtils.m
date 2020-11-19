@@ -42,8 +42,7 @@
       @"title",
       @"value",
       @"frame",
-      @"identifier",
-      @"hasFocus"
+      @"identifier"
     ];
   });
   return attributeNames;

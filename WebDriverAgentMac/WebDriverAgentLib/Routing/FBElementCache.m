@@ -55,4 +55,9 @@
   return element;
 }
 
+- (void)reset
+{
+  [self.elementCache removeAllObjects];
+}
+
 @end
