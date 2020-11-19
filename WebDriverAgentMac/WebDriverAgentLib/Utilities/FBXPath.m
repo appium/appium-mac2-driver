@@ -9,7 +9,9 @@
 
 #import "FBXPath.h"
 
+#import "AMGeometryUtils.h"
 #import "FBConfiguration.h"
+#import "FBElementUtils.h"
 #import "FBExceptions.h"
 #import "FBLogger.h"
 #import "FBElementTypeTransformer.h"
@@ -452,7 +454,7 @@ static NSString *const FBAbstractMethodInvocationException = @"AbstractMethodInv
 
 + (NSString *)name
 {
-  return @"type";
+  return @"elementType";
 }
 
 + (NSString *)valueForElement:(id<XCUIElementSnapshot>)element
@@ -471,13 +473,7 @@ static NSString *const FBAbstractMethodInvocationException = @"AbstractMethodInv
 
 + (NSString *)valueForElement:(id<XCUIElementSnapshot>)element
 {
-  id idValue = element.value;
-  if ([idValue isKindOfClass:[NSValue class]]) {
-    return [idValue stringValue];
-  } else if ([idValue isKindOfClass:[NSString class]]) {
-    return idValue;
-  }
-  return [idValue description];
+  return [FBElementUtils stringValueWithValue:element.value];
 }
 
 @end
@@ -529,12 +525,7 @@ static NSString *const FBAbstractMethodInvocationException = @"AbstractMethodInv
 + (NSString *)valueForElement:(id<XCUIElementSnapshot>)element
 {
   CGRect frame = element.frame;
-  NSDictionary *rect = @{
-    @"x": @(CGRectGetMinX(frame)),
-    @"y": @(CGRectGetMinY(frame)),
-    @"width": @(CGRectGetWidth(frame)),
-    @"height": @(CGRectGetHeight(frame)),
-  };
+  NSDictionary *rect = AMCGRectToDict(frame);
   return [NSString stringWithFormat:@"%@", [rect objectForKey:self.name]];
 }
 

@@ -48,11 +48,26 @@
   }
 
   XCUIElement *element = [self.elementCache objectForKey:uuid];
-  if (nil == element || !element.exists) {
-    NSString *reason = [NSString stringWithFormat:@"The element identified by \"%@\" is either not present or it has expired from the internal cache. Try to find it again", uuid];
+  if (nil == element) {
+    NSString *reason = [NSString stringWithFormat:@"The element identified by \"%@\" is not present in the internal cache. Try to find it first", uuid];
+    @throw [NSException exceptionWithName:FBStaleElementException reason:reason userInfo:@{}];
+  }
+  NSError *error;
+  id<XCUIElementSnapshot> snapshot = [element snapshotWithError:&error];
+  if (nil == snapshot) {
+    NSString *reason = [NSString stringWithFormat:@"The element identified by \"%@\" is not present on the current view (%@). Make sure the current view is the expected one", uuid, error.localizedDescription];
     @throw [NSException exceptionWithName:FBStaleElementException reason:reason userInfo:@{}];
   }
   return element;
+}
+
+- (BOOL)hasElementWithUUID:(NSString *)uuidStr
+{
+  if (nil == uuidStr) {
+    return NO;
+  }
+  NSUUID *uuid = [[NSUUID new] initWithUUIDString:uuidStr];
+  return nil != uuid && nil != [self.elementCache objectForKey:uuid];
 }
 
 - (void)reset

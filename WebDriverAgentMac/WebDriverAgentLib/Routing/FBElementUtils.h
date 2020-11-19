@@ -7,7 +7,7 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#import <Foundation/Foundation.h>
+#import <XCTest/XCTest.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
  @return list of attribute names, basically memebers of XCUIElementAttributeName enum
  */
 + (NSArray<NSString *> *)wdAttributeNames;
+
++ (nullable NSString *)stringValueWithValue:(nullable id)value;
 
 @end
 

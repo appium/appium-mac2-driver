@@ -109,6 +109,12 @@
 		713A9D2D25669E4F00118D07 /* XCUIElement+FBClassChain.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D2B25669E4F00118D07 /* XCUIElement+FBClassChain.h */; };
 		713A9D312566A14200118D07 /* XCUIApplication+AMActiveElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D2F2566A14200118D07 /* XCUIApplication+AMActiveElement.h */; };
 		713A9D322566A14200118D07 /* XCUIApplication+AMActiveElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D302566A14200118D07 /* XCUIApplication+AMActiveElement.m */; };
+		713A9D372566A83800118D07 /* FBElementCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D352566A83700118D07 /* FBElementCommands.h */; };
+		713A9D382566A83800118D07 /* FBElementCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D362566A83800118D07 /* FBElementCommands.m */; };
+		713A9D3C2566AA2300118D07 /* AMGeometryUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D3A2566AA2300118D07 /* AMGeometryUtils.h */; };
+		713A9D3D2566AA2300118D07 /* AMGeometryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */; };
+		713A9D412566B7A500118D07 /* XCUIElement+FBTyping.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D3F2566B7A500118D07 /* XCUIElement+FBTyping.h */; };
+		713A9D422566B7A500118D07 /* XCUIElement+FBTyping.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D402566B7A500118D07 /* XCUIElement+FBTyping.m */; };
 		714CA6FC2566461100353B27 /* FBDebugCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA6FA2566461100353B27 /* FBDebugCommands.h */; };
 		714CA6FD2566461100353B27 /* FBDebugCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA6FB2566461100353B27 /* FBDebugCommands.m */; };
 		714CA7012566475200353B27 /* XCUIApplication+AMXml.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA6FF2566475200353B27 /* XCUIApplication+AMXml.h */; };
@@ -201,6 +207,12 @@
 		713A9D2B25669E4F00118D07 /* XCUIElement+FBClassChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCUIElement+FBClassChain.h"; sourceTree = "<group>"; };
 		713A9D2F2566A14200118D07 /* XCUIApplication+AMActiveElement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIApplication+AMActiveElement.h"; sourceTree = "<group>"; };
 		713A9D302566A14200118D07 /* XCUIApplication+AMActiveElement.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIApplication+AMActiveElement.m"; sourceTree = "<group>"; };
+		713A9D352566A83700118D07 /* FBElementCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBElementCommands.h; sourceTree = "<group>"; };
+		713A9D362566A83800118D07 /* FBElementCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBElementCommands.m; sourceTree = "<group>"; };
+		713A9D3A2566AA2300118D07 /* AMGeometryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMGeometryUtils.h; sourceTree = "<group>"; };
+		713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMGeometryUtils.m; sourceTree = "<group>"; };
+		713A9D3F2566B7A500118D07 /* XCUIElement+FBTyping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCUIElement+FBTyping.h"; sourceTree = "<group>"; };
+		713A9D402566B7A500118D07 /* XCUIElement+FBTyping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XCUIElement+FBTyping.m"; sourceTree = "<group>"; };
 		714CA6FA2566461100353B27 /* FBDebugCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDebugCommands.h; sourceTree = "<group>"; };
 		714CA6FB2566461100353B27 /* FBDebugCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBDebugCommands.m; sourceTree = "<group>"; };
 		714CA6FF2566475200353B27 /* XCUIApplication+AMXml.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIApplication+AMXml.h"; sourceTree = "<group>"; };
@@ -508,6 +520,8 @@
 				713A9D2A25669E4E00118D07 /* XCUIElement+FBClassChain.m */,
 				713A9D2625669A6B00118D07 /* XCUIElement+FBFind.h */,
 				713A9D2525669A6B00118D07 /* XCUIElement+FBFind.m */,
+				713A9D3F2566B7A500118D07 /* XCUIElement+FBTyping.h */,
+				713A9D402566B7A500118D07 /* XCUIElement+FBTyping.m */,
 				713A9D0F256683E900118D07 /* XCUIElementQuery+AMHelpers.h */,
 				713A9D10256683E900118D07 /* XCUIElementQuery+AMHelpers.m */,
 			);
@@ -521,6 +535,8 @@
 				714CA6FB2566461100353B27 /* FBDebugCommands.m */,
 				713A9D1C256696AA00118D07 /* FBCustomCommands.h */,
 				713A9D1B256696AA00118D07 /* FBCustomCommands.m */,
+				713A9D352566A83700118D07 /* FBElementCommands.h */,
+				713A9D362566A83800118D07 /* FBElementCommands.m */,
 				713A9D2025669A0E00118D07 /* FBFindElementCommands.h */,
 				713A9D2125669A0F00118D07 /* FBFindElementCommands.m */,
 				7105281D2565A33300130763 /* FBSessionCommands.h */,
@@ -590,6 +606,8 @@
 				7151ADAC2564F570008B8B2A /* FBSettings.m */,
 				714CA7042566487B00353B27 /* FBXPath.h */,
 				714CA7052566487B00353B27 /* FBXPath.m */,
+				713A9D3A2566AA2300118D07 /* AMGeometryUtils.h */,
+				713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -637,11 +655,14 @@
 				714CA6FC2566461100353B27 /* FBDebugCommands.h in Headers */,
 				7109C06F2565B60C006BFD13 /* RouteRequest.h in Headers */,
 				713A9D11256683E900118D07 /* XCUIElementQuery+AMHelpers.h in Headers */,
+				713A9D372566A83800118D07 /* FBElementCommands.h in Headers */,
 				714CA722256664A800353B27 /* XCElementSnapshot.h in Headers */,
 				713A9D1925668C7200118D07 /* CDStructures.h in Headers */,
 				714CA70F25664A8000353B27 /* NSString+FBXMLSafeString.h in Headers */,
 				7109BFB32565B4EA006BFD13 /* FBConfiguration.h in Headers */,
+				713A9D412566B7A500118D07 /* XCUIElement+FBTyping.h in Headers */,
 				7109C0202565B593006BFD13 /* FBSession.h in Headers */,
+				713A9D3C2566AA2300118D07 /* AMGeometryUtils.h in Headers */,
 				7109C01C2565B58C006BFD13 /* FBSession-Private.h in Headers */,
 				7109BFED2565B546006BFD13 /* FBElementUtils.h in Headers */,
 				7109C05D2565B5F6006BFD13 /* HTTPMessage.h in Headers */,
@@ -837,6 +858,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7109BFDC2565B529006BFD13 /* FBSettings.m in Sources */,
+				713A9D3D2566AA2300118D07 /* AMGeometryUtils.m in Sources */,
 				7109C0712565B60F006BFD13 /* RouteRequest.m in Sources */,
 				7109C0312565B5AE006BFD13 /* FBScreenshotCommands.m in Sources */,
 				7109C0492565B5DD006BFD13 /* DDNumber.m in Sources */,
@@ -847,6 +869,7 @@
 				7109BFD22565B51C006BFD13 /* FBProtocolHelpers.m in Sources */,
 				7109C0752565B613006BFD13 /* RouteResponse.m in Sources */,
 				7109C0402565B5C4006BFD13 /* NSPredicate+FBFormat.m in Sources */,
+				713A9D422566B7A500118D07 /* XCUIElement+FBTyping.m in Sources */,
 				713A9D2725669A7000118D07 /* XCUIElement+FBFind.m in Sources */,
 				7109BFCA2565B50F006BFD13 /* FBLogger.m in Sources */,
 				7109C0512565B5E7006BFD13 /* HTTPDataResponse.m in Sources */,
@@ -858,6 +881,7 @@
 				714CA7072566487B00353B27 /* FBXPath.m in Sources */,
 				714CA70E25664A8000353B27 /* NSString+FBXMLSafeString.m in Sources */,
 				7109C0692565B605006BFD13 /* HTTPResponseProxy.m in Sources */,
+				713A9D382566A83800118D07 /* FBElementCommands.m in Sources */,
 				7109C05F2565B5F8006BFD13 /* HTTPMessage.m in Sources */,
 				714CA7022566475200353B27 /* XCUIApplication+AMXml.m in Sources */,
 				7109BFF02565B54A006BFD13 /* FBElementUtils.m in Sources */,
