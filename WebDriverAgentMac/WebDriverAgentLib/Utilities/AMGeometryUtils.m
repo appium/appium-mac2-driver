@@ -14,37 +14,13 @@
  * limitations under the License.
  */
 
-#import <XCTest/XCTest.h>
+#import "AMGeometryUtils.h"
 
-#import <WebDriverAgentLib/WebDriverAgentLib.h>
-
-@interface UITestingUITests : XCTestCase <FBWebServerDelegate>
-@end
-
-@implementation UITestingUITests
-
-+ (void)setUp
-{
-  FBConfiguration.sharedConfiguration.attributeKeyPathAnalysis = NO;
-  FBConfiguration.sharedConfiguration.automaticScreenshots = NO;
-  [super setUp];
+NSDictionary<NSString *, NSNumber *> *AMCGRectToDict(CGRect frame) {
+  return @{
+    @"x": @(CGRectGetMinX(frame)),
+    @"y": @(CGRectGetMinY(frame)),
+    @"width": @(CGRectGetWidth(frame)),
+    @"height": @(CGRectGetHeight(frame)),
+  };
 }
-
-/**
- Never ending test used to start WebDriverAgent
- */
-- (void)testRunner
-{
-  FBWebServer *webServer = [[FBWebServer alloc] init];
-  webServer.delegate = self;
-  [webServer startServing];
-}
-
-#pragma mark - FBWebServerDelegate
-
-- (void)webServerDidRequestShutdown:(FBWebServer *)webServer
-{
-  [webServer stopServing];
-}
-
-@end

@@ -16,35 +16,15 @@
 
 #import <XCTest/XCTest.h>
 
-#import <WebDriverAgentLib/WebDriverAgentLib.h>
+NS_ASSUME_NONNULL_BEGIN
 
-@interface UITestingUITests : XCTestCase <FBWebServerDelegate>
-@end
-
-@implementation UITestingUITests
-
-+ (void)setUp
-{
-  FBConfiguration.sharedConfiguration.attributeKeyPathAnalysis = NO;
-  FBConfiguration.sharedConfiguration.automaticScreenshots = NO;
-  [super setUp];
-}
+@interface XCUIApplication (AMActiveElement)
 
 /**
- Never ending test used to start WebDriverAgent
+ Retrives the element, which holds the keyboard input focus
  */
-- (void)testRunner
-{
-  FBWebServer *webServer = [[FBWebServer alloc] init];
-  webServer.delegate = self;
-  [webServer startServing];
-}
-
-#pragma mark - FBWebServerDelegate
-
-- (void)webServerDidRequestShutdown:(FBWebServer *)webServer
-{
-  [webServer stopServing];
-}
+- (nullable XCUIElement *)am_activeElement;
 
 @end
+
+NS_ASSUME_NONNULL_END

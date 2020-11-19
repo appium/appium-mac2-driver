@@ -14,37 +14,18 @@
  * limitations under the License.
  */
 
-#import <XCTest/XCTest.h>
+#import "XCUIApplication+AMActiveElement.h"
 
-#import <WebDriverAgentLib/WebDriverAgentLib.h>
+#import "XCUIElementQuery+AMHelpers.h"
 
-@interface UITestingUITests : XCTestCase <FBWebServerDelegate>
-@end
 
-@implementation UITestingUITests
+@implementation XCUIApplication (AMActiveElement)
 
-+ (void)setUp
+- (XCUIElement *)am_activeElement
 {
-  FBConfiguration.sharedConfiguration.attributeKeyPathAnalysis = NO;
-  FBConfiguration.sharedConfiguration.automaticScreenshots = NO;
-  [super setUp];
-}
-
-/**
- Never ending test used to start WebDriverAgent
- */
-- (void)testRunner
-{
-  FBWebServer *webServer = [[FBWebServer alloc] init];
-  webServer.delegate = self;
-  [webServer startServing];
-}
-
-#pragma mark - FBWebServerDelegate
-
-- (void)webServerDidRequestShutdown:(FBWebServer *)webServer
-{
-  [webServer stopServing];
+  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hasKeyboardFocus == YES"];
+  XCUIElementQuery *query = [[self descendantsMatchingType:XCUIElementTypeAny] matchingPredicate:predicate];
+  return query.am_firstMatch;
 }
 
 @end

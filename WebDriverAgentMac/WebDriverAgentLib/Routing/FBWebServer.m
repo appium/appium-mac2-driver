@@ -83,7 +83,7 @@
   [self registerRouteHandlers:[self.class collectCommandHandlerClasses]];
   [self registerServerKeyRouteHandlers];
 
-  NSRange serverPortRange = FBConfiguration.bindingPortRange;
+  NSRange serverPortRange = FBConfiguration.sharedConfiguration.bindingPortRange;
   NSError *error;
   BOOL serverStarted = NO;
 
@@ -143,7 +143,11 @@
     NSArray *routes = [commandHandler routes];
     for (FBRoute *route in routes) {
       [self.server handleMethod:route.verb withPath:route.path block:^(RouteRequest *request, RouteResponse *response) {
-        NSDictionary *arguments = [NSJSONSerialization JSONObjectWithData:request.body options:NSJSONReadingMutableContainers error:NULL];
+        NSError *error = nil;
+        NSDictionary *arguments = [NSJSONSerialization JSONObjectWithData:request.body options:NSJSONReadingMutableContainers error:&error];
+        if (nil != error) {
+          [FBLogger logFmt:@"%@", error];
+        }
         FBRouteRequest *routeParams = [FBRouteRequest
           routeRequestWithURL:request.url
           parameters:request.params

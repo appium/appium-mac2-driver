@@ -21,10 +21,7 @@
 
 - (NSString *)bundleID
 {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-  return [self performSelector:NSSelectorFromString(@"bundleID")];
-#pragma clang diagnostic pop
+  return [[self valueForKey:@"_applicationImpl"] valueForKey:@"_bundleID"];
 }
 
 @end

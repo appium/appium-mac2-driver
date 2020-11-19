@@ -10,6 +10,7 @@
 #import "FBElementUtils.h"
 
 #import "FBExceptions.h"
+#import "FBMacros.h"
 
 @implementation FBElementUtils
 
@@ -33,20 +34,33 @@
   dispatch_once(&onceToken, ^{
     attributeNames = @[
       @"selected",
-      @"placeholderValue",
-      @"verticalSizeClass",
-      @"horizontalSizeClass",
+      FBStringify(XCUIElement, placeholderValue),
+      FBStringify(XCUIElement, verticalSizeClass),
+      FBStringify(XCUIElement, horizontalSizeClass),
       @"enabled",
-      @"elementType",
-      @"label",
-      @"title",
-      @"value",
-      @"frame",
-      @"identifier",
-      @"hasFocus"
+      FBStringify(XCUIElement, elementType),
+      FBStringify(XCUIElement, label),
+      FBStringify(XCUIElement, title),
+      FBStringify(XCUIElement, value),
+      FBStringify(XCUIElement, frame),
+      FBStringify(XCUIElement, identifier)
     ];
   });
   return attributeNames;
+}
+
++ (NSString *)stringValueWithValue:(id)value
+{
+  if (nil == value) {
+    return nil;
+  }
+
+  if ([value isKindOfClass:[NSValue class]]) {
+    return [value stringValue];
+  } else if ([value isKindOfClass:[NSString class]]) {
+    return value;
+  }
+  return [value description];
 }
 
 @end

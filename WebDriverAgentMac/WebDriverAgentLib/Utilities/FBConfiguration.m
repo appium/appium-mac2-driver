@@ -9,42 +9,67 @@
 
 #import "FBConfiguration.h"
 
-#include "TargetConditionals.h"
-#include <dlfcn.h>
-
-static NSUInteger const DefaultStartingPort = 8100;
+static NSUInteger const DefaultStartingPort = 10100;
 static NSUInteger const DefaultPortRange = 100;
 
-static BOOL FBShouldUseFirstMatch = NO;
 static BOOL FBShouldBoundElementsByIndex = NO;
-// This is diabled by default because enabling it prevents the accessbility snapshot to be taken
-// (it always errors with kxIllegalArgument error)
-static BOOL FBIncludeNonModalElements = NO;
 
 @implementation FBConfiguration
 
+static FBConfiguration *instance;
+
 #pragma mark Public
 
-+ (void)disableRemoteQueryEvaluation
++ (instancetype)sharedConfiguration
 {
-  [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"XCTDisableRemoteQueryEvaluation"];
+  static dispatch_once_t onceInstance;
+  dispatch_once(&onceInstance, ^{
+    instance = [self new];
+  });
+  return instance;
 }
 
-+ (void)disableAttributeKeyPathAnalysis
+- (BOOL)remoteQueryEvaluation
 {
-  [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"XCTDisableAttributeKeyPathAnalysis"];
+  id value = [NSUserDefaults.standardUserDefaults objectForKey:@"XCTDisableRemoteQueryEvaluation"];
+  return nil == value ? YES : [value boolValue];
 }
 
-+ (void)disableScreenshots
+- (void)setRemoteQueryEvaluation:(BOOL)remoteQueryEvaluation
 {
-  [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"DisableScreenshots"];
+  [[NSUserDefaults standardUserDefaults] setBool:remoteQueryEvaluation
+                                          forKey:@"XCTDisableRemoteQueryEvaluation"];
 }
 
-+ (NSRange)bindingPortRange
+- (BOOL)attributeKeyPathAnalysis
+{
+  id value = [NSUserDefaults.standardUserDefaults objectForKey:@"XCTDisableAttributeKeyPathAnalysis"];
+  return nil == value ? YES : [value boolValue];
+}
+
+- (void)setAttributeKeyPathAnalysis:(BOOL)attributeKeyPathAnalysis
+{
+  [[NSUserDefaults standardUserDefaults] setBool:attributeKeyPathAnalysis
+                                          forKey:@"XCTDisableAttributeKeyPathAnalysis"];
+}
+
+- (BOOL)automaticScreenshots
+{
+  id value = [NSUserDefaults.standardUserDefaults objectForKey:@"DisableScreenshots"];
+  return nil == value ? YES : ![value boolValue];
+}
+
+- (void)setAutomaticScreenshots:(BOOL)automaticScreenshots
+{
+  [[NSUserDefaults standardUserDefaults] setBool:!automaticScreenshots
+                                          forKey:@"DisableScreenshots"];
+}
+
+- (NSRange)bindingPortRange
 {
   // 'WebDriverAgent --port 8080' can be passed via the arguments to the process
-  if (self.bindingPortRangeFromArguments.location != NSNotFound) {
-    return self.bindingPortRangeFromArguments;
+  if (self.class.bindingPortRangeFromArguments.location != NSNotFound) {
+    return self.class.bindingPortRangeFromArguments;
   }
 
   // Existence of USE_PORT in the environment implies the port range is managed by the launching process.
@@ -56,39 +81,19 @@ static BOOL FBIncludeNonModalElements = NO;
   return NSMakeRange(DefaultStartingPort, DefaultPortRange);
 }
 
-+ (BOOL)verboseLoggingEnabled
+- (BOOL)verboseLoggingEnabled
 {
   return [NSProcessInfo.processInfo.environment[@"VERBOSE_LOGGING"] boolValue];
 }
 
-+ (void)setUseFirstMatch:(BOOL)enabled
-{
-  FBShouldUseFirstMatch = enabled;
-}
-
-+ (BOOL)useFirstMatch
-{
-  return FBShouldUseFirstMatch;
-}
-
-+ (void)setBoundElementsByIndex:(BOOL)enabled
+- (void)setBoundElementsByIndex:(BOOL)enabled
 {
   FBShouldBoundElementsByIndex = enabled;
 }
 
-+ (BOOL)boundElementsByIndex
+- (BOOL)boundElementsByIndex
 {
   return FBShouldBoundElementsByIndex;
-}
-
-+ (void)setIncludeNonModalElements:(BOOL)isEnabled
-{
-  FBIncludeNonModalElements = isEnabled;
-}
-
-+ (BOOL)includeNonModalElements
-{
-  return FBIncludeNonModalElements;
 }
 
 #pragma mark Private

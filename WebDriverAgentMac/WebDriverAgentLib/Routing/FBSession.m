@@ -19,7 +19,7 @@
 #import "XCUIApplication+AMHelpers.h"
 
 @interface FBSession ()
-@property (nonatomic) NSString *testedApplicationBundleId;
+@property (nonatomic, nullable) XCUIApplication *testedApplication;
 @end
 
 @implementation FBSession
@@ -52,7 +52,7 @@ static FBSession *_activeSession = nil;
 {
   FBSession *session = [FBSession new];
   session.identifier = [[NSUUID UUID] UUIDString];
-  session.testedApplicationBundleId = application.bundleID;
+  session.testedApplication = application;
   session.elementCache = [FBElementCache new];
   [FBSession markSessionActive:session];
   return session;
@@ -60,24 +60,23 @@ static FBSession *_activeSession = nil;
 
 - (void)kill
 {
-  if (nil != self.testedApplicationBundleId) {
-    XCUIApplication *app = [[XCUIApplication alloc] initWithBundleIdentifier:self.testedApplicationBundleId];
-    if (app.state > XCUIApplicationStateNotRunning) {
-      [app terminate];
-    }
+  if (nil != self.testedApplication
+      && self.testedApplication.state > XCUIApplicationStateNotRunning) {
+    [self.testedApplication terminate];
+    self.testedApplication = nil;
   }
+  [self.elementCache reset];
   _activeSession = nil;
 }
 
 - (XCUIApplication *)currentApplication
 {
-  if (nil != self.testedApplicationBundleId) {
-    XCUIApplication *app = [[XCUIApplication alloc] initWithBundleIdentifier:self.testedApplicationBundleId];
-    if (app.state <= XCUIApplicationStateNotRunning) {
-      NSString *description = [NSString stringWithFormat:@"The application under test with bundle id '%@' is not running, possibly crashed", self.testedApplicationBundleId];
-      [[NSException exceptionWithName:FBApplicationCrashedException reason:description userInfo:nil] raise];
+  if (nil != self.testedApplication) {
+    if (self.testedApplication.state <= XCUIApplicationStateNotRunning) {
+      NSString *description = @"The application under test with is not running, possibly crashed";
+      @throw [NSException exceptionWithName:FBApplicationCrashedException reason:description userInfo:nil];
     }
-    return app;
+    return self.testedApplication;
   }
   return [[XCUIApplication alloc] init];
 }
@@ -94,33 +93,45 @@ static FBSession *_activeSession = nil;
   } else {
     [app activate];
   }
-  self.testedApplicationBundleId = app.bundleID;
+  self.testedApplication = app;
   return app;
 }
 
 - (XCUIApplication *)activateApplicationWithBundleId:(NSString *)bundleIdentifier
 {
-  XCUIApplication *app = [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
+  BOOL isCurrentApp = nil != self.testedApplication && [self.testedApplication.bundleID isEqualToString:bundleIdentifier];
+  XCUIApplication *app = isCurrentApp
+    ? self.testedApplication
+    : [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
   [app activate];
-  self.testedApplicationBundleId = app.bundleID;
+  if (!isCurrentApp) {
+    self.testedApplication = app;
+  }
   return app;
 }
 
 - (BOOL)terminateApplicationWithBundleId:(NSString *)bundleIdentifier
 {
-  XCUIApplication *app = [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
+  BOOL isCurrentApp = nil != self.testedApplication && [self.testedApplication.bundleID isEqualToString:bundleIdentifier];
+  XCUIApplication *app = isCurrentApp
+    ? self.testedApplication
+    : [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
   BOOL result = NO;
   if (app.state > XCUIApplicationStateNotRunning) {
     [app terminate];
     result = YES;
   }
-  self.testedApplicationBundleId = nil;
+  if (isCurrentApp) {
+    self.testedApplication = nil;
+  }
   return result;
 }
 
 - (NSUInteger)applicationStateWithBundleId:(NSString *)bundleIdentifier
 {
-  XCUIApplication *app = [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
+  XCUIApplication *app = (nil != self.testedApplication && [self.testedApplication.bundleID isEqualToString:bundleIdentifier])
+    ? self.testedApplication
+    : [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
   return app.state;
 }
 

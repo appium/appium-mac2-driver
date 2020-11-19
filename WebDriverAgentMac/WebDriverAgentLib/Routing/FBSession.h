@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface FBSession : NSObject
 
 /*! Application tested during that session */
-@property (nonatomic, strong, readonly) XCUIApplication *currentApplication;
+@property (nonatomic, nonnull, readonly) XCUIApplication *currentApplication;
 
 /*! Session's identifier */
 @property (nonatomic, copy, readonly) NSString *identifier;

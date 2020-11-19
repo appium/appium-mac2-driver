@@ -16,20 +16,5 @@
 
 #import <XCTest/XCTest.h>
 
-#import <WebDriverAgentLib/FBAlert.h>
-#import <WebDriverAgentLib/FBCommandHandler.h>
-#import <WebDriverAgentLib/FBCommandStatus.h>
 #import <WebDriverAgentLib/FBConfiguration.h>
-#import <WebDriverAgentLib/FBDebugLogDelegateDecorator.h>
-#import <WebDriverAgentLib/FBFailureProofTestCase.h>
-#import <WebDriverAgentLib/FBLogger.h>
-#import <WebDriverAgentLib/FBMacros.h>
-#import <WebDriverAgentLib/FBResponseJSONPayload.h>
-#import <WebDriverAgentLib/FBResponsePayload.h>
-#import <WebDriverAgentLib/FBRoute.h>
-#import <WebDriverAgentLib/FBRouteRequest.h>
-#import <WebDriverAgentLib/FBRunLoopSpinner.h>
-#import <WebDriverAgentLib/FBRuntimeUtils.h>
-#import <WebDriverAgentLib/FBSession.h>
-#import <WebDriverAgentLib/FBSpringboardApplication.h>
 #import <WebDriverAgentLib/FBWebServer.h>

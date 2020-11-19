@@ -14,37 +14,16 @@
  * limitations under the License.
  */
 
-#import <XCTest/XCTest.h>
+#import "XCElementSnapshot+AMHash.h"
 
-#import <WebDriverAgentLib/WebDriverAgentLib.h>
+#import "XCAccessibilityElement.h"
+#import "XCElementSnapshot.h"
 
-@interface UITestingUITests : XCTestCase <FBWebServerDelegate>
-@end
+@implementation XCElementSnapshot (AMHash)
 
-@implementation UITestingUITests
-
-+ (void)setUp
+- (NSUInteger)am_hash
 {
-  FBConfiguration.sharedConfiguration.attributeKeyPathAnalysis = NO;
-  FBConfiguration.sharedConfiguration.automaticScreenshots = NO;
-  [super setUp];
-}
-
-/**
- Never ending test used to start WebDriverAgent
- */
-- (void)testRunner
-{
-  FBWebServer *webServer = [[FBWebServer alloc] init];
-  webServer.delegate = self;
-  [webServer startServing];
-}
-
-#pragma mark - FBWebServerDelegate
-
-- (void)webServerDidRequestShutdown:(FBWebServer *)webServer
-{
-  [webServer stopServing];
+  return self.accessibilityElement.elementOrHash;
 }
 
 @end

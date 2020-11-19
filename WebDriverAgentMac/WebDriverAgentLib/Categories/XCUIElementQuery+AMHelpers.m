@@ -14,37 +14,22 @@
  * limitations under the License.
  */
 
-#import <XCTest/XCTest.h>
+#import "XCUIElementQuery+AMHelpers.h"
 
-#import <WebDriverAgentLib/WebDriverAgentLib.h>
+#import "FBConfiguration.h"
 
-@interface UITestingUITests : XCTestCase <FBWebServerDelegate>
-@end
+@implementation XCUIElementQuery (AMHelpers)
 
-@implementation UITestingUITests
-
-+ (void)setUp
+- (XCUIElement *)am_firstMatch
 {
-  FBConfiguration.sharedConfiguration.attributeKeyPathAnalysis = NO;
-  FBConfiguration.sharedConfiguration.automaticScreenshots = NO;
-  [super setUp];
+  return self.am_allMatches.firstObject;
 }
 
-/**
- Never ending test used to start WebDriverAgent
- */
-- (void)testRunner
+- (NSArray<XCUIElement *> *)am_allMatches
 {
-  FBWebServer *webServer = [[FBWebServer alloc] init];
-  webServer.delegate = self;
-  [webServer startServing];
-}
-
-#pragma mark - FBWebServerDelegate
-
-- (void)webServerDidRequestShutdown:(FBWebServer *)webServer
-{
-  [webServer stopServing];
+  return FBConfiguration.sharedConfiguration.boundElementsByIndex
+    ? self.allElementsBoundByIndex
+    : self.allElementsBoundByAccessibilityElement;
 }
 
 @end

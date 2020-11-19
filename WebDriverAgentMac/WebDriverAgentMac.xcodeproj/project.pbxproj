@@ -7,121 +7,173 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		710527DD2565716600130763 /* FBRouteRequest-Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 710527DC2565716600130763 /* FBRouteRequest-Private.h */; };
-		710527EC2565731200130763 /* NSPredicate+FBFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 710527E82565731200130763 /* NSPredicate+FBFormat.m */; };
-		710527ED2565731200130763 /* NSExpression+FBFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 710527E92565731200130763 /* NSExpression+FBFormat.m */; };
-		710527EE2565731200130763 /* NSExpression+FBFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 710527EA2565731200130763 /* NSExpression+FBFormat.h */; };
-		710527EF2565731200130763 /* NSPredicate+FBFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 710527EB2565731200130763 /* NSPredicate+FBFormat.h */; };
-		710527F32565744400130763 /* FBSession-Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 710527F22565744400130763 /* FBSession-Private.h */; };
-		710527FF2565802200130763 /* XCUIApplication+AMHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 710527FD2565802200130763 /* XCUIApplication+AMHelpers.h */; };
-		710528002565802200130763 /* XCUIApplication+AMHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 710527FE2565802200130763 /* XCUIApplication+AMHelpers.m */; };
-		710528032565868100130763 /* libWebDriverAgentLib.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 71688AD0256465540007F55B /* libWebDriverAgentLib.dylib */; };
-		7151ACED2564EF60008B8B2A /* RouteRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ACE12564EF5F008B8B2A /* RouteRequest.m */; };
-		7151ACEE2564EF60008B8B2A /* HTTPResponseProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ACE22564EF5F008B8B2A /* HTTPResponseProxy.m */; };
-		7151ACEF2564EF60008B8B2A /* Route.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ACE32564EF5F008B8B2A /* Route.m */; };
-		7151ACF02564EF60008B8B2A /* Route.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACE42564EF5F008B8B2A /* Route.h */; };
-		7151ACF12564EF60008B8B2A /* RouteResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACE52564EF5F008B8B2A /* RouteResponse.h */; };
-		7151ACF22564EF60008B8B2A /* RoutingConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACE62564EF5F008B8B2A /* RoutingConnection.h */; };
-		7151ACF32564EF60008B8B2A /* RoutingConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ACE72564EF5F008B8B2A /* RoutingConnection.m */; };
-		7151ACF42564EF60008B8B2A /* RoutingHTTPServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACE82564EF60008B8B2A /* RoutingHTTPServer.h */; };
-		7151ACF52564EF60008B8B2A /* RoutingHTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ACE92564EF60008B8B2A /* RoutingHTTPServer.m */; };
-		7151ACF62564EF60008B8B2A /* RouteResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ACEA2564EF60008B8B2A /* RouteResponse.m */; };
-		7151ACF72564EF60008B8B2A /* HTTPResponseProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACEB2564EF60008B8B2A /* HTTPResponseProxy.h */; };
-		7151ACF82564EF60008B8B2A /* RouteRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACEC2564EF60008B8B2A /* RouteRequest.h */; };
-		7151AD052564EF7E008B8B2A /* HTTPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACFD2564EF7E008B8B2A /* HTTPConnection.h */; };
-		7151AD062564EF7E008B8B2A /* HTTPLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACFE2564EF7E008B8B2A /* HTTPLogging.h */; };
-		7151AD072564EF7E008B8B2A /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ACFF2564EF7E008B8B2A /* HTTPServer.m */; };
-		7151AD082564EF7E008B8B2A /* HTTPResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD002564EF7E008B8B2A /* HTTPResponse.h */; };
-		7151AD092564EF7E008B8B2A /* HTTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD012564EF7E008B8B2A /* HTTPMessage.m */; };
-		7151AD0A2564EF7E008B8B2A /* HTTPServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD022564EF7E008B8B2A /* HTTPServer.h */; };
-		7151AD0B2564EF7E008B8B2A /* HTTPMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD032564EF7E008B8B2A /* HTTPMessage.h */; };
-		7151AD0C2564EF7E008B8B2A /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD042564EF7E008B8B2A /* HTTPConnection.m */; };
-		7151AD152564EF97008B8B2A /* HTTPErrorResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD112564EF97008B8B2A /* HTTPErrorResponse.h */; };
-		7151AD162564EF97008B8B2A /* HTTPErrorResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD122564EF97008B8B2A /* HTTPErrorResponse.m */; };
-		7151AD172564EF97008B8B2A /* HTTPDataResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD132564EF97008B8B2A /* HTTPDataResponse.m */; };
-		7151AD182564EF97008B8B2A /* HTTPDataResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD142564EF97008B8B2A /* HTTPDataResponse.h */; };
-		7151AD212564EFAC008B8B2A /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD1D2564EFAC008B8B2A /* DDNumber.m */; };
-		7151AD222564EFAC008B8B2A /* DDNumber.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD1E2564EFAC008B8B2A /* DDNumber.h */; };
-		7151AD232564EFAC008B8B2A /* DDRange.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD1F2564EFAC008B8B2A /* DDRange.h */; };
-		7151AD242564EFAC008B8B2A /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD202564EFAC008B8B2A /* DDRange.m */; };
-		7151AD2C2564F423008B8B2A /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */; };
-		7151AD2D2564F423008B8B2A /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		7151AD4E2564F4C7008B8B2A /* FBResponseJSONPayload.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD312564F4C5008B8B2A /* FBResponseJSONPayload.h */; };
-		7151AD4F2564F4C7008B8B2A /* FBExceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD322564F4C5008B8B2A /* FBExceptions.h */; };
-		7151AD502564F4C7008B8B2A /* FBElementUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD332564F4C5008B8B2A /* FBElementUtils.m */; };
-		7151AD522564F4C7008B8B2A /* FBExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD352564F4C5008B8B2A /* FBExceptionHandler.m */; };
-		7151AD532564F4C7008B8B2A /* FBRoute.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD362564F4C5008B8B2A /* FBRoute.h */; };
-		7151AD552564F4C7008B8B2A /* FBResponsePayload.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD382564F4C5008B8B2A /* FBResponsePayload.m */; };
-		7151AD562564F4C7008B8B2A /* FBHTTPStatusCodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD392564F4C5008B8B2A /* FBHTTPStatusCodes.h */; };
-		7151AD572564F4C7008B8B2A /* FBExceptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD3A2564F4C5008B8B2A /* FBExceptions.m */; };
-		7151AD582564F4C7008B8B2A /* FBWebServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD3B2564F4C5008B8B2A /* FBWebServer.m */; };
-		7151AD592564F4C7008B8B2A /* FBResponseJSONPayload.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD3C2564F4C5008B8B2A /* FBResponseJSONPayload.m */; };
-		7151AD5A2564F4C7008B8B2A /* FBElementCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD3D2564F4C5008B8B2A /* FBElementCache.m */; };
-		7151AD5C2564F4C7008B8B2A /* FBCommandHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD3F2564F4C5008B8B2A /* FBCommandHandler.h */; };
-		7151AD5D2564F4C7008B8B2A /* FBRoute.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD402564F4C6008B8B2A /* FBRoute.m */; };
-		7151AD5E2564F4C7008B8B2A /* FBElementCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD412564F4C6008B8B2A /* FBElementCache.h */; };
-		7151AD5F2564F4C7008B8B2A /* FBRouteRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD422564F4C6008B8B2A /* FBRouteRequest.h */; };
-		7151AD602564F4C7008B8B2A /* FBRouteRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD432564F4C6008B8B2A /* FBRouteRequest.m */; };
-		7151AD612564F4C7008B8B2A /* FBCommandStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD442564F4C6008B8B2A /* FBCommandStatus.m */; };
-		7151AD622564F4C7008B8B2A /* FBExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD452564F4C6008B8B2A /* FBExceptionHandler.h */; };
-		7151AD642564F4C7008B8B2A /* FBSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD472564F4C6008B8B2A /* FBSession.h */; };
-		7151AD652564F4C7008B8B2A /* FBElementUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD482564F4C6008B8B2A /* FBElementUtils.h */; };
-		7151AD662564F4C7008B8B2A /* FBResponsePayload.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD492564F4C6008B8B2A /* FBResponsePayload.h */; };
-		7151AD682564F4C7008B8B2A /* FBSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD4B2564F4C6008B8B2A /* FBSession.m */; };
-		7151AD692564F4C7008B8B2A /* FBWebServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD4C2564F4C6008B8B2A /* FBWebServer.h */; };
-		7151AD6A2564F4C7008B8B2A /* FBCommandStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD4D2564F4C6008B8B2A /* FBCommandStatus.h */; };
-		7151ADB82564F571008B8B2A /* FBClassChainQueryParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD732564F56D008B8B2A /* FBClassChainQueryParser.m */; };
-		7151ADBB2564F571008B8B2A /* FBRunLoopSpinner.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD762564F56D008B8B2A /* FBRunLoopSpinner.m */; };
-		7151ADC02564F571008B8B2A /* FBClassChainQueryParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD7B2564F56E008B8B2A /* FBClassChainQueryParser.h */; };
-		7151ADC32564F571008B8B2A /* FBSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD7E2564F56E008B8B2A /* FBSettings.h */; };
-		7151ADC82564F571008B8B2A /* FBErrorBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD832564F56E008B8B2A /* FBErrorBuilder.h */; };
-		7151ADCD2564F571008B8B2A /* FBElementTypeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD882564F56F008B8B2A /* FBElementTypeTransformer.m */; };
-		7151ADD82564F571008B8B2A /* FBConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD932564F56F008B8B2A /* FBConfiguration.h */; };
-		7151ADDA2564F571008B8B2A /* FBLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD952564F56F008B8B2A /* FBLogger.h */; };
-		7151ADDD2564F571008B8B2A /* FBProtocolHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD982564F56F008B8B2A /* FBProtocolHelpers.m */; };
-		7151ADDE2564F571008B8B2A /* FBElementTypeTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD992564F56F008B8B2A /* FBElementTypeTransformer.h */; };
-		7151ADE62564F571008B8B2A /* FBMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ADA12564F570008B8B2A /* FBMacros.h */; };
-		7151ADE72564F571008B8B2A /* FBRunLoopSpinner.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ADA22564F570008B8B2A /* FBRunLoopSpinner.h */; };
-		7151ADEC2564F571008B8B2A /* FBProtocolHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ADA72564F570008B8B2A /* FBProtocolHelpers.h */; };
-		7151ADF12564F571008B8B2A /* FBSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ADAC2564F570008B8B2A /* FBSettings.m */; };
-		7151ADF22564F571008B8B2A /* FBLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ADAD2564F570008B8B2A /* FBLogger.m */; };
-		7151ADF82564F571008B8B2A /* FBConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ADB32564F571008B8B2A /* FBConfiguration.m */; };
-		7151ADFC2564F571008B8B2A /* FBErrorBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ADB72564F571008B8B2A /* FBErrorBuilder.m */; };
-		7151AE312564FA37008B8B2A /* FBRuntimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AE2F2564FA37008B8B2A /* FBRuntimeUtils.m */; };
-		7151AE322564FA37008B8B2A /* FBRuntimeUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AE302564FA37008B8B2A /* FBRuntimeUtils.h */; };
-		7151AE372564FAAC008B8B2A /* FBUnknownCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AE352564FAAC008B8B2A /* FBUnknownCommands.m */; };
-		7151AE382564FAAC008B8B2A /* FBUnknownCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AE362564FAAC008B8B2A /* FBUnknownCommands.h */; };
+		7109BFB02565B413006BFD13 /* WebDriverAgentLib.h in Headers */ = {isa = PBXBuildFile; fileRef = 71688AD2256465540007F55B /* WebDriverAgentLib.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7109BFB32565B4EA006BFD13 /* FBConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD932564F56F008B8B2A /* FBConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7109BFB62565B4F0006BFD13 /* FBClassChainQueryParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD7B2564F56E008B8B2A /* FBClassChainQueryParser.h */; };
+		7109BFB92565B4F5006BFD13 /* FBClassChainQueryParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD732564F56D008B8B2A /* FBClassChainQueryParser.m */; };
+		7109BFBB2565B4FA006BFD13 /* FBConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ADB32564F571008B8B2A /* FBConfiguration.m */; };
+		7109BFBD2565B4FC006BFD13 /* FBElementTypeTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD992564F56F008B8B2A /* FBElementTypeTransformer.h */; };
+		7109BFC02565B500006BFD13 /* FBElementTypeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD882564F56F008B8B2A /* FBElementTypeTransformer.m */; };
+		7109BFC22565B503006BFD13 /* FBErrorBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD832564F56E008B8B2A /* FBErrorBuilder.h */; };
+		7109BFC52565B508006BFD13 /* FBErrorBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ADB72564F571008B8B2A /* FBErrorBuilder.m */; };
+		7109BFC72565B50B006BFD13 /* FBLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD952564F56F008B8B2A /* FBLogger.h */; };
+		7109BFCA2565B50F006BFD13 /* FBLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ADAD2564F570008B8B2A /* FBLogger.m */; };
+		7109BFCC2565B512006BFD13 /* FBMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ADA12564F570008B8B2A /* FBMacros.h */; };
+		7109BFCF2565B517006BFD13 /* FBProtocolHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ADA72564F570008B8B2A /* FBProtocolHelpers.h */; };
+		7109BFD22565B51C006BFD13 /* FBProtocolHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD982564F56F008B8B2A /* FBProtocolHelpers.m */; };
+		7109BFD42565B51E006BFD13 /* FBRunLoopSpinner.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ADA22564F570008B8B2A /* FBRunLoopSpinner.h */; };
+		7109BFD72565B522006BFD13 /* FBRunLoopSpinner.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD762564F56D008B8B2A /* FBRunLoopSpinner.m */; };
+		7109BFD92565B525006BFD13 /* FBSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD7E2564F56E008B8B2A /* FBSettings.h */; };
+		7109BFDC2565B529006BFD13 /* FBSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ADAC2564F570008B8B2A /* FBSettings.m */; };
+		7109BFE02565B536006BFD13 /* FBCommandHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD3F2564F4C5008B8B2A /* FBCommandHandler.h */; };
+		7109BFE32565B53A006BFD13 /* FBCommandStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD4D2564F4C6008B8B2A /* FBCommandStatus.h */; };
+		7109BFE62565B53D006BFD13 /* FBCommandStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD442564F4C6008B8B2A /* FBCommandStatus.m */; };
+		7109BFE82565B540006BFD13 /* FBElementCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD412564F4C6008B8B2A /* FBElementCache.h */; };
+		7109BFEB2565B544006BFD13 /* FBElementCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD3D2564F4C5008B8B2A /* FBElementCache.m */; };
+		7109BFED2565B546006BFD13 /* FBElementUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD482564F4C6008B8B2A /* FBElementUtils.h */; };
+		7109BFF02565B54A006BFD13 /* FBElementUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD332564F4C5008B8B2A /* FBElementUtils.m */; };
+		7109BFF22565B54D006BFD13 /* FBExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD452564F4C6008B8B2A /* FBExceptionHandler.h */; };
+		7109BFF52565B550006BFD13 /* FBExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD352564F4C5008B8B2A /* FBExceptionHandler.m */; };
+		7109BFF72565B553006BFD13 /* FBExceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD322564F4C5008B8B2A /* FBExceptions.h */; };
+		7109BFFA2565B556006BFD13 /* FBExceptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD3A2564F4C5008B8B2A /* FBExceptions.m */; };
+		7109BFFC2565B559006BFD13 /* FBHTTPStatusCodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD392564F4C5008B8B2A /* FBHTTPStatusCodes.h */; };
+		7109BFFF2565B55D006BFD13 /* FBResponseJSONPayload.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD312564F4C5008B8B2A /* FBResponseJSONPayload.h */; };
+		7109C0022565B561006BFD13 /* FBResponseJSONPayload.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD3C2564F4C5008B8B2A /* FBResponseJSONPayload.m */; };
+		7109C0042565B564006BFD13 /* FBResponsePayload.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD492564F4C6008B8B2A /* FBResponsePayload.h */; };
+		7109C0072565B568006BFD13 /* FBResponsePayload.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD382564F4C5008B8B2A /* FBResponsePayload.m */; };
+		7109C0092565B56B006BFD13 /* FBRuntimeUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AE302564FA37008B8B2A /* FBRuntimeUtils.h */; };
+		7109C00C2565B56E006BFD13 /* FBRuntimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AE2F2564FA37008B8B2A /* FBRuntimeUtils.m */; };
+		7109C00E2565B571006BFD13 /* FBRoute.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD362564F4C5008B8B2A /* FBRoute.h */; };
+		7109C0112565B574006BFD13 /* FBRoute.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD402564F4C6008B8B2A /* FBRoute.m */; };
+		7109C0132565B576006BFD13 /* FBRouteRequest-Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 710527DC2565716600130763 /* FBRouteRequest-Private.h */; };
+		7109C0172565B581006BFD13 /* FBRouteRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD422564F4C6008B8B2A /* FBRouteRequest.h */; };
+		7109C01A2565B58A006BFD13 /* FBRouteRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD432564F4C6008B8B2A /* FBRouteRequest.m */; };
+		7109C01C2565B58C006BFD13 /* FBSession-Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 710527F22565744400130763 /* FBSession-Private.h */; };
+		7109C0202565B593006BFD13 /* FBSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD472564F4C6008B8B2A /* FBSession.h */; };
+		7109C0222565B597006BFD13 /* FBSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD4B2564F4C6008B8B2A /* FBSession.m */; };
+		7109C0242565B59A006BFD13 /* FBWebServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD4C2564F4C6008B8B2A /* FBWebServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7109C0272565B59D006BFD13 /* FBWebServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD3B2564F4C5008B8B2A /* FBWebServer.m */; };
+		7109C0292565B5A3006BFD13 /* FBSessionCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 7105281D2565A33300130763 /* FBSessionCommands.h */; };
+		7109C02C2565B5A7006BFD13 /* FBSessionCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 7105281C2565A33300130763 /* FBSessionCommands.m */; };
+		7109C02E2565B5AA006BFD13 /* FBScreenshotCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 710528172565A09100130763 /* FBScreenshotCommands.h */; };
+		7109C0312565B5AE006BFD13 /* FBScreenshotCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 710528162565A09100130763 /* FBScreenshotCommands.m */; };
+		7109C0332565B5B0006BFD13 /* FBUnknownCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AE362564FAAC008B8B2A /* FBUnknownCommands.h */; };
+		7109C0362565B5B4006BFD13 /* FBUnknownCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AE352564FAAC008B8B2A /* FBUnknownCommands.m */; };
+		7109C0382565B5B9006BFD13 /* NSExpression+FBFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 710527EA2565731200130763 /* NSExpression+FBFormat.h */; };
+		7109C03B2565B5BD006BFD13 /* NSExpression+FBFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 710527E92565731200130763 /* NSExpression+FBFormat.m */; };
+		7109C03D2565B5BF006BFD13 /* NSPredicate+FBFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 710527EB2565731200130763 /* NSPredicate+FBFormat.h */; };
+		7109C0402565B5C4006BFD13 /* NSPredicate+FBFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 710527E82565731200130763 /* NSPredicate+FBFormat.m */; };
+		7109C0422565B5C7006BFD13 /* XCUIApplication+AMHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 710527FD2565802200130763 /* XCUIApplication+AMHelpers.h */; };
+		7109C0452565B5CB006BFD13 /* XCUIApplication+AMHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 710527FE2565802200130763 /* XCUIApplication+AMHelpers.m */; };
+		7109C0472565B5DB006BFD13 /* DDNumber.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD1E2564EFAC008B8B2A /* DDNumber.h */; };
+		7109C0492565B5DD006BFD13 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD1D2564EFAC008B8B2A /* DDNumber.m */; };
+		7109C04B2565B5E0006BFD13 /* DDRange.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD1F2564EFAC008B8B2A /* DDRange.h */; };
+		7109C04D2565B5E2006BFD13 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD202564EFAC008B8B2A /* DDRange.m */; };
+		7109C04F2565B5E5006BFD13 /* HTTPDataResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD142564EF97008B8B2A /* HTTPDataResponse.h */; };
+		7109C0512565B5E7006BFD13 /* HTTPDataResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD132564EF97008B8B2A /* HTTPDataResponse.m */; };
+		7109C0532565B5EA006BFD13 /* HTTPErrorResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD112564EF97008B8B2A /* HTTPErrorResponse.h */; };
+		7109C0552565B5EC006BFD13 /* HTTPErrorResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD122564EF97008B8B2A /* HTTPErrorResponse.m */; };
+		7109C0572565B5EE006BFD13 /* HTTPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACFD2564EF7E008B8B2A /* HTTPConnection.h */; };
+		7109C0592565B5F1006BFD13 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD042564EF7E008B8B2A /* HTTPConnection.m */; };
+		7109C05B2565B5F3006BFD13 /* HTTPLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACFE2564EF7E008B8B2A /* HTTPLogging.h */; };
+		7109C05D2565B5F6006BFD13 /* HTTPMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD032564EF7E008B8B2A /* HTTPMessage.h */; };
+		7109C05F2565B5F8006BFD13 /* HTTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD012564EF7E008B8B2A /* HTTPMessage.m */; };
+		7109C0612565B5FA006BFD13 /* HTTPResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD002564EF7E008B8B2A /* HTTPResponse.h */; };
+		7109C0632565B5FD006BFD13 /* HTTPServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD022564EF7E008B8B2A /* HTTPServer.h */; };
+		7109C0652565B5FF006BFD13 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ACFF2564EF7E008B8B2A /* HTTPServer.m */; };
+		7109C0672565B603006BFD13 /* HTTPResponseProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACEB2564EF60008B8B2A /* HTTPResponseProxy.h */; };
+		7109C0692565B605006BFD13 /* HTTPResponseProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ACE22564EF5F008B8B2A /* HTTPResponseProxy.m */; };
+		7109C06B2565B607006BFD13 /* Route.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACE42564EF5F008B8B2A /* Route.h */; };
+		7109C06D2565B60A006BFD13 /* Route.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ACE32564EF5F008B8B2A /* Route.m */; };
+		7109C06F2565B60C006BFD13 /* RouteRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACEC2564EF60008B8B2A /* RouteRequest.h */; };
+		7109C0712565B60F006BFD13 /* RouteRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ACE12564EF5F008B8B2A /* RouteRequest.m */; };
+		7109C0732565B611006BFD13 /* RouteResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACE52564EF5F008B8B2A /* RouteResponse.h */; };
+		7109C0752565B613006BFD13 /* RouteResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ACEA2564EF60008B8B2A /* RouteResponse.m */; };
+		7109C0772565B616006BFD13 /* RoutingConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACE62564EF5F008B8B2A /* RoutingConnection.h */; };
+		7109C0792565B618006BFD13 /* RoutingConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ACE72564EF5F008B8B2A /* RoutingConnection.m */; };
+		7109C07B2565B61A006BFD13 /* RoutingHTTPServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ACE82564EF60008B8B2A /* RoutingHTTPServer.h */; };
+		7109C07D2565B61D006BFD13 /* RoutingHTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ACE92564EF60008B8B2A /* RoutingHTTPServer.m */; };
+		713A9D0C256680D800118D07 /* XCUIElement+AMHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D0A256680D800118D07 /* XCUIElement+AMHelpers.h */; };
+		713A9D0D256680D800118D07 /* XCUIElement+AMHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D0B256680D800118D07 /* XCUIElement+AMHelpers.m */; };
+		713A9D11256683E900118D07 /* XCUIElementQuery+AMHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D0F256683E900118D07 /* XCUIElementQuery+AMHelpers.h */; };
+		713A9D12256683E900118D07 /* XCUIElementQuery+AMHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D10256683E900118D07 /* XCUIElementQuery+AMHelpers.m */; };
+		713A9D1625668B8A00118D07 /* XCAccessibilityElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D1525668B8A00118D07 /* XCAccessibilityElement.h */; };
+		713A9D1925668C7200118D07 /* CDStructures.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D1825668C7200118D07 /* CDStructures.h */; };
+		713A9D1D256696AA00118D07 /* FBCustomCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D1B256696AA00118D07 /* FBCustomCommands.m */; };
+		713A9D1E256696AA00118D07 /* FBCustomCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D1C256696AA00118D07 /* FBCustomCommands.h */; };
+		713A9D2225669A0F00118D07 /* FBFindElementCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D2025669A0E00118D07 /* FBFindElementCommands.h */; };
+		713A9D2325669A0F00118D07 /* FBFindElementCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D2125669A0F00118D07 /* FBFindElementCommands.m */; };
+		713A9D2725669A7000118D07 /* XCUIElement+FBFind.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D2525669A6B00118D07 /* XCUIElement+FBFind.m */; };
+		713A9D2825669A7000118D07 /* XCUIElement+FBFind.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D2625669A6B00118D07 /* XCUIElement+FBFind.h */; };
+		713A9D2C25669E4F00118D07 /* XCUIElement+FBClassChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D2A25669E4E00118D07 /* XCUIElement+FBClassChain.m */; };
+		713A9D2D25669E4F00118D07 /* XCUIElement+FBClassChain.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D2B25669E4F00118D07 /* XCUIElement+FBClassChain.h */; };
+		713A9D312566A14200118D07 /* XCUIApplication+AMActiveElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D2F2566A14200118D07 /* XCUIApplication+AMActiveElement.h */; };
+		713A9D322566A14200118D07 /* XCUIApplication+AMActiveElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D302566A14200118D07 /* XCUIApplication+AMActiveElement.m */; };
+		713A9D372566A83800118D07 /* FBElementCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D352566A83700118D07 /* FBElementCommands.h */; };
+		713A9D382566A83800118D07 /* FBElementCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D362566A83800118D07 /* FBElementCommands.m */; };
+		713A9D3C2566AA2300118D07 /* AMGeometryUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D3A2566AA2300118D07 /* AMGeometryUtils.h */; };
+		713A9D3D2566AA2300118D07 /* AMGeometryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */; };
+		713A9D412566B7A500118D07 /* XCUIElement+FBTyping.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D3F2566B7A500118D07 /* XCUIElement+FBTyping.h */; };
+		713A9D422566B7A500118D07 /* XCUIElement+FBTyping.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D402566B7A500118D07 /* XCUIElement+FBTyping.m */; };
+		714CA6FC2566461100353B27 /* FBDebugCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA6FA2566461100353B27 /* FBDebugCommands.h */; };
+		714CA6FD2566461100353B27 /* FBDebugCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA6FB2566461100353B27 /* FBDebugCommands.m */; };
+		714CA7012566475200353B27 /* XCUIApplication+AMXml.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA6FF2566475200353B27 /* XCUIApplication+AMXml.h */; };
+		714CA7022566475200353B27 /* XCUIApplication+AMXml.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA7002566475200353B27 /* XCUIApplication+AMXml.m */; };
+		714CA7062566487B00353B27 /* FBXPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA7042566487B00353B27 /* FBXPath.h */; };
+		714CA7072566487B00353B27 /* FBXPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA7052566487B00353B27 /* FBXPath.m */; };
+		714CA70A256648B200353B27 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 714CA709256648A100353B27 /* libxml2.tbd */; };
+		714CA70E25664A8000353B27 /* NSString+FBXMLSafeString.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA70C25664A8000353B27 /* NSString+FBXMLSafeString.m */; };
+		714CA70F25664A8000353B27 /* NSString+FBXMLSafeString.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA70D25664A8000353B27 /* NSString+FBXMLSafeString.h */; };
+		714CA71B2566640900353B27 /* XCElementSnapshot+AMHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA7192566640900353B27 /* XCElementSnapshot+AMHash.h */; };
+		714CA71C2566640900353B27 /* XCElementSnapshot+AMHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA71A2566640900353B27 /* XCElementSnapshot+AMHash.m */; };
+		714CA722256664A800353B27 /* XCElementSnapshot.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA721256664A800353B27 /* XCElementSnapshot.h */; };
+		714CA733256668F700353B27 /* XCTAutomationSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 714CA732256668F600353B27 /* XCTAutomationSupport.framework */; };
 		71688A98256461ED0007F55B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 71688A97256461ED0007F55B /* AppDelegate.m */; };
 		71688A9B256461ED0007F55B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71688A9A256461ED0007F55B /* ViewController.m */; };
 		71688A9D256461F00007F55B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71688A9C256461F00007F55B /* Assets.xcassets */; };
 		71688AA0256461F00007F55B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71688A9E256461F00007F55B /* Main.storyboard */; };
 		71688AA3256461F00007F55B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 71688AA2256461F00007F55B /* main.m */; };
-		71688AD3256465540007F55B /* WebDriverAgentLib.h in Headers */ = {isa = PBXBuildFile; fileRef = 71688AD2256465540007F55B /* WebDriverAgentLib.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71688B1725646A620007F55B /* WebDriverAgentRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = 71688B1625646A620007F55B /* WebDriverAgentRunner.m */; };
-		71688B2325646AB90007F55B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71688AE2256466070007F55B /* XCTest.framework */; };
 		71688B2C25646B850007F55B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71688AE2256466070007F55B /* XCTest.framework */; };
+		7199B3A22565B0A3000B5C51 /* CocoaAsyncSocket.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7199B3CD2565B1CD000B5C51 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71688AE2256466070007F55B /* XCTest.framework */; };
+		7199B3CE2565B1E8000B5C51 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */; };
+		7199B3D02565B207000B5C51 /* CocoaAsyncSocket.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7199B3D32565B251000B5C51 /* WebDriverAgentLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */; };
+		7199B3D42565B25E000B5C51 /* WebDriverAgentLib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		71688B3425646C300007F55B /* PBXContainerItemProxy */ = {
+		7199B3D12565B243000B5C51 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 71688A8B256461ED0007F55B /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 71688ACF256465540007F55B;
+			remoteGlobalIDString = 7199B3AA2565B122000B5C51;
 			remoteInfo = WebDriverAgentLib;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		7151AD2E2564F423008B8B2A /* Embed Frameworks */ = {
+		7199B3A12565B099000B5C51 /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				7151AD2D2564F423008B8B2A /* CocoaAsyncSocket.framework in Embed Frameworks */,
+				7199B3D42565B25E000B5C51 /* WebDriverAgentLib.framework in Copy Frameworks */,
+				7199B3A22565B0A3000B5C51 /* CocoaAsyncSocket.framework in Copy Frameworks */,
 			);
-			name = "Embed Frameworks";
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7199B3CF2565B1FD000B5C51 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7199B3D02565B207000B5C51 /* CocoaAsyncSocket.framework in CopyFiles */,
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -135,6 +187,46 @@
 		710527F22565744400130763 /* FBSession-Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FBSession-Private.h"; sourceTree = "<group>"; };
 		710527FD2565802200130763 /* XCUIApplication+AMHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIApplication+AMHelpers.h"; sourceTree = "<group>"; };
 		710527FE2565802200130763 /* XCUIApplication+AMHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIApplication+AMHelpers.m"; sourceTree = "<group>"; };
+		710528162565A09100130763 /* FBScreenshotCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBScreenshotCommands.m; sourceTree = "<group>"; };
+		710528172565A09100130763 /* FBScreenshotCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBScreenshotCommands.h; sourceTree = "<group>"; };
+		7105281C2565A33300130763 /* FBSessionCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBSessionCommands.m; sourceTree = "<group>"; };
+		7105281D2565A33300130763 /* FBSessionCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBSessionCommands.h; sourceTree = "<group>"; };
+		713A9D0A256680D800118D07 /* XCUIElement+AMHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIElement+AMHelpers.h"; sourceTree = "<group>"; };
+		713A9D0B256680D800118D07 /* XCUIElement+AMHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIElement+AMHelpers.m"; sourceTree = "<group>"; };
+		713A9D0F256683E900118D07 /* XCUIElementQuery+AMHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIElementQuery+AMHelpers.h"; sourceTree = "<group>"; };
+		713A9D10256683E900118D07 /* XCUIElementQuery+AMHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIElementQuery+AMHelpers.m"; sourceTree = "<group>"; };
+		713A9D1525668B8A00118D07 /* XCAccessibilityElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCAccessibilityElement.h; sourceTree = "<group>"; };
+		713A9D1825668C7200118D07 /* CDStructures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDStructures.h; sourceTree = "<group>"; };
+		713A9D1B256696AA00118D07 /* FBCustomCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBCustomCommands.m; sourceTree = "<group>"; };
+		713A9D1C256696AA00118D07 /* FBCustomCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBCustomCommands.h; sourceTree = "<group>"; };
+		713A9D2025669A0E00118D07 /* FBFindElementCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBFindElementCommands.h; sourceTree = "<group>"; };
+		713A9D2125669A0F00118D07 /* FBFindElementCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBFindElementCommands.m; sourceTree = "<group>"; };
+		713A9D2525669A6B00118D07 /* XCUIElement+FBFind.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XCUIElement+FBFind.m"; sourceTree = "<group>"; };
+		713A9D2625669A6B00118D07 /* XCUIElement+FBFind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCUIElement+FBFind.h"; sourceTree = "<group>"; };
+		713A9D2A25669E4E00118D07 /* XCUIElement+FBClassChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XCUIElement+FBClassChain.m"; sourceTree = "<group>"; };
+		713A9D2B25669E4F00118D07 /* XCUIElement+FBClassChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCUIElement+FBClassChain.h"; sourceTree = "<group>"; };
+		713A9D2F2566A14200118D07 /* XCUIApplication+AMActiveElement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIApplication+AMActiveElement.h"; sourceTree = "<group>"; };
+		713A9D302566A14200118D07 /* XCUIApplication+AMActiveElement.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIApplication+AMActiveElement.m"; sourceTree = "<group>"; };
+		713A9D352566A83700118D07 /* FBElementCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBElementCommands.h; sourceTree = "<group>"; };
+		713A9D362566A83800118D07 /* FBElementCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBElementCommands.m; sourceTree = "<group>"; };
+		713A9D3A2566AA2300118D07 /* AMGeometryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMGeometryUtils.h; sourceTree = "<group>"; };
+		713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMGeometryUtils.m; sourceTree = "<group>"; };
+		713A9D3F2566B7A500118D07 /* XCUIElement+FBTyping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCUIElement+FBTyping.h"; sourceTree = "<group>"; };
+		713A9D402566B7A500118D07 /* XCUIElement+FBTyping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XCUIElement+FBTyping.m"; sourceTree = "<group>"; };
+		714CA6FA2566461100353B27 /* FBDebugCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDebugCommands.h; sourceTree = "<group>"; };
+		714CA6FB2566461100353B27 /* FBDebugCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBDebugCommands.m; sourceTree = "<group>"; };
+		714CA6FF2566475200353B27 /* XCUIApplication+AMXml.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIApplication+AMXml.h"; sourceTree = "<group>"; };
+		714CA7002566475200353B27 /* XCUIApplication+AMXml.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIApplication+AMXml.m"; sourceTree = "<group>"; };
+		714CA7042566487B00353B27 /* FBXPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBXPath.h; sourceTree = "<group>"; };
+		714CA7052566487B00353B27 /* FBXPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBXPath.m; sourceTree = "<group>"; };
+		714CA709256648A100353B27 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
+		714CA70C25664A8000353B27 /* NSString+FBXMLSafeString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+FBXMLSafeString.m"; path = "../../../../WebDriverAgent/WebDriverAgentLib/Categories/NSString+FBXMLSafeString.m"; sourceTree = "<group>"; };
+		714CA70D25664A8000353B27 /* NSString+FBXMLSafeString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+FBXMLSafeString.h"; path = "../../../../WebDriverAgent/WebDriverAgentLib/Categories/NSString+FBXMLSafeString.h"; sourceTree = "<group>"; };
+		714CA7192566640900353B27 /* XCElementSnapshot+AMHash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCElementSnapshot+AMHash.h"; sourceTree = "<group>"; };
+		714CA71A2566640900353B27 /* XCElementSnapshot+AMHash.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCElementSnapshot+AMHash.m"; sourceTree = "<group>"; };
+		714CA721256664A800353B27 /* XCElementSnapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCElementSnapshot.h; sourceTree = "<group>"; };
+		714CA72E2566689500353B27 /* Xcode.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Xcode.app; path = ../../../../../Applications/Xcode.app; sourceTree = "<group>"; };
+		714CA732256668F600353B27 /* XCTAutomationSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTAutomationSupport.framework; path = Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework; sourceTree = DEVELOPER_DIR; };
 		7151ACE12564EF5F008B8B2A /* RouteRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouteRequest.m; sourceTree = "<group>"; };
 		7151ACE22564EF5F008B8B2A /* HTTPResponseProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPResponseProxy.m; sourceTree = "<group>"; };
 		7151ACE32564EF5F008B8B2A /* Route.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Route.m; sourceTree = "<group>"; };
@@ -221,12 +313,13 @@
 		71688AA4256461F00007F55B /* WebDriverAgent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WebDriverAgent.entitlements; sourceTree = "<group>"; };
 		71688AAD256461F00007F55B /* WebDriverAgentTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebDriverAgentTests.m; sourceTree = "<group>"; };
 		71688AAF256461F00007F55B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		71688AD0256465540007F55B /* libWebDriverAgentLib.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libWebDriverAgentLib.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		71688AD2256465540007F55B /* WebDriverAgentLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebDriverAgentLib.h; sourceTree = "<group>"; };
 		71688AE2256466070007F55B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/MacOSX.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		71688B1425646A620007F55B /* WebDriverAgentRunner.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WebDriverAgentRunner.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		71688B1625646A620007F55B /* WebDriverAgentRunner.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebDriverAgentRunner.m; sourceTree = "<group>"; };
 		71688B1825646A620007F55B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WebDriverAgentLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7199B3AE2565B122000B5C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,27 +330,47 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		71688ACE256465540007F55B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7151AD2C2564F423008B8B2A /* CocoaAsyncSocket.framework in Frameworks */,
-				71688B2325646AB90007F55B /* XCTest.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		71688B1125646A620007F55B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				710528032565868100130763 /* libWebDriverAgentLib.dylib in Frameworks */,
+				7199B3D32565B251000B5C51 /* WebDriverAgentLib.framework in Frameworks */,
 				71688B2C25646B850007F55B /* XCTest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7199B3A82565B122000B5C51 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				714CA70A256648B200353B27 /* libxml2.tbd in Frameworks */,
+				7199B3CD2565B1CD000B5C51 /* XCTest.framework in Frameworks */,
+				7199B3CE2565B1E8000B5C51 /* CocoaAsyncSocket.framework in Frameworks */,
+				714CA733256668F700353B27 /* XCTAutomationSupport.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		714CA71F2566647B00353B27 /* PrivateHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				714CA7202566648600353B27 /* XCTest */,
+			);
+			path = PrivateHeaders;
+			sourceTree = "<group>";
+		};
+		714CA7202566648600353B27 /* XCTest */ = {
+			isa = PBXGroup;
+			children = (
+				713A9D1825668C7200118D07 /* CDStructures.h */,
+				713A9D1525668B8A00118D07 /* XCAccessibilityElement.h */,
+				714CA721256664A800353B27 /* XCElementSnapshot.h */,
+			);
+			path = XCTest;
+			sourceTree = "<group>";
+		};
 		7151ACDF2564EF34008B8B2A /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
@@ -328,7 +441,7 @@
 		71688A8A256461ED0007F55B = {
 			isa = PBXGroup;
 			children = (
-				71688AD1256465540007F55B /* WebDriverAgentLib */,
+				7199B3AC2565B122000B5C51 /* WebDriverAgentLib */,
 				71688A95256461ED0007F55B /* WebDriverAgent */,
 				71688AAC256461F00007F55B /* WebDriverAgentUnitTests */,
 				71688B1525646A620007F55B /* WebDriverAgentRunner */,
@@ -341,8 +454,8 @@
 			isa = PBXGroup;
 			children = (
 				71688A93256461ED0007F55B /* WebDriverAgent.app */,
-				71688AD0256465540007F55B /* libWebDriverAgentLib.dylib */,
 				71688B1425646A620007F55B /* WebDriverAgentRunner.xctest */,
+				7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -372,22 +485,12 @@
 			path = WebDriverAgentUnitTests;
 			sourceTree = "<group>";
 		};
-		71688AD1256465540007F55B /* WebDriverAgentLib */ = {
-			isa = PBXGroup;
-			children = (
-				7151ACDF2564EF34008B8B2A /* Vendor */,
-				71688AFF256468B20007F55B /* Categories */,
-				71688B00256469310007F55B /* Commands */,
-				71688B01256469350007F55B /* Routing */,
-				71688B022564693C0007F55B /* Utilities */,
-				71688AD2256465540007F55B /* WebDriverAgentLib.h */,
-			);
-			path = WebDriverAgentLib;
-			sourceTree = "<group>";
-		};
 		71688AE1256466070007F55B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				714CA732256668F600353B27 /* XCTAutomationSupport.framework */,
+				714CA72E2566689500353B27 /* Xcode.app */,
+				714CA709256648A100353B27 /* libxml2.tbd */,
 				7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */,
 				71688AE2256466070007F55B /* XCTest.framework */,
 			);
@@ -401,8 +504,26 @@
 				710527E92565731200130763 /* NSExpression+FBFormat.m */,
 				710527EB2565731200130763 /* NSPredicate+FBFormat.h */,
 				710527E82565731200130763 /* NSPredicate+FBFormat.m */,
+				714CA70D25664A8000353B27 /* NSString+FBXMLSafeString.h */,
+				714CA70C25664A8000353B27 /* NSString+FBXMLSafeString.m */,
+				714CA7192566640900353B27 /* XCElementSnapshot+AMHash.h */,
+				714CA71A2566640900353B27 /* XCElementSnapshot+AMHash.m */,
+				713A9D2F2566A14200118D07 /* XCUIApplication+AMActiveElement.h */,
+				713A9D302566A14200118D07 /* XCUIApplication+AMActiveElement.m */,
 				710527FD2565802200130763 /* XCUIApplication+AMHelpers.h */,
 				710527FE2565802200130763 /* XCUIApplication+AMHelpers.m */,
+				714CA6FF2566475200353B27 /* XCUIApplication+AMXml.h */,
+				714CA7002566475200353B27 /* XCUIApplication+AMXml.m */,
+				713A9D0A256680D800118D07 /* XCUIElement+AMHelpers.h */,
+				713A9D0B256680D800118D07 /* XCUIElement+AMHelpers.m */,
+				713A9D2B25669E4F00118D07 /* XCUIElement+FBClassChain.h */,
+				713A9D2A25669E4E00118D07 /* XCUIElement+FBClassChain.m */,
+				713A9D2625669A6B00118D07 /* XCUIElement+FBFind.h */,
+				713A9D2525669A6B00118D07 /* XCUIElement+FBFind.m */,
+				713A9D3F2566B7A500118D07 /* XCUIElement+FBTyping.h */,
+				713A9D402566B7A500118D07 /* XCUIElement+FBTyping.m */,
+				713A9D0F256683E900118D07 /* XCUIElementQuery+AMHelpers.h */,
+				713A9D10256683E900118D07 /* XCUIElementQuery+AMHelpers.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -410,6 +531,18 @@
 		71688B00256469310007F55B /* Commands */ = {
 			isa = PBXGroup;
 			children = (
+				714CA6FA2566461100353B27 /* FBDebugCommands.h */,
+				714CA6FB2566461100353B27 /* FBDebugCommands.m */,
+				713A9D1C256696AA00118D07 /* FBCustomCommands.h */,
+				713A9D1B256696AA00118D07 /* FBCustomCommands.m */,
+				713A9D352566A83700118D07 /* FBElementCommands.h */,
+				713A9D362566A83800118D07 /* FBElementCommands.m */,
+				713A9D2025669A0E00118D07 /* FBFindElementCommands.h */,
+				713A9D2125669A0F00118D07 /* FBFindElementCommands.m */,
+				7105281D2565A33300130763 /* FBSessionCommands.h */,
+				7105281C2565A33300130763 /* FBSessionCommands.m */,
+				710528172565A09100130763 /* FBScreenshotCommands.h */,
+				710528162565A09100130763 /* FBScreenshotCommands.m */,
 				7151AE362564FAAC008B8B2A /* FBUnknownCommands.h */,
 				7151AE352564FAAC008B8B2A /* FBUnknownCommands.m */,
 			);
@@ -454,6 +587,8 @@
 		71688B022564693C0007F55B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				713A9D3A2566AA2300118D07 /* AMGeometryUtils.h */,
+				713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */,
 				7151AD7B2564F56E008B8B2A /* FBClassChainQueryParser.h */,
 				7151AD732564F56D008B8B2A /* FBClassChainQueryParser.m */,
 				7151AD932564F56F008B8B2A /* FBConfiguration.h */,
@@ -471,6 +606,8 @@
 				7151AD762564F56D008B8B2A /* FBRunLoopSpinner.m */,
 				7151AD7E2564F56E008B8B2A /* FBSettings.h */,
 				7151ADAC2564F570008B8B2A /* FBSettings.m */,
+				714CA7042566487B00353B27 /* FBXPath.h */,
+				714CA7052566487B00353B27 /* FBXPath.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -484,58 +621,93 @@
 			path = WebDriverAgentRunner;
 			sourceTree = "<group>";
 		};
+		7199B3AC2565B122000B5C51 /* WebDriverAgentLib */ = {
+			isa = PBXGroup;
+			children = (
+				714CA71F2566647B00353B27 /* PrivateHeaders */,
+				7151ACDF2564EF34008B8B2A /* Vendor */,
+				71688AFF256468B20007F55B /* Categories */,
+				71688B00256469310007F55B /* Commands */,
+				71688B01256469350007F55B /* Routing */,
+				71688B022564693C0007F55B /* Utilities */,
+				71688AD2256465540007F55B /* WebDriverAgentLib.h */,
+				7199B3AE2565B122000B5C51 /* Info.plist */,
+			);
+			path = WebDriverAgentLib;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		71688ACC256465540007F55B /* Headers */ = {
+		7199B3A62565B122000B5C51 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7151AD692564F4C7008B8B2A /* FBWebServer.h in Headers */,
-				7151ACF02564EF60008B8B2A /* Route.h in Headers */,
-				7151AD532564F4C7008B8B2A /* FBRoute.h in Headers */,
-				7151AD662564F4C7008B8B2A /* FBResponsePayload.h in Headers */,
-				710527EE2565731200130763 /* NSExpression+FBFormat.h in Headers */,
-				7151AD562564F4C7008B8B2A /* FBHTTPStatusCodes.h in Headers */,
-				710527EF2565731200130763 /* NSPredicate+FBFormat.h in Headers */,
-				7151AE382564FAAC008B8B2A /* FBUnknownCommands.h in Headers */,
-				7151AD0A2564EF7E008B8B2A /* HTTPServer.h in Headers */,
-				7151ADE72564F571008B8B2A /* FBRunLoopSpinner.h in Headers */,
-				7151ACF42564EF60008B8B2A /* RoutingHTTPServer.h in Headers */,
-				7151AD642564F4C7008B8B2A /* FBSession.h in Headers */,
-				7151ACF22564EF60008B8B2A /* RoutingConnection.h in Headers */,
-				710527F32565744400130763 /* FBSession-Private.h in Headers */,
-				7151AD232564EFAC008B8B2A /* DDRange.h in Headers */,
-				7151AD0B2564EF7E008B8B2A /* HTTPMessage.h in Headers */,
-				7151AD5F2564F4C7008B8B2A /* FBRouteRequest.h in Headers */,
-				7151AD4F2564F4C7008B8B2A /* FBExceptions.h in Headers */,
-				7151AD652564F4C7008B8B2A /* FBElementUtils.h in Headers */,
-				7151ACF12564EF60008B8B2A /* RouteResponse.h in Headers */,
-				7151AD5E2564F4C7008B8B2A /* FBElementCache.h in Headers */,
-				7151ADC02564F571008B8B2A /* FBClassChainQueryParser.h in Headers */,
-				710527FF2565802200130763 /* XCUIApplication+AMHelpers.h in Headers */,
-				7151ADC32564F571008B8B2A /* FBSettings.h in Headers */,
-				7151AD062564EF7E008B8B2A /* HTTPLogging.h in Headers */,
-				7151ADEC2564F571008B8B2A /* FBProtocolHelpers.h in Headers */,
-				7151AE322564FA37008B8B2A /* FBRuntimeUtils.h in Headers */,
-				7151AD622564F4C7008B8B2A /* FBExceptionHandler.h in Headers */,
-				7151AD4E2564F4C7008B8B2A /* FBResponseJSONPayload.h in Headers */,
-				710527DD2565716600130763 /* FBRouteRequest-Private.h in Headers */,
-				7151AD082564EF7E008B8B2A /* HTTPResponse.h in Headers */,
-				7151AD6A2564F4C7008B8B2A /* FBCommandStatus.h in Headers */,
-				7151ACF72564EF60008B8B2A /* HTTPResponseProxy.h in Headers */,
-				7151AD182564EF97008B8B2A /* HTTPDataResponse.h in Headers */,
-				7151AD152564EF97008B8B2A /* HTTPErrorResponse.h in Headers */,
-				7151ACF82564EF60008B8B2A /* RouteRequest.h in Headers */,
-				7151AD052564EF7E008B8B2A /* HTTPConnection.h in Headers */,
-				7151ADDA2564F571008B8B2A /* FBLogger.h in Headers */,
-				7151ADC82564F571008B8B2A /* FBErrorBuilder.h in Headers */,
-				7151AD5C2564F4C7008B8B2A /* FBCommandHandler.h in Headers */,
-				7151ADDE2564F571008B8B2A /* FBElementTypeTransformer.h in Headers */,
-				7151AD222564EFAC008B8B2A /* DDNumber.h in Headers */,
-				71688AD3256465540007F55B /* WebDriverAgentLib.h in Headers */,
-				7151ADE62564F571008B8B2A /* FBMacros.h in Headers */,
-				7151ADD82564F571008B8B2A /* FBConfiguration.h in Headers */,
+				714CA71B2566640900353B27 /* XCElementSnapshot+AMHash.h in Headers */,
+				7109C06B2565B607006BFD13 /* Route.h in Headers */,
+				7109BFB62565B4F0006BFD13 /* FBClassChainQueryParser.h in Headers */,
+				7109BFCC2565B512006BFD13 /* FBMacros.h in Headers */,
+				7109BFB02565B413006BFD13 /* WebDriverAgentLib.h in Headers */,
+				7109BFD42565B51E006BFD13 /* FBRunLoopSpinner.h in Headers */,
+				7109C0632565B5FD006BFD13 /* HTTPServer.h in Headers */,
+				7109C04B2565B5E0006BFD13 /* DDRange.h in Headers */,
+				7109C0382565B5B9006BFD13 /* NSExpression+FBFormat.h in Headers */,
+				714CA6FC2566461100353B27 /* FBDebugCommands.h in Headers */,
+				7109C06F2565B60C006BFD13 /* RouteRequest.h in Headers */,
+				713A9D11256683E900118D07 /* XCUIElementQuery+AMHelpers.h in Headers */,
+				713A9D372566A83800118D07 /* FBElementCommands.h in Headers */,
+				714CA722256664A800353B27 /* XCElementSnapshot.h in Headers */,
+				713A9D1925668C7200118D07 /* CDStructures.h in Headers */,
+				714CA70F25664A8000353B27 /* NSString+FBXMLSafeString.h in Headers */,
+				7109BFB32565B4EA006BFD13 /* FBConfiguration.h in Headers */,
+				713A9D412566B7A500118D07 /* XCUIElement+FBTyping.h in Headers */,
+				7109C0202565B593006BFD13 /* FBSession.h in Headers */,
+				713A9D3C2566AA2300118D07 /* AMGeometryUtils.h in Headers */,
+				7109C01C2565B58C006BFD13 /* FBSession-Private.h in Headers */,
+				7109BFED2565B546006BFD13 /* FBElementUtils.h in Headers */,
+				7109C05D2565B5F6006BFD13 /* HTTPMessage.h in Headers */,
+				7109C03D2565B5BF006BFD13 /* NSPredicate+FBFormat.h in Headers */,
+				713A9D2D25669E4F00118D07 /* XCUIElement+FBClassChain.h in Headers */,
+				7109C0422565B5C7006BFD13 /* XCUIApplication+AMHelpers.h in Headers */,
+				7109BFBD2565B4FC006BFD13 /* FBElementTypeTransformer.h in Headers */,
+				7109BFC72565B50B006BFD13 /* FBLogger.h in Headers */,
+				714CA7012566475200353B27 /* XCUIApplication+AMXml.h in Headers */,
+				7109C0132565B576006BFD13 /* FBRouteRequest-Private.h in Headers */,
+				713A9D0C256680D800118D07 /* XCUIElement+AMHelpers.h in Headers */,
+				7109C07B2565B61A006BFD13 /* RoutingHTTPServer.h in Headers */,
+				7109C00E2565B571006BFD13 /* FBRoute.h in Headers */,
+				7109C02E2565B5AA006BFD13 /* FBScreenshotCommands.h in Headers */,
+				7109BFFC2565B559006BFD13 /* FBHTTPStatusCodes.h in Headers */,
+				713A9D2225669A0F00118D07 /* FBFindElementCommands.h in Headers */,
+				713A9D1E256696AA00118D07 /* FBCustomCommands.h in Headers */,
+				7109BFD92565B525006BFD13 /* FBSettings.h in Headers */,
+				7109C0292565B5A3006BFD13 /* FBSessionCommands.h in Headers */,
+				7109C0042565B564006BFD13 /* FBResponsePayload.h in Headers */,
+				713A9D312566A14200118D07 /* XCUIApplication+AMActiveElement.h in Headers */,
+				714CA7062566487B00353B27 /* FBXPath.h in Headers */,
+				7109BFF22565B54D006BFD13 /* FBExceptionHandler.h in Headers */,
+				713A9D1625668B8A00118D07 /* XCAccessibilityElement.h in Headers */,
+				7109C0532565B5EA006BFD13 /* HTTPErrorResponse.h in Headers */,
+				7109BFE02565B536006BFD13 /* FBCommandHandler.h in Headers */,
+				7109C0732565B611006BFD13 /* RouteResponse.h in Headers */,
+				7109C04F2565B5E5006BFD13 /* HTTPDataResponse.h in Headers */,
+				7109C0572565B5EE006BFD13 /* HTTPConnection.h in Headers */,
+				7109C05B2565B5F3006BFD13 /* HTTPLogging.h in Headers */,
+				7109C0472565B5DB006BFD13 /* DDNumber.h in Headers */,
+				7109C0772565B616006BFD13 /* RoutingConnection.h in Headers */,
+				7109C0172565B581006BFD13 /* FBRouteRequest.h in Headers */,
+				7109BFCF2565B517006BFD13 /* FBProtocolHelpers.h in Headers */,
+				713A9D2825669A7000118D07 /* XCUIElement+FBFind.h in Headers */,
+				7109C0332565B5B0006BFD13 /* FBUnknownCommands.h in Headers */,
+				7109BFE32565B53A006BFD13 /* FBCommandStatus.h in Headers */,
+				7109C0672565B603006BFD13 /* HTTPResponseProxy.h in Headers */,
+				7109C0242565B59A006BFD13 /* FBWebServer.h in Headers */,
+				7109C0092565B56B006BFD13 /* FBRuntimeUtils.h in Headers */,
+				7109C0612565B5FA006BFD13 /* HTTPResponse.h in Headers */,
+				7109BFFF2565B55D006BFD13 /* FBResponseJSONPayload.h in Headers */,
+				7109BFE82565B540006BFD13 /* FBElementCache.h in Headers */,
+				7109BFF72565B553006BFD13 /* FBExceptions.h in Headers */,
+				7109BFC22565B503006BFD13 /* FBErrorBuilder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -559,24 +731,6 @@
 			productReference = 71688A93256461ED0007F55B /* WebDriverAgent.app */;
 			productType = "com.apple.product-type.application";
 		};
-		71688ACF256465540007F55B /* WebDriverAgentLib */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 71688AD6256465540007F55B /* Build configuration list for PBXNativeTarget "WebDriverAgentLib" */;
-			buildPhases = (
-				71688ACC256465540007F55B /* Headers */,
-				71688ACD256465540007F55B /* Sources */,
-				71688ACE256465540007F55B /* Frameworks */,
-				7151AD2E2564F423008B8B2A /* Embed Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = WebDriverAgentLib;
-			productName = WebDriverAgentLib;
-			productReference = 71688AD0256465540007F55B /* libWebDriverAgentLib.dylib */;
-			productType = "com.apple.product-type.library.dynamic";
-		};
 		71688B1325646A620007F55B /* WebDriverAgentRunner */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 71688B1925646A620007F55B /* Build configuration list for PBXNativeTarget "WebDriverAgentRunner" */;
@@ -584,16 +738,36 @@
 				71688B1025646A620007F55B /* Sources */,
 				71688B1125646A620007F55B /* Frameworks */,
 				71688B1225646A620007F55B /* Resources */,
+				7199B3A12565B099000B5C51 /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				71688B3525646C300007F55B /* PBXTargetDependency */,
+				7199B3D22565B243000B5C51 /* PBXTargetDependency */,
 			);
 			name = WebDriverAgentRunner;
 			productName = WebDriverAgentRunner;
 			productReference = 71688B1425646A620007F55B /* WebDriverAgentRunner.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		7199B3AA2565B122000B5C51 /* WebDriverAgentLib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7199B3BC2565B123000B5C51 /* Build configuration list for PBXNativeTarget "WebDriverAgentLib" */;
+			buildPhases = (
+				7199B3A62565B122000B5C51 /* Headers */,
+				7199B3A72565B122000B5C51 /* Sources */,
+				7199B3A82565B122000B5C51 /* Frameworks */,
+				7199B3A92565B122000B5C51 /* Resources */,
+				7199B3CF2565B1FD000B5C51 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WebDriverAgentLib;
+			productName = WebDriverAgentLib;
+			productReference = 7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -606,10 +780,10 @@
 					71688A92256461ED0007F55B = {
 						CreatedOnToolsVersion = 12.1;
 					};
-					71688ACF256465540007F55B = {
+					71688B1325646A620007F55B = {
 						CreatedOnToolsVersion = 12.1;
 					};
-					71688B1325646A620007F55B = {
+					7199B3AA2565B122000B5C51 = {
 						CreatedOnToolsVersion = 12.1;
 					};
 				};
@@ -627,9 +801,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				71688ACF256465540007F55B /* WebDriverAgentLib */,
 				71688A92256461ED0007F55B /* WebDriverAgent */,
 				71688B1325646A620007F55B /* WebDriverAgentRunner */,
+				7199B3AA2565B122000B5C51 /* WebDriverAgentLib */,
 			);
 		};
 /* End PBXProject section */
@@ -651,6 +825,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7199B3A92565B122000B5C51 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -664,50 +845,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		71688ACD256465540007F55B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7151AD682564F4C7008B8B2A /* FBSession.m in Sources */,
-				7151ADF82564F571008B8B2A /* FBConfiguration.m in Sources */,
-				7151ADCD2564F571008B8B2A /* FBElementTypeTransformer.m in Sources */,
-				7151ACEF2564EF60008B8B2A /* Route.m in Sources */,
-				7151AE312564FA37008B8B2A /* FBRuntimeUtils.m in Sources */,
-				710527EC2565731200130763 /* NSPredicate+FBFormat.m in Sources */,
-				7151AD0C2564EF7E008B8B2A /* HTTPConnection.m in Sources */,
-				710527ED2565731200130763 /* NSExpression+FBFormat.m in Sources */,
-				7151ADB82564F571008B8B2A /* FBClassChainQueryParser.m in Sources */,
-				710528002565802200130763 /* XCUIApplication+AMHelpers.m in Sources */,
-				7151AD212564EFAC008B8B2A /* DDNumber.m in Sources */,
-				7151AD242564EFAC008B8B2A /* DDRange.m in Sources */,
-				7151AD522564F4C7008B8B2A /* FBExceptionHandler.m in Sources */,
-				7151AD582564F4C7008B8B2A /* FBWebServer.m in Sources */,
-				7151AD572564F4C7008B8B2A /* FBExceptions.m in Sources */,
-				7151AD602564F4C7008B8B2A /* FBRouteRequest.m in Sources */,
-				7151AD172564EF97008B8B2A /* HTTPDataResponse.m in Sources */,
-				7151AE372564FAAC008B8B2A /* FBUnknownCommands.m in Sources */,
-				7151ACF52564EF60008B8B2A /* RoutingHTTPServer.m in Sources */,
-				7151ADF22564F571008B8B2A /* FBLogger.m in Sources */,
-				7151ADBB2564F571008B8B2A /* FBRunLoopSpinner.m in Sources */,
-				7151AD502564F4C7008B8B2A /* FBElementUtils.m in Sources */,
-				7151ACED2564EF60008B8B2A /* RouteRequest.m in Sources */,
-				7151AD5D2564F4C7008B8B2A /* FBRoute.m in Sources */,
-				7151ACF32564EF60008B8B2A /* RoutingConnection.m in Sources */,
-				7151ADDD2564F571008B8B2A /* FBProtocolHelpers.m in Sources */,
-				7151AD162564EF97008B8B2A /* HTTPErrorResponse.m in Sources */,
-				7151ACF62564EF60008B8B2A /* RouteResponse.m in Sources */,
-				7151AD092564EF7E008B8B2A /* HTTPMessage.m in Sources */,
-				7151ADF12564F571008B8B2A /* FBSettings.m in Sources */,
-				7151AD072564EF7E008B8B2A /* HTTPServer.m in Sources */,
-				7151ACEE2564EF60008B8B2A /* HTTPResponseProxy.m in Sources */,
-				7151AD612564F4C7008B8B2A /* FBCommandStatus.m in Sources */,
-				7151AD5A2564F4C7008B8B2A /* FBElementCache.m in Sources */,
-				7151ADFC2564F571008B8B2A /* FBErrorBuilder.m in Sources */,
-				7151AD592564F4C7008B8B2A /* FBResponseJSONPayload.m in Sources */,
-				7151AD552564F4C7008B8B2A /* FBResponsePayload.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		71688B1025646A620007F55B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -716,13 +853,74 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7199B3A72565B122000B5C51 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7109BFDC2565B529006BFD13 /* FBSettings.m in Sources */,
+				713A9D3D2566AA2300118D07 /* AMGeometryUtils.m in Sources */,
+				7109C0712565B60F006BFD13 /* RouteRequest.m in Sources */,
+				7109C0312565B5AE006BFD13 /* FBScreenshotCommands.m in Sources */,
+				7109C0492565B5DD006BFD13 /* DDNumber.m in Sources */,
+				7109BFFA2565B556006BFD13 /* FBExceptions.m in Sources */,
+				7109BFC52565B508006BFD13 /* FBErrorBuilder.m in Sources */,
+				7109C0792565B618006BFD13 /* RoutingConnection.m in Sources */,
+				713A9D2325669A0F00118D07 /* FBFindElementCommands.m in Sources */,
+				7109BFD22565B51C006BFD13 /* FBProtocolHelpers.m in Sources */,
+				7109C0752565B613006BFD13 /* RouteResponse.m in Sources */,
+				7109C0402565B5C4006BFD13 /* NSPredicate+FBFormat.m in Sources */,
+				713A9D422566B7A500118D07 /* XCUIElement+FBTyping.m in Sources */,
+				713A9D2725669A7000118D07 /* XCUIElement+FBFind.m in Sources */,
+				7109BFCA2565B50F006BFD13 /* FBLogger.m in Sources */,
+				7109C0512565B5E7006BFD13 /* HTTPDataResponse.m in Sources */,
+				7109C0452565B5CB006BFD13 /* XCUIApplication+AMHelpers.m in Sources */,
+				714CA6FD2566461100353B27 /* FBDebugCommands.m in Sources */,
+				7109C04D2565B5E2006BFD13 /* DDRange.m in Sources */,
+				7109BFF52565B550006BFD13 /* FBExceptionHandler.m in Sources */,
+				7109C03B2565B5BD006BFD13 /* NSExpression+FBFormat.m in Sources */,
+				714CA7072566487B00353B27 /* FBXPath.m in Sources */,
+				714CA70E25664A8000353B27 /* NSString+FBXMLSafeString.m in Sources */,
+				7109C0692565B605006BFD13 /* HTTPResponseProxy.m in Sources */,
+				713A9D382566A83800118D07 /* FBElementCommands.m in Sources */,
+				7109C05F2565B5F8006BFD13 /* HTTPMessage.m in Sources */,
+				714CA7022566475200353B27 /* XCUIApplication+AMXml.m in Sources */,
+				7109BFF02565B54A006BFD13 /* FBElementUtils.m in Sources */,
+				7109C0652565B5FF006BFD13 /* HTTPServer.m in Sources */,
+				713A9D322566A14200118D07 /* XCUIApplication+AMActiveElement.m in Sources */,
+				7109C0222565B597006BFD13 /* FBSession.m in Sources */,
+				7109C0592565B5F1006BFD13 /* HTTPConnection.m in Sources */,
+				713A9D12256683E900118D07 /* XCUIElementQuery+AMHelpers.m in Sources */,
+				7109C01A2565B58A006BFD13 /* FBRouteRequest.m in Sources */,
+				713A9D0D256680D800118D07 /* XCUIElement+AMHelpers.m in Sources */,
+				7109C07D2565B61D006BFD13 /* RoutingHTTPServer.m in Sources */,
+				7109C06D2565B60A006BFD13 /* Route.m in Sources */,
+				7109C0022565B561006BFD13 /* FBResponseJSONPayload.m in Sources */,
+				7109C00C2565B56E006BFD13 /* FBRuntimeUtils.m in Sources */,
+				7109C0072565B568006BFD13 /* FBResponsePayload.m in Sources */,
+				713A9D2C25669E4F00118D07 /* XCUIElement+FBClassChain.m in Sources */,
+				714CA71C2566640900353B27 /* XCElementSnapshot+AMHash.m in Sources */,
+				7109BFE62565B53D006BFD13 /* FBCommandStatus.m in Sources */,
+				7109C0272565B59D006BFD13 /* FBWebServer.m in Sources */,
+				7109C0362565B5B4006BFD13 /* FBUnknownCommands.m in Sources */,
+				7109C02C2565B5A7006BFD13 /* FBSessionCommands.m in Sources */,
+				7109BFD72565B522006BFD13 /* FBRunLoopSpinner.m in Sources */,
+				7109BFBB2565B4FA006BFD13 /* FBConfiguration.m in Sources */,
+				7109C0552565B5EC006BFD13 /* HTTPErrorResponse.m in Sources */,
+				7109C0112565B574006BFD13 /* FBRoute.m in Sources */,
+				713A9D1D256696AA00118D07 /* FBCustomCommands.m in Sources */,
+				7109BFEB2565B544006BFD13 /* FBElementCache.m in Sources */,
+				7109BFC02565B500006BFD13 /* FBElementTypeTransformer.m in Sources */,
+				7109BFB92565B4F5006BFD13 /* FBClassChainQueryParser.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		71688B3525646C300007F55B /* PBXTargetDependency */ = {
+		7199B3D22565B243000B5C51 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 71688ACF256465540007F55B /* WebDriverAgentLib */;
-			targetProxy = 71688B3425646C300007F55B /* PBXContainerItemProxy */;
+			target = 7199B3AA2565B122000B5C51 /* WebDriverAgentLib */;
+			targetProxy = 7199B3D12565B243000B5C51 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -862,7 +1060,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.appium.WebDriverAgent;
+				PRODUCT_BUNDLE_IDENTIFIER = io.appium.WebDriverAgentMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -880,40 +1078,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.appium.WebDriverAgent;
+				PRODUCT_BUNDLE_IDENTIFIER = io.appium.WebDriverAgentMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		71688AD7256465540007F55B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		71688AD8256465540007F55B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
@@ -957,6 +1123,66 @@
 			};
 			name = Release;
 		};
+		7199B3BD2565B123000B5C51 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PLATFORM_DIR)/Developer/Library/PrivateFrameworks",
+				);
+				INFOPLIST_FILE = WebDriverAgentLib/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.appium.WebDriverAgentLib;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		7199B3BE2565B123000B5C51 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PLATFORM_DIR)/Developer/Library/PrivateFrameworks",
+				);
+				INFOPLIST_FILE = WebDriverAgentLib/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.appium.WebDriverAgentLib;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -978,20 +1204,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		71688AD6256465540007F55B /* Build configuration list for PBXNativeTarget "WebDriverAgentLib" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				71688AD7256465540007F55B /* Debug */,
-				71688AD8256465540007F55B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
 		71688B1925646A620007F55B /* Build configuration list for PBXNativeTarget "WebDriverAgentRunner" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				71688B1A25646A620007F55B /* Debug */,
 				71688B1B25646A620007F55B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7199B3BC2565B123000B5C51 /* Build configuration list for PBXNativeTarget "WebDriverAgentLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7199B3BD2565B123000B5C51 /* Debug */,
+				7199B3BE2565B123000B5C51 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

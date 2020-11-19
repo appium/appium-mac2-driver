@@ -16,35 +16,24 @@
 
 #import <XCTest/XCTest.h>
 
-#import <WebDriverAgentLib/WebDriverAgentLib.h>
+NS_ASSUME_NONNULL_BEGIN
 
-@interface UITestingUITests : XCTestCase <FBWebServerDelegate>
-@end
-
-@implementation UITestingUITests
-
-+ (void)setUp
-{
-  FBConfiguration.sharedConfiguration.attributeKeyPathAnalysis = NO;
-  FBConfiguration.sharedConfiguration.automaticScreenshots = NO;
-  [super setUp];
-}
+@interface XCUIElementQuery (AMHelpers)
 
 /**
- Never ending test used to start WebDriverAgent
+ Retrieves the first match from the query
+
+ @returns Matched element instance ot nil if no element is found
  */
-- (void)testRunner
-{
-  FBWebServer *webServer = [[FBWebServer alloc] init];
-  webServer.delegate = self;
-  [webServer startServing];
-}
+- (nullable XCUIElement *)am_firstMatch;
 
-#pragma mark - FBWebServerDelegate
+/**
+ Retrieves all matches from the query
 
-- (void)webServerDidRequestShutdown:(FBWebServer *)webServer
-{
-  [webServer stopServing];
-}
+ @returns Matched element instances ot an empty array if no matches are found
+ */
+- (NSArray<XCUIElement *> *)am_allMatches;
 
 @end
+
+NS_ASSUME_NONNULL_END
