@@ -61,15 +61,6 @@
   return element;
 }
 
-- (BOOL)hasElementWithUUID:(NSString *)uuidStr
-{
-  if (nil == uuidStr) {
-    return NO;
-  }
-  NSUUID *uuid = [[NSUUID new] initWithUUIDString:uuidStr];
-  return nil != uuid && nil != [self.elementCache objectForKey:uuid];
-}
-
 - (void)reset
 {
   [self.elementCache removeAllObjects];

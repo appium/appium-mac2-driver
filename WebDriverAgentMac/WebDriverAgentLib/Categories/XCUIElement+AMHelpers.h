@@ -20,6 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface XCUIElement (AMHelpers)
 
+/**
+ Retrieves the query object that identifies the current element
+ */
 - (XCUIElementQuery *)am_query;
 
 @end

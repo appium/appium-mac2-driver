@@ -20,7 +20,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface XCUIApplication (AMActiveElement)
 
-- (XCUIElement *)am_activeElement;
+/**
+ Retrives the element, which holds the keyboard input focus
+ */
+- (nullable XCUIElement *)am_activeElement;
 
 @end
 

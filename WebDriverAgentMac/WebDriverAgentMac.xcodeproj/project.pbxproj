@@ -587,6 +587,8 @@
 		71688B022564693C0007F55B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				713A9D3A2566AA2300118D07 /* AMGeometryUtils.h */,
+				713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */,
 				7151AD7B2564F56E008B8B2A /* FBClassChainQueryParser.h */,
 				7151AD732564F56D008B8B2A /* FBClassChainQueryParser.m */,
 				7151AD932564F56F008B8B2A /* FBConfiguration.h */,
@@ -606,8 +608,6 @@
 				7151ADAC2564F570008B8B2A /* FBSettings.m */,
 				714CA7042566487B00353B27 /* FBXPath.h */,
 				714CA7052566487B00353B27 /* FBXPath.m */,
-				713A9D3A2566AA2300118D07 /* AMGeometryUtils.h */,
-				713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";

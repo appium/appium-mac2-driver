@@ -18,6 +18,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ Converts given CGRect to the dictionary representation
+ */
 NSDictionary<NSString *, NSNumber *> *AMCGRectToDict(CGRect rect);
 
 NS_ASSUME_NONNULL_END

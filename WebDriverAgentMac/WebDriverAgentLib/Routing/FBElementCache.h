@@ -34,14 +34,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (XCUIElement *)elementForUUID:(NSString *)uuidStr;
 
 /**
- Verifies presence of an element in cache
-
- @param uuidStr uuid of the element to check
- @return Either YES or NO
- */
-- (BOOL)hasElementWithUUID:(NSString *)uuidStr;
-
-/**
  Deletes all previously cached objects
  */
 - (void)reset;
