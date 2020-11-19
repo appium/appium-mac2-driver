@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Retrives the unique snapshot hash
  */
-- (NSUInteger)am_hash;
+- (NSString *)am_hash;
 
 @end
 

@@ -21,9 +21,10 @@
 
 @implementation XCElementSnapshot (AMHash)
 
-- (NSUInteger)am_hash
+- (NSString *)am_hash
 {
-  return self.accessibilityElement.elementOrHash;
+  NSData *token = self.accessibilityElement.token;
+  return [token base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
 }
 
 @end

@@ -54,8 +54,47 @@
 {
   NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingClassName:@"XCUIElementTypeButton"
                                                                 shouldReturnAfterFirstMatch:NO];
-  XCTAssertTrue(matches.count > 1);
+  XCTAssertTrue(matches.count >= 3);
   XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
+  XCTAssertEqualObjects([matches objectAtIndex:2].identifier, @"_XCUI:MinimizeWindow");
+}
+
+- (void)testSingleDescendantWithPredicate
+{
+  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"elementType == %lu", XCUIElementTypeButton];
+  NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingPredicate:predicate
+                                                                shouldReturnAfterFirstMatch:YES];
+  XCTAssertEqual(matches.count, 1);
+  XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
+}
+
+- (void)testMultipleDescendantsWithPredicate
+{
+  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"elementType == %lu", XCUIElementTypeButton];
+  NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingPredicate:predicate
+                                                                shouldReturnAfterFirstMatch:NO];
+  XCTAssertTrue(matches.count >= 3);
+  XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
+  XCTAssertEqualObjects([matches objectAtIndex:2].identifier, @"_XCUI:MinimizeWindow");
+}
+
+- (void)testSingleDescendantWithXPath
+{
+  NSString *query = @"*//XCUIElementTypeButton";
+  NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingXPathQuery:query
+                                                                 shouldReturnAfterFirstMatch:YES];
+  XCTAssertEqual(matches.count, 1);
+  XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
+}
+
+- (void)testMultipleDescendantsWithXPath
+{
+  NSString *query = @"*//XCUIElementTypeButton";
+  NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingXPathQuery:query
+                                                                 shouldReturnAfterFirstMatch:NO];
+  XCTAssertTrue(matches.count >= 3);
+  XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
+  XCTAssertEqualObjects([matches objectAtIndex:2].identifier, @"_XCUI:MinimizeWindow");
 }
 
 @end
