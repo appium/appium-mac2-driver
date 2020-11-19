@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 
-#import "XCUIElementQuery+AMHelpers.h"
+#import <XCTest/XCTest.h>
 
-#import "FBConfiguration.h"
+NS_ASSUME_NONNULL_BEGIN
 
-@implementation XCUIElementQuery (AMHelpers)
+@interface XCUIApplication (AMActiveElement)
 
-- (XCUIElement *)am_firstMatch
-{
-  return self.am_allMatches.firstObject;
-}
-
-- (NSArray<XCUIElement *> *)am_allMatches
-{
-  return FBConfiguration.sharedConfiguration.boundElementsByIndex
-    ? self.allElementsBoundByIndex
-    : self.allElementsBoundByAccessibilityElement;
-}
+- (XCUIElement *)am_activeElement;
 
 @end
+
+NS_ASSUME_NONNULL_END

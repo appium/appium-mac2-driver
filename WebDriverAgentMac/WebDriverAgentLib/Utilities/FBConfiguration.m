@@ -12,7 +12,6 @@
 static NSUInteger const DefaultStartingPort = 10100;
 static NSUInteger const DefaultPortRange = 100;
 
-static BOOL FBShouldUseFirstMatch = NO;
 static BOOL FBShouldBoundElementsByIndex = NO;
 
 @implementation FBConfiguration
@@ -85,16 +84,6 @@ static FBConfiguration *instance;
 - (BOOL)verboseLoggingEnabled
 {
   return [NSProcessInfo.processInfo.environment[@"VERBOSE_LOGGING"] boolValue];
-}
-
-- (void)setUseFirstMatch:(BOOL)enabled
-{
-  FBShouldUseFirstMatch = enabled;
-}
-
-- (BOOL)useFirstMatch
-{
-  return FBShouldUseFirstMatch;
 }
 
 - (void)setBoundElementsByIndex:(BOOL)enabled

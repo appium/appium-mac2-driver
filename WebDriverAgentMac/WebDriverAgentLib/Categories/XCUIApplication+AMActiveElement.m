@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
+#import "XCUIApplication+AMActiveElement.h"
+
 #import "XCUIElementQuery+AMHelpers.h"
 
-#import "FBConfiguration.h"
 
-@implementation XCUIElementQuery (AMHelpers)
+@implementation XCUIApplication (AMActiveElement)
 
-- (XCUIElement *)am_firstMatch
+- (XCUIElement *)am_activeElement
 {
-  return self.am_allMatches.firstObject;
-}
-
-- (NSArray<XCUIElement *> *)am_allMatches
-{
-  return FBConfiguration.sharedConfiguration.boundElementsByIndex
-    ? self.allElementsBoundByIndex
-    : self.allElementsBoundByAccessibilityElement;
+  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hasKeyboardFocus == YES"];
+  XCUIElementQuery *query = [[self descendantsMatchingType:XCUIElementTypeAny] matchingPredicate:predicate];
+  return query.am_firstMatch;
 }
 
 @end

@@ -43,7 +43,7 @@
 {
   NSUUID *uuid = [[NSUUID new] initWithUUIDString:uuidStr];
   if (nil == uuid) {
-    NSString *reason = [NSString stringWithFormat:@"Cannot extract cached element for UUID == '%@", uuidStr];
+    NSString *reason = [NSString stringWithFormat:@"Cannot extract cached element for '%@' UUID", uuidStr];
     @throw [NSException exceptionWithName:FBInvalidArgumentException reason:reason userInfo:@{}];
   }
 

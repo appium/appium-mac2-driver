@@ -228,7 +228,7 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
       return matchingElements.copy;
     }
   }
-  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"am_hash IN %@", firstMatch ? @[hashes.firstObject] : hashes];
+  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"accessibilityElement.elementOrHash IN %@", firstMatch ? @[hashes.firstObject] : hashes];
   [matchingElements addObjectsFromArray:[[rootElement descendantsMatchingType:XCUIElementTypeAny] matchingPredicate:predicate].am_allMatches];
   return matchingElements.copy;
 }

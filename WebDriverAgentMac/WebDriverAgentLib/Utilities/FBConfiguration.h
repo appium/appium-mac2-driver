@@ -38,13 +38,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly) BOOL verboseLoggingEnabled;
 
 /**
- * Whether to use fast search result matching while searching for elements.
- * By default this is disabled due to https://github.com/appium/appium/issues/10101
- * but it still makes sense to enable it for views containing large counts of elements
- */
-@property BOOL useFirstMatch;
-
-/**
  * Whether to bound the lookup results by index.
  * By default this is disabled and bounding by accessibility is used.
  * Read https://stackoverflow.com/questions/49307513/meaning-of-allelementsboundbyaccessibilityelement
