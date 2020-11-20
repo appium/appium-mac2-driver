@@ -147,7 +147,10 @@
     return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:@"Neither 'value' nor 'text' parameter is provided"
                                                                        traceback:nil]);
   }
-  [element am_setValue:value];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [element am_setValue:value];
+  }];
   return FBResponseWithOK();
 }
 
@@ -157,7 +160,10 @@
   XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   CGFloat deltaX = (CGFloat)[request requireDoubleArgumentWithName:@"deltaX"];
   CGFloat deltaY = (CGFloat)[request requireDoubleArgumentWithName:@"deltaY"];
-  [element scrollByDeltaX:deltaX deltaY:deltaY];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [element scrollByDeltaX:deltaX deltaY:deltaY];
+  }];
   return FBResponseWithOK();
 }
 
@@ -169,7 +175,10 @@
   CGFloat deltaX = (CGFloat)[request requireDoubleArgumentWithName:@"deltaX"];
   CGFloat deltaY = (CGFloat)[request requireDoubleArgumentWithName:@"deltaY"];
   XCUICoordinate *coordinate = [app am_coordinateWithX:x andY:y];
-  [coordinate scrollByDeltaX:deltaX deltaY:deltaY];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [coordinate scrollByDeltaX:deltaX deltaY:deltaY];
+  }];
   return FBResponseWithOK();
 }
 
@@ -179,13 +188,16 @@
   XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   id x = request.arguments[@"x"];
   id y = request.arguments[@"y"];
-  if (x != nil && y != nil) {
-    CGPoint point = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
-    XCUICoordinate *coordinate = [element am_coordinateWithPoint:point];
-    [coordinate rightClick];
-  } else {
-    [element rightClick];
-  }
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    if (x != nil && y != nil) {
+      CGPoint point = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
+      XCUICoordinate *coordinate = [element am_coordinateWithPoint:point];
+      [coordinate rightClick];
+    } else {
+      [element rightClick];
+    }
+  }];
   return FBResponseWithOK();
 }
 
@@ -195,7 +207,10 @@
   CGFloat x = (CGFloat)[request requireDoubleArgumentWithName:@"x"];
   CGFloat y = (CGFloat)[request requireDoubleArgumentWithName:@"y"];
   XCUICoordinate *coordinate = [app am_coordinateWithX:x andY:y];
-  [coordinate rightClick];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [coordinate rightClick];
+  }];
   return FBResponseWithOK();
 }
 
@@ -205,13 +220,16 @@
   XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   id x = request.arguments[@"x"];
   id y = request.arguments[@"y"];
-  if (x != nil && y != nil) {
-    CGPoint point = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
-    XCUICoordinate *coordinate = [element am_coordinateWithPoint:point];
-    [coordinate hover];
-  } else {
-    [element hover];
-  }
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    if (x != nil && y != nil) {
+      CGPoint point = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
+      XCUICoordinate *coordinate = [element am_coordinateWithPoint:point];
+      [coordinate hover];
+    } else {
+      [element hover];
+    }
+  }];
   return FBResponseWithOK();
 }
 
@@ -221,7 +239,10 @@
   CGFloat x = (CGFloat)[request requireDoubleArgumentWithName:@"x"];
   CGFloat y = (CGFloat)[request requireDoubleArgumentWithName:@"y"];
   XCUICoordinate *coordinate = [app am_coordinateWithX:x andY:y];
-  [coordinate hover];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [coordinate hover];
+  }];
   return FBResponseWithOK();
 }
 
@@ -241,7 +262,10 @@
 {
   FBElementCache *elementCache = request.session.elementCache;
   XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
-  [element doubleClick];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [element doubleClick];
+  }];
   return FBResponseWithOK();
 }
 
@@ -250,7 +274,10 @@
   CGPoint point = CGPointMake((CGFloat)[request requireDoubleArgumentWithName:@"x"],
                               (CGFloat)[request requireDoubleArgumentWithName:@"y"]);
   XCUICoordinate *doubleTapCoordinate = [request.session.currentApplication am_coordinateWithPoint:point];
-  [doubleTapCoordinate doubleClick];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [doubleTapCoordinate doubleClick];
+  }];
   return FBResponseWithOK();
 }
 
@@ -259,7 +286,10 @@
   FBElementCache *elementCache = request.session.elementCache;
   XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
-  [element pressForDuration:duration];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [element pressForDuration:duration];
+  }];
   return FBResponseWithOK();
 }
 
@@ -269,7 +299,10 @@
                               (CGFloat)[request requireDoubleArgumentWithName:@"y"]);
   XCUICoordinate *pressCoordinate = [request.session.currentApplication am_coordinateWithPoint:point];
   NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
-  [pressCoordinate pressForDuration:duration];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [pressCoordinate pressForDuration:duration];
+  }];
   return FBResponseWithOK();
 }
 
@@ -280,7 +313,10 @@
   NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
   NSDictionary *dest = [request requireDictionaryArgumentWithName:@"dest"];
   XCUIElement *dstElement = [elementCache elementForUUID:(NSString *)FBExtractElement(dest)];
-  [srcElement clickForDuration:duration thenDragToElement:dstElement];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [srcElement clickForDuration:duration thenDragToElement:dstElement];
+  }];
   return FBResponseWithOK();
 }
 
@@ -294,7 +330,10 @@
   NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
   XCUICoordinate *start = [app am_coordinateWithX:startX andY:startY];
   XCUICoordinate *end = [app am_coordinateWithX:endX andY:endY];
-  [start clickForDuration:duration thenDragToCoordinate:end];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [start clickForDuration:duration thenDragToCoordinate:end];
+  }];
   return FBResponseWithOK();
 }
 
@@ -311,10 +350,13 @@
   if (nil != velocityObj) {
     velocity = (CGFloat)[velocityObj doubleValue];
   }
-  [srcElement clickForDuration:duration
-             thenDragToElement:dstElement
-                  withVelocity:velocity
-           thenHoldForDuration:holdDuration];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [srcElement clickForDuration:duration
+               thenDragToElement:dstElement
+                    withVelocity:velocity
+             thenHoldForDuration:holdDuration];
+  }];
   return FBResponseWithOK();
 }
 
@@ -334,10 +376,13 @@
   }
   XCUICoordinate *start = [app am_coordinateWithX:startX andY:startY];
   XCUICoordinate *end = [app am_coordinateWithX:endX andY:endY];
-  [start clickForDuration:duration
-     thenDragToCoordinate:end
-             withVelocity:velocity
-      thenHoldForDuration:holdDuration];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [start clickForDuration:duration
+       thenDragToCoordinate:end
+               withVelocity:velocity
+        thenHoldForDuration:holdDuration];
+  }];
   return FBResponseWithOK();
 }
 
@@ -347,13 +392,16 @@
   XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   id x = request.arguments[@"x"];
   id y = request.arguments[@"y"];
-  if (nil != x && nil != y) {
-    CGPoint tapPoint = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
-    XCUICoordinate *coordinate = [element am_coordinateWithPoint:tapPoint];
-    [coordinate click];
-  } else {
-    [element click];
-  }
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    if (nil != x && nil != y) {
+      CGPoint tapPoint = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
+      XCUICoordinate *coordinate = [element am_coordinateWithPoint:tapPoint];
+      [coordinate click];
+    } else {
+      [element click];
+    }
+  }];
   return FBResponseWithOK();
 }
 
@@ -362,7 +410,10 @@
   CGPoint point = CGPointMake((CGFloat)[request requireDoubleArgumentWithName:@"x"],
                               (CGFloat)[request requireDoubleArgumentWithName:@"y"]);
   XCUICoordinate *coordinate = [request.session.currentApplication am_coordinateWithPoint:point];
-  [coordinate click];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [coordinate click];
+  }];
   return FBResponseWithOK();
 }
 
@@ -425,6 +476,18 @@
   }
   NSString *screenshot = [screenshotData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
   return FBResponseWithObject(screenshot);
+}
+
++ (void)excuteRespectingKeyModifiersWithRequest:(FBRouteRequest *)request block:(void(^)(void))block
+{
+  id arg = request.arguments[@"modifiers"];
+  NSNumber *modifiers = [arg isKindOfClass:NSNumber.class] ? (NSNumber *)arg : nil;
+  if (nil == modifiers) {
+    block();
+  } else {
+    [XCUIElement performWithKeyModifiers:modifiers.unsignedIntValue
+                                   block:block];
+  }
 }
 
 @end

@@ -144,7 +144,9 @@
     for (FBRoute *route in routes) {
       [self.server handleMethod:route.verb withPath:route.path block:^(RouteRequest *request, RouteResponse *response) {
         NSError *error = nil;
-        NSDictionary *arguments = [NSJSONSerialization JSONObjectWithData:request.body options:NSJSONReadingMutableContainers error:&error];
+        NSDictionary *arguments = [NSJSONSerialization JSONObjectWithData:request.body
+                                                                  options:NSJSONReadingMutableContainers
+                                                                    error:&error];
         if (nil != error) {
           [FBLogger logFmt:@"%@", error.localizedDescription];
         }
