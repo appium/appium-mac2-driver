@@ -142,9 +142,4 @@ static NSString const *FB_ELEMENT_TYPE_PREFIX = @"XCUIElementType";
     : typeName;
 }
 
-+ (NSString *)shortStringWithElementType:(XCUIElementType)type
-{
-  return [[self stringWithElementType:type] stringByReplacingOccurrencesOfString:(NSString *)FB_ELEMENT_TYPE_PREFIX withString:@""];
-}
-
 @end

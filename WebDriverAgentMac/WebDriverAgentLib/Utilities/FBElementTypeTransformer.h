@@ -33,14 +33,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (NSString *)stringWithElementType:(XCUIElementType)type;
 
-/**
- Converts XCUIElementType to short string by striping `XCUIElementType` from it
-
- @param type converted XCUIElementType to string
- @return XCUIElementType as NSString with stripped `XCUIElementType`
- */
-+ (NSString *)shortStringWithElementType:(XCUIElementType)type;
-
 @end
 
 NS_ASSUME_NONNULL_END
