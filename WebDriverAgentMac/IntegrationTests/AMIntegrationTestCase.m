@@ -43,4 +43,14 @@
   [self.testedApplication launch];
 }
 
+- (void)switchToButtonsTab
+{
+  [self.testedApplication.radioButtons[@"Buttons"].firstMatch click];
+}
+
+- (void)switchToEditsTab
+{
+  [self.testedApplication.radioButtons[@"Edits"].firstMatch click];
+}
+
 @end

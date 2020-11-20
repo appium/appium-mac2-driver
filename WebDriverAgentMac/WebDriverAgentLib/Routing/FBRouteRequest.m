@@ -9,6 +9,8 @@
 
 #import "FBRouteRequest-Private.h"
 
+#import "FBExceptions.h"
+
 @implementation FBRouteRequest
 
 + (instancetype)routeRequestWithURL:(NSURL *)URL parameters:(NSDictionary *)parameters arguments:(NSDictionary *)arguments
@@ -28,6 +30,41 @@
     self.parameters,
     self.arguments
   ];
+}
+
+- (id)requireArgumentWithName:(NSString *)name
+{
+  id value = self.arguments[name];
+  if (nil == value) {
+    NSString *reason = [NSString stringWithFormat:@"'%@' argument must be provided", name];
+    @throw [NSException exceptionWithName:FBInvalidArgumentException
+                                   reason:reason
+                                 userInfo:@{}];
+  }
+  return value;
+}
+
+- (double)requireDoubleArgumentWithName:(NSString *)name
+{
+  id value = [self requireArgumentWithName:name];
+  return [value doubleValue];
+}
+
+- (NSDictionary *)requireDictionaryArgumentWithName:(NSString *)name
+{
+  id value = [self requireArgumentWithName:name];
+  if (![value isKindOfClass:NSDictionary.class]) {
+    NSString *reason = [NSString stringWithFormat:@"'%@' argument must be of dictionary type", name];
+    @throw [NSException exceptionWithName:FBInvalidArgumentException
+                                   reason:reason
+                                 userInfo:@{}];
+  }
+  return (NSDictionary *)value;
+}
+
+- (NSString *)elementUuid
+{
+  return (NSString *)self.parameters[@"uuid"];
 }
 
 @end

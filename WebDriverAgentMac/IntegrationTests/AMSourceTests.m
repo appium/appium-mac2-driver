@@ -17,7 +17,7 @@
 #import <XCTest/XCTest.h>
 
 #import "AMIntegrationTestCase.h"
-#import "XCUIApplication+AMXml.h"
+#import "XCUIApplication+AMSource.h"
 
 
 @interface AMSourceTests : AMIntegrationTestCase
@@ -38,6 +38,12 @@
 {
   NSString *description = self.testedApplication.am_descriptionRepresentation;
   XCTAssertTrue(description.length > 0);
+}
+
+- (void)testXmlRepresentation
+{
+  NSString *xml = self.testedApplication.am_xmlRepresentation;
+  XCTAssertTrue(xml.length > 0);
 }
 
 @end

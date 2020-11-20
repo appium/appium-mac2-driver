@@ -113,8 +113,8 @@
 		713A9D422566B7A500118D07 /* XCUIElement+FBTyping.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D402566B7A500118D07 /* XCUIElement+FBTyping.m */; };
 		714CA6FC2566461100353B27 /* FBDebugCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA6FA2566461100353B27 /* FBDebugCommands.h */; };
 		714CA6FD2566461100353B27 /* FBDebugCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA6FB2566461100353B27 /* FBDebugCommands.m */; };
-		714CA7012566475200353B27 /* XCUIApplication+AMXml.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA6FF2566475200353B27 /* XCUIApplication+AMXml.h */; };
-		714CA7022566475200353B27 /* XCUIApplication+AMXml.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA7002566475200353B27 /* XCUIApplication+AMXml.m */; };
+		714CA7012566475200353B27 /* XCUIApplication+AMSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA6FF2566475200353B27 /* XCUIApplication+AMSource.h */; };
+		714CA7022566475200353B27 /* XCUIApplication+AMSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA7002566475200353B27 /* XCUIApplication+AMSource.m */; };
 		714CA7062566487B00353B27 /* FBXPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA7042566487B00353B27 /* FBXPath.h */; };
 		714CA7072566487B00353B27 /* FBXPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA7052566487B00353B27 /* FBXPath.m */; };
 		714CA70A256648B200353B27 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 714CA709256648A100353B27 /* libxml2.tbd */; };
@@ -133,6 +133,9 @@
 		718D2BEA256713FD005F533B /* XCUIElement+AMCoordinates.m in Sources */ = {isa = PBXBuildFile; fileRef = 718D2BE8256713FD005F533B /* XCUIElement+AMCoordinates.m */; };
 		718D2BF325678B4E005F533B /* AMSnapshotUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 718D2BF125678B4E005F533B /* AMSnapshotUtils.h */; };
 		718D2BF425678B4E005F533B /* AMSnapshotUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 718D2BF225678B4E005F533B /* AMSnapshotUtils.m */; };
+		718D2C082567A028005F533B /* AMElementAttributesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718D2C072567A028005F533B /* AMElementAttributesTests.m */; };
+		718D2C0D2567AA03005F533B /* XCUIElement+AMEditable.h in Headers */ = {isa = PBXBuildFile; fileRef = 718D2C0B2567AA03005F533B /* XCUIElement+AMEditable.h */; };
+		718D2C0E2567AA03005F533B /* XCUIElement+AMEditable.m in Sources */ = {isa = PBXBuildFile; fileRef = 718D2C0C2567AA03005F533B /* XCUIElement+AMEditable.m */; };
 		7199B3A22565B0A3000B5C51 /* CocoaAsyncSocket.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7199B3CD2565B1CD000B5C51 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71688AE2256466070007F55B /* XCTest.framework */; };
 		7199B3CE2565B1E8000B5C51 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */; };
@@ -227,8 +230,8 @@
 		713A9D402566B7A500118D07 /* XCUIElement+FBTyping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XCUIElement+FBTyping.m"; sourceTree = "<group>"; };
 		714CA6FA2566461100353B27 /* FBDebugCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDebugCommands.h; sourceTree = "<group>"; };
 		714CA6FB2566461100353B27 /* FBDebugCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBDebugCommands.m; sourceTree = "<group>"; };
-		714CA6FF2566475200353B27 /* XCUIApplication+AMXml.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIApplication+AMXml.h"; sourceTree = "<group>"; };
-		714CA7002566475200353B27 /* XCUIApplication+AMXml.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIApplication+AMXml.m"; sourceTree = "<group>"; };
+		714CA6FF2566475200353B27 /* XCUIApplication+AMSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIApplication+AMSource.h"; sourceTree = "<group>"; };
+		714CA7002566475200353B27 /* XCUIApplication+AMSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIApplication+AMSource.m"; sourceTree = "<group>"; };
 		714CA7042566487B00353B27 /* FBXPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBXPath.h; sourceTree = "<group>"; };
 		714CA7052566487B00353B27 /* FBXPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBXPath.m; sourceTree = "<group>"; };
 		714CA709256648A100353B27 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
@@ -330,6 +333,10 @@
 		718D2BE8256713FD005F533B /* XCUIElement+AMCoordinates.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIElement+AMCoordinates.m"; sourceTree = "<group>"; };
 		718D2BF125678B4E005F533B /* AMSnapshotUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMSnapshotUtils.h; sourceTree = "<group>"; };
 		718D2BF225678B4E005F533B /* AMSnapshotUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMSnapshotUtils.m; sourceTree = "<group>"; };
+		718D2C072567A028005F533B /* AMElementAttributesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMElementAttributesTests.m; sourceTree = "<group>"; };
+		718D2C0B2567AA03005F533B /* XCUIElement+AMEditable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIElement+AMEditable.h"; sourceTree = "<group>"; };
+		718D2C0C2567AA03005F533B /* XCUIElement+AMEditable.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIElement+AMEditable.m"; sourceTree = "<group>"; };
+		718D2C132567B465005F533B /* FBTestMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBTestMacros.h; sourceTree = "<group>"; };
 		7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WebDriverAgentLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7199B3AE2565B122000B5C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71B00E8B2566D4B90010DA73 /* IntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -508,12 +515,14 @@
 				713A9D302566A14200118D07 /* XCUIApplication+AMActiveElement.m */,
 				710527FD2565802200130763 /* XCUIApplication+AMHelpers.h */,
 				710527FE2565802200130763 /* XCUIApplication+AMHelpers.m */,
-				714CA6FF2566475200353B27 /* XCUIApplication+AMXml.h */,
-				714CA7002566475200353B27 /* XCUIApplication+AMXml.m */,
+				714CA6FF2566475200353B27 /* XCUIApplication+AMSource.h */,
+				714CA7002566475200353B27 /* XCUIApplication+AMSource.m */,
 				718D2BD725670A76005F533B /* XCUIElement+AMAttributes.h */,
 				718D2BD825670A76005F533B /* XCUIElement+AMAttributes.m */,
 				718D2BE7256713FD005F533B /* XCUIElement+AMCoordinates.h */,
 				718D2BE8256713FD005F533B /* XCUIElement+AMCoordinates.m */,
+				718D2C0B2567AA03005F533B /* XCUIElement+AMEditable.h */,
+				718D2C0C2567AA03005F533B /* XCUIElement+AMEditable.m */,
 				713A9D2B25669E4F00118D07 /* XCUIElement+FBClassChain.h */,
 				713A9D2A25669E4E00118D07 /* XCUIElement+FBClassChain.m */,
 				713A9D2625669A6B00118D07 /* XCUIElement+FBFind.h */,
@@ -638,10 +647,12 @@
 		71B00E8C2566D4B90010DA73 /* IntegrationTests */ = {
 			isa = PBXGroup;
 			children = (
+				718D2C072567A028005F533B /* AMElementAttributesTests.m */,
 				71B00E9C2566D7F10010DA73 /* AMIntegrationTestCase.h */,
 				71B00E8D2566D4BA0010DA73 /* AMIntegrationTestCase.m */,
 				71B00E9F2566D9570010DA73 /* AMFindElementTests.m */,
 				71B00EA52566DBAF0010DA73 /* AMSourceTests.m */,
+				718D2C132567B465005F533B /* FBTestMacros.h */,
 				71B00E8F2566D4BA0010DA73 /* Info.plist */,
 			);
 			path = IntegrationTests;
@@ -658,6 +669,7 @@
 				7109BFB62565B4F0006BFD13 /* FBClassChainQueryParser.h in Headers */,
 				7109BFCC2565B512006BFD13 /* FBMacros.h in Headers */,
 				7109BFB02565B413006BFD13 /* WebDriverAgentLib.h in Headers */,
+				718D2C0D2567AA03005F533B /* XCUIElement+AMEditable.h in Headers */,
 				7109BFD42565B51E006BFD13 /* FBRunLoopSpinner.h in Headers */,
 				7109C0632565B5FD006BFD13 /* HTTPServer.h in Headers */,
 				7109C04B2565B5E0006BFD13 /* DDRange.h in Headers */,
@@ -679,7 +691,7 @@
 				7109C0422565B5C7006BFD13 /* XCUIApplication+AMHelpers.h in Headers */,
 				7109BFBD2565B4FC006BFD13 /* FBElementTypeTransformer.h in Headers */,
 				7109BFC72565B50B006BFD13 /* FBLogger.h in Headers */,
-				714CA7012566475200353B27 /* XCUIApplication+AMXml.h in Headers */,
+				714CA7012566475200353B27 /* XCUIApplication+AMSource.h in Headers */,
 				7109C0132565B576006BFD13 /* FBRouteRequest-Private.h in Headers */,
 				718D2BE9256713FD005F533B /* XCUIElement+AMCoordinates.h in Headers */,
 				7109C07B2565B61A006BFD13 /* RoutingHTTPServer.h in Headers */,
@@ -922,9 +934,10 @@
 				714CA7072566487B00353B27 /* FBXPath.m in Sources */,
 				714CA70E25664A8000353B27 /* NSString+FBXMLSafeString.m in Sources */,
 				7109C0692565B605006BFD13 /* HTTPResponseProxy.m in Sources */,
+				718D2C0E2567AA03005F533B /* XCUIElement+AMEditable.m in Sources */,
 				713A9D382566A83800118D07 /* FBElementCommands.m in Sources */,
 				7109C05F2565B5F8006BFD13 /* HTTPMessage.m in Sources */,
-				714CA7022566475200353B27 /* XCUIApplication+AMXml.m in Sources */,
+				714CA7022566475200353B27 /* XCUIApplication+AMSource.m in Sources */,
 				7109BFF02565B54A006BFD13 /* FBElementUtils.m in Sources */,
 				718D2BF425678B4E005F533B /* AMSnapshotUtils.m in Sources */,
 				718D2BEA256713FD005F533B /* XCUIElement+AMCoordinates.m in Sources */,
@@ -962,6 +975,7 @@
 				71B00EA62566DBAF0010DA73 /* AMSourceTests.m in Sources */,
 				71B00E8E2566D4BA0010DA73 /* AMIntegrationTestCase.m in Sources */,
 				71B00EA02566D9570010DA73 /* AMFindElementTests.m in Sources */,
+				718D2C082567A028005F533B /* AMElementAttributesTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-#import "XCUIApplication+AMXml.h"
+#import <XCTest/XCTest.h>
 
-#import "FBXPath.h"
+NS_ASSUME_NONNULL_BEGIN
 
-@implementation XCUIApplication (AMXml)
+@interface XCUIApplication (AMSource)
 
-- (NSString *)am_xmlRepresentation
-{
-  return [FBXPath xmlStringWithRootElement:self];
-}
+/**
+ Retrives XML application source representation
+ */
+- (NSString *)am_xmlRepresentation;
 
-- (NSString *)am_descriptionRepresentation
-{
-  return self.debugDescription;
-}
+/**
+ Retrives description application source representation.
+ Actually, the value of debugDescription property
+ */
+- (NSString *)am_descriptionRepresentation;
 
 @end
+
+NS_ASSUME_NONNULL_END

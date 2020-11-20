@@ -33,10 +33,6 @@
     return [NSString stringWithFormat:@"%lu", self.elementType];
   } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, placeholderValue)]) {
     return self.placeholderValue;
-  } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, verticalSizeClass)]) {
-    return [NSString stringWithFormat:@"%lu", self.verticalSizeClass];
-  } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, horizontalSizeClass)]) {
-    return [NSString stringWithFormat:@"%lu", self.horizontalSizeClass];
   } else if ([wdAttributeName isEqualToString:@"enabled"]) {
     return self.enabled ? @"true" : @"false";
   } else if ([wdAttributeName isEqualToString:@"selected"]) {
@@ -59,22 +55,29 @@
 
 - (NSDictionary<NSString *, NSNumber *> *)am_rect
 {
-  return AMCGRectToDict(self.frame);
+  // CGRectZero is always returned as application frame by default
+  return AMCGRectToDict([self isKindOfClass:XCUIApplication.class]
+    ? NSScreen.mainScreen.frame
+    : self.frame);
 }
 
 - (NSString *)am_text
 {
-  id value = self.value;
-  if (nil != value) {
-    return [FBElementUtils stringValueWithValue:value];
+  NSString *value = [FBElementUtils stringValueWithValue:self.value];
+  if (nil != value && value.length > 0) {
+    return value;
   }
   NSString *label = self.label;
-  if (nil != label || label.length > 0) {
+  if (nil != label && label.length > 0) {
     return label;
   }
   NSString *placeholderValue = self.placeholderValue;
-  if (nil != placeholderValue || placeholderValue.length > 0) {
+  if (nil != placeholderValue && placeholderValue.length > 0) {
     return placeholderValue;
+  }
+  NSString *title = self.title;
+  if (nil != title && title.length > 0) {
+    return title;
   }
   return @"";
 }
@@ -86,14 +89,11 @@
 
 - (BOOL)am_hasKeyboardInputFocus
 {
-  SEL selector = NSSelectorFromString(@"hasKeyboardInputFocus");
-  NSMethodSignature *signature = [self methodSignatureForSelector:selector];
-  NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-  [invocation setSelector:selector];
-  [invocation invokeWithTarget:self];
-  NSNumber *__unsafe_unretained result;
-  [invocation getReturnValue:&result];
-  return [result boolValue];
+  id snapshot = [self valueForKey:@"_lastSnapshot"];
+  if (nil == snapshot) {
+    snapshot = [self snapshotWithError:nil];
+  }
+  return [[snapshot valueForKey:@"_hasKeyboardFocus"] boolValue];
 }
 
 @end

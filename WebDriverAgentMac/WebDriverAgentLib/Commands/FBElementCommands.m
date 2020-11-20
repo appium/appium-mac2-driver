@@ -28,6 +28,7 @@
 #import "FBElementTypeTransformer.h"
 #import "XCUIElement+AMAttributes.h"
 #import "XCUIElement+AMCoordinates.h"
+#import "XCUIElement+AMEditable.h"
 #import "XCUIElement+FBTyping.h"
 
 @interface FBElementCommands ()
@@ -90,90 +91,71 @@
 + (id<FBResponsePayload>)handleGetEnabled:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   return FBResponseWithObject(@(element.enabled));
 }
 
 + (id<FBResponsePayload>)handleGetRect:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   return FBResponseWithObject(element.am_rect);
 }
 
 + (id<FBResponsePayload>)handleGetAttribute:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   return [element am_wdAttributeValueWithName:(NSString *)request.parameters[@"name"]];
 }
 
 + (id<FBResponsePayload>)handleGetText:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   return FBResponseWithObject(element.am_text);
 }
 
 + (id<FBResponsePayload>)handleGetDisplayed:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   return FBResponseWithObject(@(element.exists));
 }
 
 + (id<FBResponsePayload>)handleGetName:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
-  return FBResponseWithObject(element.am_type);
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
+  return FBResponseWithObject(element.identifier);
 }
 
 + (id<FBResponsePayload>)handleGetSelected:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   return FBResponseWithObject(@(element.selected));
 }
 
 + (id<FBResponsePayload>)handleSetValue:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   id value = request.arguments[@"value"] ?: request.arguments[@"text"];
   if (!value) {
     return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:@"Neither 'value' nor 'text' parameter is provided"
                                                                        traceback:nil]);
   }
-  NSString *textToType = [value isKindOfClass:NSArray.class]
-    ? [value componentsJoinedByString:@""]
-    : value;
-  XCUIElementType elementType = element.elementType;
-  if (elementType == XCUIElementTypeSlider) {
-    CGFloat sliderValue = textToType.floatValue;
-    if (sliderValue < 0.0 || sliderValue > 1.0 ) {
-      return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:@"Value of slider should be in 0..1 range"
-                                                                         traceback:nil]);
-    }
-    [element adjustToNormalizedSliderPosition:sliderValue];
-    return FBResponseWithOK();
-  }
-  NSError *error = nil;
-  if (![element fb_typeText:textToType
-                shouldClear:NO
-                      error:&error]) {
-    return FBResponseWithStatus([FBCommandStatus invalidElementStateErrorWithMessage:error.description
-                                                                           traceback:nil]);
-  }
+  [element am_setValue:value];
   return FBResponseWithOK();
 }
 
 + (id<FBResponsePayload>)handleScroll:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
-  CGFloat deltaX = (CGFloat)[request.arguments[@"deltaX"] doubleValue];
-  CGFloat deltaY = (CGFloat)[request.arguments[@"deltaY"] doubleValue];
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
+  CGFloat deltaX = (CGFloat)[request requireDoubleArgumentWithName:@"deltaX"];
+  CGFloat deltaY = (CGFloat)[request requireDoubleArgumentWithName:@"deltaY"];
   [element scrollByDeltaX:deltaX deltaY:deltaY];
   return FBResponseWithOK();
 }
@@ -181,10 +163,10 @@
 + (id<FBResponsePayload>)handleScrollCoordinate:(FBRouteRequest *)request
 {
   XCUIApplication *app = request.session.currentApplication;
-  CGFloat x = (CGFloat)[request.arguments[@"x"] doubleValue];
-  CGFloat y = (CGFloat)[request.arguments[@"y"] doubleValue];
-  CGFloat deltaX = (CGFloat)[request.arguments[@"deltaX"] doubleValue];
-  CGFloat deltaY = (CGFloat)[request.arguments[@"deltaY"] doubleValue];
+  CGFloat x = (CGFloat)[request requireDoubleArgumentWithName:@"x"];
+  CGFloat y = (CGFloat)[request requireDoubleArgumentWithName:@"y"];
+  CGFloat deltaX = (CGFloat)[request requireDoubleArgumentWithName:@"deltaX"];
+  CGFloat deltaY = (CGFloat)[request requireDoubleArgumentWithName:@"deltaY"];
   XCUICoordinate *coordinate = [app am_coordinateWithX:x andY:y];
   [coordinate scrollByDeltaX:deltaX deltaY:deltaY];
   return FBResponseWithOK();
@@ -193,7 +175,7 @@
 + (id<FBResponsePayload>)handleRightClick:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   id x = request.arguments[@"x"];
   id y = request.arguments[@"y"];
   if (x != nil && y != nil) {
@@ -209,8 +191,8 @@
 + (id<FBResponsePayload>)handleRightClickCoordinate:(FBRouteRequest *)request
 {
   XCUIApplication *app = request.session.currentApplication;
-  CGFloat x = (CGFloat)[request.arguments[@"x"] doubleValue];
-  CGFloat y = (CGFloat)[request.arguments[@"y"] doubleValue];
+  CGFloat x = (CGFloat)[request requireDoubleArgumentWithName:@"x"];
+  CGFloat y = (CGFloat)[request requireDoubleArgumentWithName:@"y"];
   XCUICoordinate *coordinate = [app am_coordinateWithX:x andY:y];
   [coordinate rightClick];
   return FBResponseWithOK();
@@ -219,7 +201,7 @@
 + (id<FBResponsePayload>)handleHover:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   id x = request.arguments[@"x"];
   id y = request.arguments[@"y"];
   if (x != nil && y != nil) {
@@ -235,8 +217,8 @@
 + (id<FBResponsePayload>)handleHoverCoordinate:(FBRouteRequest *)request
 {
   XCUIApplication *app = request.session.currentApplication;
-  CGFloat x = (CGFloat)[request.arguments[@"x"] doubleValue];
-  CGFloat y = (CGFloat)[request.arguments[@"y"] doubleValue];
+  CGFloat x = (CGFloat)[request requireDoubleArgumentWithName:@"x"];
+  CGFloat y = (CGFloat)[request requireDoubleArgumentWithName:@"y"];
   XCUICoordinate *coordinate = [app am_coordinateWithX:x andY:y];
   [coordinate hover];
   return FBResponseWithOK();
@@ -245,10 +227,11 @@
 + (id<FBResponsePayload>)handleClear:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   NSError *error;
   if (![element fb_clearTextWithError:&error]) {
-    return FBResponseWithStatus([FBCommandStatus invalidElementStateErrorWithMessage:error.description traceback:nil]);
+    return FBResponseWithStatus([FBCommandStatus invalidElementStateErrorWithMessage:error.description
+                                                                           traceback:nil]);
   }
   return FBResponseWithOK();
 }
@@ -256,14 +239,15 @@
 + (id<FBResponsePayload>)handleDoubleClick:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   [element doubleClick];
   return FBResponseWithOK();
 }
 
 + (id<FBResponsePayload>)handleDoubleClickCoordinate:(FBRouteRequest *)request
 {
-  CGPoint point = CGPointMake((CGFloat)[request.arguments[@"x"] doubleValue], (CGFloat)[request.arguments[@"y"] doubleValue]);
+  CGPoint point = CGPointMake((CGFloat)[request requireDoubleArgumentWithName:@"x"],
+                              (CGFloat)[request requireDoubleArgumentWithName:@"y"]);
   XCUICoordinate *doubleTapCoordinate = [request.session.currentApplication am_coordinateWithPoint:point];
   [doubleTapCoordinate doubleClick];
   return FBResponseWithOK();
@@ -272,25 +256,29 @@
 + (id<FBResponsePayload>)handleTouchAndHold:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
-  [element pressForDuration:[request.arguments[@"duration"] doubleValue]];
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
+  NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
+  [element pressForDuration:duration];
   return FBResponseWithOK();
 }
 
 + (id<FBResponsePayload>)handleTouchAndHoldCoordinate:(FBRouteRequest *)request
 {
-  CGPoint point = CGPointMake((CGFloat)[request.arguments[@"x"] doubleValue], (CGFloat)[request.arguments[@"y"] doubleValue]);
+  CGPoint point = CGPointMake((CGFloat)[request requireDoubleArgumentWithName:@"x"],
+                              (CGFloat)[request requireDoubleArgumentWithName:@"y"]);
   XCUICoordinate *pressCoordinate = [request.session.currentApplication am_coordinateWithPoint:point];
-  [pressCoordinate pressForDuration:[request.arguments[@"duration"] doubleValue]];
+  NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
+  [pressCoordinate pressForDuration:duration];
   return FBResponseWithOK();
 }
 
 + (id<FBResponsePayload>)handleClickAndDrag:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *srcElement = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
-  NSTimeInterval duration = [request.arguments[@"duration"] doubleValue];
-  XCUIElement *dstElement = [elementCache elementForUUID:(NSString *)FBExtractElement(request.arguments[@"dest"])];
+  XCUIElement *srcElement = [elementCache elementForUUID:request.elementUuid];
+  NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
+  NSDictionary *dest = [request requireDictionaryArgumentWithName:@"dest"];
+  XCUIElement *dstElement = [elementCache elementForUUID:(NSString *)FBExtractElement(dest)];
   [srcElement clickForDuration:duration thenDragToElement:dstElement];
   return FBResponseWithOK();
 }
@@ -298,11 +286,11 @@
 + (id<FBResponsePayload>)handleClickAndDragCoordinate:(FBRouteRequest *)request
 {
   XCUIApplication *app = request.session.currentApplication;
-  CGFloat startX = (CGFloat)[request.arguments[@"startX"] doubleValue];
-  CGFloat startY = (CGFloat)[request.arguments[@"startY"] doubleValue];
-  CGFloat endX = (CGFloat)[request.arguments[@"endX"] doubleValue];
-  CGFloat endY = (CGFloat)[request.arguments[@"endY"] doubleValue];
-  NSTimeInterval duration = [request.arguments[@"duration"] doubleValue];
+  CGFloat startX = (CGFloat)[request requireDoubleArgumentWithName:@"startX"];
+  CGFloat startY = (CGFloat)[request requireDoubleArgumentWithName:@"startY"];
+  CGFloat endX = (CGFloat)[request requireDoubleArgumentWithName:@"endX"];
+  CGFloat endY = (CGFloat)[request requireDoubleArgumentWithName:@"endY"];
+  NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
   XCUICoordinate *start = [app am_coordinateWithX:startX andY:startY];
   XCUICoordinate *end = [app am_coordinateWithX:endX andY:endY];
   [start clickForDuration:duration thenDragToCoordinate:end];
@@ -312,10 +300,11 @@
 + (id<FBResponsePayload>)handleClickDragAndHold:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *srcElement = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
-  NSTimeInterval duration = [request.arguments[@"duration"] doubleValue];
-  NSTimeInterval holdDuration = [request.arguments[@"holdDuration"] doubleValue];
-  XCUIElement *dstElement = [elementCache elementForUUID:(NSString *)FBExtractElement(request.arguments[@"dest"])];
+  XCUIElement *srcElement = [elementCache elementForUUID:request.elementUuid];
+  NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
+  NSTimeInterval holdDuration = [request requireDoubleArgumentWithName:@"holdDuration"];
+  NSDictionary *dest = [request requireDictionaryArgumentWithName:@"dest"];
+  XCUIElement *dstElement = [elementCache elementForUUID:(NSString *)FBExtractElement(dest)];
   id velocityObj = request.arguments[@"velocity"];
   CGFloat velocity = XCUIGestureVelocityDefault;
   if (nil != velocityObj) {
@@ -331,12 +320,12 @@
 + (id<FBResponsePayload>)handleClickDragAndHoldCoordinate:(FBRouteRequest *)request
 {
   XCUIApplication *app = request.session.currentApplication;
-  CGFloat startX = (CGFloat)[request.arguments[@"startX"] doubleValue];
-  CGFloat startY = (CGFloat)[request.arguments[@"startY"] doubleValue];
-  CGFloat endX = (CGFloat)[request.arguments[@"endX"] doubleValue];
-  CGFloat endY = (CGFloat)[request.arguments[@"endY"] doubleValue];
-  NSTimeInterval duration = [request.arguments[@"duration"] doubleValue];
-  NSTimeInterval holdDuration = [request.arguments[@"holdDuration"] doubleValue];
+  CGFloat startX = (CGFloat)[request requireDoubleArgumentWithName:@"startX"];
+  CGFloat startY = (CGFloat)[request requireDoubleArgumentWithName:@"startY"];
+  CGFloat endX = (CGFloat)[request requireDoubleArgumentWithName:@"endX"];
+  CGFloat endY = (CGFloat)[request requireDoubleArgumentWithName:@"endY"];
+  NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
+  NSTimeInterval holdDuration = [request requireDoubleArgumentWithName:@"holdDuration"];
   id velocityObj = request.arguments[@"velocity"];
   CGFloat velocity = XCUIGestureVelocityDefault;
   if (nil != velocityObj) {
@@ -354,7 +343,7 @@
 + (id<FBResponsePayload>)handleClick:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   id x = request.arguments[@"x"];
   id y = request.arguments[@"y"];
   if (nil != x && nil != y) {
@@ -369,7 +358,8 @@
 
 + (id<FBResponsePayload>)handleClickCoordinate:(FBRouteRequest *)request
 {
-  CGPoint point = CGPointMake((CGFloat)[request.arguments[@"x"] doubleValue], (CGFloat)[request.arguments[@"y"] doubleValue]);
+  CGPoint point = CGPointMake((CGFloat)[request requireDoubleArgumentWithName:@"x"],
+                              (CGFloat)[request requireDoubleArgumentWithName:@"y"]);
   XCUICoordinate *coordinate = [request.session.currentApplication am_coordinateWithPoint:point];
   [coordinate click];
   return FBResponseWithOK();
@@ -378,14 +368,21 @@
 + (id<FBResponsePayload>)handleKeys:(FBRouteRequest *)request
 {
   FBSession *session = request.session;
-  NSString *textToType = [request.arguments[@"value"] componentsJoinedByString:@""];
+  id value = request.arguments[@"value"] ?: request.arguments[@"text"];
+  if (!value) {
+    return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:@"Neither 'value' nor 'text' parameter is provided"
+                                                                       traceback:nil]);
+  }
+  NSString *textToType = [value isKindOfClass:NSArray.class]
+    ? [(NSArray *)value componentsJoinedByString:@""]
+    : (NSString *)value;
   [session.currentApplication typeText:textToType];
   return FBResponseWithOK();
 }
 
 + (id<FBResponsePayload>)handleGetWindowSize:(FBRouteRequest *)request
 {
-  NSDictionary *rect = AMCGRectToDict(request.session.currentApplication.frame);
+  NSDictionary *rect = request.session.currentApplication.am_rect;
   return FBResponseWithObject(@{
     @"width": rect[@"width"],
     @"height": rect[@"height"],
@@ -395,7 +392,7 @@
 + (id<FBResponsePayload>)handleElementScreenshot:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:(NSString *)request.parameters[@"uuid"]];
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   NSData *screenshotData = [[element screenshot] PNGRepresentation];
   if (nil == screenshotData) {
     NSString *message = [NSString stringWithFormat:@"Cannot capture the screenshot of '%@'", element.description];

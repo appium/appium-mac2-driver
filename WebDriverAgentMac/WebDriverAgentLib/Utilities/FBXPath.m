@@ -527,9 +527,11 @@ static NSString *const FBAbstractMethodInvocationException = @"AbstractMethodInv
 
 + (NSString *)valueForElement:(id<XCUIElementSnapshot>)element
 {
-  CGRect frame = element.frame;
-  NSDictionary *rect = AMCGRectToDict(frame);
-  return [NSString stringWithFormat:@"%@", [rect objectForKey:self.name]];
+  // CGRectZero is always returned as application frame by default
+  CGRect frame = element.elementType == XCUIElementTypeApplication
+    ? NSScreen.mainScreen.frame
+    : element.frame;
+  return [NSString stringWithFormat:@"%@", [AMCGRectToDict(frame) objectForKey:self.name]];
 }
 
 @end

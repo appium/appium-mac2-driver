@@ -9,6 +9,7 @@
 
 #import "FBExceptions.h"
 
+NSString *const FBInvalidElementStateException = @"FBInvalidElementStateException";
 NSString *const FBInvalidArgumentException = @"FBInvalidArgumentException";
 NSString *const FBSessionDoesNotExistException = @"FBSessionDoesNotExistException";
 NSString *const FBApplicationDeadlockDetectedException = @"FBApplicationDeadlockDetectedException";

@@ -49,4 +49,7 @@ extern NSString *const FBClassChainQueryParseException;
 /*! Exception used to notify about application crash */
 extern NSString *const FBApplicationCrashedException;
 
+/*! Exception used to notify about invalid element state */
+extern NSString *const FBInvalidElementStateException;
+
 NS_ASSUME_NONNULL_END

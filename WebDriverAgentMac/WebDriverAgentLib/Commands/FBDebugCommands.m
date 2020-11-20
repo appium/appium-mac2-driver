@@ -11,7 +11,7 @@
 
 #import "FBRouteRequest.h"
 #import "FBSession.h"
-#import "XCUIApplication+AMXml.h"
+#import "XCUIApplication+AMSource.h"
 
 @implementation FBDebugCommands
 

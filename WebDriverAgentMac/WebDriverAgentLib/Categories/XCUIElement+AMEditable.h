@@ -13,23 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 #import <XCTest/XCTest.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XCUIApplication (AMXml)
+@interface XCUIElement (AMEditable)
 
-/**
- Retrives XML application source representation
- */
-- (NSString *)am_xmlRepresentation;
-
-/**
- Retrives description application source representation.
- Actually, the value of debugDescription property
- */
-- (NSString *)am_descriptionRepresentation;
+- (void)am_setValue:(id)value;
 
 @end
 

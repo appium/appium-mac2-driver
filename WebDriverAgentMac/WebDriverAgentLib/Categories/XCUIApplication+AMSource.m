@@ -14,24 +14,20 @@
  * limitations under the License.
  */
 
-#import <XCTest/XCTest.h>
-#import <WebDriverAgentLib/WebDriverAgentLib.h>
+#import "XCUIApplication+AMSource.h"
 
-NS_ASSUME_NONNULL_BEGIN
+#import "FBXPath.h"
 
-@interface AMIntegrationTestCase : XCTestCase
+@implementation XCUIApplication (AMSource)
 
-@property (nonatomic, strong, readonly) XCUIApplication *testedApplication;
+- (NSString *)am_xmlRepresentation
+{
+  return [FBXPath xmlStringWithRootElement:self];
+}
 
-/**
- Launches application and resets side effects of testing like orientation etc.
- */
-- (void)launchApplication;
-
-- (void)switchToButtonsTab;
-
-- (void)switchToEditsTab;
+- (NSString *)am_descriptionRepresentation
+{
+  return self.debugDescription;
+}
 
 @end
-
-NS_ASSUME_NONNULL_END

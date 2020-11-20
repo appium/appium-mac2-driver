@@ -35,8 +35,6 @@
     attributeNames = @[
       @"selected",
       FBStringify(XCUIElement, placeholderValue),
-      FBStringify(XCUIElement, verticalSizeClass),
-      FBStringify(XCUIElement, horizontalSizeClass),
       @"enabled",
       FBStringify(XCUIElement, elementType),
       FBStringify(XCUIElement, label),
