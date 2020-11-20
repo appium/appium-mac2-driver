@@ -15,16 +15,20 @@
  */
 
 #import <XCTest/XCTest.h>
-#import "XCElementSnapshot.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XCElementSnapshot (AMHash)
+@interface AMSnapshotUtils : NSObject
 
 /**
- Retrives the unique snapshot hash
+ Retrives the unique snapshot hash. This hash is unique per snapshot's
+ accessibility elemnent, which means different snapshots of the same
+ element may have equal hashes
+
+ @param snapshot snapshot instance to calcluate the hash for
+ @return The hash value as base64-encoded string
  */
-- (NSString *)am_hash;
++ (NSString *)hashWithSnapshot:(id)snapshot;
 
 @end
 

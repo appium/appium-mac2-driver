@@ -10,13 +10,13 @@
 #import "FBXPath.h"
 
 #import "AMGeometryUtils.h"
+#import "AMSnapshotUtils.h"
 #import "FBConfiguration.h"
 #import "FBElementUtils.h"
 #import "FBExceptions.h"
 #import "FBLogger.h"
 #import "FBElementTypeTransformer.h"
 #import "NSString+FBXMLSafeString.h"
-#import "XCElementSnapshot+AMHash.h"
 #import "XCUIElementQuery+AMHelpers.h"
 
 #ifdef __clang__
@@ -222,15 +222,15 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
     [hashes addObject:hash];
   }
   NSMutableArray<XCUIElement *> *matchingElements = [NSMutableArray array];
-  NSString *selfHash = [(XCElementSnapshot *)rootSnapshot am_hash];
+  NSString *selfHash = [AMSnapshotUtils hashWithSnapshot:rootSnapshot];
   if ([hashes containsObject:selfHash]) {
     [matchingElements addObject:rootElement];
     if (firstMatch) {
       return matchingElements.copy;
     }
   }
-  NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(XCElementSnapshot *snapshot, NSDictionary *bindings) {
-    return [hashes containsObject:snapshot.am_hash];
+  NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id snapshot, NSDictionary *bindings) {
+    return [hashes containsObject:[AMSnapshotUtils hashWithSnapshot:snapshot]];
   }];
   [matchingElements addObjectsFromArray:[[rootElement descendantsMatchingType:XCUIElementTypeAny] matchingPredicate:predicate].am_allMatches];
   return firstMatch && matchingElements.count > 0
@@ -248,7 +248,7 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
     return rc;
   }
 
-  NSString *index = [(XCElementSnapshot *)root am_hash];
+  NSString *index = [AMSnapshotUtils hashWithSnapshot:root];
   rc = [self writeXmlWithRootElement:root
                            indexPath:(query != nil ? index : nil)
                               writer:writer];
@@ -366,7 +366,7 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
   for (NSUInteger i = 0; i < [children count]; i++) {
     id<XCUIElementSnapshot> childSnapshot = [children objectAtIndex:i];
     NSString *newIndexPath = (indexPath != nil)
-      ? [(XCElementSnapshot *)childSnapshot am_hash]
+      ? [AMSnapshotUtils hashWithSnapshot:childSnapshot]
       : nil;
     rc = [self writeXmlWithRootElement:childSnapshot
                              indexPath:newIndexPath

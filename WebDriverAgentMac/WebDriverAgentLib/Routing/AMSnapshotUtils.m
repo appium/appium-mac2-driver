@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-#import "XCElementSnapshot+AMHash.h"
+#import "AMSnapshotUtils.h"
 
-#import "XCAccessibilityElement.h"
-#import "XCElementSnapshot.h"
+@implementation AMSnapshotUtils
 
-@implementation XCElementSnapshot (AMHash)
-
-- (NSString *)am_hash
++ (NSString *)hashWithSnapshot:(id)snapshot
 {
-  NSData *token = self.accessibilityElement.token;
+  NSData *token = [[snapshot valueForKey:@"_accessibilityElement"] valueForKey:@"_token"];
   return [token base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
 }
 
