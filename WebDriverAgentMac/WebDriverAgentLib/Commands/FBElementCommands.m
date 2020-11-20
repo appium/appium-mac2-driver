@@ -382,7 +382,7 @@
 
 + (id<FBResponsePayload>)handleGetWindowSize:(FBRouteRequest *)request
 {
-  NSDictionary *rect = request.session.currentApplication.am_rect;
+  NSDictionary *rect = AMCGRectToDict(NSScreen.mainScreen.frame);
   return FBResponseWithObject(@{
     @"width": rect[@"width"],
     @"height": rect[@"height"],

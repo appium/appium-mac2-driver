@@ -559,15 +559,11 @@
 		71688B01256469350007F55B /* Routing */ = {
 			isa = PBXGroup;
 			children = (
-				718D2BF125678B4E005F533B /* AMSnapshotUtils.h */,
-				718D2BF225678B4E005F533B /* AMSnapshotUtils.m */,
 				7151AD3F2564F4C5008B8B2A /* FBCommandHandler.h */,
 				7151AD4D2564F4C6008B8B2A /* FBCommandStatus.h */,
 				7151AD442564F4C6008B8B2A /* FBCommandStatus.m */,
 				7151AD412564F4C6008B8B2A /* FBElementCache.h */,
 				7151AD3D2564F4C5008B8B2A /* FBElementCache.m */,
-				7151AD482564F4C6008B8B2A /* FBElementUtils.h */,
-				7151AD332564F4C5008B8B2A /* FBElementUtils.m */,
 				7151AD452564F4C6008B8B2A /* FBExceptionHandler.h */,
 				7151AD352564F4C5008B8B2A /* FBExceptionHandler.m */,
 				7151AD322564F4C5008B8B2A /* FBExceptions.h */,
@@ -598,12 +594,16 @@
 			children = (
 				713A9D3A2566AA2300118D07 /* AMGeometryUtils.h */,
 				713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */,
+				718D2BF125678B4E005F533B /* AMSnapshotUtils.h */,
+				718D2BF225678B4E005F533B /* AMSnapshotUtils.m */,
 				7151AD7B2564F56E008B8B2A /* FBClassChainQueryParser.h */,
 				7151AD732564F56D008B8B2A /* FBClassChainQueryParser.m */,
 				7151AD932564F56F008B8B2A /* FBConfiguration.h */,
 				7151ADB32564F571008B8B2A /* FBConfiguration.m */,
 				7151AD992564F56F008B8B2A /* FBElementTypeTransformer.h */,
 				7151AD882564F56F008B8B2A /* FBElementTypeTransformer.m */,
+				7151AD482564F4C6008B8B2A /* FBElementUtils.h */,
+				7151AD332564F4C5008B8B2A /* FBElementUtils.m */,
 				7151AD832564F56E008B8B2A /* FBErrorBuilder.h */,
 				7151ADB72564F571008B8B2A /* FBErrorBuilder.m */,
 				7151AD952564F56F008B8B2A /* FBLogger.h */,

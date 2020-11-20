@@ -55,10 +55,7 @@
 
 - (NSDictionary<NSString *, NSNumber *> *)am_rect
 {
-  // CGRectZero is always returned as application frame by default
-  return AMCGRectToDict([self isKindOfClass:XCUIApplication.class]
-    ? NSScreen.mainScreen.frame
-    : self.frame);
+  return AMCGRectToDict(self.frame);
 }
 
 - (NSString *)am_text
