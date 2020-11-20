@@ -135,6 +135,7 @@
 		718D2C0D2567AA03005F533B /* XCUIElement+AMEditable.h in Headers */ = {isa = PBXBuildFile; fileRef = 718D2C0B2567AA03005F533B /* XCUIElement+AMEditable.h */; };
 		718D2C0E2567AA03005F533B /* XCUIElement+AMEditable.m in Sources */ = {isa = PBXBuildFile; fileRef = 718D2C0C2567AA03005F533B /* XCUIElement+AMEditable.m */; };
 		718D2C212567D8A8005F533B /* AMEditElementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718D2C202567D8A8005F533B /* AMEditElementTests.m */; };
+		718D2C292567E6D0005F533B /* AMSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718D2C282567E6D0005F533B /* AMSessionTests.m */; };
 		7199B3A22565B0A3000B5C51 /* CocoaAsyncSocket.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7199B3CD2565B1CD000B5C51 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71688AE2256466070007F55B /* XCTest.framework */; };
 		7199B3CE2565B1E8000B5C51 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */; };
@@ -335,6 +336,7 @@
 		718D2C0C2567AA03005F533B /* XCUIElement+AMEditable.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIElement+AMEditable.m"; sourceTree = "<group>"; };
 		718D2C132567B465005F533B /* FBTestMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBTestMacros.h; sourceTree = "<group>"; };
 		718D2C202567D8A8005F533B /* AMEditElementTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMEditElementTests.m; sourceTree = "<group>"; };
+		718D2C282567E6D0005F533B /* AMSessionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMSessionTests.m; sourceTree = "<group>"; };
 		7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WebDriverAgentLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7199B3AE2565B122000B5C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71B00E8B2566D4B90010DA73 /* IntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -648,6 +650,7 @@
 				71B00E9F2566D9570010DA73 /* AMFindElementTests.m */,
 				71B00E9C2566D7F10010DA73 /* AMIntegrationTestCase.h */,
 				71B00E8D2566D4BA0010DA73 /* AMIntegrationTestCase.m */,
+				718D2C282567E6D0005F533B /* AMSessionTests.m */,
 				71B00EA52566DBAF0010DA73 /* AMSourceTests.m */,
 				718D2C132567B465005F533B /* FBTestMacros.h */,
 				71B00E8F2566D4BA0010DA73 /* Info.plist */,
@@ -972,6 +975,7 @@
 				71B00E8E2566D4BA0010DA73 /* AMIntegrationTestCase.m in Sources */,
 				71B00EA02566D9570010DA73 /* AMFindElementTests.m in Sources */,
 				718D2C082567A028005F533B /* AMElementAttributesTests.m in Sources */,
+				718D2C292567E6D0005F533B /* AMSessionTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

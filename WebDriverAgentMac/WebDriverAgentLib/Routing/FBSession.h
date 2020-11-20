@@ -13,6 +13,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/*! Exception used to notify about invalid class chain query */
+extern NSString *const FINDER_BUNDLE_ID;
+
 /**
  Class that represents testing session
  */

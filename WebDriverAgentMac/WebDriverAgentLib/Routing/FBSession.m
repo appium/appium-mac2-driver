@@ -18,6 +18,8 @@
 #import "FBMacros.h"
 #import "XCUIApplication+AMHelpers.h"
 
+NSString *const FINDER_BUNDLE_ID = @"com.apple.finder";
+
 @interface FBSession ()
 @property (nonatomic, nullable) XCUIApplication *testedApplication;
 @end
@@ -78,7 +80,7 @@ static FBSession *_activeSession = nil;
     }
     return self.testedApplication;
   }
-  return [[XCUIApplication alloc] init];
+  return [[XCUIApplication alloc] initWithBundleIdentifier:FINDER_BUNDLE_ID];
 }
 
 - (XCUIApplication *)launchApplicationWithBundleId:(NSString *)bundleIdentifier
@@ -99,7 +101,8 @@ static FBSession *_activeSession = nil;
 
 - (XCUIApplication *)activateApplicationWithBundleId:(NSString *)bundleIdentifier
 {
-  BOOL isCurrentApp = nil != self.testedApplication && [self.testedApplication.am_bundleID isEqualToString:bundleIdentifier];
+  BOOL isCurrentApp = nil != self.testedApplication
+    && [self.testedApplication.am_bundleID isEqualToString:bundleIdentifier];
   XCUIApplication *app = isCurrentApp
     ? self.testedApplication
     : [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
