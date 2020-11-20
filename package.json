@@ -28,9 +28,7 @@
     "mainClass": "Mac2Driver"
   },
   "main": "./build/index.js",
-  "bin": {
-    "appium-wda-bootstrap": "./build/index.js"
-  },
+  "bin": {},
   "dependencies": {
     "@babel/runtime": "^7.0.0",
     "appium-base-driver": "^7.1.0",
