@@ -7,28 +7,17 @@ import { HOST, PORT, MOCHA_TIMEOUT } from '../utils';
 chai.should();
 chai.use(chaiAsPromised);
 
-const DEVICE_NAME = process.env.DEVICE_NAME || 'emulator-5554';
-// The Firefox binary could be retrieved from https://www.mozilla.org/en-GB/firefox/all/#product-android-release
 const CAPS = {
-  platformName: 'linux',
-  // platformName: 'mac',
-  verbosity: 'trace',
-  'moz:firefoxOptions': {
-    androidDeviceSerial: DEVICE_NAME,
-    androidPackage: 'org.mozilla.firefox',
-  },
+  platformName: 'mac',
+  bundleId: 'com.apple.TextEdit',
 };
 
-describe('Mobile GeckoDriver', function () {
+describe('Mac2Driver', function () {
   this.timeout(MOCHA_TIMEOUT);
 
   let server;
   let driver;
   before(async function () {
-    if (process.env.CI) {
-      // Figure out a way to run this on Azure
-      return this.skip();
-    }
     server = await startServer(PORT, HOST);
   });
   after(async function () {
@@ -49,9 +38,8 @@ describe('Mobile GeckoDriver', function () {
   });
 
   it('should start and stop a session', async function () {
-    await driver.get('https://appium.io/');
-    const button = await driver.elementByCss('#downloadLink');
-    await button.text().should.eventually.eql('Download Appium');
+    const source = await driver.source();
+    source.should.not.be.empty;
   });
 });
 
