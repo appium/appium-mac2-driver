@@ -136,6 +136,8 @@
 		718D2C0E2567AA03005F533B /* XCUIElement+AMEditable.m in Sources */ = {isa = PBXBuildFile; fileRef = 718D2C0C2567AA03005F533B /* XCUIElement+AMEditable.m */; };
 		718D2C212567D8A8005F533B /* AMEditElementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718D2C202567D8A8005F533B /* AMEditElementTests.m */; };
 		718D2C292567E6D0005F533B /* AMSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718D2C282567E6D0005F533B /* AMSessionTests.m */; };
+		718D2C322567FED3005F533B /* AMSessionCapabilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 718D2C302567FED3005F533B /* AMSessionCapabilities.h */; };
+		718D2C332567FED3005F533B /* AMSessionCapabilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 718D2C312567FED3005F533B /* AMSessionCapabilities.m */; };
 		7199B3A22565B0A3000B5C51 /* CocoaAsyncSocket.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7199B3CD2565B1CD000B5C51 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71688AE2256466070007F55B /* XCTest.framework */; };
 		7199B3CE2565B1E8000B5C51 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */; };
@@ -337,6 +339,8 @@
 		718D2C132567B465005F533B /* FBTestMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBTestMacros.h; sourceTree = "<group>"; };
 		718D2C202567D8A8005F533B /* AMEditElementTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMEditElementTests.m; sourceTree = "<group>"; };
 		718D2C282567E6D0005F533B /* AMSessionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMSessionTests.m; sourceTree = "<group>"; };
+		718D2C302567FED3005F533B /* AMSessionCapabilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMSessionCapabilities.h; sourceTree = "<group>"; };
+		718D2C312567FED3005F533B /* AMSessionCapabilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMSessionCapabilities.m; sourceTree = "<group>"; };
 		7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WebDriverAgentLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7199B3AE2565B122000B5C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71B00E8B2566D4B90010DA73 /* IntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -592,6 +596,8 @@
 			children = (
 				713A9D3A2566AA2300118D07 /* AMGeometryUtils.h */,
 				713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */,
+				718D2C302567FED3005F533B /* AMSessionCapabilities.h */,
+				718D2C312567FED3005F533B /* AMSessionCapabilities.m */,
 				718D2BF125678B4E005F533B /* AMSnapshotUtils.h */,
 				718D2BF225678B4E005F533B /* AMSnapshotUtils.m */,
 				7151AD7B2564F56E008B8B2A /* FBClassChainQueryParser.h */,
@@ -706,6 +712,7 @@
 				714CA7062566487B00353B27 /* FBXPath.h in Headers */,
 				7109BFF22565B54D006BFD13 /* FBExceptionHandler.h in Headers */,
 				7109C0532565B5EA006BFD13 /* HTTPErrorResponse.h in Headers */,
+				718D2C322567FED3005F533B /* AMSessionCapabilities.h in Headers */,
 				7109BFE02565B536006BFD13 /* FBCommandHandler.h in Headers */,
 				7109C0732565B611006BFD13 /* RouteResponse.h in Headers */,
 				7109C04F2565B5E5006BFD13 /* HTTPDataResponse.h in Headers */,
@@ -954,6 +961,7 @@
 				7109BFE62565B53D006BFD13 /* FBCommandStatus.m in Sources */,
 				7109C0272565B59D006BFD13 /* FBWebServer.m in Sources */,
 				7109C0362565B5B4006BFD13 /* FBUnknownCommands.m in Sources */,
+				718D2C332567FED3005F533B /* AMSessionCapabilities.m in Sources */,
 				7109C02C2565B5A7006BFD13 /* FBSessionCommands.m in Sources */,
 				7109BFD72565B522006BFD13 /* FBRunLoopSpinner.m in Sources */,
 				7109BFBB2565B4FA006BFD13 /* FBConfiguration.m in Sources */,

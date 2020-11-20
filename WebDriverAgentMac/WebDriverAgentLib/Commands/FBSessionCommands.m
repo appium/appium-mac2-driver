@@ -9,6 +9,7 @@
 
 #import "FBSessionCommands.h"
 
+#import "AMSessionCapabilities.h"
 #import "FBConfiguration.h"
 #import "FBLogger.h"
 #import "FBProtocolHelpers.h"
@@ -18,6 +19,7 @@
 #import "FBRuntimeUtils.h"
 #import "XCUIApplication+AMHelpers.h"
 
+const static NSString *CAPABILITIES_KEY = @"capabilities";
 
 @implementation FBSessionCommands
 
@@ -65,28 +67,39 @@
 
 + (id<FBResponsePayload>)handleCreateSession:(FBRouteRequest *)request
 {
-  NSDictionary<NSString *, id> *requirements;
-  NSError *error;
-  if (![request.arguments[@"capabilities"] isKindOfClass:NSDictionary.class]) {
-    return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:@"'capabilities' is mandatory to create a new session"
+  if (![request.arguments[CAPABILITIES_KEY] isKindOfClass:NSDictionary.class]) {
+    NSString *message = [NSString stringWithFormat:@"'%@' key is mandatory to create a new session", CAPABILITIES_KEY];
+    return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:message
                                                               traceback:nil]);
   }
-  if (nil == (requirements = FBParseCapabilities((NSDictionary *)request.arguments[@"capabilities"], &error))) {
-    return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:error.description traceback:nil]);
+
+  NSError *error;
+  NSDictionary<NSString *, id> *requirements = FBParseCapabilities([request requireDictionaryArgumentWithName:(NSString *)CAPABILITIES_KEY], &error);
+  if (nil == requirements) {
+    return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:error.description
+                                                              traceback:nil]);
   }
 
-  NSString *bundleID = requirements[@"bundleId"];
+  NSString *bundleID = requirements[AM_BUNDLE_ID_CAPABILITY];
   XCUIApplication *app = nil;
   if (bundleID != nil) {
     app = [[XCUIApplication alloc] initWithBundleIdentifier:bundleID];
-    app.launchArguments = (NSArray<NSString *> *)requirements[@"arguments"] ?: @[];
-    app.launchEnvironment = (NSDictionary <NSString *, NSString *> *)requirements[@"environment"] ?: @{};
+    app.launchArguments = (NSArray<NSString *> *)requirements[AM_APP_ARGUMENTS_CAPABILITY] ?: @[];
+    app.launchEnvironment = (NSDictionary <NSString *, NSString *> *)requirements[AM_APP_ENVIRONMENT_CAPABILITY] ?: @{};
     [app launch];
     if (app.state <= XCUIApplicationStateNotRunning) {
-      return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:[NSString stringWithFormat:@"Failed to launch %@ application", bundleID] traceback:nil]);
+      NSString *message = [NSString stringWithFormat:@"Failed to launch '%@' application", bundleID];
+      return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:message
+                                                                traceback:nil]);
     }
   }
-  [FBSession initWithApplication:app];
+  FBSession *session = [FBSession initWithApplication:app];
+  if (nil != requirements[AM_SKIP_APP_KILL_CAPABILITY]) {
+    session.skipAppTermination = [requirements[AM_SKIP_APP_KILL_CAPABILITY] boolValue];
+  } else if (nil == bundleID) {
+    // never kill apps that we don't "own"
+    session.skipAppTermination = YES;
+  }
 
   return FBResponseWithObject(FBSessionCommands.sessionInformation);
 }
@@ -163,7 +176,7 @@
 
 + (id<FBResponsePayload>)handleSetSettings:(FBRouteRequest *)request
 {
-  NSDictionary* settings = request.arguments[@"settings"];
+  NSDictionary* settings = [request requireDictionaryArgumentWithName:@"settings"];
 
   if (nil != [settings objectForKey:BOUND_ELEMENTS_BY_INDEX]) {
     FBConfiguration.sharedConfiguration.boundElementsByIndex = [[settings objectForKey:BOUND_ELEMENTS_BY_INDEX] boolValue];
@@ -187,14 +200,14 @@
 {
   return
   @{
-    @"sessionId" : [FBSession activeSession].identifier ?: NSNull.null,
+    @"sessionId" : FBSession.activeSession.identifier ?: NSNull.null,
     @"capabilities" : FBSessionCommands.currentCapabilities
   };
 }
 
 + (NSDictionary *)currentCapabilities
 {
-  XCUIApplication *application = [FBSession activeSession].currentApplication;
+  XCUIApplication *application = FBSession.activeSession.currentApplication;
   return @{
     @"CFBundleIdentifier": application.am_bundleID ?: [NSNull null],
   };

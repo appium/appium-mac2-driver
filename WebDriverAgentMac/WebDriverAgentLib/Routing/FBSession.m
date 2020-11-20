@@ -62,11 +62,12 @@ static FBSession *_activeSession = nil;
 
 - (void)kill
 {
-  if (nil != self.testedApplication
+  if (!self.skipAppTermination
+      && nil != self.testedApplication
       && self.testedApplication.state > XCUIApplicationStateNotRunning) {
     [self.testedApplication terminate];
-    self.testedApplication = nil;
   }
+  self.testedApplication = nil;
   [self.elementCache reset];
   _activeSession = nil;
 }

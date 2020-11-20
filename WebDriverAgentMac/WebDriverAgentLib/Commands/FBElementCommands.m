@@ -440,7 +440,7 @@
         return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:message
                                                                            traceback:nil]);
       }
-      id modifiers = [(NSDictionary *)item objectForKey:@"modifiers"];
+      id modifiers = [(NSDictionary *)item objectForKey:@"modifierFlags"];
       NSUInteger modifierFlags = XCUIKeyModifierNone;
       if ([modifiers isKindOfClass:NSNumber.class]) {
         modifierFlags = [(NSNumber *)modifiers unsignedIntValue];
@@ -480,7 +480,7 @@
 
 + (void)excuteRespectingKeyModifiersWithRequest:(FBRouteRequest *)request block:(void(^)(void))block
 {
-  id arg = request.arguments[@"modifiers"];
+  id arg = request.arguments[@"keyModifierFlags"];
   NSNumber *modifiers = [arg isKindOfClass:NSNumber.class] ? (NSNumber *)arg : nil;
   if (nil == modifiers) {
     block();
