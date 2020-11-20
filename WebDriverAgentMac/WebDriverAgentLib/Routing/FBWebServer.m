@@ -146,7 +146,7 @@
         NSError *error = nil;
         NSDictionary *arguments = [NSJSONSerialization JSONObjectWithData:request.body options:NSJSONReadingMutableContainers error:&error];
         if (nil != error) {
-          [FBLogger logFmt:@"%@", error];
+          [FBLogger logFmt:@"%@", error.localizedDescription];
         }
         FBRouteRequest *routeParams = [FBRouteRequest
           routeRequestWithURL:request.url
