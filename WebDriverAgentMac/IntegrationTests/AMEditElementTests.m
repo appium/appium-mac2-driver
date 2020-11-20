@@ -40,38 +40,29 @@
 {
   NSPredicate *predicate = [NSPredicate predicateWithFormat:@"placeholderValue.length == 0"];
   XCUIElement *edit = [self.testedApplication.textFields matchingPredicate:predicate].firstMatch;
-  NSString *value1 = [edit am_wdAttributeValueWithName:@"value"];
-  XCTAssertEqual(0, value1.length);
-  XCTAssertFalse(edit.am_hasKeyboardInputFocus);
   NSString *text = @"yolo😎";
   [edit am_setValue:text];
   XCTAssertTrue(edit.am_hasKeyboardInputFocus);
-  NSString *value2 = [edit am_wdAttributeValueWithName:@"value"];
-  XCTAssertNotEqualObjects(value2, value1);
-  XCTAssertEqualObjects(value2, text);
-  XCTAssertEqualObjects(value2, edit.am_text);
+  NSString *value = [edit am_wdAttributeValueWithName:@"value"];
+  XCTAssertEqualObjects(value, text);
+  XCTAssertEqualObjects(value, edit.am_text);
 }
 
 - (void)testSendingTextIntoNonFocusedEditWithPlaceholderText
 {
   NSPredicate *predicate = [NSPredicate predicateWithFormat:@"placeholderValue.length > 0"];
   XCUIElement *edit = [self.testedApplication.textFields matchingPredicate:predicate].firstMatch;
-  NSString *value1 = [edit am_wdAttributeValueWithName:@"value"];
-  XCTAssertEqual(0, value1.length);
-  XCTAssertFalse(edit.am_hasKeyboardInputFocus);
   NSString *text = @"yolo😎";
   [edit am_setValue:text];
   XCTAssertTrue(edit.am_hasKeyboardInputFocus);
-  NSString *value2 = [edit am_wdAttributeValueWithName:@"value"];
-  XCTAssertNotEqualObjects(value2, value1);
-  XCTAssertEqualObjects(value2, text);
-  XCTAssertEqualObjects(value2, edit.am_text);
+  NSString *value = [edit am_wdAttributeValueWithName:@"value"];
+  XCTAssertEqualObjects(value, text);
+  XCTAssertEqualObjects(value, edit.am_text);
 }
 
 - (void)testClearingTextField
 {
   XCUIElement *edit = self.testedApplication.textFields.firstMatch;
-  XCTAssertEqualObjects([edit am_wdAttributeValueWithName:@"value"], @"");
   NSString *text = @"yolo😎";
   [edit am_setValue:text];
   XCTAssertEqualObjects([edit am_wdAttributeValueWithName:@"value"], text);
