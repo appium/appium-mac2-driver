@@ -196,7 +196,7 @@
 {
   XCUIApplication *application = [FBSession activeSession].currentApplication;
   return @{
-    @"CFBundleIdentifier": application.bundleID ?: [NSNull null],
+    @"CFBundleIdentifier": application.am_bundleID ?: [NSNull null],
   };
 }
 

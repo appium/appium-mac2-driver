@@ -16,10 +16,96 @@
 
 #import "XCUIElement+AMEditable.h"
 
+#import "FBErrorBuilder.h"
 #import "FBExceptions.h"
-#import "XCUIElement+FBTyping.h"
+#import "XCUIElement+AMAttributes.h"
+
+#define MAX_CLEAR_RETRIES 2
+
+@interface NSString (AMTyping)
+
+- (NSString *)am_repeatTimes:(NSUInteger)times;
+- (NSUInteger)am_visualLength;
+
+@end
+
+@implementation NSString (AMTyping)
+
+- (NSString *)am_repeatTimes:(NSUInteger)times {
+  return [@"" stringByPaddingToLength:times * self.length
+                           withString:self
+                      startingAtIndex:0];
+}
+
+- (NSUInteger)am_visualLength
+{
+  return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length;
+}
+
+@end
+
 
 @implementation XCUIElement (AMEditable)
+
+- (BOOL)am_typeText:(NSString *)text error:(NSError **)error
+{
+  if (![self am_clearTextWithError:error]) {
+    return NO;
+  }
+  [self typeText:text];
+  return YES;
+}
+
+- (BOOL)am_clearTextWithError:(NSError **)error
+{
+  if (!self.am_hasKeyboardInputFocus) {
+    [self click];
+  }
+
+  id currentValue = self.value;
+  if (nil != currentValue && ![currentValue isKindOfClass:NSString.class]) {
+    return [[[FBErrorBuilder builder]
+             withDescriptionFormat:@"The value of '%@' is not a string and thus cannot be edited", self.description]
+            buildError:error];
+  }
+
+  if (nil == currentValue || 0 == [currentValue am_visualLength]) {
+    // Short circuit if the content is not present
+    return YES;
+  }
+
+  static NSString *backspaceDeleteSequence;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    backspaceDeleteSequence = [[NSString alloc] initWithData:(NSData *)[@"\\u0008\\u007F" dataUsingEncoding:NSASCIIStringEncoding]
+                                                    encoding:NSNonLossyASCIIStringEncoding];
+  });
+
+  NSUInteger retry = 0;
+  NSString *placeholderValue = self.placeholderValue;
+  NSUInteger preClearTextLength = [currentValue am_visualLength];
+  do {
+    if (retry >= MAX_CLEAR_RETRIES - 1) {
+      // Last chance retry. Double-click the field to select its content
+      [self doubleClick];
+      [self typeText:backspaceDeleteSequence];
+      return YES;
+    }
+
+    NSString *textToType = [backspaceDeleteSequence am_repeatTimes:preClearTextLength];
+    [self typeText:textToType];
+
+    currentValue = self.value;
+    if (nil != placeholderValue && [currentValue isEqualToString:placeholderValue]) {
+      // Short circuit if only the placeholder value left
+      return YES;
+    }
+    preClearTextLength = [currentValue am_visualLength];
+
+    retry++;
+  } while (preClearTextLength > 0);
+  return YES;
+}
 
 - (void)am_setValue:(id)value
 {
@@ -39,9 +125,7 @@
     return;
   }
   NSError *error;
-  if (![self fb_typeText:textToType
-                shouldClear:NO
-                      error:&error]) {
+  if (![self am_typeText:textToType error:&error]) {
     @throw [NSException exceptionWithName:FBInvalidElementStateException
                                    reason:error.description
                                  userInfo:@{}];

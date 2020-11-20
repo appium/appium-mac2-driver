@@ -26,10 +26,10 @@
 #import "FBRuntimeUtils.h"
 #import "NSPredicate+FBFormat.h"
 #import "FBElementTypeTransformer.h"
+#import "XCUIApplication+AMHelpers.h"
 #import "XCUIElement+AMAttributes.h"
 #import "XCUIElement+AMCoordinates.h"
 #import "XCUIElement+AMEditable.h"
-#import "XCUIElement+FBTyping.h"
 
 @interface FBElementCommands ()
 @end
@@ -81,6 +81,7 @@
     [[FBRoute POST:@"/wda/element/:uuid/touchAndHold"] respondWithTarget:self action:@selector(handleTouchAndHold:)],
     [[FBRoute POST:@"/wda/touchAndHold"] respondWithTarget:self action:@selector(handleTouchAndHoldCoordinate:)],
 
+    [[FBRoute POST:@"/wda/element/:uuid/keys"] respondWithTarget:self action:@selector(handleKeys:)],
     [[FBRoute POST:@"/wda/keys"] respondWithTarget:self action:@selector(handleKeys:)],
   ];
 }
@@ -229,7 +230,7 @@
   FBElementCache *elementCache = request.session.elementCache;
   XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
   NSError *error;
-  if (![element fb_clearTextWithError:&error]) {
+  if (![element am_clearTextWithError:&error]) {
     return FBResponseWithStatus([FBCommandStatus invalidElementStateErrorWithMessage:error.description
                                                                            traceback:nil]);
   }
@@ -367,22 +368,45 @@
 
 + (id<FBResponsePayload>)handleKeys:(FBRouteRequest *)request
 {
-  FBSession *session = request.session;
-  id value = request.arguments[@"value"] ?: request.arguments[@"text"];
-  if (!value) {
-    return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:@"Neither 'value' nor 'text' parameter is provided"
+  FBElementCache *elementCache = request.session.elementCache;
+  BOOL hasElement = nil != request.parameters[@"uuid"];
+  XCUIElement *destination = hasElement
+    ? [elementCache elementForUUID:request.elementUuid]
+    : request.session.currentApplication;
+  id keys = [request requireArgumentWithName:@"keys"];
+  if (![keys isKindOfClass:NSArray.class]) {
+    NSString *message = @"The 'keys' argument must be an array";
+    return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:message
                                                                        traceback:nil]);
   }
-  NSString *textToType = [value isKindOfClass:NSArray.class]
-    ? [(NSArray *)value componentsJoinedByString:@""]
-    : (NSString *)value;
-  [session.currentApplication typeText:textToType];
+  for (id item in (NSArray *)keys) {
+    if ([item isKindOfClass:NSString.class]) {
+      [destination typeKey:(NSString *)item modifierFlags:XCUIKeyModifierNone];
+    } else if ([item isKindOfClass:NSDictionary.class]) {
+      id key = [(NSDictionary *)item objectForKey:@"key"];
+      if (![key isKindOfClass:NSString.class]) {
+        NSString *message = [NSString stringWithFormat:@"All dictionaries of 'keys' array must have the 'key' item of type string. Got '%@' instead in the item %@", key, item];
+        return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:message
+                                                                           traceback:nil]);
+      }
+      id modifiers = [(NSDictionary *)item objectForKey:@"modifiers"];
+      NSUInteger modifierFlags = XCUIKeyModifierNone;
+      if ([modifiers isKindOfClass:NSNumber.class]) {
+        modifierFlags = [(NSNumber *)modifiers unsignedIntValue];
+      }
+      [destination typeKey:(NSString *)key modifierFlags:modifierFlags];
+    } else {
+      NSString *message = @"All items of the 'keys' array must be either dictionaries or strings";
+      return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:message
+                                                                         traceback:nil]);
+    }
+  }
   return FBResponseWithOK();
 }
 
 + (id<FBResponsePayload>)handleGetWindowSize:(FBRouteRequest *)request
 {
-  NSDictionary *rect = AMCGRectToDict(NSScreen.mainScreen.frame);
+  NSDictionary *rect = AMCGRectToDict(request.session.currentApplication.am_screenRect);
   return FBResponseWithObject(@{
     @"width": rect[@"width"],
     @"height": rect[@"height"],

@@ -19,9 +19,14 @@
 
 @implementation XCUIApplication (AMHelpers)
 
-- (NSString *)bundleID
+- (NSString *)am_bundleID
 {
   return [[self valueForKey:@"_applicationImpl"] valueForKey:@"_bundleID"];
+}
+
+- (CGRect)am_screenRect
+{
+  return NSScreen.mainScreen.frame;
 }
 
 @end

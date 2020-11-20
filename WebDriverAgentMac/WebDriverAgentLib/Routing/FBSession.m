@@ -99,7 +99,7 @@ static FBSession *_activeSession = nil;
 
 - (XCUIApplication *)activateApplicationWithBundleId:(NSString *)bundleIdentifier
 {
-  BOOL isCurrentApp = nil != self.testedApplication && [self.testedApplication.bundleID isEqualToString:bundleIdentifier];
+  BOOL isCurrentApp = nil != self.testedApplication && [self.testedApplication.am_bundleID isEqualToString:bundleIdentifier];
   XCUIApplication *app = isCurrentApp
     ? self.testedApplication
     : [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
@@ -112,7 +112,7 @@ static FBSession *_activeSession = nil;
 
 - (BOOL)terminateApplicationWithBundleId:(NSString *)bundleIdentifier
 {
-  BOOL isCurrentApp = nil != self.testedApplication && [self.testedApplication.bundleID isEqualToString:bundleIdentifier];
+  BOOL isCurrentApp = nil != self.testedApplication && [self.testedApplication.am_bundleID isEqualToString:bundleIdentifier];
   XCUIApplication *app = isCurrentApp
     ? self.testedApplication
     : [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
@@ -129,7 +129,7 @@ static FBSession *_activeSession = nil;
 
 - (NSUInteger)applicationStateWithBundleId:(NSString *)bundleIdentifier
 {
-  XCUIApplication *app = (nil != self.testedApplication && [self.testedApplication.bundleID isEqualToString:bundleIdentifier])
+  XCUIApplication *app = (nil != self.testedApplication && [self.testedApplication.am_bundleID isEqualToString:bundleIdentifier])
     ? self.testedApplication
     : [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
   return app.state;

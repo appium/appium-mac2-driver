@@ -19,6 +19,7 @@
 #import "AMIntegrationTestCase.h"
 #import "FBTestMacros.h"
 #import "XCUIElement+AMAttributes.h"
+#import "XCUIElement+AMEditable.h"
 
 
 @interface AMElementAttributesTests : AMIntegrationTestCase
@@ -71,6 +72,29 @@
   XCTAssertFalse(hasFocus);
   NSInteger type = [[button am_wdAttributeValueWithName:@"elementType"] integerValue];
   XCTAssertEqual(type, XCUIElementTypeButton);
+}
+
+- (void)testDisabledAttribute
+{
+  NSString *buttonTitle = @"I Am Disabled";
+  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title == %@", buttonTitle];
+  XCUIElement *button = [self.testedApplication.buttons matchingPredicate:predicate].firstMatch;
+  NSString *enabled = [button am_wdAttributeValueWithName:@"enabled"];
+  XCTAssertEqualObjects(enabled, @"false");
+}
+
+- (void)testSliderValueAttribute
+{
+  XCUIElement *slider = self.testedApplication.sliders.firstMatch;
+  NSString *value = [slider am_wdAttributeValueWithName:@"value"];
+  XCTAssertTrue([value doubleValue] > 0);
+  [slider am_setValue:@([value doubleValue] / 100.0 + 0.1)];
+  XCTAssertNotEqualObjects(value, [slider am_wdAttributeValueWithName:@"value"]);
+}
+
+- (void)testAccessingInvalidAttribute
+{
+  XCTAssertThrows([self.testedApplication am_wdAttributeValueWithName:@"foo"]);
 }
 
 @end
