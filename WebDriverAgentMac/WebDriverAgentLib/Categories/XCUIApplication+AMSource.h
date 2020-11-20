@@ -15,22 +15,21 @@
  */
 
 #import <XCTest/XCTest.h>
-#import <WebDriverAgentLib/WebDriverAgentLib.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AMIntegrationTestCase : XCTestCase
-
-@property (nonatomic, strong, readonly) XCUIApplication *testedApplication;
+@interface XCUIApplication (AMSource)
 
 /**
- Launches application and resets side effects of testing like orientation etc.
+ Retrives XML application source representation
  */
-- (void)launchApplication;
+- (NSString *)am_xmlRepresentation;
 
-- (void)switchToButtonsTab;
-
-- (void)switchToEditsTab;
+/**
+ Retrives description application source representation.
+ Actually, the value of debugDescription property
+ */
+- (NSString *)am_descriptionRepresentation;
 
 @end
 

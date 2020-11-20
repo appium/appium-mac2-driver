@@ -14,20 +14,29 @@
  * limitations under the License.
  */
 
-#import "XCUIApplication+AMXml.h"
+#import <XCTest/XCTest.h>
 
-#import "FBXPath.h"
+NS_ASSUME_NONNULL_BEGIN
 
-@implementation XCUIApplication (AMXml)
+@interface XCUIElement (AMCoordinates)
 
-- (NSString *)am_xmlRepresentation
-{
-  return [FBXPath xmlStringWithRootElement:self];
-}
+/**
+ Transforms relative x and y coordinates into absolute element coordinate
 
-- (NSString *)am_descriptionRepresentation
-{
-  return self.debugDescription;
-}
+ @param x Relative left coordinate
+ @param y Relative top coordinate
+ @returns The resuiting coordinate instance
+ */
+- (XCUICoordinate *)am_coordinateWithX:(CGFloat)x andY:(CGFloat)y;
+
+/**
+ Transforms relative point into absolute element coordinate
+
+ @param point Relative top left coordinates
+ @returns The resuiting coordinate instance
+ */
+- (XCUICoordinate *)am_coordinateWithPoint:(CGPoint)point;
 
 @end
+
+NS_ASSUME_NONNULL_END

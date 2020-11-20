@@ -28,7 +28,8 @@
     commandStatus = [FBCommandStatus invalidArgumentErrorWithMessage:exception.reason
                                                            traceback:traceback];
   } else if ([exception.name isEqualToString:FBApplicationCrashedException]
-             || [exception.name isEqualToString:FBApplicationDeadlockDetectedException]) {
+             || [exception.name isEqualToString:FBApplicationDeadlockDetectedException]
+             || [exception.name isEqualToString:FBInvalidElementStateException]) {
     commandStatus = [FBCommandStatus invalidElementStateErrorWithMessage:exception.reason
                                                                traceback:traceback];
   } else if ([exception.name isEqualToString:FBInvalidXPathException]

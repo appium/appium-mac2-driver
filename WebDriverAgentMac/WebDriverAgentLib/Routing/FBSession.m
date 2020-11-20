@@ -18,6 +18,8 @@
 #import "FBMacros.h"
 #import "XCUIApplication+AMHelpers.h"
 
+NSString *const FINDER_BUNDLE_ID = @"com.apple.finder";
+
 @interface FBSession ()
 @property (nonatomic, nullable) XCUIApplication *testedApplication;
 @end
@@ -60,11 +62,12 @@ static FBSession *_activeSession = nil;
 
 - (void)kill
 {
-  if (nil != self.testedApplication
+  if (!self.skipAppTermination
+      && nil != self.testedApplication
       && self.testedApplication.state > XCUIApplicationStateNotRunning) {
     [self.testedApplication terminate];
-    self.testedApplication = nil;
   }
+  self.testedApplication = nil;
   [self.elementCache reset];
   _activeSession = nil;
 }
@@ -78,7 +81,7 @@ static FBSession *_activeSession = nil;
     }
     return self.testedApplication;
   }
-  return [[XCUIApplication alloc] init];
+  return [[XCUIApplication alloc] initWithBundleIdentifier:FINDER_BUNDLE_ID];
 }
 
 - (XCUIApplication *)launchApplicationWithBundleId:(NSString *)bundleIdentifier
@@ -99,7 +102,8 @@ static FBSession *_activeSession = nil;
 
 - (XCUIApplication *)activateApplicationWithBundleId:(NSString *)bundleIdentifier
 {
-  BOOL isCurrentApp = nil != self.testedApplication && [self.testedApplication.bundleID isEqualToString:bundleIdentifier];
+  BOOL isCurrentApp = nil != self.testedApplication
+    && [self.testedApplication.am_bundleID isEqualToString:bundleIdentifier];
   XCUIApplication *app = isCurrentApp
     ? self.testedApplication
     : [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
@@ -112,7 +116,7 @@ static FBSession *_activeSession = nil;
 
 - (BOOL)terminateApplicationWithBundleId:(NSString *)bundleIdentifier
 {
-  BOOL isCurrentApp = nil != self.testedApplication && [self.testedApplication.bundleID isEqualToString:bundleIdentifier];
+  BOOL isCurrentApp = nil != self.testedApplication && [self.testedApplication.am_bundleID isEqualToString:bundleIdentifier];
   XCUIApplication *app = isCurrentApp
     ? self.testedApplication
     : [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
@@ -129,7 +133,7 @@ static FBSession *_activeSession = nil;
 
 - (NSUInteger)applicationStateWithBundleId:(NSString *)bundleIdentifier
 {
-  XCUIApplication *app = (nil != self.testedApplication && [self.testedApplication.bundleID isEqualToString:bundleIdentifier])
+  XCUIApplication *app = (nil != self.testedApplication && [self.testedApplication.am_bundleID isEqualToString:bundleIdentifier])
     ? self.testedApplication
     : [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
   return app.state;

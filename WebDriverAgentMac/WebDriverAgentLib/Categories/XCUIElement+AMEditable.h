@@ -13,18 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 #import <XCTest/XCTest.h>
-#import "XCElementSnapshot.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XCElementSnapshot (AMHash)
+@interface XCUIElement (AMEditable)
+
+- (void)am_setValue:(id)value;
 
 /**
- Retrives the unique snapshot hash
+ Clears text on element.
+ It will try to activate keyboard on element, if element has no keyboard focus.
+
+ @param error If there is an error, upon return contains an NSError object that describes the problem.
+ @return YES if the operation succeeds, otherwise NO.
  */
-- (NSString *)am_hash;
+- (BOOL)am_clearTextWithError:(NSError **)error;
 
 @end
 

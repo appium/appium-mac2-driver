@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
-#import "XCUIElement+AMHelpers.h"
+#import <XCTest/XCTest.h>
 
-@implementation XCUIElement (AMHelpers)
+NS_ASSUME_NONNULL_BEGIN
 
-- (XCUIElementQuery *)am_query
-{
-  return [self valueForKey:@"_query"];
-}
+@interface AMSnapshotUtils : NSObject
+
+/**
+ Retrives the unique snapshot hash. This hash is unique per snapshot's
+ accessibility elemnent, which means different snapshots of the same
+ element may have equal hashes
+
+ @param snapshot snapshot instance to calcluate the hash for
+ @return The hash value as base64-encoded string
+ */
++ (NSString *)hashWithSnapshot:(id)snapshot;
 
 @end
+
+NS_ASSUME_NONNULL_END

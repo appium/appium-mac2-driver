@@ -26,7 +26,12 @@ NS_ASSUME_NONNULL_BEGIN
 
  @returns bundle identifier string
  */
-- (NSString *)bundleID;
+- (NSString *)am_bundleID;
+
+/**
+ Retrieves the main screen rect
+ */
+- (CGRect)am_screenRect;
 
 @end
 

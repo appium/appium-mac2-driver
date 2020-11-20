@@ -35,6 +35,40 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)routeRequestWithURL:(NSURL *)URL parameters:(NSDictionary *)parameters arguments:(NSDictionary *)arguments;
 
+/**
+ Retrieves request JSON body argument with the given name
+
+ @param name the argument name
+ @returns the argument value
+ @throws FBInvalidArgumentException if the argument is not provided
+ */
+- (id)requireArgumentWithName:(NSString *)name;
+
+/**
+ Retrieves request JSON body argument with the given name and converts its value to double
+
+ @param name the argument name
+ @returns the argument value as double number
+ @throws FBInvalidArgumentException if the argument is not provided
+ */
+- (double)requireDoubleArgumentWithName:(NSString *)name;
+
+/**
+ Retrieves request JSON body argument with the given name and converts its value to a dictionary
+
+ @param name the argument name
+ @returns the argument value as dictionary
+ @throws FBInvalidArgumentException if the argument is not provided or is not of dictionary type
+ */
+- (NSDictionary *)requireDictionaryArgumentWithName:(NSString *)name;
+
+/**
+ Retrieves :uuid parameter value from the request URL
+
+ @returns :uuid parameter value
+ */
+- (NSString *)elementUuid;
+
 @end
 
 NS_ASSUME_NONNULL_END

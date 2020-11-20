@@ -18,6 +18,7 @@
 
 #import "AMIntegrationTestCase.h"
 #import "XCUIElement+FBFind.h"
+#import "XCUIElement+FBClassChain.h"
 
 
 @interface AMFindElementTests : AMIntegrationTestCase
@@ -47,7 +48,6 @@
   NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingClassName:@"XCUIElementTypeButton"
                                                                 shouldReturnAfterFirstMatch:YES];
   XCTAssertEqual(matches.count, 1);
-  XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
 }
 
 - (void)testMultipleDescendantsWithClassName
@@ -55,13 +55,11 @@
   NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingClassName:@"XCUIElementTypeButton"
                                                                 shouldReturnAfterFirstMatch:NO];
   XCTAssertTrue(matches.count >= 3);
-  XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
-  XCTAssertEqualObjects([matches objectAtIndex:2].identifier, @"_XCUI:MinimizeWindow");
 }
 
 - (void)testSingleDescendantWithPredicate
 {
-  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"elementType == %lu", XCUIElementTypeButton];
+  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"elementType == %lu AND identifier BEGINSWITH %@", XCUIElementTypeButton, @"_XCUI:"];
   NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingPredicate:predicate
                                                                 shouldReturnAfterFirstMatch:YES];
   XCTAssertEqual(matches.count, 1);
@@ -70,7 +68,7 @@
 
 - (void)testMultipleDescendantsWithPredicate
 {
-  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"elementType == %lu", XCUIElementTypeButton];
+  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"elementType == %lu AND identifier BEGINSWITH %@", XCUIElementTypeButton, @"_XCUI:"];
   NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingPredicate:predicate
                                                                 shouldReturnAfterFirstMatch:NO];
   XCTAssertTrue(matches.count >= 3);
@@ -80,7 +78,7 @@
 
 - (void)testSingleDescendantWithXPath
 {
-  NSString *query = @"*//XCUIElementTypeButton";
+  NSString *query = @"*//XCUIElementTypeButton[starts-with(@identifier, \"_XCUI:\")]";
   NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingXPathQuery:query
                                                                  shouldReturnAfterFirstMatch:YES];
   XCTAssertEqual(matches.count, 1);
@@ -89,8 +87,27 @@
 
 - (void)testMultipleDescendantsWithXPath
 {
-  NSString *query = @"*//XCUIElementTypeButton";
+  NSString *query = @"*//XCUIElementTypeButton[starts-with(@identifier, \"_XCUI:\")]";
   NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingXPathQuery:query
+                                                                 shouldReturnAfterFirstMatch:NO];
+  XCTAssertTrue(matches.count >= 3);
+  XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
+  XCTAssertEqualObjects([matches objectAtIndex:2].identifier, @"_XCUI:MinimizeWindow");
+}
+
+- (void)testSingleDescendantWithClassChain
+{
+  NSString *query = @"**/XCUIElementTypeButton[`identifier == '_XCUI:CloseWindow'`]";
+  NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingClassChain:query
+                                                                 shouldReturnAfterFirstMatch:YES];
+  XCTAssertEqual(matches.count, 1);
+  XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
+}
+
+- (void)testMultipleDescendantsWithClassChain
+{
+  NSString *query = @"**/XCUIElementTypeButton[`identifier BEGINSWITH '_XCUI:'`]";
+  NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingClassChain:query
                                                                  shouldReturnAfterFirstMatch:NO];
   XCTAssertTrue(matches.count >= 3);
   XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");

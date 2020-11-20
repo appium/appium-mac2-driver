@@ -13,6 +13,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/*! Exception used to notify about invalid class chain query */
+extern NSString *const FINDER_BUNDLE_ID;
+
 /**
  Class that represents testing session
  */
@@ -27,7 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 /*! Element cache related to that session */
 @property (nonatomic, strong, readonly) FBElementCache *elementCache;
 
-@property (nonatomic, copy) NSString *defaultActiveApplication;
+/*! Whether to avoid app under test killing on session termination */
+@property (nonatomic) BOOL skipAppTermination;
 
 + (nullable instancetype)activeSession;
 

@@ -15,22 +15,38 @@
  */
 
 #import <XCTest/XCTest.h>
-#import <WebDriverAgentLib/WebDriverAgentLib.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AMIntegrationTestCase : XCTestCase
-
-@property (nonatomic, strong, readonly) XCUIApplication *testedApplication;
+@interface XCUIElement (AMAttributes)
 
 /**
- Launches application and resets side effects of testing like orientation etc.
+ Retrieves WebDriver-compatible value for the given attribute name
+
+ @param name one of supported attribute names. See https://developer.apple.com/documentation/xctest/xcuielementattributes?language=objc
+ @return The attribute value converted to a string or nil. Only `frame` value is returned as dictionary
  */
-- (void)launchApplication;
+- (nullable id)am_wdAttributeValueWithName:(NSString *)name;
 
-- (void)switchToButtonsTab;
+/**
+ Element rectangle in dictionary representation
+ */
+- (NSDictionary<NSString *, NSNumber *> *)am_rect;
 
-- (void)switchToEditsTab;
+/**
+ Element text
+ */
+- (nullable NSString *)am_text;
+
+/**
+ Element type represented as string
+ */
+- (NSString *)am_type;
+
+/**
+ Results in YES if the current element has the keyboard input focus
+ */
+- (BOOL)am_hasKeyboardInputFocus;
 
 @end
 

@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-#import <XCTest/XCTest.h>
-#import <WebDriverAgentLib/WebDriverAgentLib.h>
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AMIntegrationTestCase : XCTestCase
-
-@property (nonatomic, strong, readonly) XCUIApplication *testedApplication;
-
-/**
- Launches application and resets side effects of testing like orientation etc.
- */
-- (void)launchApplication;
-
-- (void)switchToButtonsTab;
-
-- (void)switchToEditsTab;
-
-@end
+extern NSString* const AM_BUNDLE_ID_CAPABILITY;
+extern NSString* const AM_APP_ARGUMENTS_CAPABILITY;
+extern NSString* const AM_APP_ENVIRONMENT_CAPABILITY;
+extern NSString* const AM_SKIP_APP_KILL_CAPABILITY;
 
 NS_ASSUME_NONNULL_END
