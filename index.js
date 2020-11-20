@@ -1,4 +1,4 @@
-import GeckoDriver from './lib/driver';
+import Mac2Driver from './lib/driver';
 import { startServer } from './lib/server';
 import yargs from 'yargs';
 import { asyncify } from 'asyncbox';
@@ -16,5 +16,5 @@ if (require.main === module) {
   asyncify(main);
 }
 
-export default GeckoDriver;
-export { GeckoDriver, startServer };
+export default Mac2Driver;
+export { Mac2Driver, startServer };
