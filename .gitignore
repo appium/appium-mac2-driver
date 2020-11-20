@@ -1,1 +1,5 @@
 WebDriverAgentMac/Carthage
+node_modules
+build
+*.xcuserstate
+package-lock.json

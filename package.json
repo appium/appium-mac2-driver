@@ -1,0 +1,85 @@
+{
+  "name": "appium-mac2-driver",
+  "description": "XCTest-based Appium driver for macOS apps automation",
+  "keywords": [
+    "appium",
+    "mac",
+    "XCTest"
+  ],
+  "version": "0.0.1",
+  "author": "appium",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/appium/appium-mac2-driver.git"
+  },
+  "bugs": {
+    "url": "https://github.com/appium/appium-mac2-driver/issues"
+  },
+  "engines": [
+    "node"
+  ],
+  "appium": {
+    "driverName": "mac2",
+    "automationName": "Mac2",
+    "platformNames": [
+      "Mac"
+    ],
+    "mainClass": "Mac2Driver"
+  },
+  "main": "./build/index.js",
+  "bin": {},
+  "dependencies": {
+    "@babel/runtime": "^7.0.0",
+    "appium-base-driver": "^7.1.0",
+    "appium-support": "^2.46.0",
+    "asyncbox": "^2.0.2",
+    "bluebird": "^3.5.1",
+    "lodash": "^4.17.4",
+    "source-map-support": "^0.5.5",
+    "teen_process": "^1.15.0",
+    "yargs": "^16.1.0"
+  },
+  "scripts": {
+    "build": "gulp transpile",
+    "prepare": "gulp transpile",
+    "mocha": "mocha",
+    "prepublish": "gulp prepublish",
+    "test": "gulp once",
+    "e2e-test": "gulp e2e-test",
+    "watch": "gulp watch",
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
+    "precommit-test": "REPORTER=dot gulp once",
+    "lint": "gulp eslint",
+    "lint:fix": "gulp eslint --fix"
+  },
+  "pre-commit": [
+    "precommit-msg",
+    "precommit-test"
+  ],
+  "devDependencies": {
+    "appium-gulp-plugins": "^5.4.0",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "eslint-config-appium": "^4.0.1",
+    "gulp": "^4.0.0",
+    "mocha": "^8.0.1",
+    "pre-commit": "^1.1.3",
+    "sinon": "^9.0.0",
+    "wd": "^1.5.0"
+  },
+  "files": [
+    "index.js",
+    "lib",
+    "build/index.js",
+    "build/lib",
+    "WebDriverAgentMac/Scripts",
+    "WebDriverAgentMac/Cartfile",
+    "WebDriverAgentMac/Cartfile.resolved",
+    "WebDriverAgentMac/WebDriverAgentLib",
+    "WebDriverAgentMac/WebDriverAgentMac.xcodeproj",
+    "WebDriverAgentMac/WebDriverAgentRunner",
+    "WebDriverAgentMac/IntegrationTests",
+    "WebDriverAgentMac/WebDriverAgent"
+  ]
+}
