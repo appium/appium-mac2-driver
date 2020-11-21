@@ -38,7 +38,7 @@ describe('Mac2Driver - basic', function () {
     }
   });
 
-  it('should start and stop a session', async function () {
+  it('should retrieve xml source', async function () {
     const source = await driver.source();
     _.includes(source, '<?xml version="1.0" encoding="UTF-8"?>').should.be.true;
   });
@@ -47,6 +47,14 @@ describe('Mac2Driver - basic', function () {
     const screenshot = await driver.takeScreenshot();
     _.startsWith(screenshot, 'iVBOR').should.be.true;
   });
+
+  it('should retrieve description source', async function () {
+    const source = await driver.execute('macos: source', {
+      format: 'description',
+    });
+    _.includes(source, 'Element subtree').should.be.true;
+  });
+
 });
 
 
