@@ -12,7 +12,6 @@ stages:
   jobs:
   - job: Node_Unit_Tests
     steps:
-    - template: azure-templates/node_setup_steps.yml
+    - template: .azure-templates/node_setup_steps.yml
     - script: npm install
-    - script:
-        npm run test
+    - script: npm run test
