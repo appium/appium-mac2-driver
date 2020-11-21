@@ -15,6 +15,8 @@ const CAPS = {
 describe('Mac2Driver - find elements', function () {
   this.timeout(MOCHA_TIMEOUT);
 
+  const ACCESSIBILITY_ID = 'duplicateDocument:';
+
   let server;
   let driver;
   before(async function () {
@@ -38,14 +40,14 @@ describe('Mac2Driver - find elements', function () {
   });
 
   it('should find by accessibility id', async function () {
-    const el = await driver.elementByAccessibilityId('duplicateDocument:');
+    const el = await driver.elementByAccessibilityId(ACCESSIBILITY_ID);
     el.should.exist;
   });
 
   it('should find multiple by accessibility id', async function () {
-    const els = await driver.elementsByAccessibilityId('duplicateDocument:');
+    const els = await driver.elementsByAccessibilityId(ACCESSIBILITY_ID);
     els.length.should.eql(1);
-    await els[0].getAttribute('identifier').should.eventually.eql('duplicateDocument:');
+    await els[0].getAttribute('identifier').should.eventually.eql(ACCESSIBILITY_ID);
   });
 });
 
