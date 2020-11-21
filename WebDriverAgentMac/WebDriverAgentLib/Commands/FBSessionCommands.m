@@ -106,7 +106,7 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
 
 + (id<FBResponsePayload>)handleSessionAppLaunch:(FBRouteRequest *)request
 {
-  [request.session launchApplicationWithBundleId:(id)request.arguments[@"bundleId"]
+  [request.session launchApplicationWithBundleId:[request requireStringArgumentWithName:@"bundleId"]
                                        arguments:request.arguments[@"arguments"]
                                      environment:request.arguments[@"environment"]];
   return FBResponseWithOK();
@@ -114,19 +114,19 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
 
 + (id<FBResponsePayload>)handleSessionAppActivate:(FBRouteRequest *)request
 {
-  [request.session activateApplicationWithBundleId:(id)request.arguments[@"bundleId"]];
+  [request.session activateApplicationWithBundleId:[request requireStringArgumentWithName:@"bundleId"]];
   return FBResponseWithOK();
 }
 
 + (id<FBResponsePayload>)handleSessionAppTerminate:(FBRouteRequest *)request
 {
-  BOOL result = [request.session terminateApplicationWithBundleId:(id)request.arguments[@"bundleId"]];
+  BOOL result = [request.session terminateApplicationWithBundleId:[request requireStringArgumentWithName:@"bundleId"]];
   return FBResponseWithObject(@(result));
 }
 
 + (id<FBResponsePayload>)handleSessionAppState:(FBRouteRequest *)request
 {
-  NSUInteger state = [request.session applicationStateWithBundleId:(id)request.arguments[@"bundleId"]];
+  NSUInteger state = [request.session applicationStateWithBundleId:[request requireStringArgumentWithName:@"bundleId"]];
   return FBResponseWithObject(@(state));
 }
 
@@ -146,10 +146,6 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
   NSMutableDictionary *buildInfo = [NSMutableDictionary dictionaryWithDictionary:@{
     @"time" : [self.class buildTimestamp],
   }];
-  NSString *upgradeTimestamp = NSProcessInfo.processInfo.environment[@"UPGRADE_TIMESTAMP"];
-  if (nil != upgradeTimestamp && upgradeTimestamp.length > 0) {
-    [buildInfo setObject:upgradeTimestamp forKey:@"upgradedAt"];
-  }
 
   return FBResponseWithObject(
     @{
