@@ -64,7 +64,8 @@ static FBSession *_activeSession = nil;
 {
   if (!self.skipAppTermination
       && nil != self.testedApplication
-      && self.testedApplication.state > XCUIApplicationStateNotRunning) {
+      && self.testedApplication.state > XCUIApplicationStateNotRunning
+      && ![self.testedApplication.am_bundleID isEqualToString:FINDER_BUNDLE_ID]) {
     [self.testedApplication terminate];
   }
   self.testedApplication = nil;
