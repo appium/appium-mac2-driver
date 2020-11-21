@@ -28,7 +28,7 @@ id<FBResponsePayload> FBResponseWithObject(id object)
 
 id<FBResponsePayload> FBResponseWithCachedElement(XCUIElement *element, FBElementCache *elementCache)
 {
-  NSUUID *elementId = [elementCache storeElement:element];
+  NSString *elementId = [elementCache storeElement:element];
   return FBResponseWithStatus([FBCommandStatus okWithValue:FBInsertElement(@{}, elementId)]);
 }
 
@@ -36,7 +36,7 @@ id<FBResponsePayload> FBResponseWithCachedElements(NSArray<XCUIElement *> *eleme
 {
   NSMutableArray *elementsResponse = [NSMutableArray array];
   for (XCUIElement *element in elements) {
-    NSUUID *elementId = [elementCache storeElement:element];
+    NSString *elementId = [elementCache storeElement:element];
     [elementsResponse addObject:FBInsertElement(@{}, elementId)];
   }
   return FBResponseWithStatus([FBCommandStatus okWithValue:elementsResponse]);

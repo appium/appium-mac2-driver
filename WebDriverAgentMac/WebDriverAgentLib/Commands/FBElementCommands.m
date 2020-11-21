@@ -108,7 +108,8 @@
 {
   FBElementCache *elementCache = request.session.elementCache;
   XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
-  return [element am_wdAttributeValueWithName:(NSString *)request.parameters[@"name"]];
+  NSString *attributeName = (NSString *)request.parameters[@"name"];
+  return FBResponseWithObject([element am_wdAttributeValueWithName:attributeName]);
 }
 
 + (id<FBResponsePayload>)handleGetText:(FBRouteRequest *)request

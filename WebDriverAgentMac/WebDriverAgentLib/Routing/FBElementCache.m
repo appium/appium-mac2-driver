@@ -27,16 +27,16 @@
   return self;
 }
 
-- (NSUUID *)storeElement:(XCUIElement *)element
+- (NSString *)storeElement:(XCUIElement *)element
 {
   for (NSUUID *candidateUuid in self.elementCache) {
     if ([element isEqualTo:self.elementCache[candidateUuid]]) {
-      return candidateUuid;
+      return candidateUuid.UUIDString;
     }
   }
   NSUUID *uuid = [NSUUID UUID];
   self.elementCache[uuid] = element;
-  return uuid;
+  return uuid.UUIDString;
 }
 
 - (XCUIElement *)elementForUUID:(NSString *)uuidStr

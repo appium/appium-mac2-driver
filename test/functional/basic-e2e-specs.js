@@ -1,18 +1,19 @@
+import _ from 'lodash';
 import wd from 'wd';
 import { startServer } from '../..';
 import chaiAsPromised from 'chai-as-promised';
 import chai from 'chai';
-import { HOST, PORT, MOCHA_TIMEOUT } from '../utils';
+import { HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID } from '../utils';
 
 chai.should();
 chai.use(chaiAsPromised);
 
 const CAPS = {
   platformName: 'mac',
-  bundleId: 'com.apple.TextEdit',
+  bundleId: TEXT_EDIT_BUNDLE_ID,
 };
 
-describe('Mac2Driver', function () {
+describe('Mac2Driver - basic', function () {
   this.timeout(MOCHA_TIMEOUT);
 
   let server;
@@ -39,7 +40,12 @@ describe('Mac2Driver', function () {
 
   it('should start and stop a session', async function () {
     const source = await driver.source();
-    source.should.not.be.empty;
+    _.includes(source, '<?xml version="1.0" encoding="UTF-8"?>').should.be.true;
+  });
+
+  it('should take screenshots', async function () {
+    const screenshot = await driver.takeScreenshot();
+    _.startsWith(screenshot, 'iVBOR').should.be.true;
   });
 });
 

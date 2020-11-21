@@ -19,9 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
  Stores the element in cache
 
  @param element element to store
- @return element's uuid or nil in case the element uid cannnot be extracted
+ @return element's uuid
  */
-- (NSUUID *)storeElement:(XCUIElement *)element;
+- (NSString *)storeElement:(XCUIElement *)element;
 
 /**
  Returns cached element
