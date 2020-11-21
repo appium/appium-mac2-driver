@@ -86,11 +86,8 @@
 
 - (BOOL)am_hasKeyboardInputFocus
 {
-  id snapshot = [self valueForKey:@"_lastSnapshot"];
-  if (nil == snapshot) {
-    snapshot = [self snapshotWithError:nil];
-  }
-  return [[snapshot valueForKey:@"_hasKeyboardFocus"] boolValue];
+  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hasKeyboardFocus == YES"];
+  return [predicate evaluateWithObject:self];
 }
 
 @end

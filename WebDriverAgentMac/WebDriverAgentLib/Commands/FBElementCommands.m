@@ -43,6 +43,7 @@
   return
   @[
     [[FBRoute GET:@"/window/size"] respondWithTarget:self action:@selector(handleGetWindowSize:)],
+    [[FBRoute GET:@"/window/rect"] respondWithTarget:self action:@selector(handleGetWindowRect:)],
     [[FBRoute GET:@"/element/:uuid/enabled"] respondWithTarget:self action:@selector(handleGetEnabled:)],
     [[FBRoute GET:@"/element/:uuid/rect"] respondWithTarget:self action:@selector(handleGetRect:)],
     [[FBRoute GET:@"/element/:uuid/attribute/:name"] respondWithTarget:self action:@selector(handleGetAttribute:)],
@@ -78,8 +79,8 @@
     [[FBRoute POST:@"/wda/element/:uuid/clickDragAndHold"] respondWithTarget:self action:@selector(handleClickDragAndHold:)],
     [[FBRoute POST:@"/wda/clickDragAndHold"] respondWithTarget:self action:@selector(handleClickDragAndHoldCoordinate:)],
 
-    [[FBRoute POST:@"/wda/element/:uuid/touchAndHold"] respondWithTarget:self action:@selector(handleTouchAndHold:)],
-    [[FBRoute POST:@"/wda/touchAndHold"] respondWithTarget:self action:@selector(handleTouchAndHoldCoordinate:)],
+    [[FBRoute POST:@"/wda/element/:uuid/clickAndHold"] respondWithTarget:self action:@selector(handleClickAndHold:)],
+    [[FBRoute POST:@"/wda/clickAndHold"] respondWithTarget:self action:@selector(handleClickAndHoldCoordinate:)],
 
     [[FBRoute POST:@"/wda/element/:uuid/keys"] respondWithTarget:self action:@selector(handleKeys:)],
     [[FBRoute POST:@"/wda/keys"] respondWithTarget:self action:@selector(handleKeys:)],
@@ -158,11 +159,19 @@
 {
   FBElementCache *elementCache = request.session.elementCache;
   XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
+  id x = request.arguments[@"x"];
+  id y = request.arguments[@"y"];
   CGFloat deltaX = (CGFloat)[request requireDoubleArgumentWithName:@"deltaX"];
   CGFloat deltaY = (CGFloat)[request requireDoubleArgumentWithName:@"deltaY"];
   [self.class excuteRespectingKeyModifiersWithRequest:request
                                                 block:^void() {
-    [element scrollByDeltaX:deltaX deltaY:deltaY];
+    if (nil != x && nil != y) {
+      CGPoint point = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
+      XCUICoordinate *coordinate = [element am_coordinateWithPoint:point];
+      [coordinate scrollByDeltaX:deltaX deltaY:deltaY];
+    } else {
+      [element scrollByDeltaX:deltaX deltaY:deltaY];
+    }
   }];
   return FBResponseWithOK();
 }
@@ -262,9 +271,17 @@
 {
   FBElementCache *elementCache = request.session.elementCache;
   XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
+  id x = request.arguments[@"x"];
+  id y = request.arguments[@"y"];
   [self.class excuteRespectingKeyModifiersWithRequest:request
                                                 block:^void() {
-    [element doubleClick];
+    if (nil != x && nil != y) {
+      CGPoint point = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
+      XCUICoordinate *coordinate = [element am_coordinateWithPoint:point];
+      [coordinate doubleClick];
+    } else {
+      [element doubleClick];
+    }
   }];
   return FBResponseWithOK();
 }
@@ -281,19 +298,27 @@
   return FBResponseWithOK();
 }
 
-+ (id<FBResponsePayload>)handleTouchAndHold:(FBRouteRequest *)request
++ (id<FBResponsePayload>)handleClickAndHold:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
   XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
+  id x = request.arguments[@"x"];
+  id y = request.arguments[@"y"];
   NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
   [self.class excuteRespectingKeyModifiersWithRequest:request
                                                 block:^void() {
-    [element pressForDuration:duration];
+    if (nil != x && nil != y) {
+      CGPoint point = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
+      XCUICoordinate *coordinate = [element am_coordinateWithPoint:point];
+      [coordinate pressForDuration:duration];
+    } else {
+      [element pressForDuration:duration];
+    }
   }];
   return FBResponseWithOK();
 }
 
-+ (id<FBResponsePayload>)handleTouchAndHoldCoordinate:(FBRouteRequest *)request
++ (id<FBResponsePayload>)handleClickAndHoldCoordinate:(FBRouteRequest *)request
 {
   CGPoint point = CGPointMake((CGFloat)[request requireDoubleArgumentWithName:@"x"],
                               (CGFloat)[request requireDoubleArgumentWithName:@"y"]);
@@ -462,6 +487,12 @@
     @"width": rect[@"width"],
     @"height": rect[@"height"],
   });
+}
+
++ (id<FBResponsePayload>)handleGetWindowRect:(FBRouteRequest *)request
+{
+  NSDictionary *rect = AMCGRectToDict(request.session.currentApplication.am_screenRect);
+  return FBResponseWithObject(rect);
 }
 
 + (id<FBResponsePayload>)handleElementScreenshot:(FBRouteRequest *)request
