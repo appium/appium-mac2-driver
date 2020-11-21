@@ -36,6 +36,7 @@
     "asyncbox": "^2.0.2",
     "bluebird": "^3.5.1",
     "lodash": "^4.17.4",
+    "portscanner": "2.2.0",
     "source-map-support": "^0.5.5",
     "teen_process": "^1.15.0",
     "yargs": "^16.1.0"

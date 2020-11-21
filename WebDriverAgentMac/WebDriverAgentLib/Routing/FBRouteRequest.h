@@ -63,6 +63,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSDictionary *)requireDictionaryArgumentWithName:(NSString *)name;
 
 /**
+ Retrieves request JSON body argument with the given name and converts its value to a string
+
+ @param name the argument name
+ @returns the argument value as string
+ @throws FBInvalidArgumentException if the argument is not provided or is not of string type
+ */
+- (NSString *)requireStringArgumentWithName:(NSString *)name;
+
+/**
  Retrieves :uuid parameter value from the request URL
 
  @returns :uuid parameter value

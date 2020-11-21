@@ -2,18 +2,20 @@ import wd from 'wd';
 import { startServer } from '../..';
 import chaiAsPromised from 'chai-as-promised';
 import chai from 'chai';
-import { HOST, PORT, MOCHA_TIMEOUT } from '../utils';
+import { HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID } from '../utils';
 
 chai.should();
 chai.use(chaiAsPromised);
 
 const CAPS = {
   platformName: 'mac',
-  bundleId: 'com.apple.TextEdit',
+  bundleId: TEXT_EDIT_BUNDLE_ID,
 };
 
-describe('Mac2Driver', function () {
+describe('Mac2Driver - find elements', function () {
   this.timeout(MOCHA_TIMEOUT);
+
+  const ACCESSIBILITY_ID = 'duplicateDocument:';
 
   let server;
   let driver;
@@ -37,9 +39,15 @@ describe('Mac2Driver', function () {
     }
   });
 
-  it('should start and stop a session', async function () {
-    const source = await driver.source();
-    source.should.not.be.empty;
+  it('should find by accessibility id', async function () {
+    const el = await driver.elementByAccessibilityId(ACCESSIBILITY_ID);
+    el.should.exist;
+  });
+
+  it('should find multiple by accessibility id', async function () {
+    const els = await driver.elementsByAccessibilityId(ACCESSIBILITY_ID);
+    els.length.should.eql(1);
+    await els[0].getAttribute('identifier').should.eventually.eql(ACCESSIBILITY_ID);
   });
 });
 

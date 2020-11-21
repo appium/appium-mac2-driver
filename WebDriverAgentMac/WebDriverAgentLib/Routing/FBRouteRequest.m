@@ -62,6 +62,18 @@
   return (NSDictionary *)value;
 }
 
+- (NSString *)requireStringArgumentWithName:(NSString *)name
+{
+  id value = [self requireArgumentWithName:name];
+  if (![value isKindOfClass:NSString.class]) {
+    NSString *reason = [NSString stringWithFormat:@"'%@' argument must be of string type", name];
+    @throw [NSException exceptionWithName:FBInvalidArgumentException
+                                   reason:reason
+                                 userInfo:@{}];
+  }
+  return (NSString *)value;
+}
+
 - (NSString *)elementUuid
 {
   return (NSString *)self.parameters[@"uuid"];
