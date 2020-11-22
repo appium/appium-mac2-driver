@@ -67,7 +67,7 @@
     }
 
     if (self.elementCache.count >= MAX_CACHE_SIZE) {
-      NSUInteger maxIndex = self.elementCache.count * 100 / LOAD_FACTOR;
+      NSUInteger maxIndex = self.elementCache.count * LOAD_FACTOR / 100;
       for (NSUInteger index = 0; index < maxIndex; ++index) {
         [self.elementCache removeObjectAtIndex:0];
       }
@@ -86,7 +86,7 @@
     NSString *reason = [NSString stringWithFormat:@"Cannot extract cached element for '%@' UUID", uuidStr];
     @throw [NSException exceptionWithName:FBInvalidArgumentException reason:reason userInfo:@{}];
   }
-  
+
   @synchronized (self.elementCache) {
     XCUIElement *element = nil;
     for (FBCacheItem *item in self.elementCache.reverseObjectEnumerator) {
