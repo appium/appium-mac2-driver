@@ -11,8 +11,37 @@
 
 #import "FBExceptions.h"
 
+#define MAX_CACHE_SIZE 500
+#define LOAD_FACTOR 30
+
+
+@interface FBCacheItem : NSObject
+@property (nonatomic, readonly) NSUUID *uuid;
+@property (nonatomic, readonly) XCUIElement *element;
+
+- (instancetype)initWithElement:(XCUIElement *)element andUuid:(NSUUID *)uuid;
+
+@end
+
+@implementation FBCacheItem
+
+- (instancetype)initWithElement:(XCUIElement *)element andUuid:(NSUUID *)uuid
+{
+  self = [super init];
+  if (!self) {
+    return nil;
+  }
+
+  _element = element;
+  _uuid = uuid;
+  return self;
+}
+
+@end
+
+
 @interface FBElementCache ()
-@property (atomic, strong) NSMutableDictionary<NSUUID *, XCUIElement *> *elementCache;
+@property (nonatomic, readonly) NSMutableArray<FBCacheItem *> *elementCache;
 @end
 
 @implementation FBElementCache
@@ -23,47 +52,68 @@
   if (!self) {
     return nil;
   }
-  _elementCache = [NSMutableDictionary dictionary];
+
+  _elementCache = [NSMutableArray array];
   return self;
 }
 
 - (NSString *)storeElement:(XCUIElement *)element
 {
-  for (NSUUID *candidateUuid in self.elementCache) {
-    if ([element isEqualTo:self.elementCache[candidateUuid]]) {
-      return candidateUuid.UUIDString;
+  @synchronized (self.elementCache) {
+    for (FBCacheItem *candidate in self.elementCache.reverseObjectEnumerator) {
+      if ([element isEqualTo:candidate.element]) {
+        return candidate.uuid.UUIDString;
+      }
     }
+
+    if (self.elementCache.count >= MAX_CACHE_SIZE) {
+      NSUInteger maxIndex = self.elementCache.count * 100 / LOAD_FACTOR;
+      for (NSUInteger index = 0; index < maxIndex; ++index) {
+        [self.elementCache removeObjectAtIndex:0];
+      }
+    }
+
+    NSUUID *uuid = [NSUUID UUID];
+    [self.elementCache addObject:[[FBCacheItem alloc] initWithElement:element andUuid:uuid]];
+    return uuid.UUIDString;
   }
-  NSUUID *uuid = [NSUUID UUID];
-  self.elementCache[uuid] = element;
-  return uuid.UUIDString;
 }
 
 - (XCUIElement *)elementForUUID:(NSString *)uuidStr
 {
-  NSUUID *uuid = [[NSUUID new] initWithUUIDString:uuidStr];
-  if (nil == uuid) {
-    NSString *reason = [NSString stringWithFormat:@"Cannot extract cached element for '%@' UUID", uuidStr];
-    @throw [NSException exceptionWithName:FBInvalidArgumentException reason:reason userInfo:@{}];
-  }
+  @synchronized (self.elementCache) {
+    NSUUID *uuid = [[NSUUID new] initWithUUIDString:uuidStr];
+    if (nil == uuid) {
+      NSString *reason = [NSString stringWithFormat:@"Cannot extract cached element for '%@' UUID", uuidStr];
+      @throw [NSException exceptionWithName:FBInvalidArgumentException reason:reason userInfo:@{}];
+    }
 
-  XCUIElement *element = [self.elementCache objectForKey:uuid];
-  if (nil == element) {
-    NSString *reason = [NSString stringWithFormat:@"The element identified by \"%@\" is not present in the internal cache. Try to find it first", uuid];
-    @throw [NSException exceptionWithName:FBStaleElementException reason:reason userInfo:@{}];
+    XCUIElement *element = nil;
+    for (FBCacheItem *item in self.elementCache.reverseObjectEnumerator) {
+      if ([uuid isEqualTo:item.uuid]) {
+        element = item.element;
+        break;
+      }
+    }
+    if (nil == element) {
+      NSString *reason = [NSString stringWithFormat:@"The element identified by \"%@\" is either not present in the internal elements cache or has expired from it. Try to find the element again", uuid];
+      @throw [NSException exceptionWithName:FBStaleElementException reason:reason userInfo:@{}];
+    }
+    NSError *error;
+    id<XCUIElementSnapshot> snapshot = [element snapshotWithError:&error];
+    if (nil == snapshot) {
+      NSString *reason = [NSString stringWithFormat:@"The element identified by \"%@\" is not present on the current view (%@). Make sure the current view is the expected one", uuid, error.localizedDescription];
+      @throw [NSException exceptionWithName:FBStaleElementException reason:reason userInfo:@{}];
+    }
+    return element;
   }
-  NSError *error;
-  id<XCUIElementSnapshot> snapshot = [element snapshotWithError:&error];
-  if (nil == snapshot) {
-    NSString *reason = [NSString stringWithFormat:@"The element identified by \"%@\" is not present on the current view (%@). Make sure the current view is the expected one", uuid, error.localizedDescription];
-    @throw [NSException exceptionWithName:FBStaleElementException reason:reason userInfo:@{}];
-  }
-  return element;
 }
 
 - (void)reset
 {
-  [self.elementCache removeAllObjects];
+  @synchronized (self.elementCache) {
+    [self.elementCache removeAllObjects];
+  }
 }
 
 @end
