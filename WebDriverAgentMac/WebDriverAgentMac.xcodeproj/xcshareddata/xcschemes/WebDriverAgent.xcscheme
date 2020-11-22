@@ -20,6 +20,20 @@
                ReferencedContainer = "container:WebDriverAgentMac.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "71B00E8A2566D4B90010DA73"
+               BuildableName = "IntegrationTests.xctest"
+               BlueprintName = "IntegrationTests"
+               ReferencedContainer = "container:WebDriverAgentMac.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
