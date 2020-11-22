@@ -300,6 +300,22 @@ def test_edit_text(driver):
     assert edit_field.text == 'hello world'
     edit_field.clear()
     assert edit_field.text == ''
+
+
+def test_sending_custom_keys(driver):
+    edit_field = driver.find_element_by_class_name('XCUIElementTypeTextView')
+    flagsShift = 1 << 1
+    edit_field.execute_script('macos: keys', {
+        'keys': [{
+            'key': 'h',
+            'modifierFlags': flagsShift,
+        }, {
+            'key': 'i',
+            'modifierFlags': flagsShift,
+        }]
+    })
+    assert edit_field.text == 'HI'
+
 ```
 
 
