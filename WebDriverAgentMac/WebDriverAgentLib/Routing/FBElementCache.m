@@ -19,14 +19,16 @@
 @interface FBCacheItem : NSObject
 @property (nonatomic, readonly) NSUUID *uuid;
 @property (nonatomic, readonly) XCUIElement *element;
+@property (nonatomic, readonly) NSString *elementDescription;
 
-- (instancetype)initWithElement:(XCUIElement *)element andUuid:(NSUUID *)uuid;
-
+- (instancetype)initWithElement:(XCUIElement *)element
+                     havingUuid:(NSUUID *)uuid;
 @end
 
 @implementation FBCacheItem
 
-- (instancetype)initWithElement:(XCUIElement *)element andUuid:(NSUUID *)uuid
+- (instancetype)initWithElement:(XCUIElement *)element
+                     havingUuid:(NSUUID *)uuid
 {
   self = [super init];
   if (!self) {
@@ -34,6 +36,7 @@
   }
 
   _element = element;
+  _elementDescription = element.description;
   _uuid = uuid;
   return self;
 }
@@ -69,14 +72,15 @@
 
     if (self.elementCache.count >= MAX_CACHE_SIZE) {
       NSUInteger maxIndex = self.elementCache.count * LOAD_FACTOR / 100;
-      [FBLogger logFmt:@"The elements cache size has reached its maximum value of %@. Shrinking %lu oldest elements from it", @(MAX_CACHE_SIZE), maxIndex];
+      [FBLogger logFmt:@"The elements cache size has reached its maximum value of %@. Shrinking %lu oldest elements from it",
+       @(MAX_CACHE_SIZE), maxIndex];
       for (NSUInteger index = 0; index < maxIndex; ++index) {
         [self.elementCache removeObjectAtIndex:0];
       }
     }
 
     NSUUID *uuid = [NSUUID UUID];
-    [self.elementCache addObject:[[FBCacheItem alloc] initWithElement:element andUuid:uuid]];
+    [self.elementCache addObject:[[FBCacheItem alloc] initWithElement:element havingUuid:uuid]];
     return uuid.UUIDString;
   }
 }
@@ -91,9 +95,11 @@
 
   @synchronized (self.elementCache) {
     XCUIElement *element = nil;
+    NSString *elementDescription = nil;
     for (FBCacheItem *item in self.elementCache.reverseObjectEnumerator) {
       if ([uuid isEqualTo:item.uuid]) {
         element = item.element;
+        elementDescription = item.elementDescription;
         break;
       }
     }
@@ -104,7 +110,8 @@
     NSError *error;
     id<XCUIElementSnapshot> snapshot = [element snapshotWithError:&error];
     if (nil == snapshot) {
-      NSString *reason = [NSString stringWithFormat:@"The element identified by \"%@\" is not present on the current view (%@). Make sure the current view is the expected one", uuid, error.localizedDescription];
+      NSString *reason = [NSString stringWithFormat:@"The element \"%@\" identified by \"%@\" is not present on the current view (%@). Make sure the current view is the expected one",
+                          elementDescription, uuid, error.localizedDescription];
       @throw [NSException exceptionWithName:FBStaleElementException reason:reason userInfo:@{}];
     }
     return element;
