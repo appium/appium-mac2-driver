@@ -81,13 +81,13 @@
 
 - (XCUIElement *)elementForUUID:(NSString *)uuidStr
 {
+  NSUUID *uuid = [[NSUUID new] initWithUUIDString:uuidStr];
+  if (nil == uuid) {
+    NSString *reason = [NSString stringWithFormat:@"Cannot extract cached element for '%@' UUID", uuidStr];
+    @throw [NSException exceptionWithName:FBInvalidArgumentException reason:reason userInfo:@{}];
+  }
+  
   @synchronized (self.elementCache) {
-    NSUUID *uuid = [[NSUUID new] initWithUUIDString:uuidStr];
-    if (nil == uuid) {
-      NSString *reason = [NSString stringWithFormat:@"Cannot extract cached element for '%@' UUID", uuidStr];
-      @throw [NSException exceptionWithName:FBInvalidArgumentException reason:reason userInfo:@{}];
-    }
-
     XCUIElement *element = nil;
     for (FBCacheItem *item in self.elementCache.reverseObjectEnumerator) {
       if ([uuid isEqualTo:item.uuid]) {
