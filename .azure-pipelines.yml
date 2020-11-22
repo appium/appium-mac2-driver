@@ -31,7 +31,7 @@ stages:
     - script: npm install
     - script: npm run test
   - ${{ each job in parameters.analyzeJobs }}:
-    - template: ./azure-templates/base_job.yml
+    - template: .azure-templates/base_job.yml
       parameters:
         name: ${{ job.name }}
         action: analyze
