@@ -13,5 +13,7 @@ jobs:
     steps:
     - script: sudo xcode-select --switch "/Applications/Xcode_${{ parameters.xcodeVersion }}.app/Contents/Developer"
     # retry once on bootstrap failure
-    - script: ./Scripts/bootstrap.sh -dn || (sleep $[ ( $RANDOM % 60 )  + 1 ]s && ./Scripts/bootstrap.sh -dn)
-    - script: cd WebDriverAgentMac && xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme ${{ parameters.scheme }} ${{ parameters.action }}
+    - script: |-
+      cd WebDriverAgentMac
+      ./Scripts/bootstrap.sh -dn || (sleep $[ ( $RANDOM % 60 ) + 1 ]s && ./Scripts/bootstrap.sh -dn)
+      xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme ${{ parameters.scheme }} ${{ parameters.action }}
