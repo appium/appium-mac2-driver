@@ -35,7 +35,8 @@ static NSString *const SOURCE_FORMAT_DESCRIPTION = @"description";
 + (id<FBResponsePayload>)handleGetSourceCommand:(FBRouteRequest *)request
 {
   // This method might be called without session
-  XCUIApplication *application = request.session.currentApplication ?: [XCUIApplication new];
+  XCUIApplication *application = request.session.currentApplication
+    ?: [[XCUIApplication alloc] initWithBundleIdentifier:FINDER_BUNDLE_ID];
   NSString *sourceType = request.parameters[@"format"] ?: SOURCE_FORMAT_XML;
   id result;
   if ([sourceType caseInsensitiveCompare:SOURCE_FORMAT_XML] == NSOrderedSame) {
