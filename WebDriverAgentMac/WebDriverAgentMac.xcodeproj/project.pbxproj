@@ -116,7 +116,6 @@
 		714CA7062566487B00353B27 /* FBXPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA7042566487B00353B27 /* FBXPath.h */; };
 		714CA7072566487B00353B27 /* FBXPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA7052566487B00353B27 /* FBXPath.m */; };
 		714CA70A256648B200353B27 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 714CA709256648A100353B27 /* libxml2.tbd */; };
-		714CA70E25664A8000353B27 /* NSString+FBXMLSafeString.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA70C25664A8000353B27 /* NSString+FBXMLSafeString.m */; };
 		714CA70F25664A8000353B27 /* NSString+FBXMLSafeString.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA70D25664A8000353B27 /* NSString+FBXMLSafeString.h */; };
 		71688A98256461ED0007F55B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 71688A97256461ED0007F55B /* AppDelegate.m */; };
 		71688A9B256461ED0007F55B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71688A9A256461ED0007F55B /* ViewController.m */; };
@@ -138,6 +137,7 @@
 		718D2C292567E6D0005F533B /* AMSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718D2C282567E6D0005F533B /* AMSessionTests.m */; };
 		718D2C322567FED3005F533B /* AMSessionCapabilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 718D2C302567FED3005F533B /* AMSessionCapabilities.h */; };
 		718D2C332567FED3005F533B /* AMSessionCapabilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 718D2C312567FED3005F533B /* AMSessionCapabilities.m */; };
+		718EE0BB256B0A0300B46325 /* NSString+FBXMLSafeString.m in Sources */ = {isa = PBXBuildFile; fileRef = 718EE0BA256B0A0300B46325 /* NSString+FBXMLSafeString.m */; };
 		7199B3A22565B0A3000B5C51 /* CocoaAsyncSocket.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7199B3CD2565B1CD000B5C51 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71688AE2256466070007F55B /* XCTest.framework */; };
 		7199B3CE2565B1E8000B5C51 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */; };
@@ -235,7 +235,6 @@
 		714CA7042566487B00353B27 /* FBXPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBXPath.h; sourceTree = "<group>"; };
 		714CA7052566487B00353B27 /* FBXPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBXPath.m; sourceTree = "<group>"; };
 		714CA709256648A100353B27 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
-		714CA70C25664A8000353B27 /* NSString+FBXMLSafeString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+FBXMLSafeString.m"; path = "../../../../WebDriverAgent/WebDriverAgentLib/Categories/NSString+FBXMLSafeString.m"; sourceTree = "<group>"; };
 		714CA70D25664A8000353B27 /* NSString+FBXMLSafeString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+FBXMLSafeString.h"; path = "../../../../WebDriverAgent/WebDriverAgentLib/Categories/NSString+FBXMLSafeString.h"; sourceTree = "<group>"; };
 		714CA732256668F600353B27 /* XCTAutomationSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTAutomationSupport.framework; path = Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework; sourceTree = DEVELOPER_DIR; };
 		7151ACE12564EF5F008B8B2A /* RouteRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouteRequest.m; sourceTree = "<group>"; };
@@ -341,6 +340,7 @@
 		718D2C282567E6D0005F533B /* AMSessionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMSessionTests.m; sourceTree = "<group>"; };
 		718D2C302567FED3005F533B /* AMSessionCapabilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMSessionCapabilities.h; sourceTree = "<group>"; };
 		718D2C312567FED3005F533B /* AMSessionCapabilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMSessionCapabilities.m; sourceTree = "<group>"; };
+		718EE0BA256B0A0300B46325 /* NSString+FBXMLSafeString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FBXMLSafeString.m"; sourceTree = "<group>"; };
 		7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WebDriverAgentLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7199B3AE2565B122000B5C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71B00E8B2566D4B90010DA73 /* IntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -514,7 +514,7 @@
 				710527EB2565731200130763 /* NSPredicate+FBFormat.h */,
 				710527E82565731200130763 /* NSPredicate+FBFormat.m */,
 				714CA70D25664A8000353B27 /* NSString+FBXMLSafeString.h */,
-				714CA70C25664A8000353B27 /* NSString+FBXMLSafeString.m */,
+				718EE0BA256B0A0300B46325 /* NSString+FBXMLSafeString.m */,
 				713A9D2F2566A14200118D07 /* XCUIApplication+AMActiveElement.h */,
 				713A9D302566A14200118D07 /* XCUIApplication+AMActiveElement.m */,
 				710527FD2565802200130763 /* XCUIApplication+AMHelpers.h */,
@@ -937,7 +937,6 @@
 				7109BFF52565B550006BFD13 /* FBExceptionHandler.m in Sources */,
 				7109C03B2565B5BD006BFD13 /* NSExpression+FBFormat.m in Sources */,
 				714CA7072566487B00353B27 /* FBXPath.m in Sources */,
-				714CA70E25664A8000353B27 /* NSString+FBXMLSafeString.m in Sources */,
 				7109C0692565B605006BFD13 /* HTTPResponseProxy.m in Sources */,
 				718D2C0E2567AA03005F533B /* XCUIElement+AMEditable.m in Sources */,
 				713A9D382566A83800118D07 /* FBElementCommands.m in Sources */,
@@ -963,6 +962,7 @@
 				7109C0362565B5B4006BFD13 /* FBUnknownCommands.m in Sources */,
 				718D2C332567FED3005F533B /* AMSessionCapabilities.m in Sources */,
 				7109C02C2565B5A7006BFD13 /* FBSessionCommands.m in Sources */,
+				718EE0BB256B0A0300B46325 /* NSString+FBXMLSafeString.m in Sources */,
 				7109BFD72565B522006BFD13 /* FBRunLoopSpinner.m in Sources */,
 				7109BFBB2565B4FA006BFD13 /* FBConfiguration.m in Sources */,
 				7109C0552565B5EC006BFD13 /* HTTPErrorResponse.m in Sources */,
