@@ -47,7 +47,7 @@ selected | Contains `true` if the element is selected | 'false'
 label | Element's label value. Could be empty | 'my label'
 title | Element's title value. Could be empty | 'my title'
 identifier | Element's accessibility identifier. Could be empty | 'identifier'
-value | The value could be different depending on the actual element type. For example, text fields might have their text context there and sliders would contain the float position value, while switchers would have either `1` or `0` | '1.5'
+value | The value could be different depending on the actual element type. For example, text fields might have their text context there and sliders would contain the float position value, while switches would have either `1` or `0` | '1.5'
 
 These attribute values could be retrieved from the page source output and then used for elements location. See https://developer.apple.com/documentation/xctest/xcuielementattributes?language=objc for more details on each attribute.
 
