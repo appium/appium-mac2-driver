@@ -10,6 +10,7 @@
 #import "FBElementCache.h"
 
 #import "FBExceptions.h"
+#import "FBLogger.h"
 
 #define MAX_CACHE_SIZE 500
 #define LOAD_FACTOR 30
@@ -68,6 +69,7 @@
 
     if (self.elementCache.count >= MAX_CACHE_SIZE) {
       NSUInteger maxIndex = self.elementCache.count * LOAD_FACTOR / 100;
+      [FBLogger logFmt:@"The elements cache size has reached its maximum value of %@. Shrinking %lu oldest elements from it", @(MAX_CACHE_SIZE), maxIndex];
       for (NSUInteger index = 0; index < maxIndex; ++index) {
         [self.elementCache removeObjectAtIndex:0];
       }
