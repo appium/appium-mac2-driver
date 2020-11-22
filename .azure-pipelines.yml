@@ -35,6 +35,6 @@ stages:
       parameters:
         name: ${{ job.name }}
         action: analyze
-        scheme: ${{ job.sceme }}
+        scheme: ${{ job.scheme }}
         xcodeVersion: $(XCODE_VERSION)
         vmImage: $(VM_IMAGE)
