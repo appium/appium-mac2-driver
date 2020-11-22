@@ -3,9 +3,24 @@
 variables:
   VM_IMAGE: macOS-10.15
   DEFAULT_NODE_VERSION: "12.x"
+  XCODE_VERSION: "12"
 
 pool:
   vmImage: "$(VM_IMAGE)"
+
+parameters:
+- name: analyzeJobs
+  type: object
+  default:
+  - name: Analyze_Lib
+    scheme: WebDriverAgentLib
+  - name: Analyze_Runner
+    scheme: WebDriverAgentRunner
+  - name: Analyze_Tests
+    scheme: IntegrationTests
+  - name: Analyze_Test_App
+    scheme: WebDriverAgent
+
 
 stages:
 - stage: Unit_Tests_And_Linters
@@ -15,3 +30,11 @@ stages:
     - template: .azure-templates/node_setup_steps.yml
     - script: npm install
     - script: npm run test
+  - ${{ each job in parameters.analyzeJobs }}:
+    - template: ./azure-templates/base_job.yml
+      parameters:
+        name: ${{ job.name }}
+        action: analyze
+        scheme: ${{ job.sceme }}
+        xcodeVersion: $(XCODE_VERSION)
+        vmImage: $(VM_IMAGE)

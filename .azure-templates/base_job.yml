@@ -1,0 +1,21 @@
+parameters:
+    name: ''
+    action: ''
+    scheme: ''
+    xcodeVersion: ''
+    vmImage: ''
+
+
+jobs:
+  - job: ${{ parameters.name }}
+    pool:
+      vmImage: ${{ parameters.vmImage }}
+    variables:
+      ACTION: ${{ parameters.action }}
+      SCHEME: ${{ parameters.scheme }}
+      XCODE_VERSION: ${{ parameters.xcodeVersion }}
+    steps:
+    - script: sudo xcode-select --switch "/Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer"
+    # retry once on bootstrap failure
+    - script: ./Scripts/bootstrap.sh -dn || (sleep $[ ( $RANDOM % 60 )  + 1 ]s && ./Scripts/bootstrap.sh -dn)
+    - script: cd WebDriverAgentMac && xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme $(SCHEME) $(ACTION)
