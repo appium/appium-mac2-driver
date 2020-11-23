@@ -81,7 +81,7 @@ Name | Type | Required | Description | Example
 element | string | if `x` or `y` are unset | Unique identifier of the element to perform the click on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
 x | number | if `y` is set or `element` is unset | click X coordinate | 100
 y | number | if `y` is set or `element` is unset | click Y coordinate | 100
-keyModifierFlags | number | no | if set then the given key modifiers will be applied while click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | 1 << 1 `logical or` 1 << 2
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 
 ### macos: clickAndHold
 
@@ -95,7 +95,7 @@ element | string | if `x` or `y` are unset | Unique identifier of the element to
 x | number | if `y` is set or `element` is unset | long click X coordinate | 100
 y | number | if `y` is set or `element` is unset | long click Y coordinate | 100
 duration | number | yes | The number of float seconds to hold the mouse button | 2.5
-keyModifierFlags | number | no | if set then the given key modifiers will be applied while long click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | 1 << 1 `logical or` 1 << 2
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while long click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 
 ### macos: scroll
 
@@ -110,7 +110,7 @@ x | number | if `y` is set or `element` is unset | scroll X coordinate | 100
 y | number | if `y` is set or `element` is unset | scroll Y coordinate | 100
 deltaX | number | yes | Horizontal delta as float number. Could be negative | 100
 deltaY | number | yes | vertical delta as float number. Could be negative | 100
-keyModifierFlags | number | no | if set then the given key modifiers will be applied while scroll is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | 1 << 1 `logical or` 1 << 2
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while scroll is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 
 ### macos: rightClick
 
@@ -123,7 +123,7 @@ Name | Type | Required | Description | Example
 element | string | if `x` or `y` are unset | Unique identifier of the element to perform the right click on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
 x | number | if `y` is set or `element` is unset | right click X coordinate | 100
 y | number | if `y` is set or `element` is unset | right click Y coordinate | 100
-keyModifierFlags | number | no | if set then the given key modifiers will be applied while right click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | 1 << 1 `logical or` 1 << 2
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while right click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 
 ### macos: hover
 
@@ -136,7 +136,7 @@ Name | Type | Required | Description | Example
 element | string | if `x` or `y` are unset | Unique identifier of the element to perform the hover on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
 x | number | if `y` is set or `element` is unset | long click X coordinate | 100
 y | number | if `y` is set or `element` is unset | long click Y coordinate | 100
-keyModifierFlags | number | no | if set then the given key modifiers will be applied while hover is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | 1 << 1 `logical or` 1 << 2
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while hover is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 
 ### macos: doubleClick
 
@@ -149,7 +149,7 @@ Name | Type | Required | Description | Example
 element | string | if `x` or `y` are unset | Unique identifier of the element to perform the double click on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
 x | number | if `y` is set or `element` is unset | double click X coordinate | 100
 y | number | if `y` is set or `element` is unset | double click Y coordinate | 100
-keyModifierFlags | number | no | if set then the given key modifiers will be applied while click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | 1 << 1 `logical or` 1 << 2
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 
 ### macos: clickAndDrag
 
@@ -166,7 +166,7 @@ startY | number | if `sourceElement` and `destinationElement` are unset | starti
 endX | number | if `sourceElement` and `destinationElement` are unset | end X coordinate | 200
 endY | number | if `sourceElement` and `destinationElement` are unset | end Y coordinate | 220
 duration | number | yes | The number of float seconds to hold the mouse button | 2.5
-keyModifierFlags | number | no | if set then the given key modifiers will be applied while drag is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | 1 << 1 `logical or` 1 << 2
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while drag is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 
 ### macos: clickDragAndDrag
 
@@ -184,7 +184,7 @@ endX | number | if `sourceElement` and `destinationElement` are unset | end X co
 endY | number | if `sourceElement` and `destinationElement` are unset | end Y coordinate | 220
 duration | number | yes | The number of float seconds to hold the mouse button | 2.5
 velocity | number | no | Dragging velocity in pixels per second. If not provided then the default velocity is used. See official documentation on [XCUIGestureVelocity structure](https://developer.apple.com/documentation/xctest/xcuigesturevelocity) for more details | 2500
-keyModifierFlags | number | no | if set then the given key modifiers will be applied while drag is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | 1 << 1 `logical or` 1 << 2
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while drag is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 
 ### macos: keys
 
@@ -221,7 +221,7 @@ This API influences the state of the [Application Under Test](#application-under
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 bundleId | string | yes | bundle identifier of the app to be launched or activated | com.apple.TextEdit
-arguments | array | no | the list of command line arguments for the app to be be launched with. This argument is ignored if the app is already running. | ['--help]
+arguments | array | no | the list of command line arguments for the app to be be launched with. This argument is ignored if the app is already running. | ['--help']
 environment | dictionary | no | Environment variables mapping. Custom variables are added to the default process environment. This argument is ignored if the app is already running. | { myEnvVar: 'value' }
 
 ### macos: activateApp
