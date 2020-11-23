@@ -64,10 +64,22 @@
 - (NSString *)storeElement:(XCUIElement *)element
 {
   @synchronized (self.elementCache) {
+    FBCacheItem *matchedItem = nil;
+    NSUInteger matchIndex = self.elementCache.count - 1;
     for (FBCacheItem *candidate in self.elementCache.reverseObjectEnumerator) {
       if ([element isEqualTo:candidate.element]) {
-        return candidate.uuid.UUIDString;
+        matchedItem = candidate;
+        break;
       }
+      --matchIndex;
+    }
+    if (nil != matchedItem) {
+      if (matchIndex < self.elementCache.count - 1) {
+        // Put the accessed element to the top of the cache
+        [self.elementCache removeObjectAtIndex:matchIndex];
+        [self.elementCache addObject:matchedItem];
+      }
+      return matchedItem.uuid.UUIDString;
     }
 
     if (self.elementCache.count >= MAX_CACHE_SIZE) {
