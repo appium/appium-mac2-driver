@@ -351,12 +351,12 @@ There is a possibility to run custom AppleScript
 from your client code. This feature is potentially insecure and thus needs to be
 explicitly enabled when executing the server by providing `apple_script` key to the list
 of enabled insecure features. Check [Appium Security document](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/security.md) for more details.
-It is possible to ether execute a single AppleScript command (use the `command` argument)
+It is possible to either execute a single AppleScript command (use the `command` argument)
 or a whole script (use the `script` argument) and get its
 stdout in response. If the script execution returns non-zero exit code then an exception
 is going to be thrown. The exception message will contain the actual stderr.
-If script is a blocking one then it could only run up to 20 seconds long. After that it will be
-terminated with a timeout exception.
+If the script is a blocking one then it could only run up to 20 seconds long. After that the script
+will be terminated and a timeout exception will be thrown.
 Here's an example code of how to get a shell command output:
 
 ```java
