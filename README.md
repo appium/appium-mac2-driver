@@ -374,6 +374,7 @@ Parallel execution of multiple Mac2 driver instances is highly discouraged. Only
 ## Development & Testing
 
 This module uses the same [development tools](https://github.com/appium/appium/tree/master/docs/cn/contributing-to-appium) as the other Appium drivers.
+
 Check out the source. Then run:
 
 ```bash
@@ -382,7 +383,6 @@ gulp watch
 ```
 
 Execute `npm run test` to run unit tests and `npm run e2e-test` to run integration tests.
-
 
 
 ## TBD
