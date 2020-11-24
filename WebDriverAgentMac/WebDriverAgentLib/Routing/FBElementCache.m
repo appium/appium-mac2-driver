@@ -61,34 +61,44 @@
   return self;
 }
 
+- (nullable FBCacheItem *)getItemWithElement:(nullable XCUIElement *)element
+                                      orUuid:(nullable NSUUID *)uuid
+{
+  FBCacheItem *matchedItem = nil;
+  NSUInteger matchIndex = self.elementCache.count - 1;
+  for (FBCacheItem *candidate in self.elementCache.reverseObjectEnumerator) {
+    if ((nil != element && [element isEqualTo:candidate.element])
+        || (nil != uuid && [uuid isEqualTo:candidate.uuid])) {
+      matchedItem = candidate;
+      break;
+    }
+    --matchIndex;
+  }
+  if (nil == matchedItem) {
+    return nil;
+  }
+
+  if (matchIndex < self.elementCache.count - 1) {
+    // Put the accessed element to the top of the cache
+    [self.elementCache removeObjectAtIndex:matchIndex];
+    [self.elementCache addObject:matchedItem];
+  }
+  return matchedItem;
+}
+
 - (NSString *)storeElement:(XCUIElement *)element
 {
   @synchronized (self.elementCache) {
-    FBCacheItem *matchedItem = nil;
-    NSUInteger matchIndex = self.elementCache.count - 1;
-    for (FBCacheItem *candidate in self.elementCache.reverseObjectEnumerator) {
-      if ([element isEqualTo:candidate.element]) {
-        matchedItem = candidate;
-        break;
-      }
-      --matchIndex;
-    }
+    FBCacheItem *matchedItem = [self getItemWithElement:element orUuid:nil];
     if (nil != matchedItem) {
-      if (matchIndex < self.elementCache.count - 1) {
-        // Put the accessed element to the top of the cache
-        [self.elementCache removeObjectAtIndex:matchIndex];
-        [self.elementCache addObject:matchedItem];
-      }
       return matchedItem.uuid.UUIDString;
     }
 
     if (self.elementCache.count >= MAX_CACHE_SIZE) {
-      NSUInteger maxIndex = self.elementCache.count * LOAD_FACTOR / 100;
+      NSUInteger count = self.elementCache.count * LOAD_FACTOR / 100;
       [FBLogger logFmt:@"The elements cache size has reached its maximum value of %@. Shrinking %lu oldest elements from it",
-       @(MAX_CACHE_SIZE), maxIndex];
-      for (NSUInteger index = 0; index < maxIndex; ++index) {
-        [self.elementCache removeObjectAtIndex:0];
-      }
+       @(MAX_CACHE_SIZE), count];
+      [self.elementCache removeObjectsInRange:NSMakeRange(0, count)];
     }
 
     NSUUID *uuid = [NSUUID UUID];
@@ -108,12 +118,10 @@
   @synchronized (self.elementCache) {
     XCUIElement *element = nil;
     NSString *elementDescription = nil;
-    for (FBCacheItem *item in self.elementCache.reverseObjectEnumerator) {
-      if ([uuid isEqualTo:item.uuid]) {
-        element = item.element;
-        elementDescription = item.elementDescription;
-        break;
-      }
+    FBCacheItem *matchedItem = [self getItemWithElement:nil orUuid:uuid];
+    if (nil != matchedItem) {
+      element = matchedItem.element;
+      elementDescription = matchedItem.elementDescription;
     }
     if (nil == element) {
       NSString *reason = [NSString stringWithFormat:@"The element identified by \"%@\" is either not present in the internal elements cache or has expired from it. Try to find the element again", uuid];
