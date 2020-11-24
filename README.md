@@ -285,6 +285,8 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 command | string | yes if `script` is not provided | AppleScript command to execute | `do shell script "echo hello"`
 script | string | yes if `command` is not provided | AppleScript script to execute | `do shell script "echo hello"\ndo shell script "echo hello2"`
+timeout | number | no | The number of seconds to wait until a long-running blocking command is finished. An error is thrown if the command is still running after this timeout expires. | 60000
+cwd | string | no | The path to an existing folder which is going to be set as the working directory for the command/script being executed. | `/tmp`
 
 #### Returns
 
@@ -356,7 +358,9 @@ or a whole script (use the `script` argument) and get its
 stdout in response. If the script execution returns non-zero exit code then an exception
 is going to be thrown. The exception message will contain the actual stderr.
 If the script is a blocking one then it could only run up to 20 seconds long. After that the script
-will be terminated and a timeout exception will be thrown.
+will be terminated and a timeout error will be thrown. This timeout could be customized by
+providing the `timeout` option value.
+You could also customize the script working directory by providing the `cwd` option.
 Here's an example code of how to get a shell command output:
 
 ```java
