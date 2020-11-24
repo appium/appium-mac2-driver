@@ -33,8 +33,11 @@ describe('Mac2Driver - find elements', function () {
   });
   afterEach(async function () {
     if (driver) {
-      await driver.quit();
-      driver = null;
+      try {
+        await driver.quit();
+      } finally {
+        driver = null;
+      }
     }
   });
 

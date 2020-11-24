@@ -33,8 +33,11 @@ describe('Mac2Driver - elements interaction', function () {
   });
   afterEach(async function () {
     if (driver) {
-      await driver.quit();
-      driver = null;
+      try {
+        await driver.quit();
+      } finally {
+        driver = null;
+      }
     }
   });
 
