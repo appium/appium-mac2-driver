@@ -81,6 +81,7 @@
     "WebDriverAgentMac/WebDriverAgentMac.xcodeproj",
     "WebDriverAgentMac/WebDriverAgentRunner",
     "WebDriverAgentMac/IntegrationTests",
-    "WebDriverAgentMac/WebDriverAgent"
+    "WebDriverAgentMac/WebDriverAgent",
+    "!.DS_Store"
   ]
 }
