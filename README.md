@@ -31,6 +31,8 @@ appium:bundleId | The bundle identifier of the application to automate, for exam
 appium:arguments | Array of application command line arguments. This capability is only going to be applied if the application is not running on session startup.
 appium:environment | A dictionary of environment variables (name->value) that are going to be passed to the application under test on top of environment variables inherited from the parent process. This capability is only going to be applied if the application is not running on session startup.
 appium:skipAppKill | Whether to skip the termination of the application under test when the testing session quits. `false` by default. This capability is only going to be applied if `bundleId` is set.
+appium:prerun | An object containing either `script` or `command` key. The value of each key must be a valid AppleScript script or command to be executed prior to the Mac2Driver session startup. See [AppleScript commands execution](#applescript-commands-execution) for more details. Example: `{command: 'do shell script "echo hello"'}`
+appium:postrun | An object containing either `script` or `command` key. The value of each key must be a valid AppleScript script or command to be executed after Mac2Driver session is stopped. See [AppleScript commands execution](#applescript-commands-execution) for more details.
 
 
 ## Element Attributes
@@ -264,6 +266,32 @@ bundleId | string | yes | bundle identifier of the app to be queried | com.apple
 
 An integer value representing the application state. See the official documentation on [XCUIApplicationState enumeration](https://developer.apple.com/documentation/xctest/xcuiapplicationstate?language=objc) for more details.
 
+### macos: appleScript
+
+Executes the given AppleScript command or a whole script based on the
+given options. Either of these options must be provided. If both are provided
+then the `command` one gets the priority.
+Note that AppleScript command cannot contain line breaks. Consider making it
+to a script in such case.
+Note that by default AppleScript engine blocks commands/scripts execution if your script
+is trying to access some private entities, like cameras or the desktop screen
+and no permissions to do it are given to the parent (for example, Appium or Terminal)
+process in System Preferences -> Privacy list.
+See [AppleScript Commands Execution](#applescript-commands-execution) for more details.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+command | string | yes if `script` is not provided | AppleScript command to execute | `do shell script "echo hello"`
+script | string | yes if `command` is not provided | AppleScript script to execute | `do shell script "echo hello"\ndo shell script "echo hello2"`
+timeout | number | no | The number of seconds to wait until a long-running blocking command is finished. An error is thrown if the command is still running after this timeout expires. | 60000
+cwd | string | no | The path to an existing folder which is going to be set as the working directory for the command/script being executed. | `/tmp`
+
+#### Returns
+
+The actual stdout of the provided script if its execution was successful (e.g. got zero return code).
+
 
 ## Application Under Test Concept
 
@@ -319,9 +347,46 @@ def test_sending_custom_keys(driver):
 ```
 
 
+## AppleScript Commands Execution
+
+There is a possibility to run custom AppleScript
+from your client code. This feature is potentially insecure and thus needs to be
+explicitly enabled when executing the server by providing `apple_script` key to the list
+of enabled insecure features. Check [Appium Security document](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/security.md) for more details.
+It is possible to either execute a single AppleScript command (use the `command` argument)
+or a whole script (use the `script` argument) and get its
+stdout in response. If the script execution returns non-zero exit code then an exception
+is going to be thrown. The exception message will contain the actual stderr.
+If the script is a blocking one then it could only run up to 20 seconds long. After that the script
+will be terminated and a timeout error will be thrown. This timeout could be customized by
+providing the `timeout` option value.
+You could also customize the script working directory by providing the `cwd` option.
+Here's an example code of how to get a shell command output:
+
+```java
+// java
+String appleScript = "do shell script \"echo hello\"";
+System.println(driver.executeScript("macos: appleScript", ImmutableMap.of("command", appleScript)));
+```
+
+
 ## Parallel execution
 
 Parallel execution of multiple Mac2 driver instances is highly discouraged. Only one UI test must be running at the same time, since the access to accessibility layer is single-threaded. Also HID devices, like the mouse or the keyboard, must be acquired exclusively.
+
+
+## Development & Testing
+
+This module uses the same [development tools](https://github.com/appium/appium/tree/master/docs/cn/contributing-to-appium) as the other Appium drivers.
+
+Check out the source. Then run:
+
+```bash
+npm install
+gulp watch
+```
+
+Execute `npm run test` to run unit tests and `npm run e2e-test` to run integration tests.
 
 
 ## TBD
