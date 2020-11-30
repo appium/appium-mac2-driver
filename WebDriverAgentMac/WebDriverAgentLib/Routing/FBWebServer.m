@@ -22,6 +22,9 @@
 #import "FBConfiguration.h"
 #import "FBLogger.h"
 
+static NSString *const FBServerURLBeginMarker = @"ServerURLHere->";
+static NSString *const FBServerURLEndMarker = @"<-ServerURLHere";
+
 @interface FBHTTPConnection : RoutingConnection
 @end
 
@@ -103,6 +106,7 @@
     [FBLogger logFmt:@"Last attempt to start web server failed with error %@", [error description]];
     abort();
   }
+  [FBLogger logFmt:@"%@http://%@:%d%@", FBServerURLBeginMarker, @"localhost", [self.server port], FBServerURLEndMarker];
 }
 
 - (void)stopServing
