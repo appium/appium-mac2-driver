@@ -82,15 +82,20 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
 
   NSString *bundleID = requirements[AM_BUNDLE_ID_CAPABILITY];
   XCUIApplication *app = nil;
+  BOOL noReset = [requirements[AM_NO_RESET_CAPABILITY] boolValue];
   if (bundleID != nil) {
     app = [[XCUIApplication alloc] initWithBundleIdentifier:bundleID];
-    app.launchArguments = (NSArray<NSString *> *)requirements[AM_APP_ARGUMENTS_CAPABILITY] ?: @[];
-    app.launchEnvironment = (NSDictionary <NSString *, NSString *> *)requirements[AM_APP_ENVIRONMENT_CAPABILITY] ?: @{};
-    [app launch];
-    if (app.state <= XCUIApplicationStateNotRunning) {
-      NSString *message = [NSString stringWithFormat:@"Failed to launch '%@' application", bundleID];
-      return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:message
-                                                                traceback:nil]);
+    if (noReset && app.state > XCUIApplicationStateNotRunning) {
+      [app activate];
+    } else {
+      app.launchArguments = (NSArray<NSString *> *)requirements[AM_APP_ARGUMENTS_CAPABILITY] ?: @[];
+      app.launchEnvironment = (NSDictionary <NSString *, NSString *> *)requirements[AM_APP_ENVIRONMENT_CAPABILITY] ?: @{};
+      [app launch];
+      if (app.state <= XCUIApplicationStateNotRunning) {
+        NSString *message = [NSString stringWithFormat:@"Failed to launch '%@' application", bundleID];
+        return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:message
+                                                                  traceback:nil]);
+      }
     }
   }
   FBSession *session = [FBSession initWithApplication:app];
@@ -99,6 +104,8 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
   } else if (nil == bundleID) {
     // never kill apps that we don't "own"
     session.skipAppTermination = YES;
+  } else {
+    session.skipAppTermination = noReset;
   }
 
   return FBResponseWithObject(FBSessionCommands.sessionInformation);
