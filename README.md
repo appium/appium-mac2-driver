@@ -33,6 +33,7 @@ appium:environment | A dictionary of environment variables (name->value) that ar
 appium:skipAppKill | Whether to skip the termination of the application under test when the testing session quits. `false` by default. This capability is only going to be applied if `bundleId` is set.
 appium:prerun | An object containing either `script` or `command` key. The value of each key must be a valid AppleScript script or command to be executed prior to the Mac2Driver session startup. See [AppleScript commands execution](#applescript-commands-execution) for more details. Example: `{command: 'do shell script "echo hello"'}`
 appium:postrun | An object containing either `script` or `command` key. The value of each key must be a valid AppleScript script or command to be executed after Mac2Driver session is stopped. See [AppleScript commands execution](#applescript-commands-execution) for more details.
+appium:noReset | Whether to restart the app whose bundle identifier was passed to capabilities as `bundleId` value if it was already running on the session startup (`false`, the default value) or just pick it up without changing the app state (`true`). Note that neither of `arguments` or `environment` capabilities will take effect if the app did not restart.
 
 
 ## Element Attributes
