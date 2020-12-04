@@ -18,18 +18,22 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XCUIElement (AMEditable)
-
-- (void)am_setValue:(id)value;
+@interface NSValue (AMPoint)
 
 /**
- Clears text on element.
- It will try to activate keyboard on element, if element has no keyboard focus.
+ Allows to retrieve CGPoint from NSValue
 
- @param error If there is an error, upon return contains an NSError object that describes the problem.
- @return YES if the operation succeeds, otherwise NO.
+ @return the previsoly stored point
  */
-- (BOOL)am_clearTextWithError:(NSError **)error;
+- (CGPoint)am_CGPointValue;
+
+/**
+ Allows to store CGPoint in NSValue
+
+ @param point the point to store
+ @return NSValue wrapper instance
+ */
++ (instancetype)am_valueWithCGPoint:(CGPoint)point;
 
 @end
 
