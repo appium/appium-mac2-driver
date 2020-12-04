@@ -390,6 +390,6 @@ gulp watch
 Execute `npm run test` to run unit tests and `npm run e2e-test` to run integration tests.
 
 
-## TBD
+## Notes
 
-- W3C actions support (use `macos:` extension APIs for now)
+- W3C actions support is limited (only mouse actions are supported). You could also use `macos:` extension APIs to cover your test scenarios
