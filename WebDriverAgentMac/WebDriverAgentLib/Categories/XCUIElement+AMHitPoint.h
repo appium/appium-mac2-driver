@@ -20,6 +20,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface XCUIElement (AMHitPoint)
 
+/**
+ Retrieves the hit point coordinate from the given element
+
+ @return hit point location or nil if no hit point could be calculated
+ */
 - (nullable XCUICoordinate *)am_hitPointCoordinate;
 
 @end
