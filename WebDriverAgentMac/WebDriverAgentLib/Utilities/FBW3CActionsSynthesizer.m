@@ -123,7 +123,9 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
                                     error:(NSError **)error
 {
   if (nil == element || nil == positionOffset) {
-    return [super hitpointWithElement:element positionOffset:positionOffset error:error];
+    return [super hitpointWithElement:element
+                       positionOffset:positionOffset
+                                error:error];
   }
 
   // An offset relative to the element is defined
@@ -247,13 +249,19 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
   
   if (nil != element) {
     if (nil == x && nil == y) {
-      return [self hitpointWithElement:element positionOffset:nil error:error];
+      return [self hitpointWithElement:element
+                        positionOffset:nil
+                                 error:error];
     }
-    return [self hitpointWithElement:element positionOffset:[NSValue am_valueWithCGPoint:CGPointMake(x.floatValue, y.floatValue)] error:error];
+    return [self hitpointWithElement:element
+                      positionOffset:[NSValue am_valueWithCGPoint:CGPointMake(x.floatValue, y.floatValue)]
+                               error:error];
   }
   
   if ([origin isKindOfClass:NSString.class] && [origin isEqualToString:FB_ORIGIN_TYPE_VIEWPORT]) {
-    return [self hitpointWithElement:nil positionOffset:[NSValue am_valueWithCGPoint:CGPointMake(x.floatValue, y.floatValue)] error:error];
+    return [self hitpointWithElement:nil
+                      positionOffset:[NSValue am_valueWithCGPoint:CGPointMake(x.floatValue, y.floatValue)]
+                               error:error];
   }
   
   // origin == FB_ORIGIN_TYPE_POINTER
@@ -490,7 +498,8 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
     pointerType = [parameters objectForKey:FB_PARAMETERS_KEY_POINTER_TYPE] ?: FB_POINTER_TYPE_MOUSE;
   }
   if (![pointerType isKindOfClass:NSString.class] || ![pointerType isEqualToString:FB_POINTER_TYPE_MOUSE]) {
-    NSString *description = [NSString stringWithFormat:@"Only pointer type '%@' is supported. '%@' is given instead for action with id '%@'", FB_POINTER_TYPE_MOUSE, pointerType, actionId];
+    NSString *description = [NSString stringWithFormat:@"Only pointer type '%@' is supported. '%@' is given instead for action with id '%@'",
+                             FB_POINTER_TYPE_MOUSE, pointerType, actionId];
     if (error) {
       *error = [[FBErrorBuilder.builder withDescription:description] build];
     }
@@ -511,7 +520,8 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
   for (NSDictionary<NSString *, id> *actionItem in processedItems) {
     id actionItemType = [actionItem objectForKey:FB_ACTION_ITEM_KEY_TYPE];
     if (![actionItemType isKindOfClass:NSString.class]) {
-      NSString *description = [NSString stringWithFormat:@"The %@ property is mandatory to set for '%@' action item", FB_ACTION_ITEM_KEY_TYPE, actionItem];
+      NSString *description = [NSString stringWithFormat:@"The %@ property is mandatory to set for '%@' action item",
+                               FB_ACTION_ITEM_KEY_TYPE, actionItem];
       if (error) {
         *error = [[FBErrorBuilder.builder withDescription:description] build];
       }
@@ -520,14 +530,19 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
 
     Class gestureItemClass = [gestureItemsMapping objectForKey:actionItemType];
     if (nil == gestureItemClass) {
-      NSString *description = [NSString stringWithFormat:@"'%@' action item type '%@' is not supported. Only the following action item types are supported: %@", actionId, actionItemType, supportedActionItemTypes];
+      NSString *description = [NSString stringWithFormat:@"'%@' action item type '%@' is not supported. Only the following action item types are supported: %@",
+                               actionId, actionItemType, supportedActionItemTypes];
       if (error) {
         *error = [[FBErrorBuilder.builder withDescription:description] build];
       }
       return nil;
     }
 
-    FBW3CGestureItem *gestureItem = [[gestureItemClass alloc] initWithActionItem:actionItem application:self.application previousItem:[chain.items lastObject] offset:chain.durationOffset error:error];
+    FBW3CGestureItem *gestureItem = [[gestureItemClass alloc] initWithActionItem:actionItem
+                                                                     application:self.application
+                                                                    previousItem:[chain.items lastObject]
+                                                                          offset:chain.durationOffset
+                                                                           error:error];
     if (nil == gestureItem) {
       return nil;
     }
@@ -543,7 +558,8 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
   id actionType = [actionDescription objectForKey:FB_KEY_TYPE];
   if (![actionType isKindOfClass:NSString.class] ||
       !([actionType isEqualToString:FB_ACTION_TYPE_POINTER])) {
-    NSString *description = [NSString stringWithFormat:@"Only actions of '%@' types are supported. '%@' is given instead for action with id '%@'", @[FB_ACTION_TYPE_POINTER], actionType, actionId];
+    NSString *description = [NSString stringWithFormat:@"Only actions of '%@' types are supported. '%@' is given instead for action with id '%@'",
+                             @[FB_ACTION_TYPE_POINTER], actionType, actionId];
     if (error) {
       *error = [[FBErrorBuilder.builder withDescription:description] build];
     }
