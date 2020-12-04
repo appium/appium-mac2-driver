@@ -22,18 +22,21 @@
 {
   return
   @[
-    [[FBRoute POST:@"/actions"] respondWithTarget:self action:@selector(handlePerformW3CTouchActions:)],
+    [[FBRoute POST:@"/actions"] respondWithTarget:self action:@selector(handlePerformW3CActions:)],
   ];
 }
 
 #pragma mark - Commands
 
-+ (id<FBResponsePayload>)handlePerformW3CTouchActions:(FBRouteRequest *)request
++ (id<FBResponsePayload>)handlePerformW3CActions:(FBRouteRequest *)request
 {
   XCUIApplication *application = request.session.currentApplication;
+  FBElementCache *cache = request.session.elementCache;
   NSArray *actions = (NSArray *)request.arguments[@"actions"];
   NSError *error;
-  if (![application fb_performW3CActions:actions elementCache:request.session.elementCache error:&error]) {
+  if (![application fb_performW3CActions:actions
+                            elementCache:cache
+                                   error:&error]) {
     return FBResponseWithUnknownError(error);
   }
   return FBResponseWithOK();

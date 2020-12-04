@@ -588,6 +588,8 @@
 		71688B00256469310007F55B /* Commands */ = {
 			isa = PBXGroup;
 			children = (
+				7180C1D8257A9369008FA870 /* AMActionCommands.h */,
+				7180C1D9257A9369008FA870 /* AMActionCommands.m */,
 				714CA6FA2566461100353B27 /* FBDebugCommands.h */,
 				714CA6FB2566461100353B27 /* FBDebugCommands.m */,
 				713A9D1C256696AA00118D07 /* FBCustomCommands.h */,
@@ -600,8 +602,6 @@
 				7105281C2565A33300130763 /* FBSessionCommands.m */,
 				710528172565A09100130763 /* FBScreenshotCommands.h */,
 				710528162565A09100130763 /* FBScreenshotCommands.m */,
-				7180C1D8257A9369008FA870 /* AMActionCommands.h */,
-				7180C1D9257A9369008FA870 /* AMActionCommands.m */,
 				7151AE362564FAAC008B8B2A /* FBUnknownCommands.h */,
 				7151AE352564FAAC008B8B2A /* FBUnknownCommands.m */,
 			);
