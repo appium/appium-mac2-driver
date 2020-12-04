@@ -111,6 +111,17 @@
     },
     ],
 
+    // Chain element with unsupported pointerType (non-default)
+    @[@{
+        @"type": @"pointer",
+        @"id": @"finger1",
+        @"parameters": @{@"pointerType": @"key"},
+        @"actions": @[
+            @{@"type": @"pause", @"duration": @1},
+        ],
+    },
+    ],
+
     // Chain element without action item type
     @[@{
         @"type": @"pointer",
@@ -312,5 +323,6 @@
   XCTAssertNil(error);
   XCTAssertTrue([checkbox.value boolValue] == [value boolValue]);
 }
+
 
 @end
