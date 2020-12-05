@@ -20,10 +20,10 @@
 #import "XCUIApplication+FBW3CActions.h"
 
 
-@interface AMW3CActionsTestsTests : AMIntegrationTestCase
+@interface AMW3CActionsTests : AMIntegrationTestCase
 @end
 
-@implementation AMW3CActionsTestsTests
+@implementation AMW3CActionsTests
 
 - (void)setUp
 {
