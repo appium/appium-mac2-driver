@@ -405,7 +405,7 @@ examples for the most common macOS pointer gestures:
   {"type": "pointerMove", "duration": 10, "x": 100, "y": 100},
   {"type": "pointerDown", "button": 0},
   {"type": "pause", "duration": 100},
-  {"type": "pointerUp", "button": 0},
+  {"type": "pointerUp", "button": 0}
 ]
 ```
 
@@ -417,7 +417,7 @@ The duration of mouse button suppression should be 0-125 ms.
 [
   {"type": "pointerMove", "duration": 10, "x": 100, "y": 100},
   {"type": "pointerDown", "button": 2},
-  {"type": "pointerUp", "button": 2},
+  {"type": "pointerUp", "button": 2}
 ]
 ```
 
@@ -432,7 +432,7 @@ The duration of mouse button suppression should be 0-125 ms.
   {"type": "pointerUp", "button": 0},
   {"type": "pause", "duration": 1000},
   {"type": "pointerDown", "button": 0},
-  {"type": "pointerUp", "button": 0},
+  {"type": "pointerUp", "button": 0}
 ]
 ```
 
@@ -446,7 +446,7 @@ The duration between two clicks should be 600-1000 ms.
   {"type": "pointerDown", "button": 0},
   {"type": "pause", "duration": 600},
   {"type": "pointerMove", "duration": 10, "x": 200, "y": 200},
-  {"type": "pointerUp", "button": 0},
+  {"type": "pointerUp", "button": 0}
 ]
 ```
 
@@ -460,7 +460,7 @@ error if the duration of it exceeds 5 minutes.
 ```json
 [
   {"type": "pointerMove", "duration": 10, "x": 100, "y": 100},
-  {"type": "pointerMove", "duration": 1000, "x": 200, "y": 200},
+  {"type": "pointerMove", "duration": 1000, "x": 200, "y": 200}
 ]
 ```
 
