@@ -18,18 +18,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XCUIElement (AMEditable)
-
-- (void)am_setValue:(id)value;
+@interface XCUIElement (AMHitPoint)
 
 /**
- Clears text on element.
- It will try to activate keyboard on element, if element has no keyboard focus.
+ Retrieves the hit point coordinate from the given element
 
- @param error If there is an error, upon return contains an NSError object that describes the problem.
- @return YES if the operation succeeds, otherwise NO.
+ @return hit point location or nil if no hit point could be calculated
  */
-- (BOOL)am_clearTextWithError:(NSError **)error;
+- (nullable XCUICoordinate *)am_hitPointCoordinate;
 
 @end
 

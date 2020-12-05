@@ -302,6 +302,109 @@ Also, the `Application Under Test` is going to be terminated when the testing se
 It is possible to reset the `Application Under Test` value to none by executing `macos: terminateApp` helper and providing the bundle identifier of this app to it. Also, `macos: activateApp` or `macos: launchApp` calls can change `Application Under Test` value  if a bundle identifier different from the current one is provided to them.
 
 
+## AppleScript Commands Execution
+
+There is a possibility to run custom AppleScript
+from your client code. This feature is potentially insecure and thus needs to be
+explicitly enabled when executing the server by providing `apple_script` key to the list
+of enabled insecure features. Check [Appium Security document](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/security.md) for more details.
+It is possible to either execute a single AppleScript command (use the `command` argument)
+or a whole script (use the `script` argument) and get its
+stdout in response. If the script execution returns non-zero exit code then an exception
+is going to be thrown. The exception message will contain the actual stderr.
+If the script is a blocking one then it could only run up to 20 seconds long. After that the script
+will be terminated and a timeout error will be thrown. This timeout could be customized by
+providing the `timeout` option value.
+You could also customize the script working directory by providing the `cwd` option.
+Here's an example code of how to get a shell command output:
+
+```java
+// java
+String appleScript = "do shell script \"echo hello\"";
+System.println(driver.executeScript("macos: appleScript", ImmutableMap.of("command", appleScript)));
+```
+
+
+## W3C Action Recipes
+
+In theory it is possible to emulate a mouse gesture of any complexity with W3C actions.
+However, there is a set of "standard" gestures, where each operating system has its own
+requirements, like clicks, double clicks, etc. All such action parameters
+must comply with these requirements to be recognized properly. Here is a short list of
+examples for the most common macOS pointer gestures:
+
+### Click
+
+```json
+[
+  {"type": "pointerMove", "duration": 10, "x": 100, "y": 100},
+  {"type": "pointerDown", "button": 0},
+  {"type": "pause", "duration": 100},
+  {"type": "pointerUp", "button": 0}
+]
+```
+
+The duration of mouse button suppression should be 0-125 ms.
+
+### Right Click
+
+```json
+[
+  {"type": "pointerMove", "duration": 10, "x": 100, "y": 100},
+  {"type": "pointerDown", "button": 2},
+  {"type": "pointerUp", "button": 2}
+]
+```
+
+The duration of mouse button suppression should be 0-125 ms.
+
+### Double Click
+
+```json
+[
+  {"type": "pointerMove", "duration": 10, "x": 100, "y": 100},
+  {"type": "pointerDown", "button": 0},
+  {"type": "pointerUp", "button": 0},
+  {"type": "pause", "duration": 1000},
+  {"type": "pointerDown", "button": 0},
+  {"type": "pointerUp", "button": 0}
+]
+```
+
+The duration between two clicks should be 600-1000 ms.
+
+### Drag & Drop
+
+```json
+[
+  {"type": "pointerMove", "duration": 10, "x": 100, "y": 100},
+  {"type": "pointerDown", "button": 0},
+  {"type": "pause", "duration": 600},
+  {"type": "pointerMove", "duration": 10, "x": 200, "y": 200},
+  {"type": "pointerUp", "button": 0}
+]
+```
+
+The longer is the duration of the second `pointerMove` action the lesser is the drag velocity
+and vice versa. One could add more `pointerMove` actions before releasing the mouse button
+to simulate complex cursor moving paths. Mac2Driver terminates action execution with a timeout
+error if the duration of it exceeds 5 minutes.
+
+### Hover
+
+```json
+[
+  {"type": "pointerMove", "duration": 10, "x": 100, "y": 100},
+  {"type": "pointerMove", "duration": 1000, "x": 200, "y": 200}
+]
+```
+
+This snippet tells the mouse pointer to hover over [100, 100, 200, 200] area for 1 second.
+In general, hover action will be performed every time if there is no preceding `pointerDown`
+to the current `pointerMove` one or the preceding `pointerDown` action has been ended by
+the `pointerUp` one.
+
+
 ## Examples
 
 ```python
@@ -348,30 +451,7 @@ def test_sending_custom_keys(driver):
 ```
 
 
-## AppleScript Commands Execution
-
-There is a possibility to run custom AppleScript
-from your client code. This feature is potentially insecure and thus needs to be
-explicitly enabled when executing the server by providing `apple_script` key to the list
-of enabled insecure features. Check [Appium Security document](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/security.md) for more details.
-It is possible to either execute a single AppleScript command (use the `command` argument)
-or a whole script (use the `script` argument) and get its
-stdout in response. If the script execution returns non-zero exit code then an exception
-is going to be thrown. The exception message will contain the actual stderr.
-If the script is a blocking one then it could only run up to 20 seconds long. After that the script
-will be terminated and a timeout error will be thrown. This timeout could be customized by
-providing the `timeout` option value.
-You could also customize the script working directory by providing the `cwd` option.
-Here's an example code of how to get a shell command output:
-
-```java
-// java
-String appleScript = "do shell script \"echo hello\"";
-System.println(driver.executeScript("macos: appleScript", ImmutableMap.of("command", appleScript)));
-```
-
-
-## Parallel execution
+## Parallel Execution
 
 Parallel execution of multiple Mac2 driver instances is highly discouraged. Only one UI test must be running at the same time, since the access to accessibility layer is single-threaded. Also HID devices, like the mouse or the keyboard, must be acquired exclusively.
 
@@ -390,6 +470,6 @@ gulp watch
 Execute `npm run test` to run unit tests and `npm run e2e-test` to run integration tests.
 
 
-## TBD
+## Notes
 
-- W3C actions support (use `macos:` extension APIs for now)
+- W3C actions support is limited (only mouse actions are supported). You could also use `macos:` extension APIs to cover your test scenarios

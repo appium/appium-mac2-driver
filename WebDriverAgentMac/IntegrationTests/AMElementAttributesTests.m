@@ -20,6 +20,7 @@
 #import "FBTestMacros.h"
 #import "XCUIElement+AMAttributes.h"
 #import "XCUIElement+AMEditable.h"
+#import "XCUIElement+AMHitPoint.h"
 
 
 @interface AMElementAttributesTests : AMIntegrationTestCase
@@ -95,6 +96,11 @@
 - (void)testAccessingInvalidAttribute
 {
   XCTAssertThrows([self.testedApplication am_wdAttributeValueWithName:@"foo"]);
+}
+
+- (void)testHitPointRetrieval
+{
+  XCTAssertNotNil(self.testedApplication.sliders.firstMatch.am_hitPointCoordinate);
 }
 
 @end
