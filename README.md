@@ -390,6 +390,86 @@ gulp watch
 Execute `npm run test` to run unit tests and `npm run e2e-test` to run integration tests.
 
 
+## W3C Action Recipes
+
+In theory it is possible to emulate a mouse gesture of any complexity with W3C actions.
+However, there is a set of "standard" gestures, where each operating system has its own
+requirements, like clicks, double clicks, etc. All such action parameters
+must comply with these requirements to be recognized properly. Here is a short list of
+examples for the most common macOS pointer gestures:
+
+### Click
+
+```json
+[
+  {"type": "pointerMove", "duration": 10, "x": 100, "y": 100},
+  {"type": "pointerDown", "button": 0},
+  {"type": "pause", "duration": 100},
+  {"type": "pointerUp", "button": 0},
+]
+```
+
+The duration of mouse button suppression should be 0-125 ms.
+
+### Right Click
+
+```json
+[
+  {"type": "pointerMove", "duration": 10, "x": 100, "y": 100},
+  {"type": "pointerDown", "button": 2},
+  {"type": "pointerUp", "button": 2},
+]
+```
+
+The duration of mouse button suppression should be 0-125 ms.
+
+### Double Click
+
+```json
+[
+  {"type": "pointerMove", "duration": 10, "x": 100, "y": 100},
+  {"type": "pointerDown", "button": 0},
+  {"type": "pointerUp", "button": 0},
+  {"type": "pause", "duration": 1000},
+  {"type": "pointerDown", "button": 0},
+  {"type": "pointerUp", "button": 0},
+]
+```
+
+The duration between two clicks should be 600-1000 ms.
+
+### Drag & Drop
+
+```json
+[
+  {"type": "pointerMove", "duration": 10, "x": 100, "y": 100},
+  {"type": "pointerDown", "button": 0},
+  {"type": "pause", "duration": 600},
+  {"type": "pointerMove", "duration": 10, "x": 200, "y": 200},
+  {"type": "pointerUp", "button": 0},
+]
+```
+
+The longer is the duration of the second `pointerMove` action the lesser is the drag velocity
+and vice versa. One could add move `pointerMove` actions before releasing the mouse button
+to simulate complex cursor moving paths. Mac2Driver terminates action execution with a timeout
+error if the duration of it exceeds 5 minutes.
+
+### Hover
+
+```json
+[
+  {"type": "pointerMove", "duration": 10, "x": 100, "y": 100},
+  {"type": "pointerMove", "duration": 1000, "x": 200, "y": 200},
+]
+```
+
+This snippet tells the mouse pointer to hover over [100, 100, 200, 200] area for 1 second.
+In general, hover action will be performed every time if there is no preceding `pointerDown`
+to the current `pointerMove` one or the preceding `pointerDown` action has been ended by
+the `pointerUp` one.
+
+
 ## Notes
 
 - W3C actions support is limited (only mouse actions are supported). You could also use `macos:` extension APIs to cover your test scenarios
