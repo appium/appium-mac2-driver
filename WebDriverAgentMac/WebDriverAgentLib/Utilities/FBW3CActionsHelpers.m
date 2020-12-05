@@ -14,8 +14,8 @@
 
 static NSString *const FB_ACTION_ITEM_KEY_VALUE = @"value";
 static NSString *const FB_ACTION_ITEM_KEY_DURATION = @"duration";
-NSUInteger AM_LEFT_BUTTON_CODE = 0x1;
-NSUInteger AM_RIGHT_BUTTON_CODE = 0x2;
+NSUInteger const AM_LEFT_BUTTON_CODE = 0x1;
+NSUInteger const AM_RIGHT_BUTTON_CODE = 0x2;
 
 NSString *FBRequireValue(NSDictionary<NSString *, id> *actionItem, NSError **error)
 {

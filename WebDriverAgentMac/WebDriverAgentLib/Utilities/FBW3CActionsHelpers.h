@@ -9,8 +9,8 @@
 
 #import <XCTest/XCTest.h>
 
-extern NSUInteger AM_LEFT_BUTTON_CODE;
-extern NSUInteger AM_RIGHT_BUTTON_CODE;
+extern NSUInteger const AM_LEFT_BUTTON_CODE;
+extern NSUInteger const AM_RIGHT_BUTTON_CODE;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -50,7 +50,7 @@ BOOL FBIsMetaModifier(NSString *value);
 NSUInteger FBToMetaModifier(NSString *value, BOOL reverse);
 
 /**
- * Maps W3C button code to XITest compatible-one
+ * Maps W3C button code to a XCTest compatible-one
  *
  * @param w3cButtonCode W3C button code
  * @returns The corresponding XCTest button code or the LEFT button code if nothing matched
