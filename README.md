@@ -302,52 +302,6 @@ Also, the `Application Under Test` is going to be terminated when the testing se
 It is possible to reset the `Application Under Test` value to none by executing `macos: terminateApp` helper and providing the bundle identifier of this app to it. Also, `macos: activateApp` or `macos: launchApp` calls can change `Application Under Test` value  if a bundle identifier different from the current one is provided to them.
 
 
-## Examples
-
-```python
-# Python3 + PyTest
-import pytest
-
-from appium import webdriver
-
-
-@pytest.fixture()
-def driver():
-    drv = webdriver.Remote('http://localhost:4723/wd/hub', {
-        # automationName capability presence is mandatory for this Mac2 Driver to be selected
-        'automationName': 'Mac2',
-        'platformName': 'mac',
-        'bundleId': 'com.apple.TextEdit',
-    })
-    yield drv
-    drv.quit()
-
-
-def test_edit_text(driver):
-    edit_field = driver.find_element_by_class_name('XCUIElementTypeTextView')
-    edit_field.send_keys('hello world')
-    assert edit_field.text == 'hello world'
-    edit_field.clear()
-    assert edit_field.text == ''
-
-
-def test_sending_custom_keys(driver):
-    edit_field = driver.find_element_by_class_name('XCUIElementTypeTextView')
-    flagsShift = 1 << 1
-    edit_field.execute_script('macos: keys', {
-        'keys': [{
-            'key': 'h',
-            'modifierFlags': flagsShift,
-        }, {
-            'key': 'i',
-            'modifierFlags': flagsShift,
-        }]
-    })
-    assert edit_field.text == 'HI'
-
-```
-
-
 ## AppleScript Commands Execution
 
 There is a possibility to run custom AppleScript
@@ -369,25 +323,6 @@ Here's an example code of how to get a shell command output:
 String appleScript = "do shell script \"echo hello\"";
 System.println(driver.executeScript("macos: appleScript", ImmutableMap.of("command", appleScript)));
 ```
-
-
-## Parallel execution
-
-Parallel execution of multiple Mac2 driver instances is highly discouraged. Only one UI test must be running at the same time, since the access to accessibility layer is single-threaded. Also HID devices, like the mouse or the keyboard, must be acquired exclusively.
-
-
-## Development & Testing
-
-This module uses the same [development tools](https://github.com/appium/appium/tree/master/docs/cn/contributing-to-appium) as the other Appium drivers.
-
-Check out the source. Then run:
-
-```bash
-npm install
-gulp watch
-```
-
-Execute `npm run test` to run unit tests and `npm run e2e-test` to run integration tests.
 
 
 ## W3C Action Recipes
@@ -468,6 +403,71 @@ This snippet tells the mouse pointer to hover over [100, 100, 200, 200] area for
 In general, hover action will be performed every time if there is no preceding `pointerDown`
 to the current `pointerMove` one or the preceding `pointerDown` action has been ended by
 the `pointerUp` one.
+
+
+## Examples
+
+```python
+# Python3 + PyTest
+import pytest
+
+from appium import webdriver
+
+
+@pytest.fixture()
+def driver():
+    drv = webdriver.Remote('http://localhost:4723/wd/hub', {
+        # automationName capability presence is mandatory for this Mac2 Driver to be selected
+        'automationName': 'Mac2',
+        'platformName': 'mac',
+        'bundleId': 'com.apple.TextEdit',
+    })
+    yield drv
+    drv.quit()
+
+
+def test_edit_text(driver):
+    edit_field = driver.find_element_by_class_name('XCUIElementTypeTextView')
+    edit_field.send_keys('hello world')
+    assert edit_field.text == 'hello world'
+    edit_field.clear()
+    assert edit_field.text == ''
+
+
+def test_sending_custom_keys(driver):
+    edit_field = driver.find_element_by_class_name('XCUIElementTypeTextView')
+    flagsShift = 1 << 1
+    edit_field.execute_script('macos: keys', {
+        'keys': [{
+            'key': 'h',
+            'modifierFlags': flagsShift,
+        }, {
+            'key': 'i',
+            'modifierFlags': flagsShift,
+        }]
+    })
+    assert edit_field.text == 'HI'
+
+```
+
+
+## Parallel Execution
+
+Parallel execution of multiple Mac2 driver instances is highly discouraged. Only one UI test must be running at the same time, since the access to accessibility layer is single-threaded. Also HID devices, like the mouse or the keyboard, must be acquired exclusively.
+
+
+## Development & Testing
+
+This module uses the same [development tools](https://github.com/appium/appium/tree/master/docs/cn/contributing-to-appium) as the other Appium drivers.
+
+Check out the source. Then run:
+
+```bash
+npm install
+gulp watch
+```
+
+Execute `npm run test` to run unit tests and `npm run e2e-test` to run integration tests.
 
 
 ## Notes
