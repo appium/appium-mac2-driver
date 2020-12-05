@@ -37,6 +37,10 @@
   if (![application fb_performW3CActions:actions
                             elementCache:cache
                                    error:&error]) {
+    if ([error.localizedDescription containsString:@"not visible"]) {
+      return FBResponseWithStatus([FBCommandStatus elementNotVisibleErrorWithMessage:error.localizedDescription
+                                                                           traceback:nil]);
+    }
     return FBResponseWithUnknownError(error);
   }
   return FBResponseWithOK();

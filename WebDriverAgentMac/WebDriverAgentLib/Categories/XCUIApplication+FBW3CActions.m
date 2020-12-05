@@ -10,29 +10,17 @@
 #import "XCUIApplication+FBW3CActions.h"
 
 #import "FBBaseActionsSynthesizer.h"
-#import "FBExceptions.h"
 #import "FBErrorBuilder.h"
-#import "FBLogger.h"
 #import "FBW3CActionsSynthesizer.h"
 #import "XCUIDevice.h"
 
 #define MAX_ACTIONS_DURATION_SEC 300
 
-@implementation XCUIApplication (FBTouchAction)
+@implementation XCUIApplication (FBW3CActions)
 
-+ (BOOL)handleEventSynthesisWithError:(NSError *)error
-{
-  if ([error.localizedDescription containsString:@"not visible"]) {
-    [[NSException exceptionWithName:FBElementNotVisibleException
-                             reason:error.localizedDescription
-                           userInfo:error.userInfo] raise];
-  }
-  return NO;
-}
-
-- (BOOL)fb_performActionsWithItems:(NSArray *)actions
-                      elementCache:(FBElementCache *)elementCache
-                             error:(NSError **)error
+- (BOOL)fb_performW3CActions:(NSArray *)actions
+                elementCache:(FBElementCache *)elementCache
+                       error:(NSError **)error
 {
   FBBaseActionsSynthesizer *synthesizer = [[FBW3CActionsSynthesizer alloc] initWithActions:actions
                                                                             forApplication:self
@@ -42,20 +30,7 @@
     return NO;
   }
   XCSynthesizedEventRecord *eventRecord = [synthesizer synthesizeWithError:error];
-  if (nil == eventRecord) {
-    return [self.class handleEventSynthesisWithError:*error];
-  }
-  return [self fb_synthesizeEvent:eventRecord error:error];
-}
-
-
-- (BOOL)fb_performW3CActions:(NSArray *)actions
-                elementCache:(FBElementCache *)elementCache
-                       error:(NSError **)error
-{
-  return [self fb_performActionsWithItems:actions
-                             elementCache:elementCache
-                                    error:error];
+  return nil == eventRecord ? NO : [self fb_synthesizeEvent:eventRecord error:error];
 }
 
 - (BOOL)fb_synthesizeEvent:(XCSynthesizedEventRecord *)event error:(NSError *__autoreleasing*)error
@@ -69,15 +44,19 @@
     }
     dispatch_semaphore_signal(sem);
   }];
-  if (0 != dispatch_semaphore_wait(sem, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MAX_ACTIONS_DURATION_SEC * NSEC_PER_SEC)))) {
+  BOOL didTimeout = 0 != dispatch_semaphore_wait(sem, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MAX_ACTIONS_DURATION_SEC * NSEC_PER_SEC)));
+  if (didTimeout) {
     return [[[FBErrorBuilder builder]
              withDescriptionFormat:@"Cannot perform actions within %@ seconds timeout", @(MAX_ACTIONS_DURATION_SEC)]
             buildError:error];;
   }
-  if (error && internalError) {
-    *error = internalError;
+  if (nil != internalError) {
+    if (error) {
+      *error = internalError;
+    }
     return NO;
   }
+
   return YES;
 }
 

@@ -13,7 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XCUIApplication (FBTouchAction)
+@interface XCUIApplication (FBW3CActions)
 
 /**
  Perform complex touch action in scope of the current application.
@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BOOL)fb_performW3CActions:(NSArray *)actions
                 elementCache:(nullable FBElementCache *)elementCache
-                       error:(NSError * _Nullable*)error;
+                       error:(NSError **)error;
 
 @end
 
