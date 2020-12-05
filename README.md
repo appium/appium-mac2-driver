@@ -451,7 +451,7 @@ The duration between two clicks should be 600-1000 ms.
 ```
 
 The longer is the duration of the second `pointerMove` action the lesser is the drag velocity
-and vice versa. One could add move `pointerMove` actions before releasing the mouse button
+and vice versa. One could add more `pointerMove` actions before releasing the mouse button
 to simulate complex cursor moving paths. Mac2Driver terminates action execution with a timeout
 error if the duration of it exceeds 5 minutes.
 
