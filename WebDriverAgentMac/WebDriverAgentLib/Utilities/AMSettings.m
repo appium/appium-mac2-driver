@@ -16,4 +16,5 @@
 
 #import "AMSettings.h"
 
+/*!Controls elements binding strategy. By default elements are bind by accessiblity identifier */
 NSString* const AM_BOUND_ELEMENTS_BY_INDEX_SETTING = @"boundElementsByIndex";
