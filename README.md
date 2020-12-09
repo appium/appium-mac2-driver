@@ -405,6 +405,17 @@ to the current `pointerMove` one or the preceding `pointerDown` action has been 
 the `pointerUp` one.
 
 
+## Settings API
+
+Mac2Driver supports Appium [Settings API](https://appium.io/docs/en/advanced-concepts/settings/).
+Along with the common settings the following driver-specific settings are currently available:
+
+Name | Type | Description
+--- | --- | ---
+boundElementsByIndex | boolean | Whether to use elements binding by index (`true`) or by accessibility identifier (the default setting, `false`). It makes sense to switch the binding strategy
+to workaround stale element reference errors containing `Identity Binding` text in their descriptions. See the corresponding [Stack Overflow discussion](https://stackoverflow.com/questions/49307513/meaning-of-allelementsboundbyaccessibilityelement) to know more details on the difference between these two binding strategies.
+
+
 ## Examples
 
 ```python
