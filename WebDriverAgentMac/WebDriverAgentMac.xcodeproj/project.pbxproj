@@ -23,8 +23,8 @@
 		7109BFD22565B51C006BFD13 /* FBProtocolHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD982564F56F008B8B2A /* FBProtocolHelpers.m */; };
 		7109BFD42565B51E006BFD13 /* FBRunLoopSpinner.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151ADA22564F570008B8B2A /* FBRunLoopSpinner.h */; };
 		7109BFD72565B522006BFD13 /* FBRunLoopSpinner.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD762564F56D008B8B2A /* FBRunLoopSpinner.m */; };
-		7109BFD92565B525006BFD13 /* FBSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD7E2564F56E008B8B2A /* FBSettings.h */; };
-		7109BFDC2565B529006BFD13 /* FBSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ADAC2564F570008B8B2A /* FBSettings.m */; };
+		7109BFD92565B525006BFD13 /* AMSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD7E2564F56E008B8B2A /* AMSettings.h */; };
+		7109BFDC2565B529006BFD13 /* AMSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151ADAC2564F570008B8B2A /* AMSettings.m */; };
 		7109BFE02565B536006BFD13 /* FBCommandHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD3F2564F4C5008B8B2A /* FBCommandHandler.h */; };
 		7109BFE32565B53A006BFD13 /* FBCommandStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD4D2564F4C6008B8B2A /* FBCommandStatus.h */; };
 		7109BFE62565B53D006BFD13 /* FBCommandStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD442564F4C6008B8B2A /* FBCommandStatus.m */; };
@@ -313,7 +313,7 @@
 		7151AD732564F56D008B8B2A /* FBClassChainQueryParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBClassChainQueryParser.m; sourceTree = "<group>"; };
 		7151AD762564F56D008B8B2A /* FBRunLoopSpinner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBRunLoopSpinner.m; sourceTree = "<group>"; };
 		7151AD7B2564F56E008B8B2A /* FBClassChainQueryParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBClassChainQueryParser.h; sourceTree = "<group>"; };
-		7151AD7E2564F56E008B8B2A /* FBSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBSettings.h; sourceTree = "<group>"; };
+		7151AD7E2564F56E008B8B2A /* AMSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMSettings.h; sourceTree = "<group>"; };
 		7151AD832564F56E008B8B2A /* FBErrorBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBErrorBuilder.h; sourceTree = "<group>"; };
 		7151AD882564F56F008B8B2A /* FBElementTypeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBElementTypeTransformer.m; sourceTree = "<group>"; };
 		7151AD932564F56F008B8B2A /* FBConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBConfiguration.h; sourceTree = "<group>"; };
@@ -323,7 +323,7 @@
 		7151ADA12564F570008B8B2A /* FBMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBMacros.h; sourceTree = "<group>"; };
 		7151ADA22564F570008B8B2A /* FBRunLoopSpinner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBRunLoopSpinner.h; sourceTree = "<group>"; };
 		7151ADA72564F570008B8B2A /* FBProtocolHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBProtocolHelpers.h; sourceTree = "<group>"; };
-		7151ADAC2564F570008B8B2A /* FBSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBSettings.m; sourceTree = "<group>"; };
+		7151ADAC2564F570008B8B2A /* AMSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMSettings.m; sourceTree = "<group>"; };
 		7151ADAD2564F570008B8B2A /* FBLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBLogger.m; sourceTree = "<group>"; };
 		7151ADB32564F571008B8B2A /* FBConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBConfiguration.m; sourceTree = "<group>"; };
 		7151ADB72564F571008B8B2A /* FBErrorBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBErrorBuilder.m; sourceTree = "<group>"; };
@@ -650,6 +650,8 @@
 				718D2C312567FED3005F533B /* AMSessionCapabilities.m */,
 				718D2BF125678B4E005F533B /* AMSnapshotUtils.h */,
 				718D2BF225678B4E005F533B /* AMSnapshotUtils.m */,
+				7151AD7E2564F56E008B8B2A /* AMSettings.h */,
+				7151ADAC2564F570008B8B2A /* AMSettings.m */,
 				7180C1C8257A9336008FA870 /* FBBaseActionsSynthesizer.h */,
 				7180C1C9257A9336008FA870 /* FBBaseActionsSynthesizer.m */,
 				7151AD7B2564F56E008B8B2A /* FBClassChainQueryParser.h */,
@@ -669,8 +671,6 @@
 				7151AD982564F56F008B8B2A /* FBProtocolHelpers.m */,
 				7151ADA22564F570008B8B2A /* FBRunLoopSpinner.h */,
 				7151AD762564F56D008B8B2A /* FBRunLoopSpinner.m */,
-				7151AD7E2564F56E008B8B2A /* FBSettings.h */,
-				7151ADAC2564F570008B8B2A /* FBSettings.m */,
 				7180C1CF257A9347008FA870 /* FBW3CActionsHelpers.h */,
 				7180C1D0257A9348008FA870 /* FBW3CActionsHelpers.m */,
 				7180C1CE257A9347008FA870 /* FBW3CActionsSynthesizer.h */,
@@ -788,7 +788,7 @@
 				7109BFFC2565B559006BFD13 /* FBHTTPStatusCodes.h in Headers */,
 				713A9D2225669A0F00118D07 /* FBFindElementCommands.h in Headers */,
 				713A9D1E256696AA00118D07 /* FBCustomCommands.h in Headers */,
-				7109BFD92565B525006BFD13 /* FBSettings.h in Headers */,
+				7109BFD92565B525006BFD13 /* AMSettings.h in Headers */,
 				718EE0C1256B0A5500B46325 /* NSString+FBXMLSafeString.h in Headers */,
 				7109C0292565B5A3006BFD13 /* FBSessionCommands.h in Headers */,
 				7109C0042565B564006BFD13 /* FBResponsePayload.h in Headers */,
@@ -1007,7 +1007,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7109BFDC2565B529006BFD13 /* FBSettings.m in Sources */,
+				7109BFDC2565B529006BFD13 /* AMSettings.m in Sources */,
 				713A9D3D2566AA2300118D07 /* AMGeometryUtils.m in Sources */,
 				7109C0712565B60F006BFD13 /* RouteRequest.m in Sources */,
 				7109C0312565B5AE006BFD13 /* FBScreenshotCommands.m in Sources */,

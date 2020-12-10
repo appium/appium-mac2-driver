@@ -10,12 +10,12 @@
 #import "FBSessionCommands.h"
 
 #import "AMSessionCapabilities.h"
+#import "AMSettings.h"
 #import "FBConfiguration.h"
 #import "FBLogger.h"
 #import "FBProtocolHelpers.h"
 #import "FBRouteRequest.h"
 #import "FBSession.h"
-#import "FBSettings.h"
 #import "FBRuntimeUtils.h"
 #import "XCUIApplication+AMHelpers.h"
 
@@ -172,7 +172,7 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
 {
   return FBResponseWithObject(
     @{
-      BOUND_ELEMENTS_BY_INDEX: @([FBConfiguration.sharedConfiguration boundElementsByIndex]),
+      AM_BOUND_ELEMENTS_BY_INDEX_SETTING: @([FBConfiguration.sharedConfiguration boundElementsByIndex]),
     }
   );
 }
@@ -181,8 +181,8 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
 {
   NSDictionary* settings = [request requireDictionaryArgumentWithName:@"settings"];
 
-  if (nil != [settings objectForKey:BOUND_ELEMENTS_BY_INDEX]) {
-    FBConfiguration.sharedConfiguration.boundElementsByIndex = [[settings objectForKey:BOUND_ELEMENTS_BY_INDEX] boolValue];
+  if (nil != [settings objectForKey:AM_BOUND_ELEMENTS_BY_INDEX_SETTING]) {
+    FBConfiguration.sharedConfiguration.boundElementsByIndex = [[settings objectForKey:AM_BOUND_ELEMENTS_BY_INDEX_SETTING] boolValue];
   }
 
   return [self handleGetSettings:request];
