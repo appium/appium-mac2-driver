@@ -14,8 +14,16 @@
  * limitations under the License.
  */
 
-#import "AMSettings.h"
+#import <XCTest/XCTest.h>
 
-NSString* const AM_BOUND_ELEMENTS_BY_INDEX_SETTING = @"boundElementsByIndex";
+NS_ASSUME_NONNULL_BEGIN
 
-NSString* const AM_USE_DEFAULT_UI_INTERRUPTIONS_HANDLING_SETTING = @"useDefaultUiInterruptionsHandling";
+@interface XCUIApplication (AMUIInterruptions)
+
+/*!Whether to skip UI interruptions hanfling (NO by default).
+ See https://developer.apple.com/videos/play/wwdc2020/10220/ for more details  */
+@property (nonatomic) BOOL am_doesNotHandleUIInterruptions;
+
+@end
+
+NS_ASSUME_NONNULL_END

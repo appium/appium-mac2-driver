@@ -165,6 +165,8 @@
 		7199B3D02565B207000B5C51 /* CocoaAsyncSocket.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7151AD2B2564F423008B8B2A /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7199B3D32565B251000B5C51 /* WebDriverAgentLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */; };
 		7199B3D42565B25E000B5C51 /* WebDriverAgentLib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		719E6A6E25822DB800777988 /* XCUIApplication+AMUIInterruptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 719E6A6C25822DB800777988 /* XCUIApplication+AMUIInterruptions.h */; };
+		719E6A6F25822DB800777988 /* XCUIApplication+AMUIInterruptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 719E6A6D25822DB800777988 /* XCUIApplication+AMUIInterruptions.m */; };
 		71B00E8E2566D4BA0010DA73 /* AMIntegrationTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B00E8D2566D4BA0010DA73 /* AMIntegrationTestCase.m */; };
 		71B00E9B2566D7B00010DA73 /* WebDriverAgentLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */; };
 		71B00EA02566D9570010DA73 /* AMFindElementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B00E9F2566D9570010DA73 /* AMFindElementTests.m */; };
@@ -385,6 +387,8 @@
 		718EE0C0256B0A5400B46325 /* NSString+FBXMLSafeString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FBXMLSafeString.h"; sourceTree = "<group>"; };
 		7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WebDriverAgentLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7199B3AE2565B122000B5C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		719E6A6C25822DB800777988 /* XCUIApplication+AMUIInterruptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIApplication+AMUIInterruptions.h"; sourceTree = "<group>"; };
+		719E6A6D25822DB800777988 /* XCUIApplication+AMUIInterruptions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIApplication+AMUIInterruptions.m"; sourceTree = "<group>"; };
 		71B00E8B2566D4B90010DA73 /* IntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		71B00E8D2566D4BA0010DA73 /* AMIntegrationTestCase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMIntegrationTestCase.m; sourceTree = "<group>"; };
 		71B00E8F2566D4BA0010DA73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -565,6 +569,8 @@
 				710527FE2565802200130763 /* XCUIApplication+AMHelpers.m */,
 				714CA6FF2566475200353B27 /* XCUIApplication+AMSource.h */,
 				714CA7002566475200353B27 /* XCUIApplication+AMSource.m */,
+				719E6A6C25822DB800777988 /* XCUIApplication+AMUIInterruptions.h */,
+				719E6A6D25822DB800777988 /* XCUIApplication+AMUIInterruptions.m */,
 				7180C1DE257A9410008FA870 /* XCUIApplication+FBW3CActions.h */,
 				7180C1DF257A9410008FA870 /* XCUIApplication+FBW3CActions.m */,
 				718D2BD725670A76005F533B /* XCUIElement+AMAttributes.h */,
@@ -809,6 +815,7 @@
 				7180C1D3257A9348008FA870 /* FBW3CActionsHelpers.h in Headers */,
 				7109C0172565B581006BFD13 /* FBRouteRequest.h in Headers */,
 				7180C216257AA707008FA870 /* XCUIElement+AMHitPoint.h in Headers */,
+				719E6A6E25822DB800777988 /* XCUIApplication+AMUIInterruptions.h in Headers */,
 				718D2BF325678B4E005F533B /* AMSnapshotUtils.h in Headers */,
 				7109BFCF2565B517006BFD13 /* FBProtocolHelpers.h in Headers */,
 				7180C208257AA29A008FA870 /* NSValue+AMPoint.h in Headers */,
@@ -1047,6 +1054,7 @@
 				7109C0592565B5F1006BFD13 /* HTTPConnection.m in Sources */,
 				713A9D12256683E900118D07 /* XCUIElementQuery+AMHelpers.m in Sources */,
 				7109C01A2565B58A006BFD13 /* FBRouteRequest.m in Sources */,
+				719E6A6F25822DB800777988 /* XCUIApplication+AMUIInterruptions.m in Sources */,
 				7109C07D2565B61D006BFD13 /* RoutingHTTPServer.m in Sources */,
 				7109C06D2565B60A006BFD13 /* Route.m in Sources */,
 				7109C0022565B561006BFD13 /* FBResponseJSONPayload.m in Sources */,

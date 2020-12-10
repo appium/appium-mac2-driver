@@ -18,6 +18,7 @@
 #import "FBSession.h"
 #import "FBRuntimeUtils.h"
 #import "XCUIApplication+AMHelpers.h"
+#import "XCUIApplication+AMUIInterruptions.h"
 
 const static NSString *CAPABILITIES_KEY = @"capabilities";
 
@@ -170,9 +171,11 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
 
 + (id<FBResponsePayload>)handleGetSettings:(FBRouteRequest *)request
 {
+  XCUIApplication *application = FBSession.activeSession.currentApplication;
   return FBResponseWithObject(
     @{
       AM_BOUND_ELEMENTS_BY_INDEX_SETTING: @([FBConfiguration.sharedConfiguration boundElementsByIndex]),
+      AM_USE_DEFAULT_UI_INTERRUPTIONS_HANDLING_SETTING: @(!application.am_doesNotHandleUIInterruptions),
     }
   );
 }
@@ -183,6 +186,10 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
 
   if (nil != [settings objectForKey:AM_BOUND_ELEMENTS_BY_INDEX_SETTING]) {
     FBConfiguration.sharedConfiguration.boundElementsByIndex = [[settings objectForKey:AM_BOUND_ELEMENTS_BY_INDEX_SETTING] boolValue];
+  }
+  if (nil != [settings objectForKey:AM_USE_DEFAULT_UI_INTERRUPTIONS_HANDLING_SETTING]) {
+    XCUIApplication *application = FBSession.activeSession.currentApplication;
+    application.am_doesNotHandleUIInterruptions = ![[settings objectForKey:AM_USE_DEFAULT_UI_INTERRUPTIONS_HANDLING_SETTING] boolValue];
   }
 
   return [self handleGetSettings:request];

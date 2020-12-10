@@ -14,8 +14,18 @@
  * limitations under the License.
  */
 
-#import "AMSettings.h"
+#import "XCUIApplication+AMUIInterruptions.h"
 
-NSString* const AM_BOUND_ELEMENTS_BY_INDEX_SETTING = @"boundElementsByIndex";
+@implementation XCUIApplication (AMUIInterruptions)
 
-NSString* const AM_USE_DEFAULT_UI_INTERRUPTIONS_HANDLING_SETTING = @"useDefaultUiInterruptionsHandling";
+- (BOOL)am_doesNotHandleUIInterruptions
+{
+  return [[self valueForKey:@"_doesNotHandleUIInterruptions"] boolValue];
+}
+
+- (void)setAm_doesNotHandleUIInterruptions:(BOOL)value
+{
+  [self setValue:@(value) forKey:@"_doesNotHandleUIInterruptions"];
+}
+
+@end

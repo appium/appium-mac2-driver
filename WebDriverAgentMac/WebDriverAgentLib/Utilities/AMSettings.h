@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import <XCTest/XCTest.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-// See FBConfiguration.h for more details on the meaning of each setting
-
+/*!Controls elements binding strategy. By default elements are bind by accessiblity identifier */
 extern NSString* const AM_BOUND_ELEMENTS_BY_INDEX_SETTING;
+
+/*!Whether to use the default XCTest UI interruptions hanfling (YES by default).
+ See https://developer.apple.com/videos/play/wwdc2020/10220/ for more details  */
+extern NSString* const AM_USE_DEFAULT_UI_INTERRUPTIONS_HANDLING_SETTING;
 
 NS_ASSUME_NONNULL_END

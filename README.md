@@ -413,6 +413,7 @@ Along with the common settings the following driver-specific settings are curren
 Name | Type | Description
 --- | --- | ---
 boundElementsByIndex | boolean | Whether to use elements binding by index (`true`) or by accessibility identifier (the default setting, `false`). It makes sense to switch the binding strategy to workaround stale element reference errors containing `Identity Binding` text in their descriptions. See the corresponding [Stack Overflow discussion](https://stackoverflow.com/questions/49307513/meaning-of-allelementsboundbyaccessibilityelement) to know more details on the difference between these two binding strategies.
+useDefaultUiInterruptionsHandling | boolean | Whether to use the default XCTest UI interruptions handling (`true`, the default setting) or to disable it for the [Application Under Test](#application-under-test-concept) (`false`). It makes sense to disable the default handler if it is necessary to validate the interrupting element's presence in your test or do some other actions on it rather than just closing the view implicitly. Check [this WWDC presentation](https://developer.apple.com/videos/play/wwdc2020/10220/) from Apple to get more details on the UI interruptions handling.
 
 
 ## Examples
