@@ -74,9 +74,9 @@
   XCUICoordinate *result = [self coordinateWithNormalizedOffset:CGVectorMake(x / frame.size.width,
                                                                              y / frame.size.height)];
   if ([self isKindOfClass:XCUIApplication.class]) {
-    // This is a hack needed to make aboslute coordinates work
-    // with application element. By default XCTest returns zero-sized
-    // rectangle for XCUIApplication elements
+    // This is a hack needed to make absolute coordinates work
+    // with the application element. By default XCTest returns zero-sized
+    // rectangle for XCUIApplication nodes
     XCUIElementDouble *fakeEl = [XCUIElementDouble new];
     fakeEl.frame = [(XCUIApplication *)self am_screenRect];
     XCUIElementProxy *elementProxy = [[XCUIElementProxy alloc] initWithTargets:@[fakeEl, self]];
