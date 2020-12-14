@@ -21,6 +21,7 @@
 #import "XCUIElement+AMAttributes.h"
 #import "XCUIElement+AMEditable.h"
 #import "XCUIElement+AMHitPoint.h"
+#import "XCUIElement+AMCoordinates.h"
 
 
 @interface AMElementAttributesTests : AMIntegrationTestCase
@@ -82,6 +83,14 @@
   XCUIElement *button = [self.testedApplication.buttons matchingPredicate:predicate].firstMatch;
   NSString *enabled = [button am_wdAttributeValueWithName:@"enabled"];
   XCTAssertEqualObjects(enabled, @"false");
+}
+
+- (void)testAppCoordinates
+{
+  CGPoint buttonCoords = CGPointMake(20, 30);
+  XCUICoordinate *abosuluteCoordinate = [self.testedApplication am_coordinateWithPoint:buttonCoords];
+  XCTAssertEqualWithAccuracy(abosuluteCoordinate.screenPoint.x, buttonCoords.x, 0.1);
+  XCTAssertEqualWithAccuracy(abosuluteCoordinate.screenPoint.y, buttonCoords.y, 0.1);
 }
 
 - (void)testSliderValueAttribute
