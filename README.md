@@ -13,7 +13,6 @@ On top of standard Appium requirements Mac2 driver also expects the following pr
 - macOS 10.15 or later
 - Xcode 12 or later should be installed
 - Xcode Helper app should be enabled for Accessibility access. The app itself could be usually found at `/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/Xcode Helper.app`. In order to enable Accessibility access for it simply open the parent folder in Finder: `open /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/` and drag & drop the `Xcode Helper` app to `Security & Privacy -> Privacy -> Accessibility` list of your `System Preferences`. This action must only be done once.
-- [Carthage](https://github.com/Carthage/Carthage) should be present. On macOS the utility could be installed via [Brew](https://brew.sh/): `brew install carthage`
 
 
 ## Capabilities
@@ -25,7 +24,6 @@ automationName | Must always be set to `mac2`. Values of automationName are comp
 appium:systemPort | The number of the port for the driver to listen on. If not provided then Appium will use the default port `10100`.
 appium:showServerLogs | Set it to `true` in order to include xcodebuild output to the Appium server log. `false` by default.
 appium:bootstrapRoot | The full path to `WebDriverAgentMac` root folder where Xcode project of the server sources lives. By default this project is located in the same folder where the corresponding driver Node.js module lives.
-appium:dependenciesLoadTimeout | The number of milliseconds to wait for Carthage dependencies load. These dependencies are loaded when the project is built for the first time. `120000` by default
 appium:serverStartupTimeout | The number of milliseconds to wait util the WebDriverAgentMac project is built and started. `120000` by default
 appium:bundleId | The bundle identifier of the application to automate, for example `com.apple.TextEdit`. This is an optional capability. If it is not provided then the session will be started without an application under test (actually, it will be Finder). If the application with the given identifier is not installed then an error will be thrown on session startup. If the application is already running then it will be moved to the foreground.
 appium:arguments | Array of application command line arguments. This capability is only going to be applied if the application is not running on session startup.
