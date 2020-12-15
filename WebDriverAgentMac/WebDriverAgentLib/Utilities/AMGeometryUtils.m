@@ -17,10 +17,11 @@
 #import "AMGeometryUtils.h"
 
 NSDictionary<NSString *, NSNumber *> *AMCGRectToDict(CGRect frame) {
+  CGRect integralFrame = CGRectIntegral(frame);
   return @{
-    @"x": @(CGRectGetMinX(frame)),
-    @"y": @(CGRectGetMinY(frame)),
-    @"width": @(CGRectGetWidth(frame)),
-    @"height": @(CGRectGetHeight(frame)),
+    @"x": @(CGRectGetMinX(integralFrame)),
+    @"y": @(CGRectGetMinY(integralFrame)),
+    @"width": @(CGRectGetWidth(integralFrame)),
+    @"height": @(CGRectGetHeight(integralFrame)),
   };
 }
