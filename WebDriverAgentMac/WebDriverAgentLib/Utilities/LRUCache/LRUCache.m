@@ -44,7 +44,7 @@
   if (nil == node) {
     node = [LRUCacheNode nodeWithValue:object key:key];
     self.store[key] = node;
-    self.size++;
+    ++self.size;
 
     if (nil == self.tailNode) {
       self.tailNode = node;
@@ -92,13 +92,15 @@
 
 - (void)alignSize
 {
-  if (self.size > self.capacity) {
-    LRUCacheNode *nextTail = self.tailNode.prev;
-    [self.store removeObjectForKey:self.tailNode.key];
-    self.tailNode = nextTail;
-    self.tailNode.next = nil;
-    self.size--;
+  if (self.size <= self.capacity) {
+    return;
   }
+
+  LRUCacheNode *nextTail = self.tailNode.prev;
+  [self.store removeObjectForKey:self.tailNode.key];
+  self.tailNode = nextTail;
+  self.tailNode.next = nil;
+  --self.size;
 }
 
 @end
