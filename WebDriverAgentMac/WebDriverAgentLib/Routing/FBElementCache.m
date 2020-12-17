@@ -11,9 +11,9 @@
 
 #import "FBExceptions.h"
 #import "FBLogger.h"
+#import "LRUCache.h"
 
 #define MAX_CACHE_SIZE 500
-#define LOAD_FACTOR 30
 
 
 @interface FBCacheItem : NSObject
@@ -45,7 +45,7 @@
 
 
 @interface FBElementCache ()
-@property (nonatomic, readonly) NSMutableArray<FBCacheItem *> *elementCache;
+@property (nonatomic) LRUCache *elementCache;
 @end
 
 @implementation FBElementCache
@@ -57,7 +57,7 @@
     return nil;
   }
 
-  _elementCache = [NSMutableArray array];
+  _elementCache = [[LRUCache alloc] initWithCapacity:MAX_CACHE_SIZE];
   return self;
 }
 
@@ -65,25 +65,15 @@
                                       orUuid:(nullable NSUUID *)uuid
 {
   FBCacheItem *matchedItem = nil;
-  NSUInteger matchIndex = self.elementCache.count - 1;
-  for (FBCacheItem *candidate in self.elementCache.reverseObjectEnumerator) {
+  for (FBCacheItem *candidate in self.elementCache.allObjects) {
     if ((nil != element && [element isEqualTo:candidate.element])
         || (nil != uuid && [uuid isEqualTo:candidate.uuid])) {
       matchedItem = candidate;
       break;
     }
-    --matchIndex;
   }
-  if (nil == matchedItem) {
-    return nil;
-  }
-
-  if (matchIndex < self.elementCache.count - 1) {
-    // Put the accessed element to the top of the cache
-    [self.elementCache removeObjectAtIndex:matchIndex];
-    [self.elementCache addObject:matchedItem];
-  }
-  return matchedItem;
+  // bump the matched element
+  return nil == matchedItem ? nil : [self.elementCache objectForKey:matchedItem.uuid];
 }
 
 - (NSString *)storeElement:(XCUIElement *)element
@@ -94,15 +84,9 @@
       return matchedItem.uuid.UUIDString;
     }
 
-    if (self.elementCache.count >= MAX_CACHE_SIZE) {
-      NSUInteger count = self.elementCache.count * LOAD_FACTOR / 100;
-      [FBLogger logFmt:@"The elements cache size has reached its maximum value of %@. Shrinking %lu oldest elements from it",
-       @(MAX_CACHE_SIZE), count];
-      [self.elementCache removeObjectsInRange:NSMakeRange(0, count)];
-    }
-
     NSUUID *uuid = [NSUUID UUID];
-    [self.elementCache addObject:[[FBCacheItem alloc] initWithElement:element havingUuid:uuid]];
+    [self.elementCache setObject:[[FBCacheItem alloc] initWithElement:element havingUuid:uuid]
+                          forKey:uuid];
     return uuid.UUIDString;
   }
 }
@@ -141,7 +125,7 @@
 - (void)reset
 {
   @synchronized (self.elementCache) {
-    [self.elementCache removeAllObjects];
+    self.elementCache = [[LRUCache alloc] initWithCapacity:MAX_CACHE_SIZE];
   }
 }
 

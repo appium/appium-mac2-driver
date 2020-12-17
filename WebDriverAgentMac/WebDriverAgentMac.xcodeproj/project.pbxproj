@@ -127,6 +127,10 @@
 		71688AA3256461F00007F55B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 71688AA2256461F00007F55B /* main.m */; };
 		71688B1725646A620007F55B /* WebDriverAgentRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = 71688B1625646A620007F55B /* WebDriverAgentRunner.m */; };
 		71688B2C25646B850007F55B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71688AE2256466070007F55B /* XCTest.framework */; };
+		7168D5AD258B849B00EEFA12 /* LRUCacheNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 7168D5A9258B849B00EEFA12 /* LRUCacheNode.h */; };
+		7168D5AE258B849B00EEFA12 /* LRUCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 7168D5AA258B849B00EEFA12 /* LRUCache.h */; };
+		7168D5AF258B849B00EEFA12 /* LRUCacheNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7168D5AB258B849B00EEFA12 /* LRUCacheNode.m */; };
+		7168D5B0258B849B00EEFA12 /* LRUCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 7168D5AC258B849B00EEFA12 /* LRUCache.m */; };
 		7180C1CA257A9336008FA870 /* FBBaseActionsSynthesizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7180C1C8257A9336008FA870 /* FBBaseActionsSynthesizer.h */; };
 		7180C1CB257A9336008FA870 /* FBBaseActionsSynthesizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7180C1C9257A9336008FA870 /* FBBaseActionsSynthesizer.m */; };
 		7180C1D2257A9348008FA870 /* FBW3CActionsSynthesizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7180C1CE257A9347008FA870 /* FBW3CActionsSynthesizer.h */; };
@@ -341,6 +345,10 @@
 		71688B1425646A620007F55B /* WebDriverAgentRunner.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WebDriverAgentRunner.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		71688B1625646A620007F55B /* WebDriverAgentRunner.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebDriverAgentRunner.m; sourceTree = "<group>"; };
 		71688B1825646A620007F55B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7168D5A9258B849B00EEFA12 /* LRUCacheNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LRUCacheNode.h; sourceTree = "<group>"; };
+		7168D5AA258B849B00EEFA12 /* LRUCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LRUCache.h; sourceTree = "<group>"; };
+		7168D5AB258B849B00EEFA12 /* LRUCacheNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LRUCacheNode.m; sourceTree = "<group>"; };
+		7168D5AC258B849B00EEFA12 /* LRUCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LRUCache.m; sourceTree = "<group>"; };
 		7180C1C8257A9336008FA870 /* FBBaseActionsSynthesizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBBaseActionsSynthesizer.h; sourceTree = "<group>"; };
 		7180C1C9257A9336008FA870 /* FBBaseActionsSynthesizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBBaseActionsSynthesizer.m; sourceTree = "<group>"; };
 		7180C1CE257A9347008FA870 /* FBW3CActionsSynthesizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBW3CActionsSynthesizer.h; sourceTree = "<group>"; };
@@ -642,6 +650,7 @@
 		71688B022564693C0007F55B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				7168D5A8258B847900EEFA12 /* LRUCache */,
 				713A9D3A2566AA2300118D07 /* AMGeometryUtils.h */,
 				713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */,
 				718D2C302567FED3005F533B /* AMSessionCapabilities.h */,
@@ -686,6 +695,17 @@
 				71688B1825646A620007F55B /* Info.plist */,
 			);
 			path = WebDriverAgentRunner;
+			sourceTree = "<group>";
+		};
+		7168D5A8258B847900EEFA12 /* LRUCache */ = {
+			isa = PBXGroup;
+			children = (
+				7168D5AA258B849B00EEFA12 /* LRUCache.h */,
+				7168D5AC258B849B00EEFA12 /* LRUCache.m */,
+				7168D5A9258B849B00EEFA12 /* LRUCacheNode.h */,
+				7168D5AB258B849B00EEFA12 /* LRUCacheNode.m */,
+			);
+			path = LRUCache;
 			sourceTree = "<group>";
 		};
 		7180C1E4257A94C2008FA870 /* PrivateHeaders */ = {
@@ -780,6 +800,7 @@
 				7109C01C2565B58C006BFD13 /* FBSession-Private.h in Headers */,
 				7109BFED2565B546006BFD13 /* FBElementUtils.h in Headers */,
 				7109C05D2565B5F6006BFD13 /* HTTPMessage.h in Headers */,
+				7168D5AE258B849B00EEFA12 /* LRUCache.h in Headers */,
 				7109C03D2565B5BF006BFD13 /* NSPredicate+FBFormat.h in Headers */,
 				7180C1DA257A9369008FA870 /* AMActionCommands.h in Headers */,
 				713A9D2D25669E4F00118D07 /* XCUIElement+FBClassChain.h in Headers */,
@@ -829,6 +850,7 @@
 				7109BFE32565B53A006BFD13 /* FBCommandStatus.h in Headers */,
 				7180C1F7257A9896008FA870 /* XCUIEventSynthesizing-Protocol.h in Headers */,
 				7180C1CA257A9336008FA870 /* FBBaseActionsSynthesizer.h in Headers */,
+				7168D5AD258B849B00EEFA12 /* LRUCacheNode.h in Headers */,
 				7109C0672565B603006BFD13 /* HTTPResponseProxy.h in Headers */,
 				7109C0242565B59A006BFD13 /* FBWebServer.h in Headers */,
 				7109C0092565B56B006BFD13 /* FBRuntimeUtils.h in Headers */,
@@ -1038,6 +1060,7 @@
 				7109C0452565B5CB006BFD13 /* XCUIApplication+AMHelpers.m in Sources */,
 				718D2BDA25670A76005F533B /* XCUIElement+AMAttributes.m in Sources */,
 				714CA6FD2566461100353B27 /* FBDebugCommands.m in Sources */,
+				7168D5B0258B849B00EEFA12 /* LRUCache.m in Sources */,
 				7109C04D2565B5E2006BFD13 /* DDRange.m in Sources */,
 				7109BFF52565B550006BFD13 /* FBExceptionHandler.m in Sources */,
 				7109C03B2565B5BD006BFD13 /* NSExpression+FBFormat.m in Sources */,
@@ -1063,6 +1086,7 @@
 				719E6A6F25822DB800777988 /* XCUIApplication+AMUIInterruptions.m in Sources */,
 				7109C07D2565B61D006BFD13 /* RoutingHTTPServer.m in Sources */,
 				7109C06D2565B60A006BFD13 /* Route.m in Sources */,
+				7168D5AF258B849B00EEFA12 /* LRUCacheNode.m in Sources */,
 				7109C0022565B561006BFD13 /* FBResponseJSONPayload.m in Sources */,
 				7109C00C2565B56E006BFD13 /* FBRuntimeUtils.m in Sources */,
 				7109C0072565B568006BFD13 /* FBResponsePayload.m in Sources */,
@@ -1330,9 +1354,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = WebDriverAgentLib/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1358,9 +1380,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = WebDriverAgentLib/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
