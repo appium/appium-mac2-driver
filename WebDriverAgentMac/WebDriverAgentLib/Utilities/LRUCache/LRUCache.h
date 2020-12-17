@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface LRUCache : NSObject
 
-/*!Contains the cache capacity. Could only be set in the constructor */
+/*! Maximum cache capacity. Could only be set in the constructor */
 @property (nonatomic, readonly) NSUInteger capacity;
 
 /**

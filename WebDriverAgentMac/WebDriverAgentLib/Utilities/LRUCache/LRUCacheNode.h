@@ -20,13 +20,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface LRUCacheNode : NSObject
 
-/*!Node value */
+/*! Node value */
 @property (nonatomic, readonly) id value;
-/*!Node key */
+/*! Node key */
 @property (nonatomic, readonly) id<NSCopying> key;
-/*!Pointer to the next node */
+/*! Pointer to the next node */
 @property (nonatomic, nullable) LRUCacheNode *next;
-/*!Pointer to the previous node */
+/*! Pointer to the previous node */
 @property (nonatomic, nullable) LRUCacheNode *prev;
 
 /**
