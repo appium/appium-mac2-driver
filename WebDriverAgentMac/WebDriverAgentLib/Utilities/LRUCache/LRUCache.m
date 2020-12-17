@@ -19,8 +19,8 @@
 
 @interface LRUCache ()
 @property (nonatomic) NSMutableDictionary *store;
-@property (nonatomic) LRUCacheNode *rootNode;
-@property (nonatomic) LRUCacheNode *tailNode;
+@property (nonatomic, nullable) LRUCacheNode *headNode;
+@property (nonatomic, nullable) LRUCacheNode *tailNode;
 @property (nonatomic) NSUInteger size;
 @end
 
@@ -28,8 +28,7 @@
 
 - (instancetype)initWithCapacity:(NSUInteger)capacity
 {
-  self = [super init];
-  if (self) {
+  if ((self = [super init])) {
     _store = [NSMutableDictionary dictionary];
     _capacity = capacity;
   }
@@ -38,7 +37,7 @@
 
 - (void)setObject:(id)object forKey:(id<NSCopying>)key
 {
-  NSAssert(nil != object, @"LRUCache cannot store nil object!");
+  NSAssert(nil != object, @"LRUCache cannot store nil objects");
 
   LRUCacheNode *node = self.store[key];
   if (nil == node) {
@@ -49,8 +48,8 @@
     if (nil == self.tailNode) {
       self.tailNode = node;
     }
-    if (nil == self.rootNode) {
-      self.rootNode = node;
+    if (nil == self.headNode) {
+      self.headNode = node;
     }
   }
 
@@ -75,7 +74,7 @@
 
 - (void)bumpNode:(LRUCacheNode *)node
 {
-  if (node == self.rootNode) {
+  if (node == self.headNode) {
     return;
   }
 
@@ -83,11 +82,11 @@
     self.tailNode = self.tailNode.prev;
   }
 
-  self.rootNode.prev.next = node.next;
+  self.headNode.prev.next = node.next;
 
-  LRUCacheNode *prevRoot = self.rootNode;
-  self.rootNode = node;
-  self.rootNode.next = prevRoot;
+  LRUCacheNode *prevHead = self.headNode;
+  self.headNode = node;
+  self.headNode.next = prevHead;
 }
 
 - (void)alignSize
