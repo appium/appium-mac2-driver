@@ -316,13 +316,13 @@ Stop recording the screen. If no screen recording has been started before then t
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-remotePath | string | no | The path to the remote location, where the resulting video should be uploaded. The following protocols are supported: http/https, ftp. Null or empty string value (the default setting) means the content of resulting file should be encoded as Base64 and passed as the endpoint response value. An exception will be thrown if the generated media file is too big to fit into the available process memory. | htpps://myserver.com/upload/video.mp4
+remotePath | string | no | The path to the remote location, where the resulting video should be uploaded. The following protocols are supported: http/https, ftp. Null or empty string value (the default setting) means the content of resulting file should be encoded as Base64 and passed as the endpoint response value. An exception will be thrown if the generated media file is too big to fit into the available process memory. | https://myserver.com/upload/video.mp4
 user | string | no | The name of the user for the remote authentication. | myname
 pass | string | no | The password for the remote authentication. | mypassword
 method | string | no | The http multipart upload method name. The 'PUT' one is used by default. | POST
 headers | map | no | Additional headers mapping for multipart http(s) uploads | `{"header": "value"}`
 fileFieldName | string | no | The name of the form field, where the file content BLOB should be stored for http(s) uploads. `file` by default | payload
-formFields | `Map|Array<Pair>` | no | Additional form fields for multipart http(s) uploads | `{"field1": "value1", "field2": "value2"}` or `[["field1", "value1"], ["field2", "value2"]]`
+formFields | Map or `Array<Pair>` | no | Additional form fields for multipart http(s) uploads | `{"field1": "value1", "field2": "value2"}` or `[["field1", "value1"], ["field2", "value2"]]`
 
 #### Returns
 
