@@ -77,7 +77,7 @@ static FBSession *_activeSession = nil;
 {
   if (nil != self.testedApplication) {
     if (self.testedApplication.state <= XCUIApplicationStateNotRunning) {
-      NSString *description = @"The application under test with is not running, possibly crashed";
+      NSString *description = @"The application under test is not running, possibly crashed";
       @throw [NSException exceptionWithName:FBApplicationCrashedException reason:description userInfo:nil];
     }
     return self.testedApplication;

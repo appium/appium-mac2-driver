@@ -82,10 +82,13 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
   }
 
   NSString *bundleID = requirements[AM_BUNDLE_ID_CAPABILITY];
-  XCUIApplication *app = nil;
   BOOL noReset = [requirements[AM_NO_RESET_CAPABILITY] boolValue];
-  if (bundleID != nil) {
-    app = [[XCUIApplication alloc] initWithBundleIdentifier:bundleID];
+  FBSession *session;
+  if (nil == bundleID) {
+    session = [FBSession initWithApplication:nil];
+  } else {
+    XCUIApplication *app = [[XCUIApplication alloc] initWithBundleIdentifier:bundleID];
+    session = [FBSession initWithApplication:app];
     if (noReset && app.state > XCUIApplicationStateNotRunning) {
       [app activate];
     } else {
@@ -99,7 +102,6 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
       }
     }
   }
-  FBSession *session = [FBSession initWithApplication:app];
   if (nil != requirements[AM_SKIP_APP_KILL_CAPABILITY]) {
     session.skipAppTermination = [requirements[AM_SKIP_APP_KILL_CAPABILITY] boolValue];
   } else if (nil == bundleID) {
