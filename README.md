@@ -291,6 +291,43 @@ cwd | string | no | The path to an existing folder which is going to be set as t
 
 The actual stdout of the provided script if its execution was successful (e.g. got zero return code).
 
+### macos: startRecordingScreen
+
+Record the display in background while the automated test is running. This method requires [FFMPEG](https://www.ffmpeg.org/download.html) to be installed and present in PATH. Also, the Appium process must be allowed to access screen recording in System Preferences->Security & Privacy->Screen Recording. The resulting video uses H264 codec and is ready to be played by media players built-in into web browsers.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+deviceId | number | yes | Screen device index to use for the recording. The list of available devices could be retrieved using `ffmpeg -f avfoundation -list_devices true -i` command. | 1
+videoFilter | string | no | The video filter spec to apply for ffmpeg. See https://trac.ffmpeg.org/wiki/FilteringGuide for more details on the possible values. | Set it to `scale=ifnot(gte(iw\,1024)\,iw\,1024):-2` in order to limit the video width to 1024px. The height will be adjusted automatically to match the actual ratio.
+fps | number | no | The count of frames per second in the resulting video. The greater fps it has the bigger file size is. The default vale is `15` | 10
+preset | string | no | One of the supported encoding presets. Possible values are: `ultrafast`, `superfast`, `veryfast` (the default value), `faster`, `fast`, `medium`, `slow`, `slower`, `veryslow`. A preset is a collection of options that will provide a certain encoding speed to compression ratio. A slower preset will provide better compression (compression is quality per filesize). This means that, for example, if you target a certain file size or constant bit rate, you will achieve better quality with a slower preset. Read https://trac.ffmpeg.org/wiki/Encode/H.264 for more details. | fast
+captureCursor | boolean | no | Whether to capture the mouse cursor while recording the screen. `false` by default | true
+captureClicks | boolean | no | Whether to capture mouse clicks while recording the screen. `false` by default | true
+timeLimit | number | no | The maximum recording time, in seconds. The default value is 600 seconds (10 minutes) | 300
+forceRestart | boolean | no | Whether to ignore the call if a screen recording is currently running (`false`) or to start a new recording immediately and terminate the existing one if running (`true`, the default value). | true
+
+### macos: stopRecordingScreen
+
+Stop recording the screen. If no screen recording has been started before then the method returns an empty string.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+remotePath | string | no | The path to the remote location, where the resulting video should be uploaded. The following protocols are supported: http/https, ftp. Null or empty string value (the default setting) means the content of resulting file should be encoded as Base64 and passed as the endpoint response value. An exception will be thrown if the generated media file is too big to fit into the available process memory. | https://myserver.com/upload/video.mp4
+user | string | no | The name of the user for the remote authentication. | myname
+pass | string | no | The password for the remote authentication. | mypassword
+method | string | no | The http multipart upload method name. The 'PUT' one is used by default. | POST
+headers | map | no | Additional headers mapping for multipart http(s) uploads | `{"header": "value"}`
+fileFieldName | string | no | The name of the form field, where the file content BLOB should be stored for http(s) uploads. `file` by default | payload
+formFields | Map or `Array<Pair>` | no | Additional form fields for multipart http(s) uploads | `{"field1": "value1", "field2": "value2"}` or `[["field1", "value1"], ["field2", "value2"]]`
+
+#### Returns
+
+Base64-encoded content of the recorded media file if `remotePath` parameter is falsy or an empty string.
+
 
 ## Application Under Test Concept
 
