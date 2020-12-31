@@ -10,6 +10,7 @@
 #import "FBScreenshotCommands.h"
 
 #import "XCTest/XCTest.h"
+#import "FBSession.h"
 
 @implementation FBScreenshotCommands
 
@@ -29,7 +30,13 @@
 
 + (id<FBResponsePayload>)handleGetScreenshot:(FBRouteRequest *)request
 {
-  NSData *screenshotData = [[[XCUIScreen mainScreen] screenshot] PNGRepresentation];
+  NSData *screenshotData;
+  if (FBSession.activeSession) {
+    screenshotData = [FBSession.activeSession.currentApplication.windows.firstMatch.screenshot PNGRepresentation];
+  } else {
+    screenshotData = [[[XCUIScreen mainScreen] screenshot] PNGRepresentation];
+  }
+
   if (nil == screenshotData) {
     NSString *message = @"Cannot take a screenshot of the main screen";
     return FBResponseWithStatus([FBCommandStatus unableToCaptureScreenErrorWithMessage:message
