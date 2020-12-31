@@ -30,20 +30,22 @@
 
 + (id<FBResponsePayload>)handleGetScreenshot:(FBRouteRequest *)request
 {
-  NSData *screenshotData;
+  XCUIScreenshot *screenshot;
   if (FBSession.activeSession) {
-    screenshotData = [FBSession.activeSession.currentApplication.windows.firstMatch.screenshot PNGRepresentation];
+      screenshot = FBSession.activeSession.currentApplication.windows.firstMatch.screenshot;
   } else {
-    screenshotData = [[[XCUIScreen mainScreen] screenshot] PNGRepresentation];
+      screenshot = XCUIScreen.mainScreen.screenshot;
   }
+
+  NSData *screenshotData = [screenshot PNGRepresentation];
 
   if (nil == screenshotData) {
     NSString *message = @"Cannot take a screenshot of the main screen";
     return FBResponseWithStatus([FBCommandStatus unableToCaptureScreenErrorWithMessage:message
                                                                              traceback:nil]);
   }
-  NSString *screenshot = [screenshotData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-  return FBResponseWithObject(screenshot);
+  NSString *b64screenshot = [screenshotData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  return FBResponseWithObject(b64screenshot);
 }
 
 @end
