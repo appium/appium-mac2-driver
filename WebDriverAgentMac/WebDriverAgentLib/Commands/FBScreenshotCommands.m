@@ -32,9 +32,9 @@
 {
   XCUIScreenshot *screenshot;
   if (FBSession.activeSession) {
-      screenshot = FBSession.activeSession.currentApplication.windows.firstMatch.screenshot;
+    screenshot = FBSession.activeSession.currentApplication.windows.firstMatch.screenshot;
   } else {
-      screenshot = XCUIScreen.mainScreen.screenshot;
+    screenshot = XCUIScreen.mainScreen.screenshot;
   }
 
   NSData *screenshotData = [screenshot PNGRepresentation];
