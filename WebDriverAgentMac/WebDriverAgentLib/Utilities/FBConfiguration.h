@@ -33,6 +33,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly) NSRange bindingPortRange;
 
 /**
+ * What interface the server is listening on.
+ * nil causes the server to listen on all available interfaces like en1, wifi etc.
+ *
+ * The interface may be specified by name (e.g. "en1" or "lo0") or by IP address (e.g. "192.168.4.34").
+ * You may also use the special strings "localhost" or "loopback" to specify that
+ * the socket only accepts connections from the local machine.
+ */
+@property (readonly, nullable) NSString *serverInterface;
+
+/**
  YES if verbose logging is enabled. NO otherwise.
  */
 @property (readonly) BOOL verboseLoggingEnabled;

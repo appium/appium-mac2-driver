@@ -78,6 +78,7 @@ static NSString *const FBServerURLEndMarker = @"<-ServerURLHere";
 {
   self.server = [[RoutingHTTPServer alloc] init];
   [self.server setRouteQueue:dispatch_get_main_queue()];
+  [self.server setInterface:FBConfiguration.sharedConfiguration.serverInterface];
   [self.server setDefaultHeader:@"Server" value:@"WebDriverAgent/1.0"];
   [self.server setDefaultHeader:@"Access-Control-Allow-Origin" value:@"*"];
   [self.server setDefaultHeader:@"Access-Control-Allow-Headers" value:@"Content-Type, X-Requested-With"];
