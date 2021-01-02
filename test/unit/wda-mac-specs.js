@@ -10,7 +10,7 @@ describe('WDAMacServer', function () {
 
     it('should follow WebDriverAgentMacUrl', function () {
       WDA_MAC_SERVER.getProxyToInfo({
-        WebDriverAgentMacUrl: 'http://customhost:9999'
+        webDriverAgentMacUrl: 'http://customhost:9999'
       }).should.eql(
         {scheme: 'http', host: 'customhost', port: 9999, path: ''}
       );
@@ -18,7 +18,7 @@ describe('WDAMacServer', function () {
 
     it('should follow WebDriverAgentMacUrl with custom path', function () {
       WDA_MAC_SERVER.getProxyToInfo({
-        WebDriverAgentMacUrl: 'https://customhost/path'
+        webDriverAgentMacUrl: 'https://customhost/path'
       }).should.eql(
         {scheme: 'https', host: 'customhost', port: 10100, path: '/path'}
       );
