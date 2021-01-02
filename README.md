@@ -22,6 +22,7 @@ Capability Name | Description
 platformName | Should be set to `mac`
 automationName | Must always be set to `mac2`. Values of automationName are compared case-insensitively.
 appium:systemPort | The number of the port for the driver to listen on. If not provided then Appium will use the default port `10100`.
+appium:WebDriverAgentMacUrl | Appium will connect to an existing WebDriverAgentMac instance at this URL instead of starting a new one.
 appium:showServerLogs | Set it to `true` in order to include xcodebuild output to the Appium server log. `false` by default.
 appium:bootstrapRoot | The full path to `WebDriverAgentMac` root folder where Xcode project of the server sources lives. By default this project is located in the same folder where the corresponding driver Node.js module lives.
 appium:serverStartupTimeout | The number of milliseconds to wait util the WebDriverAgentMac project is built and started. `120000` by default
