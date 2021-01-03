@@ -75,10 +75,21 @@ static FBConfiguration *instance;
   // Existence of USE_PORT in the environment implies the port range is managed by the launching process.
   if (NSProcessInfo.processInfo.environment[@"USE_PORT"] &&
       [NSProcessInfo.processInfo.environment[@"USE_PORT"] length] > 0) {
-    return NSMakeRange([NSProcessInfo.processInfo.environment[@"USE_PORT"] integerValue] , 1);
+    return NSMakeRange([NSProcessInfo.processInfo.environment[@"USE_PORT"] integerValue], 1);
   }
 
   return NSMakeRange(DefaultStartingPort, DefaultPortRange);
+}
+
+- (NSString *)serverInterface
+{
+  // Existence of USE_HOST in the environment is managed by the launching process.
+  NSString *host = NSProcessInfo.processInfo.environment[@"USE_HOST"];
+  if (nil != host && host.length > 0) {
+    return [host isEqualToString:@"0.0.0.0"] ? nil : host;
+  }
+
+  return @"127.0.0.1";
 }
 
 - (BOOL)verboseLoggingEnabled

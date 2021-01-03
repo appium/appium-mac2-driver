@@ -43,6 +43,11 @@
             value = "${USE_PORT}"
             isEnabled = "YES">
          </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "USE_HOST"
+            value = "${USE_HOST}"
+            isEnabled = "YES">
+         </EnvironmentVariable>
       </EnvironmentVariables>
       <Testables>
          <TestableReference
