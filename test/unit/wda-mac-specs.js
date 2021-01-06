@@ -1,4 +1,8 @@
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import WDA_MAC_SERVER from '../../lib/wda-mac';
+
+chai.use(chaiAsPromised);
 
 describe('WDAMacServer', function () {
   describe('parseProxyProperties', function () {
@@ -18,6 +22,14 @@ describe('WDAMacServer', function () {
       WDA_MAC_SERVER.parseProxyProperties({ webDriverAgentMacUrl: 'https://customhost/path' }).should.eql(
         {scheme: 'https', server: 'customhost', port: 10100, path: '/path'}
       );
+    });
+
+    it('should follow WebDriverAgentMacUrl with invalid url', function () {
+      try {
+        WDA_MAC_SERVER.parseProxyProperties({ webDriverAgentMacUrl: 'invalid url' });
+      } catch (e) {
+        e.message.should.contain('is invalid');
+      }
     });
   });
 });
