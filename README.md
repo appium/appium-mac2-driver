@@ -485,7 +485,7 @@ def test_edit_text(driver):
 def test_sending_custom_keys(driver):
     edit_field = driver.find_element_by_class_name('XCUIElementTypeTextView')
     flagsShift = 1 << 1
-    edit_field.execute_script('macos: keys', {
+    driver.execute_script('macos: keys', {
         'keys': [{
             'key': 'h',
             'modifierFlags': flagsShift,
