@@ -81,6 +81,13 @@ describe('Mac2Driver - find elements', function () {
     el.should.exist;
   });
 
+  it('should find by absolute xpath', async function () {
+    // xpath index starts from 1
+    const el = await driver.elementByXPath(
+      '/XCUIElementTypeApplication[@title="TextEdit"]/XCUIElementTypeWindow[1]/XCUIElementTypeScrollView[1]');
+    el.should.exist;
+  });
+
   it('should find multiple by xpath', async function () {
     const els = await driver.elementsByXPath('//XCUIElementTypePopUpButton[@enabled="true"]');
     els.length.should.be.above(1);
