@@ -28,10 +28,12 @@ NSString *AMKeyValueForName(NSString *name)
       @"XCUIKeyboardKeyTab": XCUIKeyboardKeyTab,
       @"XCUIKeyboardKeySpace": XCUIKeyboardKeySpace,
       @"XCUIKeyboardKeyEscape": XCUIKeyboardKeyEscape,
+
       @"XCUIKeyboardKeyUpArrow": XCUIKeyboardKeyUpArrow,
       @"XCUIKeyboardKeyDownArrow": XCUIKeyboardKeyDownArrow,
       @"XCUIKeyboardKeyLeftArrow": XCUIKeyboardKeyLeftArrow,
       @"XCUIKeyboardKeyRightArrow": XCUIKeyboardKeyRightArrow,
+
       @"XCUIKeyboardKeyF1": XCUIKeyboardKeyF1,
       @"XCUIKeyboardKeyF2": XCUIKeyboardKeyF2,
       @"XCUIKeyboardKeyF3": XCUIKeyboardKeyF3,
@@ -51,6 +53,7 @@ NSString *AMKeyValueForName(NSString *name)
       @"XCUIKeyboardKeyF17": XCUIKeyboardKeyF17,
       @"XCUIKeyboardKeyF18": XCUIKeyboardKeyF18,
       @"XCUIKeyboardKeyF19": XCUIKeyboardKeyF19,
+
       @"XCUIKeyboardKeyForwardDelete": XCUIKeyboardKeyForwardDelete,
       @"XCUIKeyboardKeyHome": XCUIKeyboardKeyHome,
       @"XCUIKeyboardKeyEnd": XCUIKeyboardKeyEnd,
@@ -58,6 +61,7 @@ NSString *AMKeyValueForName(NSString *name)
       @"XCUIKeyboardKeyPageDown": XCUIKeyboardKeyPageDown,
       @"XCUIKeyboardKeyClear": XCUIKeyboardKeyClear,
       @"XCUIKeyboardKeyHelp": XCUIKeyboardKeyHelp,
+      
       @"XCUIKeyboardKeyCapsLock": XCUIKeyboardKeyCapsLock,
       @"XCUIKeyboardKeyShift": XCUIKeyboardKeyShift,
       @"XCUIKeyboardKeyControl": XCUIKeyboardKeyControl,
