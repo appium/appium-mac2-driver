@@ -10,6 +10,7 @@
 #import "FBElementCommands.h"
 
 #import "AMGeometryUtils.h"
+#import "AMKeyboardUtils.h"
 #import "FBConfiguration.h"
 #import "FBRoute.h"
 #import "FBRouteRequest.h"
@@ -458,7 +459,8 @@
   }
   for (id item in (NSArray *)keys) {
     if ([item isKindOfClass:NSString.class]) {
-      [destination typeKey:(NSString *)item modifierFlags:XCUIKeyModifierNone];
+      NSString *keyValue = AMKeyValueForName(item) ?: item;
+      [destination typeKey:keyValue modifierFlags:XCUIKeyModifierNone];
     } else if ([item isKindOfClass:NSDictionary.class]) {
       id key = [(NSDictionary *)item objectForKey:@"key"];
       if (![key isKindOfClass:NSString.class]) {
@@ -471,7 +473,8 @@
       if ([modifiers isKindOfClass:NSNumber.class]) {
         modifierFlags = [(NSNumber *)modifiers unsignedIntValue];
       }
-      [destination typeKey:(NSString *)key modifierFlags:modifierFlags];
+      NSString *keyValue = AMKeyValueForName(key) ?: key;
+      [destination typeKey:keyValue modifierFlags:modifierFlags];
     } else {
       NSString *message = @"All items of the 'keys' array must be either dictionaries or strings";
       return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:message
