@@ -20,10 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Transforms key name to its string representation, which could be used with XCTest
- If no match is found then the original string is returned
 
  @param name one of available keyboard key names defined in https://developer.apple.com/documentation/xctest/xcuikeyboardkey?language=objc
- @return Either the key value ornil  if no matches have been found
+ @return Either the key value or nil if no matches have been found
  */
 NSString *_Nullable AMKeyValueForName(NSString *name);
 
