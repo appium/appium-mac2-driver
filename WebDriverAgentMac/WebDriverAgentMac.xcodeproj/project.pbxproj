@@ -172,6 +172,8 @@
 		7199B3D42565B25E000B5C51 /* WebDriverAgentLib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		719E6A6E25822DB800777988 /* XCUIApplication+AMUIInterruptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 719E6A6C25822DB800777988 /* XCUIApplication+AMUIInterruptions.h */; };
 		719E6A6F25822DB800777988 /* XCUIApplication+AMUIInterruptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 719E6A6D25822DB800777988 /* XCUIApplication+AMUIInterruptions.m */; };
+		71AA30BF25EFF81900151CED /* AMKeyboardUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AA30BD25EFF81900151CED /* AMKeyboardUtils.h */; };
+		71AA30C025EFF81900151CED /* AMKeyboardUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA30BE25EFF81900151CED /* AMKeyboardUtils.m */; };
 		71B00E8E2566D4BA0010DA73 /* AMIntegrationTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B00E8D2566D4BA0010DA73 /* AMIntegrationTestCase.m */; };
 		71B00E9B2566D7B00010DA73 /* WebDriverAgentLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */; };
 		71B00EA02566D9570010DA73 /* AMFindElementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B00E9F2566D9570010DA73 /* AMFindElementTests.m */; };
@@ -390,6 +392,8 @@
 		7199B3AE2565B122000B5C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		719E6A6C25822DB800777988 /* XCUIApplication+AMUIInterruptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIApplication+AMUIInterruptions.h"; sourceTree = "<group>"; };
 		719E6A6D25822DB800777988 /* XCUIApplication+AMUIInterruptions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIApplication+AMUIInterruptions.m"; sourceTree = "<group>"; };
+		71AA30BD25EFF81900151CED /* AMKeyboardUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMKeyboardUtils.h; sourceTree = "<group>"; };
+		71AA30BE25EFF81900151CED /* AMKeyboardUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMKeyboardUtils.m; sourceTree = "<group>"; };
 		71B00E8B2566D4B90010DA73 /* IntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		71B00E8D2566D4BA0010DA73 /* AMIntegrationTestCase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMIntegrationTestCase.m; sourceTree = "<group>"; };
 		71B00E8F2566D4BA0010DA73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -653,6 +657,8 @@
 				7168D5A8258B847900EEFA12 /* LRUCache */,
 				713A9D3A2566AA2300118D07 /* AMGeometryUtils.h */,
 				713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */,
+				71AA30BD25EFF81900151CED /* AMKeyboardUtils.h */,
+				71AA30BE25EFF81900151CED /* AMKeyboardUtils.m */,
 				718D2C302567FED3005F533B /* AMSessionCapabilities.h */,
 				718D2C312567FED3005F533B /* AMSessionCapabilities.m */,
 				718D2BF125678B4E005F533B /* AMSnapshotUtils.h */,
@@ -787,6 +793,7 @@
 				7109BFD42565B51E006BFD13 /* FBRunLoopSpinner.h in Headers */,
 				7109C0632565B5FD006BFD13 /* HTTPServer.h in Headers */,
 				7109C04B2565B5E0006BFD13 /* DDRange.h in Headers */,
+				71AA30BF25EFF81900151CED /* AMKeyboardUtils.h in Headers */,
 				7109C0382565B5B9006BFD13 /* NSExpression+FBFormat.h in Headers */,
 				7180C1E8257A94F4008FA870 /* XCPointerEventPath.h in Headers */,
 				714CA6FC2566461100353B27 /* FBDebugCommands.h in Headers */,
@@ -1068,6 +1075,7 @@
 				714CA7072566487B00353B27 /* FBXPath.m in Sources */,
 				7109C0692565B605006BFD13 /* HTTPResponseProxy.m in Sources */,
 				718D2C0E2567AA03005F533B /* XCUIElement+AMEditable.m in Sources */,
+				71AA30C025EFF81900151CED /* AMKeyboardUtils.m in Sources */,
 				713A9D382566A83800118D07 /* FBElementCommands.m in Sources */,
 				7109C05F2565B5F8006BFD13 /* HTTPMessage.m in Sources */,
 				714CA7022566475200353B27 /* XCUIApplication+AMSource.m in Sources */,
