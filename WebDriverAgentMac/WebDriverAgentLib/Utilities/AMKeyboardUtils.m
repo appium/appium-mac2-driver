@@ -61,7 +61,7 @@ NSString *AMKeyValueForName(NSString *name)
       @"XCUIKeyboardKeyPageDown": XCUIKeyboardKeyPageDown,
       @"XCUIKeyboardKeyClear": XCUIKeyboardKeyClear,
       @"XCUIKeyboardKeyHelp": XCUIKeyboardKeyHelp,
-      
+
       @"XCUIKeyboardKeyCapsLock": XCUIKeyboardKeyCapsLock,
       @"XCUIKeyboardKeyShift": XCUIKeyboardKeyShift,
       @"XCUIKeyboardKeyControl": XCUIKeyboardKeyControl,
@@ -74,5 +74,5 @@ NSString *AMKeyValueForName(NSString *name)
       @"XCUIKeyboardKeySecondaryFn": XCUIKeyboardKeySecondaryFn
     };
   });
-  return keysMapping[name] ?: name;
+  return keysMapping[name];
 }

@@ -23,8 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
  If no match is found then the original string is returned
 
  @param name one of available keyboard key names defined in https://developer.apple.com/documentation/xctest/xcuikeyboardkey?language=objc
- @return Either the key value or the original string if no matches have been found
+ @return Either the key value ornil  if no matches have been found
  */
-NSString *AMKeyValueForName(NSString *name);
+NSString *_Nullable AMKeyValueForName(NSString *name);
 
 NS_ASSUME_NONNULL_END
