@@ -33,6 +33,8 @@
     return [NSString stringWithFormat:@"%lu", self.elementType];
   } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, placeholderValue)]) {
     return self.placeholderValue;
+  } else if ([wdAttributeName isEqualToString:@"hittable"]) {
+    return self.hittable ? @"true" : @"false";
   } else if ([wdAttributeName isEqualToString:@"enabled"]) {
     return self.enabled ? @"true" : @"false";
   } else if ([wdAttributeName isEqualToString:@"selected"]) {

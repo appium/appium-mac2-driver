@@ -34,6 +34,7 @@
   dispatch_once(&onceToken, ^{
     attributeNames = @[
       @"selected",
+      @"hittable",
       FBStringify(XCUIElement, placeholderValue),
       @"enabled",
       FBStringify(XCUIElement, elementType),
