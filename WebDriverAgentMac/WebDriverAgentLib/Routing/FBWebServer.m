@@ -191,9 +191,12 @@ static NSString *const FBServerURLEndMarker = @"<-ServerURLHere";
   }];
 
   [self.server delete:@"/" withBlock:^(RouteRequest *request, RouteResponse *response) {
-    [FBSession.activeSession kill];
-    [response respondWithString:@"Shutting down"];
-    [self.delegate webServerDidRequestShutdown:self];
+    @try {
+      [FBSession.activeSession kill];
+    } @finally {
+      [response respondWithString:@"Shutting down"];
+      [self.delegate webServerDidRequestShutdown:self];
+    }
   }];
 
   [self registerRouteHandlers:@[FBUnknownCommands.class]];
