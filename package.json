@@ -34,6 +34,7 @@
     "appium-base-driver": "^7.1.0",
     "appium-support": "^2.46.0",
     "asyncbox": "^2.0.2",
+    "axios": "^0.x",
     "bluebird": "^3.5.1",
     "lodash": "^4.17.4",
     "portscanner": "2.2.0",

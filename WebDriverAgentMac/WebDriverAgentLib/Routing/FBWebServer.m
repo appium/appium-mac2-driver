@@ -190,7 +190,8 @@ static NSString *const FBServerURLEndMarker = @"<-ServerURLHere";
     [response respondWithString:@"I-AM-ALIVE"];
   }];
 
-  [self.server get:@"/wda/shutdown" withBlock:^(RouteRequest *request, RouteResponse *response) {
+  [self.server delete:@"/" withBlock:^(RouteRequest *request, RouteResponse *response) {
+    [FBSession.activeSession kill];
     [response respondWithString:@"Shutting down"];
     [self.delegate webServerDidRequestShutdown:self];
   }];
