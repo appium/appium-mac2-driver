@@ -30,6 +30,14 @@
   [super setUp];
 }
 
+- (void)setUp
+{
+  [super setUp];
+  self.continueAfterFailure = YES;
+  [self setValue:@(NO) forKey:@"_shouldSetShouldHaltWhenReceivesControl"];
+  [self setValue:@(NO) forKey:@"_shouldHaltWhenReceivesControl"];
+}
+
 /**
  Never ending test used to start WebDriverAgent
  */
