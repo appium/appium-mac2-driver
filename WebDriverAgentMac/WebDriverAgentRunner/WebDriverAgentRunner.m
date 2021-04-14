@@ -33,7 +33,8 @@
 - (void)setUp
 {
   [super setUp];
-  self.continueAfterFailure = YES;
+  [self setValue:@(NO) forKey:@"_shouldSetShouldHaltWhenReceivesControl"];
+  [self setValue:@(NO) forKey:@"_shouldHaltWhenReceivesControl"];
 }
 
 /**
