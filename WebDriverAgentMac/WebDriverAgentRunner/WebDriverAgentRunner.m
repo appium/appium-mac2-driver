@@ -30,6 +30,12 @@
   [super setUp];
 }
 
+- (void)setUp
+{
+  [super setUp];
+  self.continueAfterFailure = YES;
+}
+
 /**
  Never ending test used to start WebDriverAgent
  */
