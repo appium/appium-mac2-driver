@@ -82,10 +82,15 @@ Perform click gesture on an element or by relative/absolute coordinates
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-element | string | if `x` or `y` are unset | Unique identifier of the element to perform the click on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
-x | number | if `y` is set or `element` is unset | click X coordinate | 100
-y | number | if `y` is set or `element` is unset | click Y coordinate | 100
+elementId ("element" prior to Appium v 1.22) | string | if `x` or `y` are unset | Unique identifier of the element to perform the click on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
+x | number | if `y` is set or `elementId` is unset | click X coordinate | 100
+y | number | if `y` is set or `elementId` is unset | click Y coordinate | 100
 keyModifierFlags | number | no | if set then the given key modifiers will be applied while click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+
+#### References
+
+- [click (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1500316-click?language=objc)
+- [click (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/1500677-click?language=objc)
 
 ### macos: clickAndHold
 
@@ -95,11 +100,16 @@ Perform long click gesture on an element or by relative/absolute coordinates
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-element | string | if `x` or `y` are unset | Unique identifier of the element to perform the long click on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
-x | number | if `y` is set or `element` is unset | long click X coordinate | 100
-y | number | if `y` is set or `element` is unset | long click Y coordinate | 100
+elementId ("element" prior to Appium v 1.22) | string | if `x` or `y` are unset | Unique identifier of the element to perform the long click on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
+x | number | if `y` is set or `elementId` is unset | long click X coordinate | 100
+y | number | if `y` is set or `elementId` is unset | long click Y coordinate | 100
 duration | number | yes | The number of float seconds to hold the mouse button | 2.5
 keyModifierFlags | number | no | if set then the given key modifiers will be applied while long click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+
+#### References
+
+- [pressForDuration: (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1618663-pressforduration?language=objc)
+- [pressForDuration: (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/1615002-pressforduration?language=objc)
 
 ### macos: scroll
 
@@ -109,12 +119,17 @@ Perform scroll gesture on an element or by relative/absolute coordinates
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-element | string | if `x` or `y` are unset | Unique identifier of the element to be scrolled. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
-x | number | if `y` is set or `element` is unset | scroll X coordinate | 100
-y | number | if `y` is set or `element` is unset | scroll Y coordinate | 100
+elementId ("element" prior to Appium v 1.22) | string | if `x` or `y` are unset | Unique identifier of the element to be scrolled. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
+x | number | if `y` is set or `elementId` is unset | scroll X coordinate | 100
+y | number | if `y` is set or `elementId` is unset | scroll Y coordinate | 100
 deltaX | number | yes | Horizontal delta as float number. Could be negative | 100
 deltaY | number | yes | vertical delta as float number. Could be negative | 100
 keyModifierFlags | number | no | if set then the given key modifiers will be applied while scroll is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+
+#### References
+
+- [scrollByDeltaX:deltaY: (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1500758-scrollbydeltax?language=objc)
+- [scrollByDeltaX:deltaY: (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate?language=objc)
 
 ### macos: rightClick
 
@@ -124,10 +139,17 @@ Perform right click gesture on an element or by relative/absolute coordinates
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-element | string | if `x` or `y` are unset | Unique identifier of the element to perform the right click on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
-x | number | if `y` is set or `element` is unset | right click X coordinate | 100
-y | number | if `y` is set or `element` is unset | right click Y coordinate | 100
+elementId ("element" prior to Appium v 1.22) | string | if `x` or `y` are unset | Unique identifier of the element to perform the right click on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
+x | number | if `y` is set or `elementId` is unset | right click X coordinate | 100
+y | number | if `y` is set or `elementId` is unset | right click Y coordinate | 100
 keyModifierFlags | number | no | if set then the given key modifiers will be applied while right click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+
+#### References
+
+- [rightClick (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1500469-rightclick?language=objc)
+- [rightClick (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/1500503-rightclick?language=objc)
+
+### macos: rightClick
 
 ### macos: hover
 
@@ -137,10 +159,15 @@ Perform hover gesture on an element or by relative/absolute coordinates
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-element | string | if `x` or `y` are unset | Unique identifier of the element to perform the hover on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
-x | number | if `y` is set or `element` is unset | long click X coordinate | 100
-y | number | if `y` is set or `element` is unset | long click Y coordinate | 100
+elementId ("element" prior to Appium v 1.22) | string | if `x` or `y` are unset | Unique identifier of the element to perform the hover on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
+x | number | if `y` is set or `elementId` is unset | long click X coordinate | 100
+y | number | if `y` is set or `elementId` is unset | long click Y coordinate | 100
 keyModifierFlags | number | no | if set then the given key modifiers will be applied while hover is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+
+#### References
+
+- [hover (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1500437-hover?language=objc)
+- [hover (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/1501021-hover?language=objc)
 
 ### macos: doubleClick
 
@@ -150,10 +177,15 @@ Perform double click gesture on an element or by relative/absolute coordinates
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-element | string | if `x` or `y` are unset | Unique identifier of the element to perform the double click on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
-x | number | if `y` is set or `element` is unset | double click X coordinate | 100
-y | number | if `y` is set or `element` is unset | double click Y coordinate | 100
+elementId ("element" prior to Appium v 1.22) | string | if `x` or `y` are unset | Unique identifier of the element to perform the double click on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
+x | number | if `y` is set or `elementId` is unset | double click X coordinate | 100
+y | number | if `y` is set or `elementId` is unset | double click Y coordinate | 100
 keyModifierFlags | number | no | if set then the given key modifiers will be applied while click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+
+#### References
+
+- [doubleClick (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1500571-doubleclick?language=objc)
+- [doubleClick (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/1500302-doubleclick?language=objc)
 
 ### macos: clickAndDrag
 
@@ -163,14 +195,19 @@ Perform long click and drag gesture on an element or by absolute coordinates
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-sourceElement | string | if `startX`, `startY`, `endX` and `endY` are unset or if `destinationElement` is set | Uuid of the element to start the drag from. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
-destinationElement | string | if `startX`, `startY`, `endX` and `endY` are unset or if `sourceElement` is set | Uuid of the element to end the drag on. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0745
-startX | number | if `sourceElement` and `destinationElement` are unset | starting X coordinate | 100
-startY | number | if `sourceElement` and `destinationElement` are unset | starting Y coordinate | 110
-endX | number | if `sourceElement` and `destinationElement` are unset | end X coordinate | 200
-endY | number | if `sourceElement` and `destinationElement` are unset | end Y coordinate | 220
+sourceElementId ("sourceElement" prior to Appium v 1.22) | string | if `startX`, `startY`, `endX` and `endY` are unset or if `destinationElementId` is set | Uuid of the element to start the drag from. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
+destinationElementId ("destinationElement" prior to Appium v 1.22) | string | if `startX`, `startY`, `endX` and `endY` are unset or if `sourceElementId` is set | Uuid of the element to end the drag on. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0745
+startX | number | if `sourceElementId` and `destinationElementId` are unset | starting X coordinate | 100
+startY | number | if `sourceElementId` and `destinationElementId` are unset | starting Y coordinate | 110
+endX | number | if `sourceElementId` and `destinationElementId` are unset | end X coordinate | 200
+endY | number | if `sourceElementId` and `destinationElementId` are unset | end Y coordinate | 220
 duration | number | yes | The number of float seconds to hold the mouse button | 2.5
 keyModifierFlags | number | no | if set then the given key modifiers will be applied while drag is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+
+#### References
+
+- [clickForDuration:thenDragToCoordinate: (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1500989-clickforduration?language=objc)
+- [clickForDuration:thenDragToCoordinate: (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/1500369-clickforduration?language=objc)
 
 ### macos: clickDragAndDrag
 
@@ -180,15 +217,44 @@ Perform long click, drag and hold gesture on an element or by absolute coordinat
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-sourceElement | string | if `startX`, `startY`, `endX` and `endY` are unset or if `destinationElement` is set | Uuid of the element to start the drag from. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
-destinationElement | string | if `startX`, `startY`, `endX` and `endY` are unset or if `sourceElement` is set | Uuid of the element to end the drag on. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0745
-startX | number | if `sourceElement` and `destinationElement` are unset | starting X coordinate | 100
-startY | number | if `sourceElement` and `destinationElement` are unset | starting Y coordinate | 110
-endX | number | if `sourceElement` and `destinationElement` are unset | end X coordinate | 200
-endY | number | if `sourceElement` and `destinationElement` are unset | end Y coordinate | 220
+sourceElementId ("sourceElement" prior to Appium v 1.22) | string | if `startX`, `startY`, `endX` and `endY` are unset or if `destinationElementId` is set | Uuid of the element to start the drag from. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
+destinationElementId ("destinationElement" prior to Appium v 1.22) | string | if `startX`, `startY`, `endX` and `endY` are unset or if `sourceElementId` is set | Uuid of the element to end the drag on. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0745
+startX | number | if `sourceElementId` and `destinationElementId` are unset | starting X coordinate | 100
+startY | number | if `sourceElementId` and `destinationElementId` are unset | starting Y coordinate | 110
+endX | number | if `sourceElementId` and `destinationElementId` are unset | end X coordinate | 200
+endY | number | if `sourceElementId` and `destinationElementId` are unset | end Y coordinate | 220
 duration | number | yes | The number of float seconds to hold the mouse button | 2.5
 velocity | number | no | Dragging velocity in pixels per second. If not provided then the default velocity is used. See official documentation on [XCUIGestureVelocity structure](https://developer.apple.com/documentation/xctest/xcuigesturevelocity) for more details | 2500
 keyModifierFlags | number | no | if set then the given key modifiers will be applied while drag is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+
+#### References
+
+- [clickForDuration:thenDragToElement:withVelocity:thenHoldForDuration: (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/3553192-clickforduration?language=objc)
+- [clickForDuration:thenDragToElement:withVelocity:thenHoldForDuration: (XCUICoordinate)](hhttps://developer.apple.com/documentation/xctest/xcuicoordinate/3553191-clickforduration?language=objc)
+
+### mobile: swipe
+
+This extension performs a swipe gesture on the particular screen element or by given coordinates.
+The API is only available on macOS since Xcode SDK 13.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+elementId ("element" prior to Appium v 1.22) | string | if `x` or `y` are unset | The internal element identifier (as hexadecimal hash string) to swipe on. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | fe50b60b-916d-420b-8728-ee2072ec53eb
+x | number | if `y` is set or `elementId` is unset | long click X coordinate | 100
+y | number | if `y` is set or `elementId` is unset | long click Y coordinate | 100
+direction | Either 'up', 'down', 'left' or 'right' | yes | The direction in which to swipe | up
+velocity | number | no | The value is measured in pixels per second and same values could behave differently on different devices depending on their display density. Higher values make swipe gesture faster (which usually scrolls larger areas if we apply it to a list) and lower values slow it down. Only values greater than zero have effect. | 250
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while swipe is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+
+#### References
+
+- [swipeDown (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1618664-swipedown?language=objc)
+- [swipeDown (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/3752780-swipedown?language=objc)
+- [swipeDownWithVelocity: (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/3551694-swipedownwithvelocity?language=objc)
+- [swipeDownWithVelocity: (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/3752781-swipedownwithvelocity?language=objc)
+- ...
 
 ### macos: keys
 
@@ -198,8 +264,12 @@ Send keys to the given element or to the application under test
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-element | string | no | Unique identifier of the element to send the keys to. If unset then keys are sent to the current application under test. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
+elementId ("element" prior to Appium v 1.22) | string | no | Unique identifier of the element to send the keys to. If unset then keys are sent to the current application under test. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
 keys | array | yes | Array of keys to type. Each item could either be a string, that represents a key itself (see the official documentation on XCUIElement's [typeKey:modifierFlags: method](https://developer.apple.com/documentation/xctest/xcuielement/1500604-typekey?language=objc) and on [XCUIKeyboardKey constants](https://developer.apple.com/documentation/xctest/xcuikeyboardkey?language=objc)) or a dictionary with `key` and `modifierFlags` entries, if the key should also be entered with modifiers. | ['h', 'i'] or [{key: 'h', modifierFlags: 1 << 1}, {key: 'i', modifierFlags: 1 << 2}] or ['XCUIKeyboardKeyEscape'] |
+
+#### References
+
+- [typeKey:modifierFlags:](https://developer.apple.com/documentation/xctest/xcuielement/1500604-typekey?language=objc)
 
 ### macos: source
 

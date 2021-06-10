@@ -31,6 +31,8 @@
 #import "XCUIElement+AMAttributes.h"
 #import "XCUIElement+AMCoordinates.h"
 #import "XCUIElement+AMEditable.h"
+#import "XCUIElement+AMSwipe.h"
+#import "XCUICoordinate+AMSwipe.h"
 
 @interface FBElementCommands ()
 @end
@@ -82,6 +84,9 @@
 
     [[FBRoute POST:@"/wda/element/:uuid/clickAndHold"] respondWithTarget:self action:@selector(handleClickAndHold:)],
     [[FBRoute POST:@"/wda/clickAndHold"] respondWithTarget:self action:@selector(handleClickAndHoldCoordinate:)],
+
+    [[FBRoute POST:@"/wda/element/:uuid/swipe"] respondWithTarget:self action:@selector(handleSwipe:)],
+    [[FBRoute POST:@"/wda/swipe"] respondWithTarget:self action:@selector(handleSwipeCoordinate:)],
 
     [[FBRoute POST:@"/wda/element/:uuid/keys"] respondWithTarget:self action:@selector(handleKeys:)],
     [[FBRoute POST:@"/wda/keys"] respondWithTarget:self action:@selector(handleKeys:)],
@@ -430,6 +435,69 @@
     }
   }];
   return FBResponseWithOK();
+}
+
++ (NSString *)requireDirectionWithRequest:(FBRouteRequest *)request
+{
+  NSString *direction = [request requireStringArgumentWithName:@"direction"];
+  NSArray<NSString *> *supportedDirections = @[@"up", @"down", @"left", @"right"];
+  if (![supportedDirections containsObject:direction.lowercaseString]) {
+    NSString *reason = [NSString stringWithFormat: @"Unsupported swipe direction '%@'. Only the following directions are supported: %@", direction, supportedDirections];
+    @throw [NSException exceptionWithName:FBInvalidArgumentException
+                                   reason:reason
+                                 userInfo:@{}];
+  }
+  return direction;
+}
+
++ (id<FBResponsePayload>)handleSwipe:(FBRouteRequest *)request
+{
+  FBElementCache *elementCache = request.session.elementCache;
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
+  NSString *direction = [self.class requireDirectionWithRequest:request];
+  id x = request.arguments[@"x"];
+  id y = request.arguments[@"y"];
+  __block id<FBResponsePayload> response = nil;
+  [self.class excuteRespectingKeyModifiersWithRequest:request block:^void() {
+    NSError *error;
+    if (nil != x && nil != y) {
+      CGPoint swipePoint = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
+      XCUICoordinate *coordinate = [element am_coordinateWithPoint:swipePoint];
+      if (![coordinate am_swipeWithDirection:direction.lowercaseString
+                                    velocity:request.arguments[@"velocity"]
+                                       error:&error]) {
+        response = FBResponseWithStatus([FBCommandStatus unknownErrorWithMessage:error.description
+                                                                       traceback:nil]);
+      }
+    } else {
+      if (![element am_swipeWithDirection:direction.lowercaseString
+                                 velocity:request.arguments[@"velocity"]
+                                    error:&error]) {
+        response = FBResponseWithStatus([FBCommandStatus unknownErrorWithMessage:error.description
+                                                                       traceback:nil]);
+      }
+    }
+  }];
+  return response ?: FBResponseWithOK();
+}
+
++ (id<FBResponsePayload>)handleSwipeCoordinate:(FBRouteRequest *)request
+{
+  CGPoint point = CGPointMake((CGFloat)[request requireDoubleArgumentWithName:@"x"],
+                              (CGFloat)[request requireDoubleArgumentWithName:@"y"]);
+  XCUICoordinate *coordinate = [request.session.currentApplication am_coordinateWithPoint:point];
+  NSString *direction = [self.class requireDirectionWithRequest:request];
+  __block id<FBResponsePayload> response = nil;
+  [self.class excuteRespectingKeyModifiersWithRequest:request block:^void() {
+    NSError *error;
+    if (![coordinate am_swipeWithDirection:direction.lowercaseString
+                                  velocity:request.arguments[@"velocity"]
+                                     error:&error]) {
+      response = FBResponseWithStatus([FBCommandStatus unknownErrorWithMessage:error.description
+                                                                     traceback:nil]);
+    }
+  }];
+  return response ?: FBResponseWithOK();
 }
 
 + (id<FBResponsePayload>)handleClickCoordinate:(FBRouteRequest *)request

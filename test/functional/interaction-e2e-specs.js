@@ -87,7 +87,7 @@ describe('Mac2Driver - elements interaction', function () {
     const el = await driver.elementByClassName('XCUIElementTypeTextView');
     const flagsCtrl = 1 << 2;
     await driver.execute('macos: click', {
-      element: el,
+      elementId: el,
       keyModifierFlags: flagsCtrl,
     });
     const els = await driver.elements('-ios predicate string', `title == 'Import Image'`);
