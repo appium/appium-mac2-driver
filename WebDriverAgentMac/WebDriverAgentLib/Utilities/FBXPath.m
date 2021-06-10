@@ -286,9 +286,9 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
   return xpathObj;
 }
 
-+ (nullable NSString *)safeXmlStringWithString:(NSString *)str
++ (nullable NSString *)safeXmlStringWithString:(nullable NSString *)str
 {
-  return nil == str ? nil : [str fb_xmlSafeStringWithReplacement:@""];
+  return [str fb_xmlSafeStringWithReplacement:@""];
 }
 
 + (int)recordElementAttributes:(xmlTextWriterPtr)writer
