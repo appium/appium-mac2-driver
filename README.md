@@ -357,6 +357,7 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 command | string | yes if `script` is not provided | AppleScript command to execute | `do shell script "echo hello"`
 script | string | yes if `command` is not provided | AppleScript script to execute | `do shell script "echo hello"\ndo shell script "echo hello2"`
+language | string | no | Overrides the scripting language. Basically, sets the value of `-l` command line argument of `osascript` tool. If unset the AppleScript language is assumed. | JavaScript
 timeout | number | no | The number of seconds to wait until a long-running blocking command is finished. An error is thrown if the command is still running after this timeout expires. | 60000
 cwd | string | no | The path to an existing folder which is going to be set as the working directory for the command/script being executed. | `/tmp`
 
