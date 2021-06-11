@@ -178,6 +178,13 @@
 		71B00E9B2566D7B00010DA73 /* WebDriverAgentLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7199B3AB2565B122000B5C51 /* WebDriverAgentLib.framework */; };
 		71B00EA02566D9570010DA73 /* AMFindElementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B00E9F2566D9570010DA73 /* AMFindElementTests.m */; };
 		71B00EA62566DBAF0010DA73 /* AMSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B00EA52566DBAF0010DA73 /* AMSourceTests.m */; };
+		71B8B67926724B9F009CE50C /* XCUIElement+AMSwipe.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B8B67726724B9F009CE50C /* XCUIElement+AMSwipe.h */; };
+		71B8B67A26724B9F009CE50C /* XCUIElement+AMSwipe.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B8B67826724B9F009CE50C /* XCUIElement+AMSwipe.m */; };
+		71B8B67D26725A01009CE50C /* XCUICoordinate+AMSwipe.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B8B67B26725A01009CE50C /* XCUICoordinate+AMSwipe.h */; };
+		71B8B67E26725A01009CE50C /* XCUICoordinate+AMSwipe.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B8B67C26725A01009CE50C /* XCUICoordinate+AMSwipe.m */; };
+		71B8B68126726369009CE50C /* AMSwipeHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B8B67F26726369009CE50C /* AMSwipeHelpers.h */; };
+		71B8B68226726369009CE50C /* AMSwipeHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B8B68026726369009CE50C /* AMSwipeHelpers.m */; };
+		71B8B684267265D7009CE50C /* AMVariousElementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B8B683267265D7009CE50C /* AMVariousElementTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -400,6 +407,13 @@
 		71B00E9C2566D7F10010DA73 /* AMIntegrationTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMIntegrationTestCase.h; sourceTree = "<group>"; };
 		71B00E9F2566D9570010DA73 /* AMFindElementTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMFindElementTests.m; sourceTree = "<group>"; };
 		71B00EA52566DBAF0010DA73 /* AMSourceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMSourceTests.m; sourceTree = "<group>"; };
+		71B8B67726724B9F009CE50C /* XCUIElement+AMSwipe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIElement+AMSwipe.h"; sourceTree = "<group>"; };
+		71B8B67826724B9F009CE50C /* XCUIElement+AMSwipe.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIElement+AMSwipe.m"; sourceTree = "<group>"; };
+		71B8B67B26725A01009CE50C /* XCUICoordinate+AMSwipe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUICoordinate+AMSwipe.h"; sourceTree = "<group>"; };
+		71B8B67C26725A01009CE50C /* XCUICoordinate+AMSwipe.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUICoordinate+AMSwipe.m"; sourceTree = "<group>"; };
+		71B8B67F26726369009CE50C /* AMSwipeHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMSwipeHelpers.h; sourceTree = "<group>"; };
+		71B8B68026726369009CE50C /* AMSwipeHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMSwipeHelpers.m; sourceTree = "<group>"; };
+		71B8B683267265D7009CE50C /* AMVariousElementTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMVariousElementTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -577,6 +591,8 @@
 				719E6A6D25822DB800777988 /* XCUIApplication+AMUIInterruptions.m */,
 				7180C1DE257A9410008FA870 /* XCUIApplication+FBW3CActions.h */,
 				7180C1DF257A9410008FA870 /* XCUIApplication+FBW3CActions.m */,
+				71B8B67B26725A01009CE50C /* XCUICoordinate+AMSwipe.h */,
+				71B8B67C26725A01009CE50C /* XCUICoordinate+AMSwipe.m */,
 				718D2BD725670A76005F533B /* XCUIElement+AMAttributes.h */,
 				718D2BD825670A76005F533B /* XCUIElement+AMAttributes.m */,
 				718D2BE7256713FD005F533B /* XCUIElement+AMCoordinates.h */,
@@ -585,6 +601,8 @@
 				718D2C0C2567AA03005F533B /* XCUIElement+AMEditable.m */,
 				7180C214257AA707008FA870 /* XCUIElement+AMHitPoint.h */,
 				7180C215257AA707008FA870 /* XCUIElement+AMHitPoint.m */,
+				71B8B67726724B9F009CE50C /* XCUIElement+AMSwipe.h */,
+				71B8B67826724B9F009CE50C /* XCUIElement+AMSwipe.m */,
 				713A9D2B25669E4F00118D07 /* XCUIElement+FBClassChain.h */,
 				713A9D2A25669E4E00118D07 /* XCUIElement+FBClassChain.m */,
 				713A9D2625669A6B00118D07 /* XCUIElement+FBFind.h */,
@@ -665,6 +683,8 @@
 				718D2BF225678B4E005F533B /* AMSnapshotUtils.m */,
 				7151AD7E2564F56E008B8B2A /* AMSettings.h */,
 				7151ADAC2564F570008B8B2A /* AMSettings.m */,
+				71B8B67F26726369009CE50C /* AMSwipeHelpers.h */,
+				71B8B68026726369009CE50C /* AMSwipeHelpers.m */,
 				7180C1C8257A9336008FA870 /* FBBaseActionsSynthesizer.h */,
 				7180C1C9257A9336008FA870 /* FBBaseActionsSynthesizer.m */,
 				7151AD7B2564F56E008B8B2A /* FBClassChainQueryParser.h */,
@@ -760,6 +780,7 @@
 				71B00E8D2566D4BA0010DA73 /* AMIntegrationTestCase.m */,
 				718D2C282567E6D0005F533B /* AMSessionTests.m */,
 				71B00EA52566DBAF0010DA73 /* AMSourceTests.m */,
+				71B8B683267265D7009CE50C /* AMVariousElementTests.m */,
 				7180C21C257AC27F008FA870 /* AMW3CActionsTests.m */,
 				718D2C132567B465005F533B /* FBTestMacros.h */,
 				71B00E8F2566D4BA0010DA73 /* Info.plist */,
@@ -807,11 +828,13 @@
 				7109C01C2565B58C006BFD13 /* FBSession-Private.h in Headers */,
 				7109BFED2565B546006BFD13 /* FBElementUtils.h in Headers */,
 				7109C05D2565B5F6006BFD13 /* HTTPMessage.h in Headers */,
+				71B8B67D26725A01009CE50C /* XCUICoordinate+AMSwipe.h in Headers */,
 				7168D5AE258B849B00EEFA12 /* LRUCache.h in Headers */,
 				7109C03D2565B5BF006BFD13 /* NSPredicate+FBFormat.h in Headers */,
 				7180C1DA257A9369008FA870 /* AMActionCommands.h in Headers */,
 				713A9D2D25669E4F00118D07 /* XCUIElement+FBClassChain.h in Headers */,
 				7109C0422565B5C7006BFD13 /* XCUIApplication+AMHelpers.h in Headers */,
+				71B8B67926724B9F009CE50C /* XCUIElement+AMSwipe.h in Headers */,
 				7109BFBD2565B4FC006BFD13 /* FBElementTypeTransformer.h in Headers */,
 				7180C1D2257A9348008FA870 /* FBW3CActionsSynthesizer.h in Headers */,
 				7109BFC72565B50B006BFD13 /* FBLogger.h in Headers */,
@@ -844,6 +867,7 @@
 				7109C05B2565B5F3006BFD13 /* HTTPLogging.h in Headers */,
 				7109C0472565B5DB006BFD13 /* DDNumber.h in Headers */,
 				7109C0772565B616006BFD13 /* RoutingConnection.h in Headers */,
+				71B8B68126726369009CE50C /* AMSwipeHelpers.h in Headers */,
 				7180C1D3257A9348008FA870 /* FBW3CActionsHelpers.h in Headers */,
 				7109C0172565B581006BFD13 /* FBRouteRequest.h in Headers */,
 				7180C216257AA707008FA870 /* XCUIElement+AMHitPoint.h in Headers */,
@@ -1091,6 +1115,7 @@
 				7109C0592565B5F1006BFD13 /* HTTPConnection.m in Sources */,
 				713A9D12256683E900118D07 /* XCUIElementQuery+AMHelpers.m in Sources */,
 				7109C01A2565B58A006BFD13 /* FBRouteRequest.m in Sources */,
+				71B8B67A26724B9F009CE50C /* XCUIElement+AMSwipe.m in Sources */,
 				719E6A6F25822DB800777988 /* XCUIApplication+AMUIInterruptions.m in Sources */,
 				7109C07D2565B61D006BFD13 /* RoutingHTTPServer.m in Sources */,
 				7109C06D2565B60A006BFD13 /* Route.m in Sources */,
@@ -1098,11 +1123,13 @@
 				7109C0022565B561006BFD13 /* FBResponseJSONPayload.m in Sources */,
 				7109C00C2565B56E006BFD13 /* FBRuntimeUtils.m in Sources */,
 				7109C0072565B568006BFD13 /* FBResponsePayload.m in Sources */,
+				71B8B68226726369009CE50C /* AMSwipeHelpers.m in Sources */,
 				713A9D2C25669E4F00118D07 /* XCUIElement+FBClassChain.m in Sources */,
 				7109BFE62565B53D006BFD13 /* FBCommandStatus.m in Sources */,
 				7180C217257AA707008FA870 /* XCUIElement+AMHitPoint.m in Sources */,
 				7109C0272565B59D006BFD13 /* FBWebServer.m in Sources */,
 				7109C0362565B5B4006BFD13 /* FBUnknownCommands.m in Sources */,
+				71B8B67E26725A01009CE50C /* XCUICoordinate+AMSwipe.m in Sources */,
 				718D2C332567FED3005F533B /* AMSessionCapabilities.m in Sources */,
 				7109C02C2565B5A7006BFD13 /* FBSessionCommands.m in Sources */,
 				718EE0BB256B0A0300B46325 /* NSString+FBXMLSafeString.m in Sources */,
@@ -1129,6 +1156,7 @@
 				71B00EA02566D9570010DA73 /* AMFindElementTests.m in Sources */,
 				718D2C082567A028005F533B /* AMElementAttributesTests.m in Sources */,
 				7180C21D257AC27F008FA870 /* AMW3CActionsTests.m in Sources */,
+				71B8B684267265D7009CE50C /* AMVariousElementTests.m in Sources */,
 				718D2C292567E6D0005F533B /* AMSessionTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
