@@ -79,17 +79,30 @@
     [[FBRoute POST:@"/wda/element/:uuid/clickAndDrag"] respondWithTarget:self action:@selector(handleClickAndDrag:)],
     [[FBRoute POST:@"/wda/clickAndDrag"] respondWithTarget:self action:@selector(handleClickAndDragCoordinate:)],
 
-    [[FBRoute POST:@"/wda/element/:uuid/clickDragAndHold"] respondWithTarget:self action:@selector(handleClickDragAndHold:)],
-    [[FBRoute POST:@"/wda/clickDragAndHold"] respondWithTarget:self action:@selector(handleClickDragAndHoldCoordinate:)],
-
-    [[FBRoute POST:@"/wda/element/:uuid/clickAndHold"] respondWithTarget:self action:@selector(handleClickAndHold:)],
-    [[FBRoute POST:@"/wda/clickAndHold"] respondWithTarget:self action:@selector(handleClickAndHoldCoordinate:)],
+    [[FBRoute POST:@"/wda/element/:uuid/clickAndDragAndHold"] respondWithTarget:self action:@selector(handleClickAndDragAndHold:)],
+    [[FBRoute POST:@"/wda/clickAndDragAndHold"] respondWithTarget:self action:@selector(handleClickAndDragAndHoldCoordinate:)],
 
     [[FBRoute POST:@"/wda/element/:uuid/swipe"] respondWithTarget:self action:@selector(handleSwipe:)],
     [[FBRoute POST:@"/wda/swipe"] respondWithTarget:self action:@selector(handleSwipeCoordinate:)],
 
     [[FBRoute POST:@"/wda/element/:uuid/keys"] respondWithTarget:self action:@selector(handleKeys:)],
     [[FBRoute POST:@"/wda/keys"] respondWithTarget:self action:@selector(handleKeys:)],
+
+    // Touch Bar
+    [[FBRoute POST:@"/wda/element/:uuid/tap"] respondWithTarget:self action:@selector(handleTap:)],
+    [[FBRoute POST:@"/wda/tap"] respondWithTarget:self action:@selector(handleTapCoordinate:)],
+
+    [[FBRoute POST:@"/wda/element/:uuid/doubleTap"] respondWithTarget:self action:@selector(handleDoubleTap:)],
+    [[FBRoute POST:@"/wda/doubleTap"] respondWithTarget:self action:@selector(handleDoubleTapCoordinate:)],
+
+    [[FBRoute POST:@"/wda/element/:uuid/press"] respondWithTarget:self action:@selector(handlePress:)],
+    [[FBRoute POST:@"/wda/press"] respondWithTarget:self action:@selector(handlePressCoordinate:)],
+
+    [[FBRoute POST:@"/wda/element/:uuid/pressAndDrag"] respondWithTarget:self action:@selector(handlePressAndDrag:)],
+    [[FBRoute POST:@"/wda/pressAndDrag"] respondWithTarget:self action:@selector(handlePressAndDragCoordinate:)],
+
+    [[FBRoute POST:@"/wda/element/:uuid/pressAndDragAndHold"] respondWithTarget:self action:@selector(handlePressAndDragAndHold:)],
+    [[FBRoute POST:@"/wda/pressAndDragAndHold"] respondWithTarget:self action:@selector(handlePressAndDragAndHold:)],
   ];
 }
 
@@ -305,39 +318,6 @@
   return FBResponseWithOK();
 }
 
-+ (id<FBResponsePayload>)handleClickAndHold:(FBRouteRequest *)request
-{
-  FBElementCache *elementCache = request.session.elementCache;
-  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
-  id x = request.arguments[@"x"];
-  id y = request.arguments[@"y"];
-  NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
-  [self.class excuteRespectingKeyModifiersWithRequest:request
-                                                block:^void() {
-    if (nil != x && nil != y) {
-      CGPoint point = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
-      XCUICoordinate *coordinate = [element am_coordinateWithPoint:point];
-      [coordinate pressForDuration:duration];
-    } else {
-      [element pressForDuration:duration];
-    }
-  }];
-  return FBResponseWithOK();
-}
-
-+ (id<FBResponsePayload>)handleClickAndHoldCoordinate:(FBRouteRequest *)request
-{
-  CGPoint point = CGPointMake((CGFloat)[request requireDoubleArgumentWithName:@"x"],
-                              (CGFloat)[request requireDoubleArgumentWithName:@"y"]);
-  XCUICoordinate *pressCoordinate = [request.session.currentApplication am_coordinateWithPoint:point];
-  NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
-  [self.class excuteRespectingKeyModifiersWithRequest:request
-                                                block:^void() {
-    [pressCoordinate pressForDuration:duration];
-  }];
-  return FBResponseWithOK();
-}
-
 + (id<FBResponsePayload>)handleClickAndDrag:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
@@ -369,7 +349,7 @@
   return FBResponseWithOK();
 }
 
-+ (id<FBResponsePayload>)handleClickDragAndHold:(FBRouteRequest *)request
++ (id<FBResponsePayload>)handleClickAndDragAndHold:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
   XCUIElement *srcElement = [elementCache elementForUUID:request.elementUuid];
@@ -392,7 +372,7 @@
   return FBResponseWithOK();
 }
 
-+ (id<FBResponsePayload>)handleClickDragAndHoldCoordinate:(FBRouteRequest *)request
++ (id<FBResponsePayload>)handleClickAndDragAndHoldCoordinate:(FBRouteRequest *)request
 {
   XCUIApplication *app = request.session.currentApplication;
   CGFloat startX = (CGFloat)[request requireDoubleArgumentWithName:@"startX"];
@@ -549,6 +529,181 @@
                                                                          traceback:nil]);
     }
   }
+  return FBResponseWithOK();
+}
+
++ (id<FBResponsePayload>)handleTap:(FBRouteRequest *)request
+{
+  FBElementCache *elementCache = request.session.elementCache;
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
+  id x = request.arguments[@"x"];
+  id y = request.arguments[@"y"];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    if (nil != x && nil != y) {
+      CGPoint tapPoint = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
+      XCUICoordinate *coordinate = [element am_coordinateWithPoint:tapPoint];
+      [coordinate tap];
+    } else {
+      [element tap];
+    }
+  }];
+  return FBResponseWithOK();
+}
+
++ (id<FBResponsePayload>)handleTapCoordinate:(FBRouteRequest *)request
+{
+  CGPoint point = CGPointMake((CGFloat)[request requireDoubleArgumentWithName:@"x"],
+                              (CGFloat)[request requireDoubleArgumentWithName:@"y"]);
+  XCUICoordinate *coordinate = [request.session.currentApplication.touchBars.firstMatch am_coordinateWithPoint:point];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [coordinate tap];
+  }];
+  return FBResponseWithOK();
+}
+
++ (id<FBResponsePayload>)handleDoubleTap:(FBRouteRequest *)request
+{
+  FBElementCache *elementCache = request.session.elementCache;
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
+  id x = request.arguments[@"x"];
+  id y = request.arguments[@"y"];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    if (nil != x && nil != y) {
+      CGPoint point = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
+      XCUICoordinate *coordinate = [element am_coordinateWithPoint:point];
+      [coordinate doubleTap];
+    } else {
+      [element doubleTap];
+    }
+  }];
+  return FBResponseWithOK();
+}
+
++ (id<FBResponsePayload>)handleDoubleTapCoordinate:(FBRouteRequest *)request
+{
+  CGPoint point = CGPointMake((CGFloat)[request requireDoubleArgumentWithName:@"x"],
+                              (CGFloat)[request requireDoubleArgumentWithName:@"y"]);
+  XCUICoordinate *doubleTapCoordinate = [request.session.currentApplication.touchBars.firstMatch am_coordinateWithPoint:point];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [doubleTapCoordinate doubleTap];
+  }];
+  return FBResponseWithOK();
+}
+
++ (id<FBResponsePayload>)handlePress:(FBRouteRequest *)request
+{
+  FBElementCache *elementCache = request.session.elementCache;
+  XCUIElement *element = [elementCache elementForUUID:request.elementUuid];
+  id x = request.arguments[@"x"];
+  id y = request.arguments[@"y"];
+  NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    if (nil != x && nil != y) {
+      CGPoint point = CGPointMake((CGFloat)[x doubleValue], (CGFloat)[y doubleValue]);
+      XCUICoordinate *coordinate = [element am_coordinateWithPoint:point];
+      [coordinate pressForDuration:duration];
+    } else {
+      [element pressForDuration:duration];
+    }
+  }];
+  return FBResponseWithOK();
+}
+
++ (id<FBResponsePayload>)handlePressCoordinate:(FBRouteRequest *)request
+{
+  NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
+  CGPoint point = CGPointMake((CGFloat)[request requireDoubleArgumentWithName:@"x"],
+                              (CGFloat)[request requireDoubleArgumentWithName:@"y"]);
+  XCUICoordinate *coordinate = [request.session.currentApplication.touchBars.firstMatch am_coordinateWithPoint:point];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [coordinate pressForDuration:duration];
+  }];
+  return FBResponseWithOK();
+}
+
++ (id<FBResponsePayload>)handlePressAndDrag:(FBRouteRequest *)request
+{
+  FBElementCache *elementCache = request.session.elementCache;
+  XCUIElement *srcElement = [elementCache elementForUUID:request.elementUuid];
+  NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
+  NSDictionary *dest = [request requireDictionaryArgumentWithName:@"dest"];
+  XCUIElement *dstElement = [elementCache elementForUUID:(NSString *)FBExtractElement(dest)];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [srcElement pressForDuration:duration thenDragToElement:dstElement];
+  }];
+  return FBResponseWithOK();
+}
+
++ (id<FBResponsePayload>)handlePressAndDragCoordinate:(FBRouteRequest *)request
+{
+  XCUIElement *touchBar = request.session.currentApplication.touchBars.firstMatch;
+  CGFloat startX = (CGFloat)[request requireDoubleArgumentWithName:@"startX"];
+  CGFloat startY = (CGFloat)[request requireDoubleArgumentWithName:@"startY"];
+  CGFloat endX = (CGFloat)[request requireDoubleArgumentWithName:@"endX"];
+  CGFloat endY = (CGFloat)[request requireDoubleArgumentWithName:@"endY"];
+  NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
+  XCUICoordinate *start = [touchBar am_coordinateWithX:startX andY:startY];
+  XCUICoordinate *end = [touchBar am_coordinateWithX:endX andY:endY];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [start pressForDuration:duration thenDragToCoordinate:end];
+  }];
+  return FBResponseWithOK();
+}
+
++ (id<FBResponsePayload>)handlePressAndDragAndHold:(FBRouteRequest *)request
+{
+  FBElementCache *elementCache = request.session.elementCache;
+  XCUIElement *srcElement = [elementCache elementForUUID:request.elementUuid];
+  NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
+  NSTimeInterval holdDuration = [request requireDoubleArgumentWithName:@"holdDuration"];
+  NSDictionary *dest = [request requireDictionaryArgumentWithName:@"dest"];
+  XCUIElement *dstElement = [elementCache elementForUUID:(NSString *)FBExtractElement(dest)];
+  id velocityObj = request.arguments[@"velocity"];
+  CGFloat velocity = XCUIGestureVelocityDefault;
+  if (nil != velocityObj) {
+    velocity = (CGFloat)[velocityObj doubleValue];
+  }
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [srcElement pressForDuration:duration
+               thenDragToElement:dstElement
+                    withVelocity:velocity
+             thenHoldForDuration:holdDuration];
+  }];
+  return FBResponseWithOK();
+}
+
++ (id<FBResponsePayload>)handlePressAndDragAndHoldCoordinate:(FBRouteRequest *)request
+{
+  XCUIElement *touchBar = request.session.currentApplication.touchBars.firstMatch;
+  CGFloat startX = (CGFloat)[request requireDoubleArgumentWithName:@"startX"];
+  CGFloat startY = (CGFloat)[request requireDoubleArgumentWithName:@"startY"];
+  CGFloat endX = (CGFloat)[request requireDoubleArgumentWithName:@"endX"];
+  CGFloat endY = (CGFloat)[request requireDoubleArgumentWithName:@"endY"];
+  NSTimeInterval duration = [request requireDoubleArgumentWithName:@"duration"];
+  NSTimeInterval holdDuration = [request requireDoubleArgumentWithName:@"holdDuration"];
+  id velocityObj = request.arguments[@"velocity"];
+  CGFloat velocity = XCUIGestureVelocityDefault;
+  if (nil != velocityObj) {
+    velocity = (CGFloat)[velocityObj doubleValue];
+  }
+  XCUICoordinate *start = [touchBar am_coordinateWithX:startX andY:startY];
+  XCUICoordinate *end = [touchBar am_coordinateWithX:endX andY:endY];
+  [self.class excuteRespectingKeyModifiersWithRequest:request
+                                                block:^void() {
+    [start pressForDuration:duration
+       thenDragToCoordinate:end
+               withVelocity:velocity
+        thenHoldForDuration:holdDuration];
+  }];
   return FBResponseWithOK();
 }
 

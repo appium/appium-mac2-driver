@@ -92,25 +92,6 @@ keyModifierFlags | number | no | if set then the given key modifiers will be app
 - [click (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1500316-click?language=objc)
 - [click (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/1500677-click?language=objc)
 
-### macos: clickAndHold
-
-Perform long click gesture on an element or by relative/absolute coordinates
-
-#### Arguments
-
-Name | Type | Required | Description | Example
---- | --- | --- | --- | ---
-elementId ("element" prior to Appium v 1.22) | string | if `x` or `y` are unset | Unique identifier of the element to perform the long click on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
-x | number | if `y` is set or `elementId` is unset | long click X coordinate | 100
-y | number | if `y` is set or `elementId` is unset | long click Y coordinate | 100
-duration | number | yes | The number of float seconds to hold the mouse button | 2.5
-keyModifierFlags | number | no | if set then the given key modifiers will be applied while long click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
-
-#### References
-
-- [pressForDuration: (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1618663-pressforduration?language=objc)
-- [pressForDuration: (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/1615002-pressforduration?language=objc)
-
 ### macos: scroll
 
 Perform scroll gesture on an element or by relative/absolute coordinates
@@ -206,10 +187,10 @@ keyModifierFlags | number | no | if set then the given key modifiers will be app
 
 #### References
 
-- [clickForDuration:thenDragToCoordinate: (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1500989-clickforduration?language=objc)
+- [clickForDuration:thenDragToElement (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1500989-clickforduration?language=objc)
 - [clickForDuration:thenDragToCoordinate: (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/1500369-clickforduration?language=objc)
 
-### macos: clickDragAndDrag
+### macos: clickAndDragAndHold
 
 Perform long click, drag and hold gesture on an element or by absolute coordinates
 
@@ -230,7 +211,7 @@ keyModifierFlags | number | no | if set then the given key modifiers will be app
 #### References
 
 - [clickForDuration:thenDragToElement:withVelocity:thenHoldForDuration: (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/3553192-clickforduration?language=objc)
-- [clickForDuration:thenDragToElement:withVelocity:thenHoldForDuration: (XCUICoordinate)](hhttps://developer.apple.com/documentation/xctest/xcuicoordinate/3553191-clickforduration?language=objc)
+- [clickForDuration:thenDragToCoordinate:withVelocity:thenHoldForDuration: (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/3553191-clickforduration?language=objc)
 
 ### mobile: swipe
 
@@ -255,6 +236,106 @@ keyModifierFlags | number | no | if set then the given key modifiers will be app
 - [swipeDownWithVelocity: (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/3551694-swipedownwithvelocity?language=objc)
 - [swipeDownWithVelocity: (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/3752781-swipedownwithvelocity?language=objc)
 - ...
+
+### macos: press
+
+Perform press gesture on a Touch Bar element or by relative/absolute coordinates
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+elementId | string | if `x` or `y` are unset | Unique identifier of a Touch Bar element to perform the press on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute Touch Bar coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
+x | number | if `y` is set or `elementId` is unset | long click X coordinate | 100
+y | number | if `y` is set or `elementId` is unset | long click Y coordinate | 100
+duration | number | yes | The number of float seconds to hold the touch | 2.5
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while long click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+
+#### References
+
+- [pressForDuration: (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1618663-pressforduration?language=objc)
+- [pressForDuration: (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/1615002-pressforduration?language=objc)
+
+### macos: tap
+
+Perform tap gesture on a Touch Bar element or by relative/absolute coordinates
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+elementId | string | if `x` or `y` are unset | Unique identifier of a Touch Bar element to perform the tap on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute Touch Bar coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
+x | number | if `y` is set or `elementId` is unset | click X coordinate | 100
+y | number | if `y` is set or `elementId` is unset | click Y coordinate | 100
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+
+#### References
+
+- [tap (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1618666-tap?language=objc)
+- [tap (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/1615004-tap?language=objc)
+
+### macos: doubleTap
+
+Perform double tap gesture on a Touch Bar element or by relative/absolute coordinates
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+elementId | string | if `x` or `y` are unset | Unique identifier of a Touch Bar element to perform the double tap on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute Touch Bar coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
+x | number | if `y` is set or `elementId` is unset | click X coordinate | 100
+y | number | if `y` is set or `elementId` is unset | click Y coordinate | 100
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+
+#### References
+
+- [doubleTap (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1618673-doubletap?language=objc)
+- [doubleTap (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/1615005-doubletap?language=objc)
+
+### macos: pressAndDrag
+
+Perform long press and drag gesture on a Touch Bar element or by absolute Touch Bar coordinates
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+sourceElementId | string | if `startX`, `startY`, `endX` and `endY` are unset or if `destinationElementId` is set | Uuid of a Touch Bar element to start the drag from. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
+destinationElementId | string | if `startX`, `startY`, `endX` and `endY` are unset or if `sourceElementId` is set | Uuid of a Touch Bar element to end the drag on. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0745
+startX | number | if `sourceElementId` and `destinationElementId` are unset | starting X coordinate | 100
+startY | number | if `sourceElementId` and `destinationElementId` are unset | starting Y coordinate | 110
+endX | number | if `sourceElementId` and `destinationElementId` are unset | end X coordinate | 200
+endY | number | if `sourceElementId` and `destinationElementId` are unset | end Y coordinate | 220
+duration | number | yes | The number of float seconds to hold the touch | 2.5
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while drag is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+
+#### References
+
+- [pressForDuration:thenDragToElement: (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1618670-pressforduration?language=objc)
+- [pressForDuration:thenDragToCoordinate: (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/1615003-pressforduration?language=objc)
+
+### macos: pressAndDragAndHold
+
+Perform long press, drag and hold gesture on a Touch Bar element or by absolute Touch Bar coordinates
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+sourceElementId | string | if `startX`, `startY`, `endX` and `endY` are unset or if `destinationElementId` is set | Uuid of a Touch Bar element to start the drag from. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
+destinationElementId | string | if `startX`, `startY`, `endX` and `endY` are unset or if `sourceElementId` is set | Uuid of a Touch Bar element to end the drag on. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0745
+startX | number | if `sourceElementId` and `destinationElementId` are unset | starting X coordinate | 100
+startY | number | if `sourceElementId` and `destinationElementId` are unset | starting Y coordinate | 110
+endX | number | if `sourceElementId` and `destinationElementId` are unset | end X coordinate | 200
+endY | number | if `sourceElementId` and `destinationElementId` are unset | end Y coordinate | 220
+duration | number | yes | The number of float seconds to hold the touch | 2.5
+velocity | number | no | Dragging velocity in pixels per second. If not provided then the default velocity is used. See official documentation on [XCUIGestureVelocity structure](https://developer.apple.com/documentation/xctest/xcuigesturevelocity) for more details | 2500
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while drag is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+
+#### References
+
+- [pressForDuration:thenDragToElement:withVelocity:thenHoldForDuration: (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/3551693-pressforduration?language=objc)
+- [pressForDuration:thenDragToCoordinate:withVelocity:thenHoldForDuration: (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/3551692-pressforduration?language=objc)
 
 ### macos: keys
 
