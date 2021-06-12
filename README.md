@@ -249,7 +249,7 @@ elementId | string | if `x` or `y` are unset | Unique identifier of a Touch Bar 
 x | number | if `y` is set or `elementId` is unset | long click X coordinate | 100
 y | number | if `y` is set or `elementId` is unset | long click Y coordinate | 100
 duration | number | yes | The number of float seconds to hold the touch | 2.5
-keyModifierFlags | number | no | if set then the given key modifiers will be applied while long click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while the gesture is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 
 #### References
 
@@ -267,7 +267,7 @@ Name | Type | Required | Description | Example
 elementId | string | if `x` or `y` are unset | Unique identifier of a Touch Bar element to perform the tap on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute Touch Bar coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
 x | number | if `y` is set or `elementId` is unset | click X coordinate | 100
 y | number | if `y` is set or `elementId` is unset | click Y coordinate | 100
-keyModifierFlags | number | no | if set then the given key modifiers will be applied while click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while the gesture is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 
 #### References
 
@@ -285,7 +285,7 @@ Name | Type | Required | Description | Example
 elementId | string | if `x` or `y` are unset | Unique identifier of a Touch Bar element to perform the double tap on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute Touch Bar coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
 x | number | if `y` is set or `elementId` is unset | click X coordinate | 100
 y | number | if `y` is set or `elementId` is unset | click Y coordinate | 100
-keyModifierFlags | number | no | if set then the given key modifiers will be applied while click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while the gesture is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 
 #### References
 
@@ -307,7 +307,7 @@ startY | number | if `sourceElementId` and `destinationElementId` are unset | st
 endX | number | if `sourceElementId` and `destinationElementId` are unset | end X coordinate | 200
 endY | number | if `sourceElementId` and `destinationElementId` are unset | end Y coordinate | 220
 duration | number | yes | The number of float seconds to hold the touch | 2.5
-keyModifierFlags | number | no | if set then the given key modifiers will be applied while drag is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while the gesture is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 
 #### References
 
@@ -330,7 +330,7 @@ endX | number | if `sourceElementId` and `destinationElementId` are unset | end 
 endY | number | if `sourceElementId` and `destinationElementId` are unset | end Y coordinate | 220
 duration | number | yes | The number of float seconds to hold the touch | 2.5
 velocity | number | no | Dragging velocity in pixels per second. If not provided then the default velocity is used. See official documentation on [XCUIGestureVelocity structure](https://developer.apple.com/documentation/xctest/xcuigesturevelocity) for more details | 2500
-keyModifierFlags | number | no | if set then the given key modifiers will be applied while drag is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
+keyModifierFlags | number | no | if set then the given key modifiers will be applied while the gesture is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 
 #### References
 
