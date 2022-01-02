@@ -1,5 +1,5 @@
 import wd from 'wd';
-import { startServer } from '../..';
+import { startServer } from '../../lib/server';
 import chaiAsPromised from 'chai-as-promised';
 import chai from 'chai';
 import os from 'os';

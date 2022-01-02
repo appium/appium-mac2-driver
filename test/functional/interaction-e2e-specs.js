@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import wd from 'wd';
-import { startServer } from '../..';
+import { startServer } from '../../lib/server';
 import chaiAsPromised from 'chai-as-promised';
 import chai from 'chai';
 import { HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID } from '../utils';

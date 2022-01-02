@@ -1,4 +1,4 @@
-import Mac2Driver from '../..';
+import Mac2Driver from '../../lib/driver';
 import chai from 'chai';
 const should = chai.should();
 
