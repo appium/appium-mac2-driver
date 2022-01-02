@@ -613,7 +613,7 @@ useDefaultUiInterruptionsHandling | boolean | Whether to use the default XCTest 
 import pytest
 
 from appium import webdriver
-
+from appium.webdriver.common.appiumby import AppiumBy
 
 @pytest.fixture()
 def driver():
@@ -628,7 +628,7 @@ def driver():
 
 
 def test_edit_text(driver):
-    edit_field = driver.find_element_by_class_name('XCUIElementTypeTextView')
+    edit_field = driver.find_element(by=AppiumBy.CLASS_NAME, value='XCUIElementTypeTextView')
     edit_field.send_keys('hello world')
     assert edit_field.text == 'hello world'
     edit_field.clear()
@@ -636,7 +636,7 @@ def test_edit_text(driver):
 
 
 def test_sending_custom_keys(driver):
-    edit_field = driver.find_element_by_class_name('XCUIElementTypeTextView')
+    edit_field = driver.find_element(by=AppiumBy.CLASS_NAME, value='XCUIElementTypeTextView')
     flagsShift = 1 << 1
     driver.execute_script('macos: keys', {
         'keys': [{
@@ -648,7 +648,6 @@ def test_sending_custom_keys(driver):
         }]
     })
     assert edit_field.text == 'HI'
-
 ```
 
 
