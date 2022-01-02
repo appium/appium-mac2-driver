@@ -4,7 +4,7 @@ import chaiAsPromised from 'chai-as-promised';
 import chai from 'chai';
 import os from 'os';
 import path from 'path';
-import { fs } from 'appium-support';
+import { fs } from '@appium/support';
 import { HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID } from '../utils';
 
 chai.should();
