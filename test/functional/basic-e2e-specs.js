@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import wd from 'wd';
+import { remote } from 'webdriverio';
 import { startServer } from '../../lib/server';
 import chaiAsPromised from 'chai-as-promised';
 import chai from 'chai';
@@ -10,7 +10,7 @@ chai.use(chaiAsPromised);
 
 const CAPS = {
   platformName: 'mac',
-  bundleId: TEXT_EDIT_BUNDLE_ID,
+  'appium:bundleId': TEXT_EDIT_BUNDLE_ID,
 };
 
 describe('Mac2Driver - basic', function () {
@@ -28,13 +28,16 @@ describe('Mac2Driver - basic', function () {
     }
   });
   beforeEach(async function () {
-    driver = wd.promiseChainRemote(HOST, PORT);
-    await driver.init(CAPS);
+    driver = await remote({
+      hostname: HOST,
+      port: PORT,
+      capabilities: CAPS,
+    });
   });
   afterEach(async function () {
     if (driver) {
       try {
-        await driver.quit();
+        await driver.deleteSession();
       } finally {
         driver = null;
       }
@@ -42,7 +45,7 @@ describe('Mac2Driver - basic', function () {
   });
 
   it('should retrieve xml source', async function () {
-    const source = await driver.source();
+    const source = await driver.getPageSource();
     _.includes(source, '<?xml version="1.0" encoding="UTF-8"?>').should.be.true;
   });
 
@@ -52,7 +55,7 @@ describe('Mac2Driver - basic', function () {
   });
 
   it('should retrieve description source', async function () {
-    const source = await driver.execute('macos: source', {
+    const source = await driver.executeScript('macos: source', {
       format: 'description',
     });
     _.includes(source, 'Element subtree').should.be.true;
