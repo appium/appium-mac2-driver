@@ -1,6 +1,12 @@
 Appium Mac2 Driver
 ====
 
+[![NPM version](http://img.shields.io/npm/v/appium-mac2-driver.svg)](https://npmjs.org/package/appium-mac2-driver)
+[![Downloads](http://img.shields.io/npm/dm/appium-mac2-driver.svg)](https://npmjs.org/package/appium-mac2-driver)
+
+[![Release](https://github.com/appium/appium-mac2-driver/actions/workflows/publish.js.yml/badge.svg)](https://github.com/appium/appium-mac2-driver/actions/workflows/publish.js.yml)
+
+
 This is Appium driver for automating macOS applications using Apple's [XCTest](https://developer.apple.com/documentation/xctest) framework.
 The driver operates in scope of [W3C WebDriver protocol](https://www.w3.org/TR/webdriver/) with several custom extensions to cover operating-system specific scenarios.
 The original idea and parts of the source code are borrowed from the Facebook's [WebDriverAgent](https://github.com/facebookarchive/WebDriverAgent) project.
