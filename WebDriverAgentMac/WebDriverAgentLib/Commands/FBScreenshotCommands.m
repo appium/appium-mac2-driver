@@ -49,7 +49,7 @@
   NSMutableDictionary <NSNumber *, NSDictionary *> *result = [NSMutableDictionary new];
   for (XCUIScreen *screen in XCUIScreen.screens) {
     NSNumber *displayId = [screen valueForKey:@"_displayID"];
-    if (nil != desiredId && ![desiredId isEqual:displayId]) {
+    if (nil != desiredId && ![desiredId isEqualToNumber:displayId]) {
       continue;
     }
 
