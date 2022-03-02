@@ -45,7 +45,7 @@
 
 + (id<FBResponsePayload>)handleGetScreenshots:(FBRouteRequest *)request
 {
-  NSNumber *desiredId = request.arguments[@"id"];
+  NSNumber *desiredId = request.arguments[@"displayId"];
   NSMutableDictionary <NSNumber *, NSDictionary *> *result = [NSMutableDictionary new];
   for (XCUIScreen *screen in XCUIScreen.screens) {
     NSNumber *displayId = [screen valueForKey:@"_displayID"];
