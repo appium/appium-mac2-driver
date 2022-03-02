@@ -3,4 +3,22 @@
    uuid = "EB05C65E-1678-400C-AEEC-EE53AC4C3816"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "557A20AB-411F-42C4-B430-CF99CB25F1D3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WebDriverAgentLib/Commands/FBScreenshotCommands.m"
+            startingColumnNumber = "90"
+            endingColumnNumber = "109"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
+            landmarkName = "+routes"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

@@ -490,6 +490,18 @@ formFields | Map or `Array<Pair>` | no | Additional form fields for multipart ht
 
 Base64-encoded content of the recorded media file if `remotePath` parameter is falsy or an empty string.
 
+### macos: screenshots
+
+Retrieves a screenshot of each display available to macOS.
+
+#### Returns
+
+A dictionary where each key contains a unique display identifier
+and values are dictionaries with following items:
+- `id`: Display identifier
+- `isMain`: Whether this display is the main one
+- `payload`: The actual PNG screenshot data encoded to base64 string
+
 
 ## Application Under Test Concept
 
