@@ -494,6 +494,12 @@ Base64-encoded content of the recorded media file if `remotePath` parameter is f
 
 Retrieves a screenshot of each display available to macOS.
 
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+displayId | number | no | Display identifier to take a screenshot for. If not provided then all display screenshots are going to be returned. If no matches were found then an error is thrown. | 1
+
 #### Returns
 
 A dictionary where each key contains a unique display identifier

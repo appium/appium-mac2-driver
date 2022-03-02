@@ -10,6 +10,7 @@
 #import "FBScreenshotCommands.h"
 
 #import "XCTest/XCTest.h"
+#import "FBRouteRequest.h"
 
 @implementation FBScreenshotCommands
 
@@ -22,8 +23,8 @@
     [[FBRoute GET:@"/screenshot"].withoutSession respondWithTarget:self action:@selector(handleGetScreenshot:)],
     [[FBRoute GET:@"/screenshot"] respondWithTarget:self action:@selector(handleGetScreenshot:)],
 
-    [[FBRoute GET:@"/wda/screenshots"].withoutSession respondWithTarget:self action:@selector(handleGetScreenshots:)],
-    [[FBRoute GET:@"/wda/screenshots"] respondWithTarget:self action:@selector(handleGetScreenshots:)],
+    [[FBRoute POST:@"/wda/screenshots"].withoutSession respondWithTarget:self action:@selector(handleGetScreenshots:)],
+    [[FBRoute POST:@"/wda/screenshots"] respondWithTarget:self action:@selector(handleGetScreenshots:)],
   ];
 }
 
@@ -44,17 +45,27 @@
 
 + (id<FBResponsePayload>)handleGetScreenshots:(FBRouteRequest *)request
 {
+  NSNumber *desiredId = request.arguments[@"id"];
   NSMutableDictionary <NSNumber *, NSDictionary *> *result = [NSMutableDictionary new];
   for (XCUIScreen *screen in XCUIScreen.screens) {
     NSNumber *displayId = [screen valueForKey:@"_displayID"];
+    if (nil == desiredId || (nil != desiredId && ![desiredId isEqual:displayId])) {
+      continue;
+    }
+
     NSNumber *isMainDisplay = [screen valueForKey:@"_isMainScreen"];
     NSData *screenshotData = screen.screenshot.PNGRepresentation;
     NSDictionary *screenInfo = @{
-      @"id": displayId == nil ? @(-1) : displayId,
-      @"isMain": isMainDisplay == nil ? @(NO) : isMainDisplay,
+      @"id": displayId ?: NSNull.null,
+      @"isMain": isMainDisplay ?: NSNull.null,
       @"payload": screenshotData == nil ? NSNull.null : [screenshotData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength]
     };
     [result setObject:screenInfo forKey:displayId];
+  }
+  if (nil != desiredId && 0 == [result count]) {
+    NSString *message = [NSString stringWithFormat:@"The screen identified by %@ is not available to XCTest", desiredId];
+    return FBResponseWithStatus([FBCommandStatus unableToCaptureScreenErrorWithMessage:message
+                                                                             traceback:nil]);
   }
   return FBResponseWithObject(result);
 }

@@ -13,9 +13,9 @@
             continueAfterRunningActions = "No"
             filePath = "WebDriverAgentLib/Commands/FBScreenshotCommands.m"
             startingColumnNumber = "90"
-            endingColumnNumber = "109"
-            startingLineNumber = "22"
-            endingLineNumber = "22"
+            endingColumnNumber = "90"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
             landmarkName = "+routes"
             landmarkType = "7">
          </BreakpointContent>
