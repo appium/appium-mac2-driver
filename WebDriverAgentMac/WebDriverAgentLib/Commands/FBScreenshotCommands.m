@@ -47,24 +47,28 @@
 {
   NSNumber *desiredId = request.arguments[@"displayId"];
   NSMutableDictionary <NSString *, NSDictionary<NSString *, id> *> *result = [NSMutableDictionary new];
+  NSMutableArray <NSNumber *> *availableDisplayIds = [NSMutableArray new];
   for (XCUIScreen *screen in XCUIScreen.screens) {
     NSNumber *displayId = [screen valueForKey:@"_displayID"];
     if (nil == displayId || (nil != desiredId && ![desiredId isEqualToNumber:displayId])) {
       continue;
     }
 
+    [availableDisplayIds addObject:displayId];
     result[displayId.stringValue] = @{
       @"id": displayId,
       @"isMain": [screen valueForKey:@"_isMainScreen"] ?: NSNull.null,
-      @"payload": [screen.screenshot.PNGRepresentation base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength] ?: NSNull.null
+      @"payload": [screen.screenshot.PNGRepresentation
+                   base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength] ?: NSNull.null
     };
   }
   if (nil != desiredId && 0 == [result count]) {
-    NSString *message = [NSString stringWithFormat:@"The screen identified by %@ is not available to XCTest", desiredId];
+    NSString *message = [NSString stringWithFormat:@"The screen identified by %@ is not available to XCTest. Only the following identifiers are available: %@",
+                         desiredId, availableDisplayIds];
     return FBResponseWithStatus([FBCommandStatus unableToCaptureScreenErrorWithMessage:message
                                                                              traceback:nil]);
   }
-  return FBResponseWithObject(result);
+  return FBResponseWithObject(result.copy);
 }
 
 @end
