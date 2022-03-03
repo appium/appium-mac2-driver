@@ -46,14 +46,14 @@
 + (id<FBResponsePayload>)handleGetScreenshots:(FBRouteRequest *)request
 {
   NSNumber *desiredId = request.arguments[@"displayId"];
-  NSMutableDictionary <NSNumber *, NSDictionary<NSString *, id> *> *result = [NSMutableDictionary new];
+  NSMutableDictionary <NSString *, NSDictionary<NSString *, id> *> *result = [NSMutableDictionary new];
   for (XCUIScreen *screen in XCUIScreen.screens) {
     NSNumber *displayId = [screen valueForKey:@"_displayID"];
     if (nil == displayId || (nil != desiredId && ![desiredId isEqualToNumber:displayId])) {
       continue;
     }
 
-    result[displayId] = @{
+    result[displayId.stringValue] = @{
       @"id": displayId,
       @"isMain": [screen valueForKey:@"_isMainScreen"] ?: NSNull.null,
       @"payload": [screen.screenshot.PNGRepresentation base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength] ?: NSNull.null
