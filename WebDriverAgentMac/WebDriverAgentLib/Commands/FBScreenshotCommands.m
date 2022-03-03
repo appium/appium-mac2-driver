@@ -46,21 +46,18 @@
 + (id<FBResponsePayload>)handleGetScreenshots:(FBRouteRequest *)request
 {
   NSNumber *desiredId = request.arguments[@"displayId"];
-  NSMutableDictionary <NSNumber *, NSDictionary *> *result = [NSMutableDictionary new];
+  NSMutableDictionary <NSNumber *, NSDictionary<NSString *, id> *> *result = [NSMutableDictionary new];
   for (XCUIScreen *screen in XCUIScreen.screens) {
     NSNumber *displayId = [screen valueForKey:@"_displayID"];
-    if (nil != desiredId && (nil == displayId || ![desiredId isEqualToNumber:displayId])) {
+    if (nil == displayId || (nil != desiredId && ![desiredId isEqualToNumber:displayId])) {
       continue;
     }
 
-    NSNumber *isMainDisplay = [screen valueForKey:@"_isMainScreen"];
-    NSData *screenshotData = screen.screenshot.PNGRepresentation;
-    NSDictionary *screenInfo = @{
-      @"id": displayId ?: NSNull.null,
-      @"isMain": isMainDisplay ?: NSNull.null,
-      @"payload": screenshotData == nil ? NSNull.null : [screenshotData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength]
+    result[displayId] = @{
+      @"id": displayId,
+      @"isMain": [screen valueForKey:@"_isMainScreen"] ?: NSNull.null,
+      @"payload": [screen.screenshot.PNGRepresentation base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength] ?: NSNull.null
     };
-    [result setObject:screenInfo forKey:displayId];
   }
   if (nil != desiredId && 0 == [result count]) {
     NSString *message = [NSString stringWithFormat:@"The screen identified by %@ is not available to XCTest", desiredId];
