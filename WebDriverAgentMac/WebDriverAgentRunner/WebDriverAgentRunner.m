@@ -34,6 +34,7 @@
 {
   [super setUp];
   self.continueAfterFailure = YES;
+  self.executionTimeAllowance = 24 * 60 * 60;
   [self setValue:@(NO) forKey:@"_shouldSetShouldHaltWhenReceivesControl"];
   [self setValue:@(NO) forKey:@"_shouldHaltWhenReceivesControl"];
 }
@@ -43,6 +44,7 @@
  */
 - (void)testRunner
 {
+  XCTExpectFailureWithOptions(@"Ignore all failures", XCTExpectedFailureOptions.nonStrictOptions);
   FBWebServer *webServer = [[FBWebServer alloc] init];
   webServer.delegate = self;
   [webServer startServing];
