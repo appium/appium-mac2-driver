@@ -43,9 +43,9 @@
  */
 - (void)testRunner
 {
-  if (@available(macOS 11.3, *)) {
-    XCTExpectFailureWithOptions(@"Ignore all failures", XCTExpectedFailureOptions.nonStrictOptions);
-  }
+#ifdef MAC_OS_VERSION_11_3
+  XCTExpectFailureWithOptions(@"Ignore all failures", XCTExpectedFailureOptions.nonStrictOptions);
+#endif
   FBWebServer *webServer = [[FBWebServer alloc] init];
   webServer.delegate = self;
   [webServer startServing];
