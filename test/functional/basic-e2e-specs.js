@@ -55,9 +55,9 @@ describe('Mac2Driver - basic', function () {
   });
 
   it('should retrieve description source', async function () {
-    const source = await driver.executeScript('macos: source', {
+    const source = await driver.executeScript('macos: source', [{
       format: 'description',
-    });
+    }]);
     _.includes(source, 'Element subtree').should.be.true;
   });
 
