@@ -120,6 +120,7 @@
 		714CA7062566487B00353B27 /* FBXPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA7042566487B00353B27 /* FBXPath.h */; };
 		714CA7072566487B00353B27 /* FBXPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA7052566487B00353B27 /* FBXPath.m */; };
 		714CA70A256648B200353B27 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 714CA709256648A100353B27 /* libxml2.tbd */; };
+		715C123A27EB587100D6F63B /* XCTestSuite+AMPatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C123927EB587100D6F63B /* XCTestSuite+AMPatcher.m */; };
 		71688A98256461ED0007F55B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 71688A97256461ED0007F55B /* AppDelegate.m */; };
 		71688A9B256461ED0007F55B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71688A9A256461ED0007F55B /* ViewController.m */; };
 		71688A9D256461F00007F55B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71688A9C256461F00007F55B /* Assets.xcassets */; };
@@ -339,6 +340,8 @@
 		7151AE302564FA37008B8B2A /* FBRuntimeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBRuntimeUtils.h; sourceTree = "<group>"; };
 		7151AE352564FAAC008B8B2A /* FBUnknownCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBUnknownCommands.m; sourceTree = "<group>"; };
 		7151AE362564FAAC008B8B2A /* FBUnknownCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBUnknownCommands.h; sourceTree = "<group>"; };
+		715C123827EB587100D6F63B /* XCTestSuite+AMPatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTestSuite+AMPatcher.h"; sourceTree = "<group>"; };
+		715C123927EB587100D6F63B /* XCTestSuite+AMPatcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCTestSuite+AMPatcher.m"; sourceTree = "<group>"; };
 		71688A93256461ED0007F55B /* WebDriverAgent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebDriverAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71688A96256461ED0007F55B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		71688A97256461ED0007F55B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -718,6 +721,8 @@
 			isa = PBXGroup;
 			children = (
 				71688B1625646A620007F55B /* WebDriverAgentRunner.m */,
+				715C123827EB587100D6F63B /* XCTestSuite+AMPatcher.h */,
+				715C123927EB587100D6F63B /* XCTestSuite+AMPatcher.m */,
 				71688B1825646A620007F55B /* Info.plist */,
 			);
 			path = WebDriverAgentRunner;
@@ -1064,6 +1069,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				71688B1725646A620007F55B /* WebDriverAgentRunner.m in Sources */,
+				715C123A27EB587100D6F63B /* XCTestSuite+AMPatcher.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
