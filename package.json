@@ -31,7 +31,7 @@
   "bin": {},
   "dependencies": {
     "@appium/base-driver": "^8.0.0",
-    "@appium/support": "^2.46.0",
+    "@appium/support": "^2.56.1",
     "@babel/runtime": "^7.0.0",
     "asyncbox": "^2.0.2",
     "axios": "^0.x",
