@@ -502,8 +502,7 @@ displayId | number | no | Display identifier to take a screenshot for. If not pr
 
 #### Returns
 
-A dictionary where each key contains a unique display identifier
-and values are dictionaries with following items:
+A list of dictionaries where each item has the following keys:
 - `id`: Display identifier
 - `isMain`: Whether this display is the main one
 - `payload`: The actual PNG screenshot data encoded to base64 string
