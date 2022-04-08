@@ -137,8 +137,6 @@ keyModifierFlags | number | no | if set then the given key modifiers will be app
 - [rightClick (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/1500469-rightclick?language=objc)
 - [rightClick (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/1500503-rightclick?language=objc)
 
-### macos: rightClick
-
 ### macos: hover
 
 Perform hover gesture on an element or by relative/absolute coordinates
