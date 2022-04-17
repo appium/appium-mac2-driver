@@ -22,6 +22,8 @@ On top of standard Appium requirements Mac2 driver also expects the following pr
 - Since the version `1.0.0` this driver is only compatible with Appium 2. Use the `appium driver install mac2` CLI command to add it to your server dist.
 
 
+`testmanagerd` procccess requires UIAutomation authentication since macOS 12. `automationmodetool enable-automationmode-without-authentication` command may help to disable it. It may help especially CI environment. [apple forum](https://developer.apple.com/forums/thread/693850).
+
 ## Capabilities
 
 Capability Name | Description
