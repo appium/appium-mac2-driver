@@ -20,6 +20,7 @@ On top of standard Appium requirements Mac2 driver also expects the following pr
 - Xcode 12 or later should be installed
 - Xcode Helper app should be enabled for Accessibility access. The app itself could be usually found at `/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/Xcode Helper.app`. In order to enable Accessibility access for it simply open the parent folder in Finder: `open /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/` and drag & drop the `Xcode Helper` app to `Security & Privacy -> Privacy -> Accessibility` list of your `System Preferences`. This action must only be done once.
 - Since the version `1.0.0` this driver is only compatible with Appium 2. Use the `appium driver install mac2` CLI command to add it to your server dist.
+- macOS 12 will interactively require a password when starting the driver. Run `automationmodetool enable-automationmode-without-authentication` to disable the need for authentication (especially useful on CI machines)
 
 
 ## Capabilities
