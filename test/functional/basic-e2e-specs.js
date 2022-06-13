@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { remote } from 'webdriverio';
-import { startServer } from '../../lib/server';
+import { startServer } from '../server';
 import chaiAsPromised from 'chai-as-promised';
 import chai from 'chai';
 import { HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID } from '../utils';
