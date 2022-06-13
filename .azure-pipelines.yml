@@ -3,7 +3,7 @@
 variables:
   VM_IMAGE: macOS-12
   DEFAULT_NODE_VERSION: "16.x"
-  XCODE_VERSION: "15.4"
+  XCODE_VERSION: "13.4"
 
 pool:
   vmImage: "$(VM_IMAGE)"
