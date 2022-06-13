@@ -14,6 +14,7 @@ const TEST_FILE = path.resolve(os.tmpdir(), 'test.test');
 
 const CAPS = {
   platformName: 'mac',
+  'appium:automationName': 'mac2',
   'appium:bundleId': TEXT_EDIT_BUNDLE_ID,
   'appium:prerun': {command: `do shell script "touch ${TEST_FILE}"`},
   'appium:postrun': {command: `do shell script "rm ${TEST_FILE}"`},

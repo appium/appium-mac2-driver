@@ -10,6 +10,7 @@ chai.use(chaiAsPromised);
 
 const CAPS = {
   platformName: 'mac',
+  'appium:automationName': 'mac2',
   'appium:bundleId': TEXT_EDIT_BUNDLE_ID,
 };
 
