@@ -28,7 +28,10 @@ stages:
   - job: Node_Unit_Tests
     steps:
     - template: .azure-templates/node_setup_steps.yml
-    - script: npm install
+    - script: |
+        npm install -g appium@next
+        npm install
+        appium driver install --source=local .
     - script: npm run test
   - ${{ each job in parameters.analyzeJobs }}:
     - template: .azure-templates/base_job.yml
