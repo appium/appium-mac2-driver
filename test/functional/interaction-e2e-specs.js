@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { remote } from 'webdriverio';
-import { startServer } from '../server';
 import chaiAsPromised from 'chai-as-promised';
 import chai from 'chai';
 import { HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID } from '../utils';
@@ -18,17 +17,7 @@ const CAPS = {
 describe('Mac2Driver - elements interaction', function () {
   this.timeout(MOCHA_TIMEOUT);
 
-  let server;
   let driver;
-  before(async function () {
-    server = await startServer(PORT, HOST);
-  });
-  after(async function () {
-    if (server) {
-      await server.close();
-      server = null;
-    }
-  });
   beforeEach(async function () {
     driver = await remote({
       hostname: HOST,
