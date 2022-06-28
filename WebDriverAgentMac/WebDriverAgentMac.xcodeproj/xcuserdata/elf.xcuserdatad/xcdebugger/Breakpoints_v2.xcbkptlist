@@ -3,4 +3,55 @@
    uuid = "EB05C65E-1678-400C-AEEC-EE53AC4C3816"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3D5478DF-A313-41A9-9BDF-A2377DF307D2"
+            shouldBeEnabled = "Yes"
+            condition = "result"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WebDriverAgentLib/Utilities/FBXPath.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "515"
+            endingLineNumber = "515"
+            landmarkName = "+valueForElement:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "3D5478DF-A313-41A9-9BDF-A2377DF307D2 - 863241e8031aebd2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "+[FBFocusedAttribute valueForElement:]"
+                  moduleName = "WebDriverAgentLib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/elf/code/appium-mac2-driver/WebDriverAgentMac/WebDriverAgentLib/Utilities/FBXPath.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "515"
+                  endingLineNumber = "515"
+                  offsetFromSymbolStart = "129">
+               </Location>
+               <Location
+                  uuid = "3D5478DF-A313-41A9-9BDF-A2377DF307D2 - 137c7d8d7ee0f2b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "+[FBYAttribute name]"
+                  moduleName = "WebDriverAgentLib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/elf/code/appium-mac2-driver/WebDriverAgentMac/WebDriverAgentLib/Utilities/FBXPath.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "517"
+                  endingLineNumber = "517"
+                  offsetFromSymbolStart = "12">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

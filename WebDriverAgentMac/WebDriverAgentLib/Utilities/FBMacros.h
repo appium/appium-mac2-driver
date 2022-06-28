@@ -45,3 +45,6 @@
 
 /*! Converts the given number of milliseconds into seconds */
 #define FBMillisToSeconds(ms) ((ms) / 1000.0)
+
+/*! Converts the given boolean value to a string representation */
+#define FBBoolToStr(b) ((b) ? @"true" : @"false")
