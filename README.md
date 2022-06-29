@@ -637,16 +637,17 @@ useDefaultUiInterruptionsHandling | boolean | Whether to use the default XCTest 
 import pytest
 
 from appium import webdriver
+# Options are available in Python client since v2.6.0
+from appium.options.mac import Mac2Options
 from appium.webdriver.common.appiumby import AppiumBy
+
 
 @pytest.fixture()
 def driver():
-    drv = webdriver.Remote('http://localhost:4723/wd/hub', {
-        # automationName capability presence is mandatory for this Mac2 Driver to be selected
-        'automationName': 'Mac2',
-        'platformName': 'mac',
-        'bundleId': 'com.apple.TextEdit',
-    })
+    options = Mac2Options()
+    options.bundle_id = 'com.apple.TextEdit'
+    # The default URL is http://127.0.0.1:4723/wd/hub in Appium1
+    drv = webdriver.Remote('http://127.0.0.1:4723', options=options)
     yield drv
     drv.quit()
 
