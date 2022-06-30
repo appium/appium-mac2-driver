@@ -55,6 +55,8 @@
   NSString *text = @"yolo😎";
   [edit am_setValue:text];
   XCTAssertTrue(edit.am_hasKeyboardInputFocus);
+  NSString *focused = [edit am_wdAttributeValueWithName:@"focused"];
+  XCTAssertEqualObjects(focused, @"true");
   NSString *value = [edit am_wdAttributeValueWithName:@"value"];
   XCTAssertEqualObjects(value, text);
   XCTAssertEqualObjects(value, edit.am_text);

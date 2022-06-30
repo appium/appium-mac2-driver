@@ -34,11 +34,13 @@
   } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, placeholderValue)]) {
     return self.placeholderValue;
   } else if ([wdAttributeName isEqualToString:@"hittable"]) {
-    return self.hittable ? @"true" : @"false";
+    return FBBoolToStr(self.hittable);
   } else if ([wdAttributeName isEqualToString:@"enabled"]) {
-    return self.enabled ? @"true" : @"false";
+    return FBBoolToStr(self.enabled);
+  } else if ([wdAttributeName isEqualToString:@"focused"]) {
+    return FBBoolToStr(self.am_hasKeyboardInputFocus);
   } else if ([wdAttributeName isEqualToString:@"selected"]) {
-    return self.selected ? @"true" : @"false";
+    return FBBoolToStr(self.selected);
   } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, label)]) {
     return self.label;
   } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, title)]) {

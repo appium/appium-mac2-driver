@@ -55,6 +55,7 @@ elementType | Integer-encoded element class. See the official documentation on [
 frame | Coordinates of bounding element rectangle | {x: 1, y: 2.5, width: 100, height: 200}
 placeholderValue | It is usually only present for text fields. For other element types it's mostly empty | 'my placeholder'
 enabled | Contains `true` if the element is enabled | 'false'
+focused | Contains `true` if the element has the keyboard input focus | 'false'
 selected | Contains `true` if the element is selected | 'false'
 hittable | Contains `true` if the element is hittable | 'true'
 label | Element's label value. Could be empty | 'my label'
