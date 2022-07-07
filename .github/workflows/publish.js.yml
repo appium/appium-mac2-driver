@@ -10,18 +10,23 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js 14.x
+    - name: Use Node.js 16.x
       uses: actions/setup-node@v1
       with:
-        node-version: 14.x
-    - name: install newer npm
-      run: npm install -g npm
+        node-version: 16.x
     - run: npm install
       name: Install dependencies
-    - run: rm -rf package-lock.json
-    - run: npm shrinkwrap
     - run: npm test
       name: Run NPM Test
+    - run: |
+        rm -rf package-lock.json
+        npm prune --production
+        rm -rf node_modules/appium
+      name: Remove dev dependencies and appium peer dependencies
+    - run: npm shrinkwrap
+      name: Create shrinkwrap
+    - run: npm install --only=dev
+      name: Install dev dependencies for the release
     - run: npx semantic-release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
