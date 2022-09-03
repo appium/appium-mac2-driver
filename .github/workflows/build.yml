@@ -33,15 +33,24 @@ jobs:
     - run: |
         pushd "$(pwd)"
         cd WebDriverAgentMac
-        schemes=(WebDriverAgentLib WebDriverAgentRunner IntegrationTests WebDriverAgent)
-        did_fail=0
-        for scheme in "${schemes[@]}"; do
-          if ! xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme "$scheme" analyze; then
-            did_fail=1
-          fi
-        done
-        if [[ $did_fail -eq 1 ]]; then
-          exit 1
-        fi
+        xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme WebDriverAgentLib analyze
         popd
-      name: Analyze schemes
+      name: Analyze WebDriverAgentLib
+    - run: |
+        pushd "$(pwd)"
+        cd WebDriverAgentMac
+        xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme WebDriverAgentRunner analyze
+        popd
+      name: Analyze WebDriverAgentRunner
+    - run: |
+        pushd "$(pwd)"
+        cd WebDriverAgentMac
+        xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme IntegrationTests analyze
+        popd
+      name: Analyze IntegrationTests
+    - run: |
+        pushd "$(pwd)"
+        cd WebDriverAgentMac
+        xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme WebDriverAgent analyze
+        popd
+      name: Analyze WebDriverAgent
