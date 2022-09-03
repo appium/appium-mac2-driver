@@ -23,14 +23,7 @@ jobs:
     - run: npm run test
       name: Run unit tests
 
-  wda:
-    strategy:
-      matrix:
-        scheme:
-        - WebDriverAgentLib
-        - WebDriverAgentRunner
-        - IntegrationTests
-        - WebDriverAgent
+  analyze_wda:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v3
@@ -40,6 +33,15 @@ jobs:
     - run: |
         pushd "$(pwd)"
         cd WebDriverAgentMac
-        xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme "${{ matrix.scheme }}" analyze
+        schemes=(WebDriverAgentLib WebDriverAgentRunner IntegrationTests WebDriverAgent)
+        did_fail=0
+        for scheme in "${schemes[@]}"; do
+          if ! xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme "$scheme" analyze; then
+            did_fail=1
+          fi
+        done
+        if [[ $did_fail -eq 1 ]]; then
+          exit 1
+        fi
         popd
-      name: Analyze ${{ matrix.scheme }}
+      name: Analyze schemes
