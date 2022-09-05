@@ -1,0 +1,56 @@
+name: Build
+
+on: [pull_request, push]
+
+
+jobs:
+  unit_test:
+    strategy:
+      matrix:
+        node: [14, 16, 18]
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node }}
+    - run: npm i -g npm
+      name: Update NPM
+    - run: npm install --no-package-lock
+      name: Install dev dependencies
+    - run: npm run lint
+      name: Run linter
+    - run: npm run test
+      name: Run unit tests
+
+  analyze_wda:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+    - run: |
+        pushd "$(pwd)"
+        cd WebDriverAgentMac
+        xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme WebDriverAgentLib analyze
+        popd
+      name: Analyze WebDriverAgentLib
+    - run: |
+        pushd "$(pwd)"
+        cd WebDriverAgentMac
+        xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme WebDriverAgentRunner analyze
+        popd
+      name: Analyze WebDriverAgentRunner
+    - run: |
+        pushd "$(pwd)"
+        cd WebDriverAgentMac
+        xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme IntegrationTests analyze
+        popd
+      name: Analyze IntegrationTests
+    - run: |
+        pushd "$(pwd)"
+        cd WebDriverAgentMac
+        xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme WebDriverAgent analyze
+        popd
+      name: Analyze WebDriverAgent
