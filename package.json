@@ -66,7 +66,7 @@
     "precommit-lint"
   ],
   "peerDependencies": {
-    "appium": "^2.0.0-beta.40"
+    "appium": "^2.0.0-beta.44"
   },
   "devDependencies": {
     "@appium/eslint-config-appium": "^6.0.0",
