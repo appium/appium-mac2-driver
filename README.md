@@ -11,6 +11,11 @@ This is Appium driver for automating macOS applications using Apple's [XCTest](h
 The driver operates in scope of [W3C WebDriver protocol](https://www.w3.org/TR/webdriver/) with several custom extensions to cover operating-system specific scenarios.
 The original idea and parts of the source code are borrowed from the Facebook's [WebDriverAgent](https://github.com/facebookarchive/WebDriverAgent) project.
 
+> **Note**
+>
+> Since version 1.0.0 Mac2 driver has dropped the support of Appium 1, and is only compatible to Appium 2. Use the `appium driver install mac2` 
+> command to add it to your Appium 2 dist.
+
 
 ## Requirements
 
@@ -19,10 +24,8 @@ On top of standard Appium requirements Mac2 driver also expects the following pr
 - macOS 10.15 or later
 - Xcode 12 or later should be installed
 - Xcode Helper app should be enabled for Accessibility access. The app itself could be usually found at `/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/Xcode Helper.app`. In order to enable Accessibility access for it simply open the parent folder in Finder: `open /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/` and drag & drop the `Xcode Helper` app to `Security & Privacy -> Privacy -> Accessibility` list of your `System Preferences`. This action must only be done once.
-- Since the version `1.0.0` this driver is only compatible with Appium 2. Use the `appium driver install mac2` CLI command to add it to your server dist.
+- `testmanagerd` procccess requires UIAutomation authentication since macOS 12. `automationmodetool enable-automationmode-without-authentication` command may help to disable it. It may be particularly useful in CI environments. [Apple forum thread](https://developer.apple.com/forums/thread/693850).
 
-
-`testmanagerd` procccess requires UIAutomation authentication since macOS 12. `automationmodetool enable-automationmode-without-authentication` command may help to disable it. It may help especially CI environment. [apple forum](https://developer.apple.com/forums/thread/693850).
 
 ## Capabilities
 
