@@ -693,7 +693,6 @@ Check out the source. Then run:
 
 ```bash
 npm install
-gulp watch
 ```
 
 Execute `npm run test` to run unit tests and `npm run e2e-test` to run integration tests.
