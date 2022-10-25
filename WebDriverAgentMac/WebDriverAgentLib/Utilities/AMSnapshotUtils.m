@@ -21,7 +21,7 @@
 + (NSString *)hashWithSnapshot:(id)snapshot
 {
   NSData *token = [[snapshot valueForKey:@"_accessibilityElement"] valueForKey:@"_token"];
-  return [token base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  return [token base64EncodedStringWithOptions:0];
 }
 
 @end

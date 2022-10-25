@@ -732,7 +732,7 @@
     return FBResponseWithStatus([FBCommandStatus unableToCaptureScreenErrorWithMessage:message
                                                                              traceback:nil]);
   }
-  NSString *screenshot = [screenshotData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  NSString *screenshot = [screenshotData base64EncodedStringWithOptions:0];
   return FBResponseWithObject(screenshot);
 }
 
