@@ -39,7 +39,7 @@
     return FBResponseWithStatus([FBCommandStatus unableToCaptureScreenErrorWithMessage:message
                                                                              traceback:nil]);
   }
-  NSString *screenshot = [screenshotData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  NSString *screenshot = [screenshotData base64EncodedStringWithOptions:0];
   return FBResponseWithObject(screenshot);
 }
 
@@ -58,8 +58,7 @@
     result[displayId.stringValue] = @{
       @"id": displayId,
       @"isMain": [screen valueForKey:@"_isMainScreen"] ?: NSNull.null,
-      @"payload": [screen.screenshot.PNGRepresentation
-                   base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength] ?: NSNull.null
+      @"payload": [screen.screenshot.PNGRepresentation base64EncodedStringWithOptions:0] ?: NSNull.null
     };
   }
   if (nil != desiredId && 0 == [result count]) {
