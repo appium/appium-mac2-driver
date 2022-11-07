@@ -48,14 +48,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly) BOOL verboseLoggingEnabled;
 
 /**
- * Whether to bound the lookup results by index.
- * By default this is disabled and bounding by accessibility is used.
- * Read https://stackoverflow.com/questions/49307513/meaning-of-allelementsboundbyaccessibilityelement
- * for more details on these two bounding methods.
- */
-@property BOOL boundElementsByIndex;
-
-/**
  * Extract switch value from arguments
  *
  * @param arguments Array of strings with the command-line arguments, e.g. @[@"--port", @"12345"].

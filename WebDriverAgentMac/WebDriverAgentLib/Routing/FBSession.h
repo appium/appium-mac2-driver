@@ -33,6 +33,14 @@ extern NSString *const FINDER_BUNDLE_ID;
 /*! Whether to avoid app under test killing on session termination */
 @property (nonatomic) BOOL skipAppTermination;
 
+/**
+ * Whether to bound the lookup results by index.
+ * By default this is disabled and bounding by accessibility is used.
+ * Read https://stackoverflow.com/questions/49307513/meaning-of-allelementsboundbyaccessibilityelement
+ * for more details on these two bounding methods.
+ */
+@property (nonatomic) BOOL boundElementsByIndex;
+
 + (nullable instancetype)activeSession;
 
 /**

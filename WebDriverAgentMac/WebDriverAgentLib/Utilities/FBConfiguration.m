@@ -12,8 +12,6 @@
 static NSUInteger const DefaultStartingPort = 10100;
 static NSUInteger const DefaultPortRange = 100;
 
-static BOOL FBShouldBoundElementsByIndex = NO;
-
 @implementation FBConfiguration
 
 static FBConfiguration *instance;
@@ -95,16 +93,6 @@ static FBConfiguration *instance;
 - (BOOL)verboseLoggingEnabled
 {
   return [NSProcessInfo.processInfo.environment[@"VERBOSE_LOGGING"] boolValue];
-}
-
-- (void)setBoundElementsByIndex:(BOOL)enabled
-{
-  FBShouldBoundElementsByIndex = enabled;
-}
-
-- (BOOL)boundElementsByIndex
-{
-  return FBShouldBoundElementsByIndex;
 }
 
 #pragma mark Private
