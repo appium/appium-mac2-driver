@@ -110,6 +110,7 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
   } else {
     session.skipAppTermination = noReset;
   }
+  session.boundElementsByIndex = NO;
 
   return FBResponseWithObject(FBSessionCommands.sessionInformation);
 }
@@ -176,7 +177,7 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
   XCUIApplication *application = FBSession.activeSession.currentApplication;
   return FBResponseWithObject(
     @{
-      AM_BOUND_ELEMENTS_BY_INDEX_SETTING: @([FBConfiguration.sharedConfiguration boundElementsByIndex]),
+      AM_BOUND_ELEMENTS_BY_INDEX_SETTING: @(FBSession.activeSession.boundElementsByIndex),
       AM_USE_DEFAULT_UI_INTERRUPTIONS_HANDLING_SETTING: @(!application.am_doesNotHandleUIInterruptions),
     }
   );
@@ -187,7 +188,7 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
   NSDictionary* settings = [request requireDictionaryArgumentWithName:@"settings"];
 
   if (nil != [settings objectForKey:AM_BOUND_ELEMENTS_BY_INDEX_SETTING]) {
-    FBConfiguration.sharedConfiguration.boundElementsByIndex = [[settings objectForKey:AM_BOUND_ELEMENTS_BY_INDEX_SETTING] boolValue];
+    FBSession.activeSession.boundElementsByIndex = [[settings objectForKey:AM_BOUND_ELEMENTS_BY_INDEX_SETTING] boolValue];
   }
   if (nil != [settings objectForKey:AM_USE_DEFAULT_UI_INTERRUPTIONS_HANDLING_SETTING]) {
     XCUIApplication *application = FBSession.activeSession.currentApplication;

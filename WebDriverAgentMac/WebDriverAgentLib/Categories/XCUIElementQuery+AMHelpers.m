@@ -16,7 +16,7 @@
 
 #import "XCUIElementQuery+AMHelpers.h"
 
-#import "FBConfiguration.h"
+#import "FBSession.h"
 
 @implementation XCUIElementQuery (AMHelpers)
 
@@ -27,7 +27,7 @@
 
 - (NSArray<XCUIElement *> *)am_allMatches
 {
-  return FBConfiguration.sharedConfiguration.boundElementsByIndex
+  return FBSession.activeSession.boundElementsByIndex
     ? self.allElementsBoundByIndex
     : self.allElementsBoundByAccessibilityElement;
 }
