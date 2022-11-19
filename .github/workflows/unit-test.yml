@@ -45,13 +45,19 @@ jobs:
   analyze_wda:
     strategy:
       matrix:
-        os: [macos-11, macos-12] 
+        os: [macos-11, macos-12]
+        xcode_version: [12, 13, 14]
+        exclude:
+          - os: macos-11
+            xcode_version: 14
+          - os: macos-12
+            version: 12
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: latest-stable
+        xcode-version: ${{ matrix.xcode_version }}
     - run: |
         pushd "$(pwd)"
         cd WebDriverAgentMac
