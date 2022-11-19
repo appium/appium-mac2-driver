@@ -46,12 +46,10 @@ jobs:
     strategy:
       matrix:
         os: [macos-11, macos-12]
-        xcode_version: [12, 13, 14]
+        xcode_version: [13, 14]
         exclude:
           - os: macos-11
             xcode_version: 14
-          - os: macos-12
-            xcode_version: 12
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3

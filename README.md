@@ -13,7 +13,7 @@ The original idea and parts of the source code are borrowed from the Facebook's 
 
 > **Note**
 >
-> Since version 1.0.0 Mac2 driver has dropped the support of Appium 1, and is only compatible to Appium 2. Use the `appium driver install mac2` 
+> Since version 1.0.0 Mac2 driver has dropped the support of Appium 1, and is only compatible to Appium 2. Use the `appium driver install mac2`
 > command to add it to your Appium 2 dist.
 
 
@@ -22,6 +22,7 @@ The original idea and parts of the source code are borrowed from the Facebook's 
 On top of standard Appium requirements Mac2 driver also expects the following prerequisites:
 
 - macOS 10.15 or later
+    - macOS 11.3 or later and less than macOS 12, and Xcode 12 combination does not work as the build failure
 - Xcode 12 or later should be installed
 - Xcode Helper app should be enabled for Accessibility access. The app itself could be usually found at `/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/Xcode Helper.app`. In order to enable Accessibility access for it simply open the parent folder in Finder: `open /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/` and drag & drop the `Xcode Helper` app to `Security & Privacy -> Privacy -> Accessibility` list of your `System Preferences`. This action must only be done once.
 - `testmanagerd` proccess requires UIAutomation authentication since macOS 12. `automationmodetool enable-automationmode-without-authentication` command may help to disable it. This may be particularly useful in CI environments. [Apple forum thread](https://developer.apple.com/forums/thread/693850).
@@ -701,4 +702,3 @@ Execute `npm run test` to run unit tests and `npm run e2e-test` to run integrati
 ## Notes
 
 - W3C actions support is limited (only mouse actions are supported). You could also use `macos:` extension APIs to cover your test scenarios
-
