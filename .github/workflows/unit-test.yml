@@ -43,7 +43,10 @@ jobs:
       name: Run unit tests
 
   analyze_wda:
-    runs-on: macos-latest
+    strategy:
+      matrix:
+        os: [macos-11, macos-12] 
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
     - uses: maxim-lobanov/setup-xcode@v1
