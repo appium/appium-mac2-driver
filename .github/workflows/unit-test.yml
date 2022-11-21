@@ -43,12 +43,19 @@ jobs:
       name: Run unit tests
 
   analyze_wda:
-    runs-on: macos-latest
+    strategy:
+      matrix:
+        os: [macos-11, macos-12]
+        xcode_version: [13, 14]
+        exclude:
+          - os: macos-11
+            xcode_version: 14
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: latest-stable
+        xcode-version: ${{ matrix.xcode_version }}
     - run: |
         pushd "$(pwd)"
         cd WebDriverAgentMac
