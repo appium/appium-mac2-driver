@@ -1,3 +1,10 @@
+## [1.5.0](https://github.com/appium/appium-mac2-driver/compare/v1.4.9...v1.5.0) (2023-01-12)
+
+
+### Features
+
+* Add newMethodMap to the driver ([#183](https://github.com/appium/appium-mac2-driver/issues/183)) ([a432f7f](https://github.com/appium/appium-mac2-driver/commit/a432f7ffca18540ef24bf478b2a4b348a4d27a7a))
+
 ## [1.4.9](https://github.com/appium/appium-mac2-driver/compare/v1.4.8...v1.4.9) (2023-01-12)
 
 
