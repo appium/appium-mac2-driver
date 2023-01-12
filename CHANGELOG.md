@@ -1,3 +1,10 @@
+## [1.4.9](https://github.com/appium/appium-mac2-driver/compare/v1.4.8...v1.4.9) (2023-01-12)
+
+
+### Bug Fixes
+
+* Proxy getStatus call to WDA ([#182](https://github.com/appium/appium-mac2-driver/issues/182)) ([43e310d](https://github.com/appium/appium-mac2-driver/commit/43e310da73a0940bec5bc2749a85e498e289031c))
+
 ## [1.4.8](https://github.com/appium/appium-mac2-driver/compare/v1.4.7...v1.4.8) (2022-12-03)
 
 
