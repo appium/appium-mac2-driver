@@ -288,10 +288,12 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
                                             error:(NSError **)error
 {
   if (nil == eventPath) {
-    XCPointerEventPath *result = [[XCPointerEventPath alloc] initForMouseEvents];
-    [result moveMouseToPoint:self.atPosition
-                    atOffset:FBMillisToSeconds(self.offset)
-                    duration:FBMillisToSeconds(self.duration)];
+    XCPointerEventPath *result = [[XCPointerEventPath alloc] initForMouseEventsAtLocation:self.atPosition];
+    if (self.offset > 0 || self.duration > 0) {
+      [result moveMouseToPoint:self.atPosition
+                      atOffset:FBMillisToSeconds(self.offset)
+                      duration:FBMillisToSeconds(self.duration)];
+    }
     return @[result];
   }
 
