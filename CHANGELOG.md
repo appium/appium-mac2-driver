@@ -1,3 +1,15 @@
+## [1.5.2](https://github.com/appium/appium-mac2-driver/compare/v1.5.1...v1.5.2) (2023-02-20)
+
+
+### Bug Fixes
+
+* Init mouse cursor at the proper starting position ([#192](https://github.com/appium/appium-mac2-driver/issues/192)) ([67d10e0](https://github.com/appium/appium-mac2-driver/commit/67d10e09a9bd4f88560bb05b953ff7988f005289))
+
+
+### Miscellaneous Chores
+
+* Add dummy implementation of releaseActions API ([#191](https://github.com/appium/appium-mac2-driver/issues/191)) ([45f7956](https://github.com/appium/appium-mac2-driver/commit/45f79565ee4afa1e0ac2faabe30454420800f7c9))
+
 ## [1.5.1](https://github.com/appium/appium-mac2-driver/compare/v1.5.0...v1.5.1) (2023-01-17)
 
 
