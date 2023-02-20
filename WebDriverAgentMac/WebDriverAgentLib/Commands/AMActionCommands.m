@@ -23,6 +23,7 @@
   return
   @[
     [[FBRoute POST:@"/actions"] respondWithTarget:self action:@selector(handlePerformW3CActions:)],
+    [[FBRoute DELETE:@"/actions"] respondWithTarget:self action:@selector(handleReleaseW3CActions:)],
   ];
 }
 
@@ -43,6 +44,12 @@
     }
     return FBResponseWithUnknownError(error);
   }
+  return FBResponseWithOK();
+}
+
++ (id<FBResponsePayload>)handleReleaseW3CActions:(FBRouteRequest *)request
+{
+  // just a dummy call to avoid UnknownCommandError being thrown
   return FBResponseWithOK();
 }
 
