@@ -73,7 +73,7 @@ These attribute values could be retrieved from the page source output and then u
 
 Mac2 driver supports the following location strategies:
 
-Name | Description | Speed Ranking | Example
+Name | Description | Speed Ranking | Pseudocode
 --- | --- |  --- | ---
 accessibilityId, id, name | These all strategies are mapped to the same Mac2 driver ByIdentifier lookup strategy. The locator matches the passed value with element's `identifer` attribute case-sensitively. | `⭐⭐⭐⭐⭐` | AppiumBy.accessibilityId("identifier"), By.id("identifier"), By.name("identifier")
 className | Class name uses stringified element types for lookup | `⭐⭐⭐⭐⭐` | By.className("XCUIElementTypePopUpButton")
