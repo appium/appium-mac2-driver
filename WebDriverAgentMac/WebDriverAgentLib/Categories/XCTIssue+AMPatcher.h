@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XCTestSuite (AMPatcher)
+@interface XCTIssue (AMPatcher)
 
 @end
 

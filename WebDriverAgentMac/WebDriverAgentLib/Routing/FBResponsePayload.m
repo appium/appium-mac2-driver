@@ -16,7 +16,7 @@
 #import "FBMacros.h"
 #import "FBProtocolHelpers.h"
 
-id<FBResponsePayload> FBResponseWithOK()
+id<FBResponsePayload> FBResponseWithOK(void)
 {
   return FBResponseWithStatus(FBCommandStatus.ok);
 }
