@@ -61,6 +61,7 @@
                               expected:(BOOL)expected
 {
   [FBLogger logFmt:@"Enqueue Failure: %@ %@ %lu %d", description, filePath, (unsigned long)lineNumber, expected];
+  // TODO: Figure out which errors we want to escalate
 }
 
 @end
