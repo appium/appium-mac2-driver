@@ -12,7 +12,7 @@
 #import "FBBaseActionsSynthesizer.h"
 #import "FBErrorBuilder.h"
 #import "FBW3CActionsSynthesizer.h"
-#import "XCUIDevice.h"
+#import "XCUIEventSynthesizing-Protocol.h"
 
 #define MAX_ACTIONS_DURATION_SEC 300
 
@@ -37,8 +37,10 @@
 {
   __block NSError *internalError = nil;
   dispatch_semaphore_t sem = dispatch_semaphore_create(0);
-  [[XCUIDevice.sharedDevice eventSynthesizer] synthesizeEvent:event
-                                                   completion:(id)^(BOOL result, NSError *invokeError) {
+  id<XCUIEventSynthesizing> eventSynthesizer = [[NSClassFromString(@"XCUIDevice") valueForKey:@"sharedDevice"]
+                                                valueForKey:@"eventSynthesizer"];
+  [eventSynthesizer synthesizeEvent:event
+                         completion:(id)^(BOOL result, NSError *invokeError) {
     if (!result) {
       internalError = invokeError;
     }

@@ -18,10 +18,7 @@
 
 #import <WebDriverAgentLib/WebDriverAgentLib.h>
 
-// This is needed to ignore test failures in Xcode 12.5+
-#import "XCTestSuite+AMPatcher.h"
-
-@interface UITestingUITests : XCTestCase <FBWebServerDelegate>
+@interface UITestingUITests : FBFailureProofTestCase <FBWebServerDelegate>
 @end
 
 @implementation UITestingUITests
@@ -36,9 +33,6 @@
 - (void)setUp
 {
   [super setUp];
-  self.continueAfterFailure = YES;
-  [self setValue:@(NO) forKey:@"_shouldSetShouldHaltWhenReceivesControl"];
-  [self setValue:@(NO) forKey:@"_shouldHaltWhenReceivesControl"];
 }
 
 /**
