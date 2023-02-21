@@ -36,10 +36,7 @@
 
 - (void)_recordIssue:(XCTIssue *)issue forCaughtError:(id)error
 {
-  [self _enqueueFailureWithDescription:issue.compactDescription
-                                inFile:issue.sourceCodeContext.location.fileURL.path
-                                atLine:issue.sourceCodeContext.location.lineNumber
-                              expected:issue.type == XCTIssueTypeUnmatchedExpectedFailure];
+  [self _recordIssue:issue];
 }
 
 - (void)recordIssue:(XCTIssue *)issue
