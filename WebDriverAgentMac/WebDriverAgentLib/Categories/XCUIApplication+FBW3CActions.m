@@ -37,7 +37,8 @@
 {
   __block NSError *internalError = nil;
   dispatch_semaphore_t sem = dispatch_semaphore_create(0);
-  id<XCUIEventSynthesizing> eventSynthesizer = [XCUIDevice.sharedDevice valueForKey:@"eventSynthesizer"];
+  id<XCUIEventSynthesizing> eventSynthesizer = [[NSClassFromString(@"XCUIDevice") valueForKey:@"sharedDevice"]
+                                                valueForKey:@"eventSynthesizer"];
   [eventSynthesizer synthesizeEvent:event
                          completion:(id)^(BOOL result, NSError *invokeError) {
     if (!result) {
