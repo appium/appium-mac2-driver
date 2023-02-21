@@ -20,3 +20,4 @@
 #import <WebDriverAgentLib/FBWebServer.h>
 // This is needed to ignore test failures in Xcode 12.5+
 #import <WebDriverAgentLib/XCTIssue+AMPatcher.h>
+#import <WebDriverAgentLib/FBFailureProofTestCase.h>

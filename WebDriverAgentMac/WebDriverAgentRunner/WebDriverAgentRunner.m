@@ -18,7 +18,7 @@
 
 #import <WebDriverAgentLib/WebDriverAgentLib.h>
 
-@interface UITestingUITests : XCTestCase <FBWebServerDelegate>
+@interface UITestingUITests : FBFailureProofTestCase <FBWebServerDelegate>
 @end
 
 @implementation UITestingUITests
@@ -33,9 +33,6 @@
 - (void)setUp
 {
   [super setUp];
-  self.continueAfterFailure = YES;
-  [self setValue:@(NO) forKey:@"_shouldSetShouldHaltWhenReceivesControl"];
-  [self setValue:@(NO) forKey:@"_shouldHaltWhenReceivesControl"];
 }
 
 /**
