@@ -11,9 +11,6 @@
 
 #import "FBLogger.h"
 
-@interface FBFailureProofTestCase ()
-@end
-
 @implementation FBFailureProofTestCase
 
 - (void)setUp
@@ -28,7 +25,8 @@
 #ifdef MAC_OS_VERSION_13_0
 - (void)_recordIssue:(XCTIssue *)issue
 {
-  [self _enqueueFailureWithDescription:issue.compactDescription
+  NSString *description = [NSString stringWithFormat:@"%@ (%@)", issue.compactDescription, issue.associatedError.description];
+  [self _enqueueFailureWithDescription:description
                                 inFile:issue.sourceCodeContext.location.fileURL.path
                                 atLine:issue.sourceCodeContext.location.lineNumber
                               expected:issue.type == XCTIssueTypeUnmatchedExpectedFailure];
