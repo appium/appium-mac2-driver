@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/appium/appium-mac2-driver/compare/v1.5.2...v1.5.3) (2023-02-21)
+
+
+### Miscellaneous Chores
+
+* Tune test interruption patching logic ([#194](https://github.com/appium/appium-mac2-driver/issues/194)) ([febe396](https://github.com/appium/appium-mac2-driver/commit/febe396a56389b7870f806b1c78516a393df6000))
+
 ## [1.5.2](https://github.com/appium/appium-mac2-driver/compare/v1.5.1...v1.5.2) (2023-02-20)
 
 
