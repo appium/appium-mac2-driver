@@ -1,3 +1,10 @@
+## [1.6.0](https://github.com/appium/appium-mac2-driver/compare/v1.5.3...v1.6.0) (2023-06-02)
+
+
+### Features
+
+* Use strongbox to persist last upgrade version ([#207](https://github.com/appium/appium-mac2-driver/issues/207)) ([11367c5](https://github.com/appium/appium-mac2-driver/commit/11367c59d7881b8775efaa12b05328887478ae93))
+
 ## [1.5.3](https://github.com/appium/appium-mac2-driver/compare/v1.5.2...v1.5.3) (2023-02-21)
 
 
