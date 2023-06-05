@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/appium/appium-mac2-driver/compare/v1.6.0...v1.6.1) (2023-06-05)
+
+
+### Bug Fixes
+
+* Use module log instance ([8571666](https://github.com/appium/appium-mac2-driver/commit/8571666e217253209998dae7e552e63114769fd2))
+
 ## [1.6.0](https://github.com/appium/appium-mac2-driver/compare/v1.5.3...v1.6.0) (2023-06-02)
 
 
