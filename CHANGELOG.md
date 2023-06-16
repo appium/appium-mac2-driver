@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/appium/appium-mac2-driver/compare/v1.6.2...v1.6.3) (2023-06-16)
+
+
+### Bug Fixes
+
+* Update strongbox API name ([8da1c9f](https://github.com/appium/appium-mac2-driver/commit/8da1c9f2af852f927efdb80037cd2f399aaadbbb))
+
 ## [1.6.2](https://github.com/appium/appium-mac2-driver/compare/v1.6.1...v1.6.2) (2023-06-07)
 
 
