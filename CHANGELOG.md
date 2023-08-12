@@ -1,3 +1,10 @@
+## [1.7.0](https://github.com/appium/appium-mac2-driver/compare/v1.6.3...v1.7.0) (2023-08-12)
+
+
+### Features
+
+* Switch babel to typescript ([#216](https://github.com/appium/appium-mac2-driver/issues/216)) ([c908503](https://github.com/appium/appium-mac2-driver/commit/c9085034ebe57ee743acb18da5236af4563873f7))
+
 ## [1.6.3](https://github.com/appium/appium-mac2-driver/compare/v1.6.2...v1.6.3) (2023-06-16)
 
 
