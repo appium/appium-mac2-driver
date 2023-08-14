@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/appium/appium-mac2-driver/compare/v1.7.0...v1.7.1) (2023-08-14)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump lint-staged from 13.3.0 to 14.0.0 ([#217](https://github.com/appium/appium-mac2-driver/issues/217)) ([7c02fb6](https://github.com/appium/appium-mac2-driver/commit/7c02fb618471c221d98f77b4c187d6a98895428b))
+
 ## [1.7.0](https://github.com/appium/appium-mac2-driver/compare/v1.6.3...v1.7.0) (2023-08-12)
 
 
