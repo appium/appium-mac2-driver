@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/appium/appium-mac2-driver/compare/v1.7.1...v1.7.2) (2023-08-17)
+
+
+### Miscellaneous Chores
+
+* remove obsolete babel stuff ([5e6951a](https://github.com/appium/appium-mac2-driver/commit/5e6951a3fee694f59ab68de30a6d1ea076333f9e))
+
 ## [1.7.1](https://github.com/appium/appium-mac2-driver/compare/v1.7.0...v1.7.1) (2023-08-14)
 
 
