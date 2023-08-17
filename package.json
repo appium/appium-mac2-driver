@@ -42,7 +42,6 @@
   "bin": {},
   "dependencies": {
     "@appium/strongbox": "^0.x",
-    "@babel/runtime": "^7.0.0",
     "asyncbox": "^2.0.2",
     "axios": "^1.x",
     "bluebird": "^3.5.1",
