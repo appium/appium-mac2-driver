@@ -1,3 +1,10 @@
+## [1.7.3](https://github.com/appium/appium-mac2-driver/compare/v1.7.2...v1.7.3) (2023-08-25)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump semantic-release from 20.1.3 to 21.1.0 ([#225](https://github.com/appium/appium-mac2-driver/issues/225)) ([e54345a](https://github.com/appium/appium-mac2-driver/commit/e54345ad2314981e72ed9387472b65a3b5f081a9))
+
 ## [1.7.2](https://github.com/appium/appium-mac2-driver/compare/v1.7.1...v1.7.2) (2023-08-17)
 
 
