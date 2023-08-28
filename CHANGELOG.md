@@ -1,3 +1,10 @@
+## [1.7.4](https://github.com/appium/appium-mac2-driver/compare/v1.7.3...v1.7.4) (2023-08-28)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump conventional-changelog-conventionalcommits ([#226](https://github.com/appium/appium-mac2-driver/issues/226)) ([6417dc6](https://github.com/appium/appium-mac2-driver/commit/6417dc6b24461a0f83e2e9ae156f323d999f767b))
+
 ## [1.7.3](https://github.com/appium/appium-mac2-driver/compare/v1.7.2...v1.7.3) (2023-08-25)
 
 
