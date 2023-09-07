@@ -218,6 +218,7 @@ startY | number | if `sourceElementId` and `destinationElementId` are unset | st
 endX | number | if `sourceElementId` and `destinationElementId` are unset | end X coordinate | 200
 endY | number | if `sourceElementId` and `destinationElementId` are unset | end Y coordinate | 220
 duration | number | yes | The number of float seconds to hold the mouse button | 2.5
+holdDuration | number | yes | Touch hold duration in float seconds | 2.5
 velocity | number | no | Dragging velocity in pixels per second. If not provided then the default velocity is used. See official documentation on [XCUIGestureVelocity structure](https://developer.apple.com/documentation/xctest/xcuigesturevelocity) for more details | 2500
 keyModifierFlags | number | no | if set then the given key modifiers will be applied while drag is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 
@@ -342,6 +343,7 @@ startY | number | if `sourceElementId` and `destinationElementId` are unset | st
 endX | number | if `sourceElementId` and `destinationElementId` are unset | end X coordinate | 200
 endY | number | if `sourceElementId` and `destinationElementId` are unset | end Y coordinate | 220
 duration | number | yes | The number of float seconds to hold the touch | 2.5
+holdDuration | number | yes | Touch hold duration in float seconds | 2.5
 velocity | number | no | Dragging velocity in pixels per second. If not provided then the default velocity is used. See official documentation on [XCUIGestureVelocity structure](https://developer.apple.com/documentation/xctest/xcuigesturevelocity) for more details | 2500
 keyModifierFlags | number | no | if set then the given key modifiers will be applied while the gesture is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 

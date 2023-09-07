@@ -1,3 +1,66 @@
+## [1.7.4](https://github.com/appium/appium-mac2-driver/compare/v1.7.3...v1.7.4) (2023-08-28)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump conventional-changelog-conventionalcommits ([#226](https://github.com/appium/appium-mac2-driver/issues/226)) ([6417dc6](https://github.com/appium/appium-mac2-driver/commit/6417dc6b24461a0f83e2e9ae156f323d999f767b))
+
+## [1.7.3](https://github.com/appium/appium-mac2-driver/compare/v1.7.2...v1.7.3) (2023-08-25)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump semantic-release from 20.1.3 to 21.1.0 ([#225](https://github.com/appium/appium-mac2-driver/issues/225)) ([e54345a](https://github.com/appium/appium-mac2-driver/commit/e54345ad2314981e72ed9387472b65a3b5f081a9))
+
+## [1.7.2](https://github.com/appium/appium-mac2-driver/compare/v1.7.1...v1.7.2) (2023-08-17)
+
+
+### Miscellaneous Chores
+
+* remove obsolete babel stuff ([5e6951a](https://github.com/appium/appium-mac2-driver/commit/5e6951a3fee694f59ab68de30a6d1ea076333f9e))
+
+## [1.7.1](https://github.com/appium/appium-mac2-driver/compare/v1.7.0...v1.7.1) (2023-08-14)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump lint-staged from 13.3.0 to 14.0.0 ([#217](https://github.com/appium/appium-mac2-driver/issues/217)) ([7c02fb6](https://github.com/appium/appium-mac2-driver/commit/7c02fb618471c221d98f77b4c187d6a98895428b))
+
+## [1.7.0](https://github.com/appium/appium-mac2-driver/compare/v1.6.3...v1.7.0) (2023-08-12)
+
+
+### Features
+
+* Switch babel to typescript ([#216](https://github.com/appium/appium-mac2-driver/issues/216)) ([c908503](https://github.com/appium/appium-mac2-driver/commit/c9085034ebe57ee743acb18da5236af4563873f7))
+
+## [1.6.3](https://github.com/appium/appium-mac2-driver/compare/v1.6.2...v1.6.3) (2023-06-16)
+
+
+### Bug Fixes
+
+* Update strongbox API name ([8da1c9f](https://github.com/appium/appium-mac2-driver/commit/8da1c9f2af852f927efdb80037cd2f399aaadbbb))
+
+## [1.6.2](https://github.com/appium/appium-mac2-driver/compare/v1.6.1...v1.6.2) (2023-06-07)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump conventional-changelog-conventionalcommits ([#210](https://github.com/appium/appium-mac2-driver/issues/210)) ([27f8735](https://github.com/appium/appium-mac2-driver/commit/27f8735b347e3703630062eb474272af87e5ab30))
+
+## [1.6.1](https://github.com/appium/appium-mac2-driver/compare/v1.6.0...v1.6.1) (2023-06-05)
+
+
+### Bug Fixes
+
+* Use module log instance ([8571666](https://github.com/appium/appium-mac2-driver/commit/8571666e217253209998dae7e552e63114769fd2))
+
+## [1.6.0](https://github.com/appium/appium-mac2-driver/compare/v1.5.3...v1.6.0) (2023-06-02)
+
+
+### Features
+
+* Use strongbox to persist last upgrade version ([#207](https://github.com/appium/appium-mac2-driver/issues/207)) ([11367c5](https://github.com/appium/appium-mac2-driver/commit/11367c59d7881b8775efaa12b05328887478ae93))
+
 ## [1.5.3](https://github.com/appium/appium-mac2-driver/compare/v1.5.2...v1.5.3) (2023-02-21)
 
 
