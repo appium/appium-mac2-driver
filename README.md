@@ -24,7 +24,7 @@ On top of standard Appium requirements Mac2 driver also expects the following pr
 - macOS 10.15 or later
     - macOS 11.3 or later and less than macOS 12, and Xcode 12 combination does not work as the build failure
 - Xcode 12 or later should be installed
-    - `xcode-select` should set for `Xcode.app/Contents/Developer` instead of `/Library/Developer/CommandLineTools` to run `xcodebuild` commands
+    - `xcode-select` should be pointing to `<full_path_to_xcode_app>/Contents/Developer` developer directory instead of `/Library/Developer/CommandLineTools` to run `xcodebuild` commands
 - Xcode Helper app should be enabled for Accessibility access. The app itself could be usually found at `/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/Xcode Helper.app`. In order to enable Accessibility access for it simply open the parent folder in Finder: `open /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/` and drag & drop the `Xcode Helper` app to `Security & Privacy -> Privacy -> Accessibility` list of your `System Preferences`. This action must only be done once.
 - `testmanagerd` proccess requires UIAutomation authentication since macOS 12. `automationmodetool enable-automationmode-without-authentication` command may help to disable it. This may be particularly useful in CI environments. [Apple forum thread](https://developer.apple.com/forums/thread/693850).
 
