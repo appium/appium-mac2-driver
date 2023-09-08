@@ -1,3 +1,10 @@
+## [1.8.0](https://github.com/appium/appium-mac2-driver/compare/v1.7.4...v1.8.0) (2023-09-08)
+
+
+### Features
+
+* add appPath to handleCreateSession ([#230](https://github.com/appium/appium-mac2-driver/issues/230)) ([7b7cc17](https://github.com/appium/appium-mac2-driver/commit/7b7cc17f267e909f38fd210dea6652281679d662))
+
 ## [1.7.4](https://github.com/appium/appium-mac2-driver/compare/v1.7.3...v1.7.4) (2023-08-28)
 
 
