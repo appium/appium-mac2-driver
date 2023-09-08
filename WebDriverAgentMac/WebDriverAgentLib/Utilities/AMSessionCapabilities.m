@@ -21,3 +21,4 @@ NSString* const AM_APP_ARGUMENTS_CAPABILITY = @"arguments";
 NSString* const AM_APP_ENVIRONMENT_CAPABILITY = @"environment";
 NSString* const AM_SKIP_APP_KILL_CAPABILITY = @"skipAppKill";
 NSString* const AM_NO_RESET_CAPABILITY = @"noReset";
+NSString* const AM_APP_PATH_CAPABILITY = @"appPath";
