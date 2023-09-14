@@ -1,3 +1,11 @@
+## [1.8.1](https://github.com/appium/appium-mac2-driver/compare/v1.8.0...v1.8.1) (2023-09-14)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/teen_process from 2.0.0 to 2.0.1 ([#232](https://github.com/appium/appium-mac2-driver/issues/232)) ([206c07e](https://github.com/appium/appium-mac2-driver/commit/206c07e3401b64a47fa1228ff37b2216f4967f37))
+* **deps-dev:** bump sinon from 15.2.0 to 16.0.0 ([#233](https://github.com/appium/appium-mac2-driver/issues/233)) ([5d00d84](https://github.com/appium/appium-mac2-driver/commit/5d00d84bdcbcc3d5ad2404941b4dd3ab1cb8622e))
+
 ## [1.8.0](https://github.com/appium/appium-mac2-driver/compare/v1.7.4...v1.8.0) (2023-09-08)
 
 
