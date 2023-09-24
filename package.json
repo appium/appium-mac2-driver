@@ -120,6 +120,8 @@
     "WebDriverAgentMac/IntegrationTests",
     "WebDriverAgentMac/WebDriverAgent",
     "!.DS_Store",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "LICENSE",
+    "npm-shrinkwrap.json"
   ]
 }
