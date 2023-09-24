@@ -1,3 +1,10 @@
+## [1.8.2](https://github.com/appium/appium-mac2-driver/compare/v1.8.1...v1.8.2) (2023-09-24)
+
+
+### Bug Fixes
+
+* release package ([#237](https://github.com/appium/appium-mac2-driver/issues/237)) ([dac6dd7](https://github.com/appium/appium-mac2-driver/commit/dac6dd7b644e30455693d83a0f579d3b32723c9f))
+
 ## [1.8.1](https://github.com/appium/appium-mac2-driver/compare/v1.8.0...v1.8.1) (2023-09-14)
 
 
