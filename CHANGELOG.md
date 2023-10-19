@@ -1,3 +1,15 @@
+## [1.8.3](https://github.com/appium/appium-mac2-driver/compare/v1.8.2...v1.8.3) (2023-10-19)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/teen_process from 2.0.1 to 2.0.2 ([#247](https://github.com/appium/appium-mac2-driver/issues/247)) ([2aaf7c7](https://github.com/appium/appium-mac2-driver/commit/2aaf7c744264ab1c8632eb1651452f35cf4d0c00))
+* **deps-dev:** bump eslint-config-prettier from 8.10.0 to 9.0.0 ([#246](https://github.com/appium/appium-mac2-driver/issues/246)) ([c41eb9d](https://github.com/appium/appium-mac2-driver/commit/c41eb9dd44cc95bbcee08995290da574808e76dd))
+* **deps-dev:** bump lint-staged from 14.0.1 to 15.0.2 ([#248](https://github.com/appium/appium-mac2-driver/issues/248)) ([1e0295d](https://github.com/appium/appium-mac2-driver/commit/1e0295da20b98f62c83f757d88d6f443cc91d0e3))
+* **deps-dev:** bump semantic-release from 21.1.2 to 22.0.5 ([#238](https://github.com/appium/appium-mac2-driver/issues/238)) ([28c8314](https://github.com/appium/appium-mac2-driver/commit/28c8314fe509d14a6b3fcbc3509d144f00204b8c))
+* Use latest teen_process types ([b52f482](https://github.com/appium/appium-mac2-driver/commit/b52f482a4b19cc0ea82487cb6fa6264bbec683a1))
+* Use latest types ([2236825](https://github.com/appium/appium-mac2-driver/commit/2236825b68d0973891739e121c0f40c0ec2ebc9a))
+
 ## [1.8.2](https://github.com/appium/appium-mac2-driver/compare/v1.8.1...v1.8.2) (2023-09-24)
 
 
