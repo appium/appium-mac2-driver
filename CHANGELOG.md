@@ -1,3 +1,10 @@
+## [1.8.5](https://github.com/appium/appium-mac2-driver/compare/v1.8.4...v1.8.5) (2023-10-25)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @typescript-eslint/eslint-plugin from 5.62.0 to 6.9.0 ([#250](https://github.com/appium/appium-mac2-driver/issues/250)) ([9421419](https://github.com/appium/appium-mac2-driver/commit/9421419772bc3ebcb924735f05f158ca3b21ed9e))
+
 ## [1.8.4](https://github.com/appium/appium-mac2-driver/compare/v1.8.3...v1.8.4) (2023-10-24)
 
 
