@@ -91,7 +91,7 @@ Beside of standard W3C APIs the driver provides the below custom command extensi
 
 ```java
 // Java 11+
-var result = driver.executeScript("mobile: <methodName>", Map.of(
+var result = driver.executeScript("macos: <methodName>", Map.of(
     "arg1", "value1",
     "arg2", "value2"
     // you may add more pairs if needed or skip providing the map completely
@@ -101,7 +101,7 @@ var result = driver.executeScript("mobile: <methodName>", Map.of(
 
 ```js
 // WebdriverIO
-const result = await driver.executeScript('mobile: <methodName>', [{
+const result = await driver.executeScript('macos: <methodName>', [{
     arg1: "value1",
     arg2: "value2",
 }]);
@@ -109,7 +109,7 @@ const result = await driver.executeScript('mobile: <methodName>', [{
 
 ```python
 # Python
-result = driver.execute_script('mobile: <methodName>', {
+result = driver.execute_script('macos: <methodName>', {
     'arg1': 'value1',
     'arg2': 'value2',
 })
@@ -117,7 +117,7 @@ result = driver.execute_script('mobile: <methodName>', {
 
 ```ruby
 # Ruby
-result = @driver.execute_script 'mobile: <methodName>', {
+result = @driver.execute_script 'macos: <methodName>', {
     arg1: 'value1',
     arg2: 'value2',
 }
@@ -125,7 +125,7 @@ result = @driver.execute_script 'mobile: <methodName>', {
 
 ```csharp
 // Dotnet
-object result = driver.ExecuteScript("mobile: <methodName>", new Dictionary<string, object>() {
+object result = driver.ExecuteScript("macos: <methodName>", new Dictionary<string, object>() {
     {"arg1", "value1"},
     {"arg2", "value2"}
 });
