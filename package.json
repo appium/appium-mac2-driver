@@ -42,7 +42,7 @@
   "bin": {},
   "dependencies": {
     "@appium/strongbox": "^0.x",
-    "asyncbox": "^2.0.2",
+    "asyncbox": "^3.0.0",
     "axios": "^1.x",
     "bluebird": "^3.5.1",
     "lodash": "^4.17.4",
