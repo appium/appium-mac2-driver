@@ -1,3 +1,10 @@
+## [1.8.7](https://github.com/appium/appium-mac2-driver/compare/v1.8.6...v1.8.7) (2023-11-06)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/sinon from 10.0.20 to 17.0.0 ([#253](https://github.com/appium/appium-mac2-driver/issues/253)) ([79cf763](https://github.com/appium/appium-mac2-driver/commit/79cf7635681515b442b3fc4fc45cd3b7766ddd20))
+
 ## [1.8.6](https://github.com/appium/appium-mac2-driver/compare/v1.8.5...v1.8.6) (2023-11-01)
 
 
