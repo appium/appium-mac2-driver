@@ -1,3 +1,10 @@
+## [1.8.8](https://github.com/appium/appium-mac2-driver/compare/v1.8.7...v1.8.8) (2023-11-08)
+
+
+### Miscellaneous Chores
+
+* use omit to prune dev and peer ([#254](https://github.com/appium/appium-mac2-driver/issues/254)) ([0dc2323](https://github.com/appium/appium-mac2-driver/commit/0dc23234ec2d158284152efc5ec85eb7e3ac0baa))
+
 ## [1.8.7](https://github.com/appium/appium-mac2-driver/compare/v1.8.6...v1.8.7) (2023-11-06)
 
 
