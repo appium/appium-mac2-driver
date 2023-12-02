@@ -1,3 +1,10 @@
+## [1.8.9](https://github.com/appium/appium-mac2-driver/compare/v1.8.8...v1.8.9) (2023-12-02)
+
+
+### Miscellaneous Chores
+
+* update publish.js.yml ([#259](https://github.com/appium/appium-mac2-driver/issues/259)) ([c9d5daa](https://github.com/appium/appium-mac2-driver/commit/c9d5daab3579c1f61e3f63dccccfd484b8989bd8))
+
 ## [1.8.8](https://github.com/appium/appium-mac2-driver/compare/v1.8.7...v1.8.8) (2023-11-08)
 
 
