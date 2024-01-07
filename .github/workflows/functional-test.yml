@@ -41,6 +41,7 @@ jobs:
         xcode-version: "${{ matrix.xcodeVersion }}"
 
     - run: |
+        npm install
         export cwd=$(pwd)
         pushd "$cwd"
         cd ~
