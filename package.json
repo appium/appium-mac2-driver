@@ -36,12 +36,20 @@
     "platformNames": [
       "Mac"
     ],
-    "mainClass": "Mac2Driver"
+    "mainClass": "Mac2Driver",
+    "doctor": {
+      "checks": [
+        "./build/lib/doctor/required-checks.js",
+        "./build/lib/doctor/optional-checks.js"
+      ]
+    }
   },
   "main": "./build/index.js",
   "bin": {},
   "dependencies": {
     "@appium/strongbox": "^0.x",
+    "@colors/colors": "^1.6.0",
+    "appium-xcode": "^5.1.4",
     "asyncbox": "^3.0.0",
     "axios": "^1.x",
     "bluebird": "^3.5.1",
@@ -68,7 +76,7 @@
     "precommit-lint"
   ],
   "peerDependencies": {
-    "appium": "^2.0.0"
+    "appium": "^2.4.1"
   },
   "devDependencies": {
     "@appium/eslint-config-appium": "^8.0.4",
