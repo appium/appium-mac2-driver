@@ -1,3 +1,10 @@
+## [1.9.0](https://github.com/appium/appium-mac2-driver/compare/v1.8.9...v1.9.0) (2024-01-08)
+
+
+### Features
+
+* Add doctor checks ([#266](https://github.com/appium/appium-mac2-driver/issues/266)) ([001597a](https://github.com/appium/appium-mac2-driver/commit/001597a39ad5a1b9a51d7dec5f161d0c6f8b9460))
+
 ## [1.8.9](https://github.com/appium/appium-mac2-driver/compare/v1.8.8...v1.8.9) (2023-12-02)
 
 
