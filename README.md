@@ -11,8 +11,7 @@ This is Appium driver for automating macOS applications using Apple's [XCTest](h
 The driver operates in scope of [W3C WebDriver protocol](https://www.w3.org/TR/webdriver/) with several custom extensions to cover operating-system specific scenarios.
 The original idea and parts of the source code are borrowed from the Facebook's [WebDriverAgent](https://github.com/facebookarchive/WebDriverAgent) project.
 
-> **Note**
->
+> [!NOTE]
 > Since version 1.0.0 Mac2 driver has dropped the support of Appium 1, and is only compatible to Appium 2. Use the `appium driver install mac2`
 > command to add it to your Appium 2 dist.
 
@@ -411,33 +410,32 @@ Name | Type | Required | Description | Example
 elementId ("element" prior to Appium v 1.22) | string | no | Unique identifier of the element to send the keys to. If unset then keys are sent to the current application under test. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
 keys | array | yes | Array of keys to type. Each item could either be a string, that represents a key itself (see the official documentation on XCUIElement's [typeKey:modifierFlags: method](https://developer.apple.com/documentation/xctest/xcuielement/1500604-typekey?language=objc) and on [XCUIKeyboardKey constants](https://developer.apple.com/documentation/xctest/xcuikeyboardkey?language=objc)) or a dictionary with `key` and `modifierFlags` entries, if the key should also be entered with modifiers. | ['h', 'i'] or [{key: 'h', modifierFlags: 1 << 1}, {key: 'i', modifierFlags: 1 << 2}] or ['XCUIKeyboardKeyEscape'] |
 
-!!! note
-
-    The `modifierFlags` argument is of `unsigned long` type and defines the bitmask with depressed modifier keys for the given key.
-    XCTest defines the following possible bitmasks for modifier keys:
-
-    <pre>
-    typedef NS_OPTIONS(NSUInteger, XCUIKeyModifierFlags) {
-       XCUIKeyModifierNone       = 0,
-       XCUIKeyModifierCapsLock   = (1UL << 0),
-       XCUIKeyModifierShift      = (1UL << 1),
-       XCUIKeyModifierControl    = (1UL << 2),
-       XCUIKeyModifierOption     = (1UL << 3),
-       XCUIKeyModifierCommand    = (1UL << 4),
-       XCUIKeyModifierFunction   = (1UL << 5),
-       // These values align with UIKeyModifierFlags and CGEventFlags.
-       XCUIKeyModifierAlphaShift = XCUIKeyModifierCapsLock,
-       XCUIKeyModifierAlternate  = XCUIKeyModifierOption,
-    };
-    </pre>
-
-    So, for example, if you want Ctrl and Shift to be depressed while entering your key then `modifierFlags` should be set to
-    `(1 << 1) | (1 << 2)`, where the first constant defines `XCUIKeyModifierShift` and the seconds
-    one - `XCUIKeyModifierControl`. We apply the [bitwise or](https://www.programiz.com/c-programming/bitwise-operators#or)
-    (`|`) operator between them to raise both bitflags
-    in the resulting value. The [left bitshift](https://www.programiz.com/c-programming/bitwise-operators#left-shift)
-    (`<<`) operator defines the binary bitmask for the given modifier key.
-    You may combine more keys using the same approach.
+> [!NOTE]
+> The `modifierFlags` argument is of `unsigned long` type and defines the bitmask with depressed modifier keys for the given key.
+> XCTest defines the following possible bitmasks for modifier keys:
+> 
+> <pre>
+> typedef NS_OPTIONS(NSUInteger, XCUIKeyModifierFlags) {
+>    XCUIKeyModifierNone       = 0,
+>    XCUIKeyModifierCapsLock   = (1UL << 0),
+>    XCUIKeyModifierShift      = (1UL << 1),
+>    XCUIKeyModifierControl    = (1UL << 2),
+>    XCUIKeyModifierOption     = (1UL << 3),
+>    XCUIKeyModifierCommand    = (1UL << 4),
+>    XCUIKeyModifierFunction   = (1UL << 5),
+>    // These values align with UIKeyModifierFlags and CGEventFlags.
+>    XCUIKeyModifierAlphaShift = XCUIKeyModifierCapsLock,
+>    XCUIKeyModifierAlternate  = XCUIKeyModifierOption,
+> };
+> </pre>
+> 
+> So, for example, if you want Ctrl and Shift to be depressed while entering your key then `modifierFlags` should be set to
+> `(1 << 1) | (1 << 2)`, where the first constant defines `XCUIKeyModifierShift` and the seconds
+> one - `XCUIKeyModifierControl`. We apply the [bitwise or](https://www.programiz.com/c-programming/bitwise-operators#or)
+> (`|`) operator between them to raise both bitflags
+> in the resulting value. The [left bitshift](https://www.programiz.com/c-programming/bitwise-operators#left-shift)
+> (`<<`) operator defines the binary bitmask for the given modifier key.
+> You may combine more keys using the same approach.
 
 #### References
 
