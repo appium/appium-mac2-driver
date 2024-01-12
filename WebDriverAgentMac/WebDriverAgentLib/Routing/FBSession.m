@@ -85,11 +85,12 @@ static FBSession *_activeSession = nil;
   return [[XCUIApplication alloc] initWithBundleIdentifier:FINDER_BUNDLE_ID];
 }
 
-- (XCUIApplication *)launchApplicationWithBundleId:(NSString *)bundleIdentifier
+- (XCUIApplication *)launchApplicationWithBundleId:(nullable NSString *)bundleIdentifier
+                                              path:(nullable NSString *)path
                                          arguments:(nullable NSArray<NSString *> *)arguments
                                        environment:(nullable NSDictionary <NSString *, NSString *> *)environment
 {
-  XCUIApplication *app = [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
+  XCUIApplication *app = [self applicationWithBundleId:bundleIdentifier orPath:path];
   if (app.state <= XCUIApplicationStateNotRunning) {
     app.launchArguments = arguments ?: @[];
     app.launchEnvironment = environment ?: @{};
@@ -101,13 +102,13 @@ static FBSession *_activeSession = nil;
   return app;
 }
 
-- (XCUIApplication *)activateApplicationWithBundleId:(NSString *)bundleIdentifier
+- (XCUIApplication *)activateApplicationWithBundleId:(nullable NSString *)bundleIdentifier
+                                                path:(nullable NSString *)path
 {
-  BOOL isCurrentApp = nil != self.testedApplication
-    && [self.testedApplication.am_bundleID isEqualToString:bundleIdentifier];
+  BOOL isCurrentApp = [self isCurrentApplicationForBundleId:bundleIdentifier orPath:path];
   XCUIApplication *app = isCurrentApp
     ? self.testedApplication
-    : [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
+    : [self applicationWithBundleId:bundleIdentifier orPath:path];
   [app activate];
   if (!isCurrentApp) {
     self.testedApplication = app;
@@ -115,12 +116,13 @@ static FBSession *_activeSession = nil;
   return app;
 }
 
-- (BOOL)terminateApplicationWithBundleId:(NSString *)bundleIdentifier
+- (BOOL)terminateApplicationWithBundleId:(nullable NSString *)bundleIdentifier
+                                    path:(nullable NSString *)path
 {
-  BOOL isCurrentApp = nil != self.testedApplication && [self.testedApplication.am_bundleID isEqualToString:bundleIdentifier];
+  BOOL isCurrentApp = [self isCurrentApplicationForBundleId:bundleIdentifier orPath:path];
   XCUIApplication *app = isCurrentApp
     ? self.testedApplication
-    : [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
+    : [self applicationWithBundleId:bundleIdentifier orPath:path];
   BOOL result = NO;
   if (app.state > XCUIApplicationStateNotRunning) {
     [app terminate];
@@ -132,12 +134,40 @@ static FBSession *_activeSession = nil;
   return result;
 }
 
-- (NSUInteger)applicationStateWithBundleId:(NSString *)bundleIdentifier
+- (NSUInteger)applicationStateWithBundleId:(nullable NSString *)bundleIdentifier
+                                      path:(nullable NSString *)path
 {
-  XCUIApplication *app = (nil != self.testedApplication && [self.testedApplication.am_bundleID isEqualToString:bundleIdentifier])
+  XCUIApplication *app = [self isCurrentApplicationForBundleId:bundleIdentifier orPath:path]
     ? self.testedApplication
-    : [[XCUIApplication alloc] initWithBundleIdentifier:bundleIdentifier];
+    : [self applicationWithBundleId:bundleIdentifier orPath:path];
   return app.state;
+}
+
+- (BOOL)isCurrentApplicationForBundleId:(nullable NSString *)bundleId
+                                 orPath:(nullable NSString *)path
+{
+  if (nil == self.testedApplication) {
+    return NO;
+  }
+  if (nil != path) {
+    NSURL *appUrl = [NSURL fileURLWithPath:self.testedApplication.am_path].URLByStandardizingPath;
+    NSURL *expectedUrl = [NSURL fileURLWithPath:path].URLByStandardizingPath;
+    return [appUrl.path compare:expectedUrl.path] == NSOrderedSame;
+  }
+  return nil != bundleId && [self.testedApplication.am_bundleID isEqualToString:bundleId];
+}
+
+- (XCUIApplication *)applicationWithBundleId:(nullable NSString *)bundleId
+                                      orPath:(nullable NSString *)path
+{
+  if (nil == bundleId && nil == path) {
+    @throw [NSException exceptionWithName:FBInvalidArgumentException
+                                   reason:@"Either app bundle identifier or app path must be provided"
+                                 userInfo:@{}];
+  }
+  return nil != path
+    ? [[XCUIApplication alloc] initWithURL:[NSURL fileURLWithPath:(id)path]]
+    : [[XCUIApplication alloc] initWithBundleIdentifier:(id)bundleId];
 }
 
 @end

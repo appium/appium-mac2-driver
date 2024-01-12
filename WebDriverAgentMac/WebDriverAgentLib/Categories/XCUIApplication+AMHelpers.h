@@ -29,6 +29,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)am_bundleID;
 
 /**
+ Retrieves the full path to the app bundle
+
+ @returns full path to the app bundle
+ */
+- (NSString *)am_path;
+
+/**
  Retrieves the main screen rect
  */
 - (CGRect)am_screenRect;
