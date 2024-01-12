@@ -24,6 +24,11 @@
   return [[self valueForKey:@"_applicationImpl"] valueForKey:@"_bundleID"];
 }
 
+- (NSString *)am_path
+{
+  return [[self valueForKey:@"_applicationImpl"] valueForKey:@"_path"];
+}
+
 - (CGRect)am_screenRect
 {
   return NSScreen.mainScreen.frame;

@@ -413,7 +413,7 @@ keys | array | yes | Array of keys to type. Each item could either be a string, 
 > [!NOTE]
 > The `modifierFlags` argument is of `unsigned long` type and defines the bitmask with depressed modifier keys for the given key.
 > XCTest defines the following possible bitmasks for modifier keys:
-> 
+>
 > <pre>
 > typedef NS_OPTIONS(NSUInteger, XCUIKeyModifierFlags) {
 >    XCUIKeyModifierNone       = 0,
@@ -428,7 +428,7 @@ keys | array | yes | Array of keys to type. Each item could either be a string, 
 >    XCUIKeyModifierAlternate  = XCUIKeyModifierOption,
 > };
 > </pre>
-> 
+>
 > So, for example, if you want Ctrl and Shift to be depressed while entering your key then `modifierFlags` should be set to
 > `(1 << 1) | (1 << 2)`, where the first constant defines `XCUIKeyModifierShift` and the seconds
 > one - `XCUIKeyModifierControl`. We apply the [bitwise or](https://www.programiz.com/c-programming/bitwise-operators#or)
@@ -464,7 +464,8 @@ This API influences the state of the [Application Under Test](#application-under
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-bundleId | string | yes | bundle identifier of the app to be launched or activated | com.apple.TextEdit
+bundleId | string | no | Bundle identifier of the app to be launched or activated. Either this argument or the `path` one must be provided | com.apple.TextEdit
+path | string | no | Full path to the app bundle. Either this argument or the `bundleId` one must be provided | /Applications/Xcode.app
 arguments | array | no | the list of command line arguments for the app to be be launched with. This argument is ignored if the app is already running. | ['--help']
 environment | dictionary | no | Environment variables mapping. Custom variables are added to the default process environment. This argument is ignored if the app is already running. | { myEnvVar: 'value' }
 
@@ -477,7 +478,8 @@ This API influences the state of the [Application Under Test](#application-under
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-bundleId | string | yes | bundle identifier of the app to be activated | com.apple.Finder
+bundleId | string | no | Bundle identifier of the app to be activated. Either this argument or the `path` one must be provided | com.apple.Finder
+path | string | no | Full path to the app bundle. Either this argument or the `bundleId` one must be provided | /Applications/Xcode.app
 
 ### macos: terminateApp
 
@@ -488,7 +490,8 @@ This API influences the state of the [Application Under Test](#application-under
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-bundleId | string | yes | bundle identifier of the app to be terminated | com.apple.Finder
+bundleId | string | no | Bundle identifier of the app to be terminated. Either this argument or the `path` one must be provided | com.apple.Finder
+path | string | no | Full path to the app bundle. Either this argument or the `bundleId` one must be provided | /Applications/Xcode.app
 
 #### Returns
 
@@ -502,7 +505,8 @@ Query an app state with given bundle identifier. An exception is thrown if the p
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-bundleId | string | yes | bundle identifier of the app to be queried | com.apple.TextEdit
+bundleId | string | no | Bundle identifier of the app to be queried. Either this argument or the `path` one must be provided | com.apple.TextEdit
+path | string | no | Full path to the app bundle. Either this argument or the `bundleId` one must be provided | /Applications/Xcode.app
 
 #### Returns
 

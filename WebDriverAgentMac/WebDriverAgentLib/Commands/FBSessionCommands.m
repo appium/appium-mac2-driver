@@ -121,7 +121,8 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
 
 + (id<FBResponsePayload>)handleSessionAppLaunch:(FBRouteRequest *)request
 {
-  [request.session launchApplicationWithBundleId:[request requireStringArgumentWithName:@"bundleId"]
+  [request.session launchApplicationWithBundleId:request.arguments[@"bundleId"]
+                                            path:request.arguments[@"path"]
                                        arguments:request.arguments[@"arguments"]
                                      environment:request.arguments[@"environment"]];
   return FBResponseWithOK();
@@ -129,19 +130,22 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
 
 + (id<FBResponsePayload>)handleSessionAppActivate:(FBRouteRequest *)request
 {
-  [request.session activateApplicationWithBundleId:[request requireStringArgumentWithName:@"bundleId"]];
+  [request.session activateApplicationWithBundleId:request.arguments[@"bundleId"]
+                                              path:request.arguments[@"path"]];
   return FBResponseWithOK();
 }
 
 + (id<FBResponsePayload>)handleSessionAppTerminate:(FBRouteRequest *)request
 {
-  BOOL result = [request.session terminateApplicationWithBundleId:[request requireStringArgumentWithName:@"bundleId"]];
+  BOOL result = [request.session terminateApplicationWithBundleId:request.arguments[@"bundleId"]
+                                                             path:request.arguments[@"path"]];
   return FBResponseWithObject(@(result));
 }
 
 + (id<FBResponsePayload>)handleSessionAppState:(FBRouteRequest *)request
 {
-  NSUInteger state = [request.session applicationStateWithBundleId:[request requireStringArgumentWithName:@"bundleId"]];
+  NSUInteger state = [request.session applicationStateWithBundleId:request.arguments[@"bundleId"]
+                                                              path:request.arguments[@"path"]];
   return FBResponseWithObject(@(state));
 }
 
