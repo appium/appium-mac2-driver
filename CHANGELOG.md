@@ -1,3 +1,10 @@
+## [1.10.0](https://github.com/appium/appium-mac2-driver/compare/v1.9.0...v1.10.0) (2024-01-12)
+
+
+### Features
+
+* Add a possibility to work with absolute app paths ([#270](https://github.com/appium/appium-mac2-driver/issues/270)) ([696bbf8](https://github.com/appium/appium-mac2-driver/commit/696bbf830b1767d4e016f6ddbf8b0d9748df3d07))
+
 ## [1.9.0](https://github.com/appium/appium-mac2-driver/compare/v1.8.9...v1.9.0) (2024-01-08)
 
 
