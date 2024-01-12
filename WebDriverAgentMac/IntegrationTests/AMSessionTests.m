@@ -46,27 +46,30 @@ static NSString *const SETTINGS_BUNDLE_ID = @"com.apple.systempreferences";
 - (void)testSettingsAppCanBeOpenedInScopeOfTheCurrentSession
 {
   [self.session launchApplicationWithBundleId:SETTINGS_BUNDLE_ID
+                                         path:nil
                                     arguments:nil
                                   environment:nil];
   XCTAssertEqualObjects(SETTINGS_BUNDLE_ID, self.session.currentApplication.am_bundleID);
-  XCTAssertEqual([self.session applicationStateWithBundleId:SETTINGS_BUNDLE_ID],
+  XCTAssertEqual([self.session applicationStateWithBundleId:SETTINGS_BUNDLE_ID path:nil],
                  XCUIApplicationStateRunningForeground);
-  [self.session activateApplicationWithBundleId:self.testedApplication.am_bundleID];
+  [self.session activateApplicationWithBundleId:self.testedApplication.am_bundleID path:nil];
   XCTAssertEqualObjects(self.testedApplication.am_bundleID, self.session.currentApplication.am_bundleID);
-  XCTAssertEqual([self.session applicationStateWithBundleId:self.testedApplication.am_bundleID],
+  XCTAssertEqual([self.session applicationStateWithBundleId:self.testedApplication.am_bundleID path:nil],
                  XCUIApplicationStateRunningForeground);
 }
 
 - (void)testSettingsAppCanBeReopenedInScopeOfTheCurrentSession
 {
   [self.session launchApplicationWithBundleId:SETTINGS_BUNDLE_ID
+                                         path:nil
                                     arguments:nil
                                   environment:nil];
   FBAssertWaitTillBecomesTrue([SETTINGS_BUNDLE_ID isEqualToString:self.session.currentApplication.am_bundleID]);
-  XCTAssertTrue([self.session terminateApplicationWithBundleId:SETTINGS_BUNDLE_ID]);
+  XCTAssertTrue([self.session terminateApplicationWithBundleId:SETTINGS_BUNDLE_ID path:nil]);
   XCUIApplication *app = self.session.currentApplication;
   FBAssertWaitTillBecomesTrue([FINDER_BUNDLE_ID isEqualToString:app.am_bundleID]);
   [self.session launchApplicationWithBundleId:SETTINGS_BUNDLE_ID
+                                         path:nil
                                     arguments:nil
                                   environment:nil];
   XCTAssertEqualObjects(SETTINGS_BUNDLE_ID, self.session.currentApplication.am_bundleID);
@@ -75,22 +78,26 @@ static NSString *const SETTINGS_BUNDLE_ID = @"com.apple.systempreferences";
 - (void)testMainAppCanBeReactivatedInScopeOfTheCurrentSession
 {
   [self.session launchApplicationWithBundleId:SETTINGS_BUNDLE_ID
+                                         path:nil
                                     arguments:nil
                                   environment:nil];
   XCTAssertEqualObjects(SETTINGS_BUNDLE_ID, self.session.currentApplication.am_bundleID);
-  [self.session activateApplicationWithBundleId:self.testedApplication.am_bundleID];
+  [self.session activateApplicationWithBundleId:self.testedApplication.am_bundleID path:nil];
   XCTAssertEqualObjects(self.testedApplication.am_bundleID, self.session.currentApplication.am_bundleID);
 }
 
 - (void)testMainAppCanBeRestartedInScopeOfTheCurrentSession
 {
   NSString *testedAppBundleId = self.testedApplication.am_bundleID;
-  XCTAssertTrue([self.session terminateApplicationWithBundleId:testedAppBundleId]);
+  NSString *testedAppPath = self.testedApplication.am_path;
+  XCTAssertTrue([self.session terminateApplicationWithBundleId:testedAppBundleId path:nil]);
   XCTAssertEqualObjects(FINDER_BUNDLE_ID, self.session.currentApplication.am_bundleID);
   [self.session launchApplicationWithBundleId:testedAppBundleId
+                                         path:testedAppPath
                                     arguments:nil
                                   environment:nil];
   XCTAssertEqualObjects(testedAppBundleId, self.session.currentApplication.am_bundleID);
+  XCTAssertEqualObjects(testedAppPath, self.session.currentApplication.am_path);
 }
 
 @end
