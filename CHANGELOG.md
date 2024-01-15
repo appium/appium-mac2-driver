@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/appium/appium-mac2-driver/compare/v1.10.0...v1.10.1) (2024-01-15)
+
+
+### Bug Fixes
+
+* Add 'path' argument to app management methods ([#272](https://github.com/appium/appium-mac2-driver/issues/272)) ([bece139](https://github.com/appium/appium-mac2-driver/commit/bece139378448d9a438b54e91f5a73045484625a))
+
 ## [1.10.0](https://github.com/appium/appium-mac2-driver/compare/v1.9.0...v1.10.0) (2024-01-12)
 
 
