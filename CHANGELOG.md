@@ -1,3 +1,10 @@
+## [1.10.2](https://github.com/appium/appium-mac2-driver/compare/v1.10.1...v1.10.2) (2024-01-16)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump semantic-release from 22.0.12 to 23.0.0 ([#271](https://github.com/appium/appium-mac2-driver/issues/271)) ([ef0d2dd](https://github.com/appium/appium-mac2-driver/commit/ef0d2ddcbd1f36b7dd98a7df95c2aadf2c5fd120))
+
 ## [1.10.1](https://github.com/appium/appium-mac2-driver/compare/v1.10.0...v1.10.1) (2024-01-15)
 
 
