@@ -96,7 +96,14 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
     if (noReset && app.state > XCUIApplicationStateNotRunning) {
       [app activate];
     } else {
-      app.launchArguments = (NSArray<NSString *> *)requirements[AM_APP_ARGUMENTS_CAPABILITY] ?: @[];
+      NSMutableArray<NSString *> *launchArguments = [NSMutableArray new];
+      if (nil != requirements[AM_APP_ARGUMENTS_CAPABILITY]) {
+        [launchArguments addObjectsFromArray:(NSArray<NSString *> *)requirements[AM_APP_ARGUMENTS_CAPABILITY]];
+      }
+      if (nil != requirements[AM_APP_LOCALE_CAPABILITY]) {
+        [launchArguments addObjectsFromArray:[self appArgumentsForLocale:requirements[AM_APP_LOCALE_CAPABILITY]]];
+      }
+      app.launchArguments = [launchArguments copy];
       app.launchEnvironment = (NSDictionary <NSString *, NSString *> *)requirements[AM_APP_ENVIRONMENT_CAPABILITY] ?: @{};
       [app launch];
       if (app.state <= XCUIApplicationStateNotRunning) {
@@ -232,6 +239,32 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
   return @{
     @"CFBundleIdentifier": application.am_bundleID ?: [NSNull null],
   };
+}
+
++ (NSArray<NSString *> *)appArgumentsForLocale:(NSDictionary<NSString *, NSString *> *)appLocale
+{
+  // https://developer.apple.com/forums/thread/678634
+  NSMutableArray<NSString *> *result = [NSMutableArray new];
+  if (appLocale[@"language"]) {
+    [result addObject:@"-AppleLanguages"];
+    [result addObject:[NSString stringWithFormat:@"(%@)", appLocale[@"language"]]];
+  }
+  if (appLocale[@"locale"]) {
+    [result addObject:@"-AppleLocale"];
+    [result addObject:[NSString stringWithFormat:@"%@", appLocale[@"locale"]]];
+  }
+  if (appLocale[@"useMetricUnits"]) {
+    [result addObject:@"-AppleMetricUnits"];
+    [result addObject:[NSString stringWithFormat:@"<%@/>", appLocale[@"useMetricUnits"] ? @"true" : @"false"]];
+  }
+  if (appLocale[@"measurementUnits"]) {
+    [result addObject:@"-AppleMeasurementUnits"];
+    [result addObject:[NSString stringWithFormat:@"%@", appLocale[@"measurementUnits"]]];
+  }
+  if (result.count > 0) {
+    [FBLogger logFmt:@"appLocale %@ has been parsed to the following command line arguments: %@", appLocale, result];
+  }
+  return [result copy];
 }
 
 @end
