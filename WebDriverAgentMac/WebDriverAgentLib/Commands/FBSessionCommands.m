@@ -245,19 +245,19 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
 {
   // https://developer.apple.com/forums/thread/678634
   NSMutableArray<NSString *> *result = [NSMutableArray new];
-  if (appLocale[@"language"]) {
+  if (nil != appLocale[@"language"]) {
     [result addObject:@"-AppleLanguages"];
     [result addObject:[NSString stringWithFormat:@"(%@)", appLocale[@"language"]]];
   }
-  if (appLocale[@"locale"]) {
+  if (nil != appLocale[@"locale"]) {
     [result addObject:@"-AppleLocale"];
     [result addObject:[NSString stringWithFormat:@"%@", appLocale[@"locale"]]];
   }
-  if (appLocale[@"useMetricUnits"]) {
+  if (nil != appLocale[@"useMetricUnits"]) {
     [result addObject:@"-AppleMetricUnits"];
     [result addObject:[NSString stringWithFormat:@"<%@/>", appLocale[@"useMetricUnits"] ? @"true" : @"false"]];
   }
-  if (appLocale[@"measurementUnits"]) {
+  if (nil != appLocale[@"measurementUnits"]) {
     [result addObject:@"-AppleMeasurementUnits"];
     [result addObject:[NSString stringWithFormat:@"%@", appLocale[@"measurementUnits"]]];
   }
