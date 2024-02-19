@@ -24,5 +24,6 @@ extern NSString* const AM_APP_ENVIRONMENT_CAPABILITY;
 extern NSString* const AM_SKIP_APP_KILL_CAPABILITY;
 extern NSString* const AM_NO_RESET_CAPABILITY;
 extern NSString* const AM_APP_PATH_CAPABILITY;
+extern NSString* const AM_APP_LOCALE_CAPABILITY;
 
 NS_ASSUME_NONNULL_END
