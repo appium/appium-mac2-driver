@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/appium/appium-mac2-driver/compare/v1.11.0...v1.11.1) (2024-03-06)
+
+
+### Miscellaneous Chores
+
+* Add an explicit getWindowRect for the images plugin ([#287](https://github.com/appium/appium-mac2-driver/issues/287)) ([7f9ea99](https://github.com/appium/appium-mac2-driver/commit/7f9ea990a3ab6999756b6430fb87a7d7e02abe07))
+
 ## [1.11.0](https://github.com/appium/appium-mac2-driver/compare/v1.10.2...v1.11.0) (2024-02-19)
 
 
