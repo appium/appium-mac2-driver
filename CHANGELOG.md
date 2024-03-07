@@ -1,3 +1,10 @@
+## [1.11.3](https://github.com/appium/appium-mac2-driver/compare/v1.11.2...v1.11.3) (2024-03-07)
+
+
+### Miscellaneous Chores
+
+* bump typescript ([4d9c4f1](https://github.com/appium/appium-mac2-driver/commit/4d9c4f1b0aac242a0b639bcaeca110b7adf2ee20))
+
 ## [1.11.2](https://github.com/appium/appium-mac2-driver/compare/v1.11.1...v1.11.2) (2024-03-07)
 
 
