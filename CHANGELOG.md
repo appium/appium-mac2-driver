@@ -1,3 +1,10 @@
+## [1.11.2](https://github.com/appium/appium-mac2-driver/compare/v1.11.1...v1.11.2) (2024-03-07)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump typescript from 5.2.2 to 5.4.2 ([#288](https://github.com/appium/appium-mac2-driver/issues/288)) ([a5534c0](https://github.com/appium/appium-mac2-driver/commit/a5534c0e43950f81c27c43badafb045e2400ce0a))
+
 ## [1.11.1](https://github.com/appium/appium-mac2-driver/compare/v1.11.0...v1.11.1) (2024-03-06)
 
 
