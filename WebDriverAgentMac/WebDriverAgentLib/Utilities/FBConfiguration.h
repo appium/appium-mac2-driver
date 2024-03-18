@@ -27,6 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 /*! Enables XCTest automated screenshots taking */
 @property BOOL automaticScreenshots;
 
+/*! Enables XCTest automated screen recordings taking in Xcode 15+ */
+@property BOOL automaticScreenRecordings;
+
 /**
  The range of ports that the HTTP Server should attempt to bind on launch
  */
