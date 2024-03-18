@@ -26,7 +26,6 @@
 + (void)setUp
 {
   FBConfiguration.sharedConfiguration.attributeKeyPathAnalysis = NO;
-  
   FBConfiguration.sharedConfiguration.automaticScreenshots =
     [NSProcessInfo.processInfo.environment[@"ENABLE_AUTOMATIC_SCREENSHOTS"] boolValue];
   FBConfiguration.sharedConfiguration.automaticScreenRecordings =
