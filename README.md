@@ -767,6 +767,22 @@ def test_sending_custom_keys(driver):
 
 Parallel execution of multiple Mac2 driver instances is highly discouraged. Only one UI test must be running at the same time, since the access to accessibility layer is single-threaded. Also HID devices, like the mouse or the keyboard, must be acquired exclusively.
 
+## Environment Variables
+
+The server part of the driver recognizes the following environment variables:
+
+- `ENABLE_AUTOMATIC_SCREENSHOTS`: enables automatic XCTest screenshots.
+  These screenshots are stored in the same folder where WDA test logs are located and are taken automatically.
+  This feature is disabled by default. Only enable it if you know what you are doing otherwise these
+  screenshots may quickly fill up the free disk space.
+- `ENABLE_AUTOMATIC_SCREEN_RECORDINGS`: enables automatic XCTest screen recordings.
+  These screen recordings are stored in the same folder where WDA test logs are located and are taken automatically. This feature is disabled by default.
+  Only enable it if you know what you are doing otherwise these videos may quickly fill up the free disk space.
+  The native screen recording feature only works on Xcode 15+.
+- `USE_PORT`. If enabled then the server listens on the given port. Otherwise, a random free port from the
+  10100..10200 range is selected. By default, the port is selected by the driver (see the `appium:systemPort`
+  capability description).
+- `VERBOSE_LOGGING`. If enabled then server logs should include various verbose details. Disabled by default.
 
 ## Development & Testing
 

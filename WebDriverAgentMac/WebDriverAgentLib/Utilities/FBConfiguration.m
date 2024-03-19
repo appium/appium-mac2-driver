@@ -63,6 +63,18 @@ static FBConfiguration *instance;
                                           forKey:@"DisableScreenshots"];
 }
 
+- (BOOL)automaticScreenRecordings
+{
+  id value = [NSUserDefaults.standardUserDefaults objectForKey:@"DisableDiagnosticScreenRecordings"];
+  return nil == value ? YES : ![value boolValue];
+}
+
+- (void)setAutomaticScreenRecordings:(BOOL)automaticScreenRecordings
+{
+  [[NSUserDefaults standardUserDefaults] setBool:!automaticScreenRecordings
+                                          forKey:@"DisableDiagnosticScreenRecordings"];
+}
+
 - (NSRange)bindingPortRange
 {
   // 'WebDriverAgent --port 8080' can be passed via the arguments to the process
