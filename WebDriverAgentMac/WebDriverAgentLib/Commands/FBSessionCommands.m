@@ -82,12 +82,12 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
   }
 
   NSString *bundleID = requirements[AM_BUNDLE_ID_CAPABILITY];
+  NSString *appPath = requirements[AM_APP_PATH_CAPABILITY];
   BOOL noReset = [requirements[AM_NO_RESET_CAPABILITY] boolValue];
   FBSession *session;
-  if (nil == bundleID) {
+  if (nil == bundleID && nil == appPath) {
     session = [FBSession initWithApplication:nil];
   } else {
-    NSString *appPath = requirements[AM_APP_PATH_CAPABILITY];
     XCUIApplication *app = appPath == nil ?
       [[XCUIApplication alloc] initWithBundleIdentifier:bundleID] :
       [[XCUIApplication alloc] initWithURL:[NSURL fileURLWithPath:appPath]];
