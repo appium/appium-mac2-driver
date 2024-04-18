@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#import "XCUIDeviceWrapper.h"
+#import "AMXCUIDeviceWrapper.h"
 
 #import "FBErrorBuilder.h"
 #import "FBRunLoopSpinner.h"
@@ -23,11 +23,11 @@
 
 #define MAX_ACTIONS_DURATION_SEC 300
 
-@implementation XCUIDeviceWrapper
+@implementation AMXCUIDeviceWrapper
 
 + (instancetype)sharedDevice;
 {
-  static XCUIDeviceWrapper *instance;
+  static AMXCUIDeviceWrapper *instance;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
     instance = [[self alloc] init];

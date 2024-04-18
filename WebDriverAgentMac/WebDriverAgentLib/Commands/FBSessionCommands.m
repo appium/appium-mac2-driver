@@ -11,6 +11,7 @@
 
 #import "AMSessionCapabilities.h"
 #import "AMSettings.h"
+#import "AMXCUIDeviceWrapper.h"
 #import "FBConfiguration.h"
 #import "FBLogger.h"
 #import "FBProtocolHelpers.h"
@@ -19,7 +20,6 @@
 #import "FBRuntimeUtils.h"
 #import "XCUIApplication+AMHelpers.h"
 #import "XCUIApplication+AMUIInterruptions.h"
-#import "XCUIDeviceWrapper.h"
 
 const static NSString *CAPABILITIES_KEY = @"capabilities";
 
@@ -60,11 +60,11 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
     return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:message
                                                                        traceback:nil]);
   }
-  if ([XCUIDeviceWrapper.sharedDevice supportsOpenUrl] || nil != bundleId) {
+  if ([AMXCUIDeviceWrapper.sharedDevice supportsOpenUrl] || nil != bundleId) {
     NSError *error;
     BOOL result = nil == bundleId
-      ? [XCUIDeviceWrapper.sharedDevice openUrl:url error:&error]
-      : [XCUIDeviceWrapper.sharedDevice openUrl:url withApplication:bundleId error:&error];
+      ? [AMXCUIDeviceWrapper.sharedDevice openUrl:url error:&error]
+      : [AMXCUIDeviceWrapper.sharedDevice openUrl:url withApplication:bundleId error:&error];
     if (!result) {
       NSString *message = [NSString stringWithFormat:@"'%@' cannot be opened: %@", urlString, error.localizedDescription];
       return FBResponseWithStatus([FBCommandStatus unknownErrorWithMessage:message

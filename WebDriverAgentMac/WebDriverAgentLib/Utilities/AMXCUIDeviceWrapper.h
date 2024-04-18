@@ -21,10 +21,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XCUIDeviceWrapper : NSObject
+@interface AMXCUIDeviceWrapper : NSObject
 
+/**
+ This is a wrapper for XCUIDevice.sharedDevice API,
+ which was only made public for macOS since Xcode 13
+ */
 + (instancetype)sharedDevice;
 
+/**
+ Whether the current Xcode SDK supports opening of URLs
+ */
 - (BOOL)supportsOpenUrl;
 
 /**
