@@ -1,3 +1,10 @@
+## [1.14.0](https://github.com/appium/appium-mac2-driver/compare/v1.13.0...v1.14.0) (2024-04-18)
+
+
+### Features
+
+* Add appTimeZone capability ([#295](https://github.com/appium/appium-mac2-driver/issues/295)) ([4e5c45c](https://github.com/appium/appium-mac2-driver/commit/4e5c45cf4e300cf086c67cd206a2993dd5cfc687))
+
 ## [1.13.0](https://github.com/appium/appium-mac2-driver/compare/v1.12.0...v1.13.0) (2024-04-18)
 
 
