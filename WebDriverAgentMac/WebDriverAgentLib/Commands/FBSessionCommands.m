@@ -88,9 +88,9 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
   if (nil == bundleID && nil == appPath) {
     session = [FBSession initWithApplication:nil];
   } else {
-    XCUIApplication *app = appPath == nil ?
-      [[XCUIApplication alloc] initWithBundleIdentifier:bundleID] :
-      [[XCUIApplication alloc] initWithURL:[NSURL fileURLWithPath:appPath]];
+    XCUIApplication *app = nil != appPath 
+      ? [[XCUIApplication alloc] initWithURL:[NSURL fileURLWithPath:appPath]]
+      : [[XCUIApplication alloc] initWithBundleIdentifier:bundleID];
     session = [FBSession initWithApplication:app];
     if (noReset && app.state > XCUIApplicationStateNotRunning) {
       [app activate];
