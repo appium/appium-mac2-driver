@@ -114,7 +114,8 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
     if (nil != bundleID && nil != appPath) {
       NSString *realBundleID = app.am_bundleID;
       if (![realBundleID isEqualToString:bundleID]) {
-        NSString *message = [NSString stringWithFormat:@"The bundle identifier %@ of the '%@' does not match to the one provided in capabilities: %@", realBundleID, appPath, bundleID];
+        NSString *message = [NSString stringWithFormat:@"The bundle identifier %@ of the '%@' does not match to the one provided in capabilities: %@", 
+                             realBundleID, appPath, bundleID];
         return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:message
                                                                   traceback:nil]);
       }
