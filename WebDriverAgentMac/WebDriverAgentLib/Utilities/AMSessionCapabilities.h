@@ -18,12 +18,21 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/** Bundle identifier of the application under test */
 extern NSString* const AM_BUNDLE_ID_CAPABILITY;
+/** Command line arguments for the application under test */
 extern NSString* const AM_APP_ARGUMENTS_CAPABILITY;
+/** Environment variables mapping for the application under test */
 extern NSString* const AM_APP_ENVIRONMENT_CAPABILITY;
+/** Whether to skip application under test termination when the test session is deleted */
 extern NSString* const AM_SKIP_APP_KILL_CAPABILITY;
+/** Whether to avoid resetting the state of the application under test on test startup */
 extern NSString* const AM_NO_RESET_CAPABILITY;
+/** Full path the the application under test bundle on the local FS */
 extern NSString* const AM_APP_PATH_CAPABILITY;
+/** Custom time zone name for the application under test */
+extern NSString* const AM_APP_TIME_ZONE_CAPABILITY;
+/** Custom locale properties for the application under test */
 extern NSString* const AM_APP_LOCALE_CAPABILITY;
 
 NS_ASSUME_NONNULL_END
