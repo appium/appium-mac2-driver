@@ -103,7 +103,14 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
         [launchArguments addObjectsFromArray:[self appArgumentsForLocale:requirements[AM_APP_LOCALE_CAPABILITY]]];
       }
       app.launchArguments = [launchArguments copy];
-      app.launchEnvironment = (NSDictionary <NSString *, NSString *> *)requirements[AM_APP_ENVIRONMENT_CAPABILITY] ?: @{};
+      NSMutableDictionary<NSString *, NSString *> *launchEnv = [NSMutableDictionary new];
+      if (nil != requirements[AM_APP_ENVIRONMENT_CAPABILITY]) {
+        [launchEnv addEntriesFromDictionary:requirements[AM_APP_ENVIRONMENT_CAPABILITY]];
+      }
+      if (nil != requirements[AM_APP_TIME_ZONE_CAPABILITY]) {
+        launchEnv[@"TZ"] = requirements[AM_APP_TIME_ZONE_CAPABILITY];
+      }
+      app.launchEnvironment = [launchEnv copy];
       [app launch];
       if (app.state <= XCUIApplicationStateNotRunning) {
         NSString *message = [NSString stringWithFormat:@"Failed to launch '%@' application", appPath ?: bundleID];
