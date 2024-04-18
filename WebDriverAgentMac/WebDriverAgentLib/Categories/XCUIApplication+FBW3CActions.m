@@ -11,7 +11,7 @@
 
 #import "FBBaseActionsSynthesizer.h"
 #import "FBErrorBuilder.h"
-#import "XCUIDevice+AMHelpers.h"
+#import "XCUIDeviceWrapper.h"
 #import "FBW3CActionsSynthesizer.h"
 
 #define MAX_ACTIONS_DURATION_SEC 300
@@ -30,7 +30,7 @@
     return NO;
   }
   XCSynthesizedEventRecord *eventRecord = [synthesizer synthesizeWithError:error];
-  return nil == eventRecord ? NO : [XCUIDevice.sharedDevice am_synthesizeEvent:eventRecord error:error];
+  return nil == eventRecord ? NO : [XCUIDeviceWrapper.sharedDevice synthesizeEvent:eventRecord error:error];
 }
 
 @end

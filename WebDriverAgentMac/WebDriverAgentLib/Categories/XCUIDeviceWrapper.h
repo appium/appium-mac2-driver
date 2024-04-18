@@ -21,9 +21,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XCUIDevice (AMHelpers)
+@interface XCUIDeviceWrapper : NSObject
 
-- (BOOL)am_supportsOpenUrl;
++ (instancetype)sharedDevice;
+
+- (BOOL)supportsOpenUrl;
 
 /**
  Opens the particular url scheme using the default application assigned to it.
@@ -33,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param error If there is an error, upon return contains an NSError object that describes the problem.
  @return YES if the operation was successful
  */
-- (BOOL)am_openUrl:(NSURL *)url error:(NSError **)error;
+- (BOOL)openUrl:(NSURL *)url error:(NSError **)error;
 
 /**
  Opens the particular url scheme using the given application
@@ -44,9 +46,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param error If there is an error, upon return contains an NSError object that describes the problem.
  @return YES if the operation was successful
  */
-- (BOOL)am_openUrl:(NSURL *)url 
-   withApplication:(NSString *)bundleId
-             error:(NSError **)error;
+- (BOOL)openUrl:(NSURL *)url
+withApplication:(NSString *)bundleId
+          error:(NSError **)error;
 
 /**
  Synthesizes an input event according to the given event spec
@@ -55,8 +57,8 @@ NS_ASSUME_NONNULL_BEGIN
  @param error If there is an error, upon return contains an NSError object that describes the problem.
  @return YES if the operation was successful
  */
-- (BOOL)am_synthesizeEvent:(XCSynthesizedEventRecord *)event
-                     error:(NSError **)error;
+- (BOOL)synthesizeEvent:(XCSynthesizedEventRecord *)event
+                  error:(NSError **)error;
 
 @end
 

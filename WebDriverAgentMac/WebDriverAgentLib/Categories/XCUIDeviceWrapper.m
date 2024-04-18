@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#import "XCUIDevice+AMHelpers.h"
+#import "XCUIDeviceWrapper.h"
 
 #import "FBErrorBuilder.h"
 #import "FBRunLoopSpinner.h"
@@ -23,9 +23,24 @@
 
 #define MAX_ACTIONS_DURATION_SEC 300
 
-@implementation XCUIDevice (AMHelpers)
+@implementation XCUIDeviceWrapper
 
-- (BOOL)am_supportsOpenUrl
++ (instancetype)sharedDevice;
+{
+  static XCUIDeviceWrapper *instance;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    instance = [[self alloc] init];
+  });
+  return instance;
+}
+
+- (id)xcuiDeviceInstance
+{
+  return [NSClassFromString(@"XCUIDevice") valueForKey:@"sharedDevice"];
+}
+
+- (BOOL)supportsOpenUrl
 {
   id<XCUIApplicationProcessManaging> platformApplicationManager = [self am_platformApplicationManager];
   return nil != platformApplicationManager
@@ -34,15 +49,15 @@
 
 - (id<XCUIApplicationProcessManaging>)am_platformApplicationManager
 {
-  return [XCUIDevice.sharedDevice valueForKey:@"platformApplicationManager"];
+  return [self.xcuiDeviceInstance valueForKey:@"platformApplicationManager"];
 }
 
 - (id<XCUIEventSynthesizing>)am_eventSynthesizer
 {
-  return [XCUIDevice.sharedDevice valueForKey:@"eventSynthesizer"];
+  return [self.xcuiDeviceInstance valueForKey:@"eventSynthesizer"];
 }
 
-- (BOOL)am_openUrl:(NSURL *)url error:(NSError **)error
+- (BOOL)openUrl:(NSURL *)url error:(NSError **)error
 {
   id<XCUIApplicationProcessManaging> platformApplicationManager = [self am_platformApplicationManager];
   if (nil == platformApplicationManager 
@@ -72,9 +87,9 @@
   return didSucceed;
 }
 
-- (BOOL)am_openUrl:(NSURL *)url 
-   withApplication:(NSString *)bundleId
-             error:(NSError **)error
+- (BOOL)openUrl:(NSURL *)url
+withApplication:(NSString *)bundleId
+          error:(NSError **)error
 {
   id<XCUIApplicationProcessManaging> platformApplicationManager = [self am_platformApplicationManager];
   if (nil == platformApplicationManager 
@@ -105,8 +120,8 @@
   return didSucceed;
 }
 
-- (BOOL)am_synthesizeEvent:(XCSynthesizedEventRecord *)event
-                     error:(NSError **)error
+- (BOOL)synthesizeEvent:(XCSynthesizedEventRecord *)event
+                  error:(NSError **)error
 {
   __block NSError *internalError = nil;
   dispatch_semaphore_t sem = dispatch_semaphore_create(0);
