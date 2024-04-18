@@ -1,3 +1,10 @@
+## [1.13.0](https://github.com/appium/appium-mac2-driver/compare/v1.12.0...v1.13.0) (2024-04-18)
+
+
+### Features
+
+* Use public API to run application using the path to it ([#294](https://github.com/appium/appium-mac2-driver/issues/294)) ([b8b0ce0](https://github.com/appium/appium-mac2-driver/commit/b8b0ce09ae899ad1a36651754560ec804befd7d8))
+
 ## [1.12.0](https://github.com/appium/appium-mac2-driver/compare/v1.11.3...v1.12.0) (2024-03-19)
 
 
