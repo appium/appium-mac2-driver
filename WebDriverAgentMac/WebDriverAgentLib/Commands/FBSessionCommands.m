@@ -106,7 +106,7 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
       app.launchEnvironment = (NSDictionary <NSString *, NSString *> *)requirements[AM_APP_ENVIRONMENT_CAPABILITY] ?: @{};
       [app launch];
       if (app.state <= XCUIApplicationStateNotRunning) {
-        NSString *message = [NSString stringWithFormat:@"Failed to launch '%@' application", bundleID];
+        NSString *message = [NSString stringWithFormat:@"Failed to launch '%@' application", appPath ?: bundleID];
         return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:message
                                                                   traceback:nil]);
       }
