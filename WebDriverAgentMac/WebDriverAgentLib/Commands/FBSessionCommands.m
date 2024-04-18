@@ -17,7 +17,6 @@
 #import "FBRouteRequest.h"
 #import "FBSession.h"
 #import "FBRuntimeUtils.h"
-#import "XCUIApplication.h"
 #import "XCUIApplication+AMHelpers.h"
 #import "XCUIApplication+AMUIInterruptions.h"
 
@@ -83,15 +82,15 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
   }
 
   NSString *bundleID = requirements[AM_BUNDLE_ID_CAPABILITY];
+  NSString *appPath = requirements[AM_APP_PATH_CAPABILITY];
   BOOL noReset = [requirements[AM_NO_RESET_CAPABILITY] boolValue];
   FBSession *session;
-  if (nil == bundleID) {
+  if (nil == bundleID && nil == appPath) {
     session = [FBSession initWithApplication:nil];
   } else {
-    NSString *appPath = requirements[AM_APP_PATH_CAPABILITY];
-    XCUIApplication *app = appPath == nil ?
-      [[XCUIApplication alloc] initWithBundleIdentifier:bundleID] :
-      [[XCUIApplication alloc] initPrivateWithPath:appPath bundleID:bundleID];
+    XCUIApplication *app = nil != appPath 
+      ? [[XCUIApplication alloc] initWithURL:[NSURL fileURLWithPath:appPath]]
+      : [[XCUIApplication alloc] initWithBundleIdentifier:bundleID];
     session = [FBSession initWithApplication:app];
     if (noReset && app.state > XCUIApplicationStateNotRunning) {
       [app activate];
@@ -107,7 +106,16 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
       app.launchEnvironment = (NSDictionary <NSString *, NSString *> *)requirements[AM_APP_ENVIRONMENT_CAPABILITY] ?: @{};
       [app launch];
       if (app.state <= XCUIApplicationStateNotRunning) {
-        NSString *message = [NSString stringWithFormat:@"Failed to launch '%@' application", bundleID];
+        NSString *message = [NSString stringWithFormat:@"Failed to launch '%@' application", appPath ?: bundleID];
+        return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:message
+                                                                  traceback:nil]);
+      }
+    }
+    if (nil != bundleID && nil != appPath) {
+      NSString *realBundleID = app.am_bundleID;
+      if (![realBundleID isEqualToString:bundleID]) {
+        NSString *message = [NSString stringWithFormat:@"The bundle identifier %@ of the '%@' does not match to the one provided in capabilities: %@", 
+                             realBundleID, appPath, bundleID];
         return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:message
                                                                   traceback:nil]);
       }

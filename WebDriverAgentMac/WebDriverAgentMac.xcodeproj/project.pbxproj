@@ -190,7 +190,6 @@
 		71B8B68126726369009CE50C /* AMSwipeHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B8B67F26726369009CE50C /* AMSwipeHelpers.h */; };
 		71B8B68226726369009CE50C /* AMSwipeHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B8B68026726369009CE50C /* AMSwipeHelpers.m */; };
 		71B8B684267265D7009CE50C /* AMVariousElementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B8B683267265D7009CE50C /* AMVariousElementTests.m */; };
-		C68B934B2AA892CF009F00F2 /* XCUIApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = C68B934A2AA892CF009F00F2 /* XCUIApplication.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -425,7 +424,6 @@
 		71B8B67F26726369009CE50C /* AMSwipeHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMSwipeHelpers.h; sourceTree = "<group>"; };
 		71B8B68026726369009CE50C /* AMSwipeHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMSwipeHelpers.m; sourceTree = "<group>"; };
 		71B8B683267265D7009CE50C /* AMVariousElementTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMVariousElementTests.m; sourceTree = "<group>"; };
-		C68B934A2AA892CF009F00F2 /* XCUIApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XCUIApplication.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -768,7 +766,6 @@
 				7180C1E6257A94F3008FA870 /* XCPointerEventPath.h */,
 				7180C1EC257A95C2008FA870 /* XCSynthesizedEventRecord.h */,
 				7180C1F6257A9896008FA870 /* XCUIEventSynthesizing-Protocol.h */,
-				C68B934A2AA892CF009F00F2 /* XCUIApplication.h */,
 			);
 			path = XCTest;
 			sourceTree = "<group>";
@@ -878,7 +875,6 @@
 				7109C0532565B5EA006BFD13 /* HTTPErrorResponse.h in Headers */,
 				7180C1E9257A94F4008FA870 /* XCPointerEvent.h in Headers */,
 				712FA091288BD68100976DA8 /* AMWindowCommands.h in Headers */,
-				C68B934B2AA892CF009F00F2 /* XCUIApplication.h in Headers */,
 				7180C1ED257A95C2008FA870 /* XCSynthesizedEventRecord.h in Headers */,
 				718D2C322567FED3005F533B /* AMSessionCapabilities.h in Headers */,
 				7109BFE02565B536006BFD13 /* FBCommandHandler.h in Headers */,
