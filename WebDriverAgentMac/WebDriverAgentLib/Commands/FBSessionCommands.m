@@ -91,14 +91,6 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
     XCUIApplication *app = nil != appPath 
       ? [[XCUIApplication alloc] initWithURL:[NSURL fileURLWithPath:appPath]]
       : [[XCUIApplication alloc] initWithBundleIdentifier:bundleID];
-    if (nil != bundleID && nil != appPath) {
-      NSString *realBundleID = app.am_bundleID;
-      if (![realBundleID isEqualToString:bundleID]) {
-        NSString *message = [NSString stringWithFormat:@"The bundle identifier %@ of the '%@' does not match to the one provided in capabilities: %@", realBundleID, appPath, bundleID];
-        return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:message
-                                                                  traceback:nil]);
-      }
-    }
     session = [FBSession initWithApplication:app];
     if (noReset && app.state > XCUIApplicationStateNotRunning) {
       [app activate];
@@ -115,6 +107,14 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
       [app launch];
       if (app.state <= XCUIApplicationStateNotRunning) {
         NSString *message = [NSString stringWithFormat:@"Failed to launch '%@' application", bundleID];
+        return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:message
+                                                                  traceback:nil]);
+      }
+    }
+    if (nil != bundleID && nil != appPath) {
+      NSString *realBundleID = app.am_bundleID;
+      if (![realBundleID isEqualToString:bundleID]) {
+        NSString *message = [NSString stringWithFormat:@"The bundle identifier %@ of the '%@' does not match to the one provided in capabilities: %@", realBundleID, appPath, bundleID];
         return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:message
                                                                   traceback:nil]);
       }
