@@ -17,7 +17,6 @@
 #import "FBRouteRequest.h"
 #import "FBSession.h"
 #import "FBRuntimeUtils.h"
-#import "XCUIApplication.h"
 #import "XCUIApplication+AMHelpers.h"
 #import "XCUIApplication+AMUIInterruptions.h"
 
@@ -91,7 +90,7 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
     NSString *appPath = requirements[AM_APP_PATH_CAPABILITY];
     XCUIApplication *app = appPath == nil ?
       [[XCUIApplication alloc] initWithBundleIdentifier:bundleID] :
-      [[XCUIApplication alloc] initPrivateWithPath:appPath bundleID:bundleID];
+      [[XCUIApplication alloc] initWithURL:[NSURL fileURLWithPath:appPath]];
     session = [FBSession initWithApplication:app];
     if (noReset && app.state > XCUIApplicationStateNotRunning) {
       [app activate];
