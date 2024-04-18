@@ -19,6 +19,7 @@
 #import "FBRuntimeUtils.h"
 #import "XCUIApplication+AMHelpers.h"
 #import "XCUIApplication+AMUIInterruptions.h"
+#import "XCUIDevice+AMHelpers.h"
 
 const static NSString *CAPABILITIES_KEY = @"capabilities";
 
@@ -52,16 +53,29 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
 + (id<FBResponsePayload>)handleOpenURL:(FBRouteRequest *)request
 {
   NSString *urlString = request.arguments[@"url"];
+  NSString *bundleId = request.arguments[@"bundleId"];
   NSURL *url = [NSURL URLWithString:urlString];
   if (!url) {
     NSString *message = [NSString stringWithFormat:@"'%@' should be a valid URL", urlString];
     return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:message
                                                                        traceback:nil]);
   }
-  if (![[NSWorkspace sharedWorkspace] openURL:url]) {
-    NSString *message = [NSString stringWithFormat:@"'%@' cannot be opened", urlString];
-    return FBResponseWithStatus([FBCommandStatus unknownErrorWithMessage:message
-                                                               traceback:nil]);
+  if ([XCUIDevice.sharedDevice am_supportsOpenUrl] || nil != bundleId) {
+    NSError *error;
+    BOOL result = nil == bundleId
+      ? [XCUIDevice.sharedDevice am_openUrl:url error:&error]
+      : [XCUIDevice.sharedDevice am_openUrl:url withApplication:bundleId error:&error];
+    if (!result) {
+      NSString *message = [NSString stringWithFormat:@"'%@' cannot be opened: %@", urlString, error.localizedDescription];
+      return FBResponseWithStatus([FBCommandStatus unknownErrorWithMessage:message
+                                                                 traceback:nil]);
+    }
+  } else {
+    if (![[NSWorkspace sharedWorkspace] openURL:url]) {
+      NSString *message = [NSString stringWithFormat:@"'%@' cannot be opened", urlString];
+      return FBResponseWithStatus([FBCommandStatus unknownErrorWithMessage:message
+                                                                 traceback:nil]);
+    }
   }
   return FBResponseWithOK();
 }
