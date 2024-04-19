@@ -34,5 +34,7 @@ extern NSString* const AM_APP_PATH_CAPABILITY;
 extern NSString* const AM_APP_TIME_ZONE_CAPABILITY;
 /** Custom locale properties for the application under test */
 extern NSString* const AM_APP_LOCALE_CAPABILITY;
+/** Deeplink URL to start the session with */
+extern NSString* const AM_INITIAL_DEEPLINK_URL_CAPABILITY;
 
 NS_ASSUME_NONNULL_END

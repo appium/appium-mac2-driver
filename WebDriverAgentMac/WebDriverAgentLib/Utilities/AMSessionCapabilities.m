@@ -24,3 +24,4 @@ NSString* const AM_NO_RESET_CAPABILITY = @"noReset";
 NSString* const AM_APP_PATH_CAPABILITY = @"appPath";
 NSString* const AM_APP_TIME_ZONE_CAPABILITY = @"appTimeZone";
 NSString* const AM_APP_LOCALE_CAPABILITY = @"appLocale";
+NSString* const AM_INITIAL_DEEPLINK_URL_CAPABILITY = @"initialDeeplinkUrl";
