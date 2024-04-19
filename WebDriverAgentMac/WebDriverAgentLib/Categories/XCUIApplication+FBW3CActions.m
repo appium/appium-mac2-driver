@@ -9,10 +9,10 @@
 
 #import "XCUIApplication+FBW3CActions.h"
 
+#import "AMXCUIDeviceWrapper.h"
 #import "FBBaseActionsSynthesizer.h"
 #import "FBErrorBuilder.h"
 #import "FBW3CActionsSynthesizer.h"
-#import "XCUIEventSynthesizing-Protocol.h"
 
 #define MAX_ACTIONS_DURATION_SEC 300
 
@@ -30,36 +30,7 @@
     return NO;
   }
   XCSynthesizedEventRecord *eventRecord = [synthesizer synthesizeWithError:error];
-  return nil == eventRecord ? NO : [self fb_synthesizeEvent:eventRecord error:error];
-}
-
-- (BOOL)fb_synthesizeEvent:(XCSynthesizedEventRecord *)event error:(NSError *__autoreleasing*)error
-{
-  __block NSError *internalError = nil;
-  dispatch_semaphore_t sem = dispatch_semaphore_create(0);
-  id<XCUIEventSynthesizing> eventSynthesizer = [[NSClassFromString(@"XCUIDevice") valueForKey:@"sharedDevice"]
-                                                valueForKey:@"eventSynthesizer"];
-  [eventSynthesizer synthesizeEvent:event
-                         completion:(id)^(BOOL result, NSError *invokeError) {
-    if (!result) {
-      internalError = invokeError;
-    }
-    dispatch_semaphore_signal(sem);
-  }];
-  BOOL didTimeout = 0 != dispatch_semaphore_wait(sem, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MAX_ACTIONS_DURATION_SEC * NSEC_PER_SEC)));
-  if (didTimeout) {
-    return [[[FBErrorBuilder builder]
-             withDescriptionFormat:@"Cannot perform actions within %@ seconds timeout", @(MAX_ACTIONS_DURATION_SEC)]
-            buildError:error];;
-  }
-  if (nil != internalError) {
-    if (error) {
-      *error = internalError;
-    }
-    return NO;
-  }
-
-  return YES;
+  return nil == eventRecord ? NO : [AMXCUIDeviceWrapper.sharedDevice synthesizeEvent:eventRecord error:error];
 }
 
 @end

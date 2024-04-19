@@ -594,6 +594,18 @@ A list of dictionaries where each item has the following keys:
 - `isMain`: Whether this display is the main one
 - `payload`: The actual PNG screenshot data encoded to base64 string
 
+### mobile: deepLink
+
+Opens the given URL with the default or the given application.
+Xcode must be at version 14.3+.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+url | string | yes | The URL to be opened. This parameter is manadatory. | https://apple.com, myscheme:yolo
+bundleId | string | no | The bundle identifier of an application to open the given url with. If not provided then the default application for the given url scheme is going to be used. | com.myapp.yolo
+
 
 ## Application Under Test Concept
 

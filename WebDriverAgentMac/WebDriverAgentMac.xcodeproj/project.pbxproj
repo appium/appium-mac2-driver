@@ -99,6 +99,10 @@
 		71221BDC2588945400B4FBF5 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 71221BD82588945400B4FBF5 /* GCDAsyncUdpSocket.m */; };
 		712FA091288BD68100976DA8 /* AMWindowCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 712FA08F288BD68100976DA8 /* AMWindowCommands.h */; };
 		712FA092288BD68100976DA8 /* AMWindowCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 712FA090288BD68100976DA8 /* AMWindowCommands.m */; };
+		71336AF12BD1345000997FF4 /* XCUIApplicationProcessManaging-Protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 71336AF02BD1344100997FF4 /* XCUIApplicationProcessManaging-Protocol.h */; };
+		71336AF42BD1348F00997FF4 /* AMXCUIDeviceWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 71336AF32BD1348F00997FF4 /* AMXCUIDeviceWrapper.m */; };
+		71336AF52BD1348F00997FF4 /* AMXCUIDeviceWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 71336AF22BD1348F00997FF4 /* AMXCUIDeviceWrapper.h */; };
+		71336AF72BD15B4D00997FF4 /* AMDeviceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71336AF62BD15B4D00997FF4 /* AMDeviceTests.m */; };
 		713A9D11256683E900118D07 /* XCUIElementQuery+AMHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D0F256683E900118D07 /* XCUIElementQuery+AMHelpers.h */; };
 		713A9D12256683E900118D07 /* XCUIElementQuery+AMHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D10256683E900118D07 /* XCUIElementQuery+AMHelpers.m */; };
 		713A9D1D256696AA00118D07 /* FBCustomCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D1B256696AA00118D07 /* FBCustomCommands.m */; };
@@ -249,6 +253,10 @@
 		71221BD82588945400B4FBF5 /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncUdpSocket.m; path = CocoaAsyncSocket/GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
 		712FA08F288BD68100976DA8 /* AMWindowCommands.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMWindowCommands.h; sourceTree = "<group>"; };
 		712FA090288BD68100976DA8 /* AMWindowCommands.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMWindowCommands.m; sourceTree = "<group>"; };
+		71336AF02BD1344100997FF4 /* XCUIApplicationProcessManaging-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCUIApplicationProcessManaging-Protocol.h"; sourceTree = "<group>"; };
+		71336AF22BD1348F00997FF4 /* AMXCUIDeviceWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMXCUIDeviceWrapper.h; sourceTree = "<group>"; };
+		71336AF32BD1348F00997FF4 /* AMXCUIDeviceWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMXCUIDeviceWrapper.m; sourceTree = "<group>"; };
+		71336AF62BD15B4D00997FF4 /* AMDeviceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMDeviceTests.m; sourceTree = "<group>"; };
 		713A9D0F256683E900118D07 /* XCUIElementQuery+AMHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIElementQuery+AMHelpers.h"; sourceTree = "<group>"; };
 		713A9D10256683E900118D07 /* XCUIElementQuery+AMHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIElementQuery+AMHelpers.m"; sourceTree = "<group>"; };
 		713A9D1B256696AA00118D07 /* FBCustomCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBCustomCommands.m; sourceTree = "<group>"; };
@@ -699,6 +707,8 @@
 				7151ADAC2564F570008B8B2A /* AMSettings.m */,
 				71B8B67F26726369009CE50C /* AMSwipeHelpers.h */,
 				71B8B68026726369009CE50C /* AMSwipeHelpers.m */,
+				71336AF22BD1348F00997FF4 /* AMXCUIDeviceWrapper.h */,
+				71336AF32BD1348F00997FF4 /* AMXCUIDeviceWrapper.m */,
 				7180C1C8257A9336008FA870 /* FBBaseActionsSynthesizer.h */,
 				7180C1C9257A9336008FA870 /* FBBaseActionsSynthesizer.m */,
 				7151AD7B2564F56E008B8B2A /* FBClassChainQueryParser.h */,
@@ -766,6 +776,7 @@
 				7180C1E6257A94F3008FA870 /* XCPointerEventPath.h */,
 				7180C1EC257A95C2008FA870 /* XCSynthesizedEventRecord.h */,
 				7180C1F6257A9896008FA870 /* XCUIEventSynthesizing-Protocol.h */,
+				71336AF02BD1344100997FF4 /* XCUIApplicationProcessManaging-Protocol.h */,
 			);
 			path = XCTest;
 			sourceTree = "<group>";
@@ -790,6 +801,7 @@
 			children = (
 				718D2C072567A028005F533B /* AMElementAttributesTests.m */,
 				718D2C202567D8A8005F533B /* AMEditElementTests.m */,
+				71336AF62BD15B4D00997FF4 /* AMDeviceTests.m */,
 				71B00E9F2566D9570010DA73 /* AMFindElementTests.m */,
 				71B00E9C2566D7F10010DA73 /* AMIntegrationTestCase.h */,
 				71B00E8D2566D4BA0010DA73 /* AMIntegrationTestCase.m */,
@@ -847,6 +859,7 @@
 				7168D5AE258B849B00EEFA12 /* LRUCache.h in Headers */,
 				7109C03D2565B5BF006BFD13 /* NSPredicate+FBFormat.h in Headers */,
 				7180C1DA257A9369008FA870 /* AMActionCommands.h in Headers */,
+				71336AF12BD1345000997FF4 /* XCUIApplicationProcessManaging-Protocol.h in Headers */,
 				71A5C67029A4E41A00421C37 /* XCTIssue+AMPatcher.h in Headers */,
 				713A9D2D25669E4F00118D07 /* XCUIElement+FBClassChain.h in Headers */,
 				7109C0422565B5C7006BFD13 /* XCUIApplication+AMHelpers.h in Headers */,
@@ -897,6 +910,7 @@
 				7109C0332565B5B0006BFD13 /* FBUnknownCommands.h in Headers */,
 				7109BFE32565B53A006BFD13 /* FBCommandStatus.h in Headers */,
 				7180C1F7257A9896008FA870 /* XCUIEventSynthesizing-Protocol.h in Headers */,
+				71336AF52BD1348F00997FF4 /* AMXCUIDeviceWrapper.h in Headers */,
 				7180C1CA257A9336008FA870 /* FBBaseActionsSynthesizer.h in Headers */,
 				7168D5AD258B849B00EEFA12 /* LRUCacheNode.h in Headers */,
 				7109C0672565B603006BFD13 /* HTTPResponseProxy.h in Headers */,
@@ -1138,6 +1152,7 @@
 				719E6A6F25822DB800777988 /* XCUIApplication+AMUIInterruptions.m in Sources */,
 				7109C07D2565B61D006BFD13 /* RoutingHTTPServer.m in Sources */,
 				7109C06D2565B60A006BFD13 /* Route.m in Sources */,
+				71336AF42BD1348F00997FF4 /* AMXCUIDeviceWrapper.m in Sources */,
 				7168D5AF258B849B00EEFA12 /* LRUCacheNode.m in Sources */,
 				7109C0022565B561006BFD13 /* FBResponseJSONPayload.m in Sources */,
 				7109C00C2565B56E006BFD13 /* FBRuntimeUtils.m in Sources */,
@@ -1170,6 +1185,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71336AF72BD15B4D00997FF4 /* AMDeviceTests.m in Sources */,
 				71B00EA62566DBAF0010DA73 /* AMSourceTests.m in Sources */,
 				718D2C212567D8A8005F533B /* AMEditElementTests.m in Sources */,
 				71B00E8E2566D4BA0010DA73 /* AMIntegrationTestCase.m in Sources */,
