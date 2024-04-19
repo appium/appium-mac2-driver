@@ -1,3 +1,10 @@
+## [1.15.0](https://github.com/appium/appium-mac2-driver/compare/v1.14.0...v1.15.0) (2024-04-19)
+
+
+### Features
+
+* Add support of deep links ([#296](https://github.com/appium/appium-mac2-driver/issues/296)) ([4076190](https://github.com/appium/appium-mac2-driver/commit/40761902f78e57494d60be94d12736dc20b8b391))
+
 ## [1.14.0](https://github.com/appium/appium-mac2-driver/compare/v1.13.0...v1.14.0) (2024-04-18)
 
 
