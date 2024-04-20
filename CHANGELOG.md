@@ -1,3 +1,10 @@
+## [1.16.0](https://github.com/appium/appium-mac2-driver/compare/v1.15.0...v1.16.0) (2024-04-20)
+
+
+### Features
+
+* Add initialDeeplinkUrl capability ([#297](https://github.com/appium/appium-mac2-driver/issues/297)) ([6dee2e8](https://github.com/appium/appium-mac2-driver/commit/6dee2e87c310d23b1a2819b6633d63ee249477d3))
+
 ## [1.15.0](https://github.com/appium/appium-mac2-driver/compare/v1.14.0...v1.15.0) (2024-04-19)
 
 
