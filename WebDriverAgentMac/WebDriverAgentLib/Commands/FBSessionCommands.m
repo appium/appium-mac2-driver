@@ -97,10 +97,24 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
 
   NSString *bundleID = requirements[AM_BUNDLE_ID_CAPABILITY];
   NSString *appPath = requirements[AM_APP_PATH_CAPABILITY];
+  NSString *deepLink = requirements[AM_INITIAL_DEEPLINK_URL_CAPABILITY];
   BOOL noReset = [requirements[AM_NO_RESET_CAPABILITY] boolValue];
   FBSession *session;
-  if (nil == bundleID && nil == appPath) {
+  if (nil == bundleID && nil == appPath && nil == deepLink) {
     session = [FBSession initWithApplication:nil];
+  } else if (nil != deepLink) {
+    NSURL *url = [NSURL URLWithString:deepLink];
+    NSError *error;
+    BOOL success = nil == bundleID
+      ? [AMXCUIDeviceWrapper.sharedDevice openUrl:url error:&error]
+      : [AMXCUIDeviceWrapper.sharedDevice openUrl:url withApplication:bundleID error:&error];
+    if (!success) {
+      return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:error.localizedDescription
+                                                                traceback:nil]);
+    }
+    if (nil != bundleID) {
+      session = [FBSession initWithApplication:[[XCUIApplication alloc] initWithBundleIdentifier:bundleID]];
+    }
   } else {
     XCUIApplication *app = nil != appPath 
       ? [[XCUIApplication alloc] initWithURL:[NSURL fileURLWithPath:appPath]]

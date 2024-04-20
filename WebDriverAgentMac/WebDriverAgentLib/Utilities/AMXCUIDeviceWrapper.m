@@ -42,24 +42,24 @@
 
 - (BOOL)supportsOpenUrl
 {
-  id<XCUIApplicationProcessManaging> platformApplicationManager = [self am_platformApplicationManager];
+  id<XCUIApplicationProcessManaging> platformApplicationManager = [self platformApplicationManager];
   return nil != platformApplicationManager
     && [(NSObject *)platformApplicationManager respondsToSelector:@selector(openDefaultApplicationForURL:completion:)];
 }
 
-- (id<XCUIApplicationProcessManaging>)am_platformApplicationManager
+- (id<XCUIApplicationProcessManaging>)platformApplicationManager
 {
   return [self.xcuiDeviceInstance valueForKey:@"platformApplicationManager"];
 }
 
-- (id<XCUIEventSynthesizing>)am_eventSynthesizer
+- (id<XCUIEventSynthesizing>)eventSynthesizer
 {
   return [self.xcuiDeviceInstance valueForKey:@"eventSynthesizer"];
 }
 
 - (BOOL)openUrl:(NSURL *)url error:(NSError **)error
 {
-  id<XCUIApplicationProcessManaging> platformApplicationManager = [self am_platformApplicationManager];
+  id<XCUIApplicationProcessManaging> platformApplicationManager = [self platformApplicationManager];
   if (nil == platformApplicationManager 
       || ![(NSObject *)platformApplicationManager respondsToSelector:@selector(openDefaultApplicationForURL:completion:)]) {
     NSString *description = [NSString stringWithFormat:@"Cannot open '%@' with the default application assigned for it. Consider upgrading to Xcode 14.3+", url];
@@ -91,7 +91,7 @@
 withApplication:(NSString *)bundleId
           error:(NSError **)error
 {
-  id<XCUIApplicationProcessManaging> platformApplicationManager = [self am_platformApplicationManager];
+  id<XCUIApplicationProcessManaging> platformApplicationManager = [self platformApplicationManager];
   if (nil == platformApplicationManager 
       || ![(NSObject *)platformApplicationManager respondsToSelector:@selector(openURL:usingApplication:completion:)]) {
     NSString *description = [NSString stringWithFormat:@"Cannot open '%@' with the default application assigned for it. Consider upgrading to Xcode 14.3+", url];
@@ -125,7 +125,7 @@ withApplication:(NSString *)bundleId
 {
   __block NSError *internalError = nil;
   dispatch_semaphore_t sem = dispatch_semaphore_create(0);
-  id<XCUIEventSynthesizing> eventSynthesizer = [self am_eventSynthesizer];
+  id<XCUIEventSynthesizing> eventSynthesizer = [self eventSynthesizer];
   [eventSynthesizer synthesizeEvent:event
                          completion:(id)^(BOOL result, NSError *invokeError) {
     if (!result) {
