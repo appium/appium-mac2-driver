@@ -1,3 +1,10 @@
+## [1.17.0](https://github.com/appium/appium-mac2-driver/compare/v1.16.0...v1.17.0) (2024-04-21)
+
+
+### Features
+
+* Improve the typing system ([#298](https://github.com/appium/appium-mac2-driver/issues/298)) ([20bdd85](https://github.com/appium/appium-mac2-driver/commit/20bdd85de5b801098a23b1f95dd46f72d97a9506))
+
 ## [1.16.0](https://github.com/appium/appium-mac2-driver/compare/v1.15.0...v1.16.0) (2024-04-20)
 
 
