@@ -1,3 +1,10 @@
+## [1.17.1](https://github.com/appium/appium-mac2-driver/compare/v1.17.0...v1.17.1) (2024-05-08)
+
+
+### Bug Fixes
+
+* Typing issue ([9a0804d](https://github.com/appium/appium-mac2-driver/commit/9a0804d2432262c2df0f4bf82cd9b60388c96825))
+
 ## [1.17.0](https://github.com/appium/appium-mac2-driver/compare/v1.16.0...v1.17.0) (2024-04-21)
 
 
