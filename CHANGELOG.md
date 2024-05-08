@@ -1,3 +1,10 @@
+## [1.17.2](https://github.com/appium/appium-mac2-driver/compare/v1.17.1...v1.17.2) (2024-05-08)
+
+
+### Bug Fixes
+
+* Optional Automation Mode user authentication check ([339c5c9](https://github.com/appium/appium-mac2-driver/commit/339c5c9e55c47f671ddb34d0e351fb70e8801bbb))
+
 ## [1.17.1](https://github.com/appium/appium-mac2-driver/compare/v1.17.0...v1.17.1) (2024-05-08)
 
 
