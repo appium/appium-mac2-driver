@@ -1,3 +1,10 @@
+## [1.17.3](https://github.com/appium/appium-mac2-driver/compare/v1.17.2...v1.17.3) (2024-05-16)
+
+
+### Miscellaneous Chores
+
+* Update dev dependencies ([5fa1580](https://github.com/appium/appium-mac2-driver/commit/5fa1580d7218fdbd1a93b8050e9f282f160b6f0a))
+
 ## [1.17.2](https://github.com/appium/appium-mac2-driver/compare/v1.17.1...v1.17.2) (2024-05-08)
 
 
