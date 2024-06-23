@@ -1,10 +1,16 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import WDA_MAC_SERVER from '../../lib/wda-mac';
 
-chai.use(chaiAsPromised);
-
 describe('WDAMacServer', function () {
+  let chai;
+
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+  });
+
   describe('parseProxyProperties', function () {
     it('should default', function () {
       WDA_MAC_SERVER.parseProxyProperties({}).should.eql(

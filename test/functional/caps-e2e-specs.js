@@ -1,13 +1,8 @@
 import { remote } from 'webdriverio';
-import chaiAsPromised from 'chai-as-promised';
-import chai from 'chai';
 import os from 'os';
 import path from 'path';
 import { fs } from 'appium/support';
 import { HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID } from '../utils';
-
-chai.should();
-chai.use(chaiAsPromised);
 
 const TEST_FILE = path.resolve(os.tmpdir(), 'test.test');
 
@@ -23,6 +18,16 @@ describe('Mac2Driver - caps', function () {
   this.timeout(MOCHA_TIMEOUT);
 
   let driver;
+  let chai;
+
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+  });
+
   beforeEach(async function () {
     driver = await remote({
       hostname: HOST,
