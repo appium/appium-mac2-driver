@@ -1,14 +1,20 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
 import * as teen_process from 'teen_process';
 import { listChildrenProcessIds } from '../../lib/utils';
 
 const sandbox = sinon.createSandbox();
-chai.should();
-chai.use(chaiAsPromised);
 
 describe('listChildrenProcessIds', function () {
+  let chai;
+
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+  });
+
   const EXAMPLE_PS_OUTPUT = `
   USER                PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND           PPID
   _coreaudiod         236   3.1  0.0  4343236   4124   ??  Ss   Thu10AM  42:23.82 /usr/sbin/coreau     1

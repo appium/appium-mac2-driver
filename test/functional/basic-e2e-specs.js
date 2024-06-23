@@ -1,11 +1,6 @@
 import _ from 'lodash';
 import { remote } from 'webdriverio';
-import chaiAsPromised from 'chai-as-promised';
-import chai from 'chai';
 import { HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID } from '../utils';
-
-chai.should();
-chai.use(chaiAsPromised);
 
 const CAPS = {
   platformName: 'mac',
@@ -17,6 +12,16 @@ describe('Mac2Driver - basic', function () {
   this.timeout(MOCHA_TIMEOUT);
 
   let driver;
+  let chai;
+
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+  });
+
   beforeEach(async function () {
     driver = await remote({
       hostname: HOST,
