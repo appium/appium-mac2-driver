@@ -1,3 +1,10 @@
+## [1.17.4](https://github.com/appium/appium-mac2-driver/compare/v1.17.3...v1.17.4) (2024-06-23)
+
+
+### Miscellaneous Chores
+
+* Bump chai and chai-as-promised ([#303](https://github.com/appium/appium-mac2-driver/issues/303)) ([e4090eb](https://github.com/appium/appium-mac2-driver/commit/e4090eb01d8a93acfc557fcdd4a8862659a9bcf5))
+
 ## [1.17.3](https://github.com/appium/appium-mac2-driver/compare/v1.17.2...v1.17.3) (2024-05-16)
 
 
