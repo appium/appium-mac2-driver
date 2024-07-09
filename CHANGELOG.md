@@ -1,3 +1,10 @@
+## [1.17.5](https://github.com/appium/appium-mac2-driver/compare/v1.17.4...v1.17.5) (2024-07-09)
+
+
+### Miscellaneous Chores
+
+* Remove extra import ([62f887b](https://github.com/appium/appium-mac2-driver/commit/62f887b30f086f1a5df6bf1168ba223d72dd3287))
+
 ## [1.17.4](https://github.com/appium/appium-mac2-driver/compare/v1.17.3...v1.17.4) (2024-06-23)
 
 
