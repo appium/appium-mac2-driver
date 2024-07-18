@@ -80,7 +80,7 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
 
 @property (nullable, readonly, nonatomic) FBW3CKeyItem *previousItem;
 
-- (NSUInteger)calculateModifierForChain:(NSArray *)allItems
+- (NSUInteger)calculateModifiersForChain:(NSArray *)allItems
                           lastItemIndex:(NSUInteger)lastItemIndex;
 
 @end
@@ -436,7 +436,7 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
   return self;
 }
 
-- (NSUInteger)calculateModifierForChain:(NSArray *)allItems
+- (NSUInteger)calculateModifiersForChain:(NSArray *)allItems
                           lastItemIndex:(NSUInteger)lastItemIndex
 {
   NSUInteger result = 0;
@@ -501,7 +501,7 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
     BOOL isKeyDown = [item isKindOfClass:FBKeyDownItem.class];
     BOOL isKeyUp = !isKeyDown && [item isKindOfClass:FBKeyUpItem.class];
     if (!isKeyUp && !isKeyDown) {
-      break;
+      continue;
     }
 
     NSString *value = [item performSelector:@selector(value)];
@@ -536,36 +536,46 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
   }
 
   NSNumber *modifier = AMToMetaModifier(self.value);
-  NSTimeInterval offsetSeconds = FBMillisToSeconds(self.offset);
-  XCPointerEventPath *result = nil == eventPath ? [[XCPointerEventPath alloc] initForTextInput] : eventPath;
   if (nil != modifier) {
-    NSUInteger previousModifier = [self calculateModifierForChain:allItems lastItemIndex:currentItemIndex - 1];
-    [result setModifiers:previousModifier & ~[modifier unsignedIntValue]
-mergeWithCurrentModifierFlags:NO
-                atOffset:offsetSeconds];
-    return @[result];
+    return @[];
   }
 
+  NSTimeInterval offsetSeconds = FBMillisToSeconds(self.offset);
+  XCPointerEventPath *result = nil == eventPath ? [[XCPointerEventPath alloc] initForTextInput] : eventPath;
+
   NSString *specialKey = AMToSpecialKey(self.value);
+  NSUInteger modifiers = [self calculateModifiersForChain:allItems lastItemIndex:currentItemIndex];
   if (nil != specialKey) {
-    NSUInteger previousModifier = [self calculateModifierForChain:allItems lastItemIndex:currentItemIndex];
-    if ([specialKey isEqualToString:@""]) {
-      // NOOP
-      [result setModifiers:previousModifier
-mergeWithCurrentModifierFlags:NO
-                  atOffset:offsetSeconds];
-    } else {
+    if (specialKey.length > 0) {
       [result typeKey:specialKey
-            modifiers:previousModifier
+            modifiers:modifiers
              atOffset:offsetSeconds];
     }
     return @[result];
   }
 
-  [result typeText:self.value
-          atOffset:offsetSeconds
-       typingSpeed:[self.class defaultTypingFrequency]
-      shouldRedact:NO];
+  NSUInteger len = [self.value length];
+  unichar buffer[len + 1];
+  [self.value getCharacters:buffer range:NSMakeRange(0, len)];
+  for (int i = 0; i < 1; i++) {
+    unichar charCode = buffer[i];
+    NSString *oneChar = [NSString stringWithFormat:@"%C", charCode];
+    // 0x7F is the end of the first half of the ASCII table, where (almoust) all
+    // chars have their own key representations
+    if (charCode <= 0x7F) {
+      [result typeKey:oneChar
+            modifiers:modifiers
+             atOffset:offsetSeconds];
+    } else {
+      // The typeText API does not respect modifiers
+      // while the typeKey API can only enter keys
+      [result typeText:oneChar
+              atOffset:offsetSeconds
+           typingSpeed:[self.class defaultTypingFrequency]
+          shouldRedact:NO];
+    }
+  }
+
   return @[result];
 }
 
@@ -608,7 +618,7 @@ mergeWithCurrentModifierFlags:NO
     BOOL isKeyDown = [item isKindOfClass:FBKeyDownItem.class];
     BOOL isKeyUp = !isKeyDown && [item isKindOfClass:FBKeyUpItem.class];
     if (!isKeyUp && !isKeyDown) {
-      break;
+      continue;
     }
 
     NSString *value = [item performSelector:@selector(value)];
@@ -635,20 +645,7 @@ mergeWithCurrentModifierFlags:NO
     return nil;
   }
 
-  NSNumber *modifier = AMToMetaModifier(self.value);
-  if (nil == modifier) {
-    return @[];
-  }
-  NSUInteger previousModifier = [self calculateModifierForChain:allItems lastItemIndex:currentItemIndex - 1];
-  if ([modifier unsignedIntValue] == previousModifier) {
-    return @[];
-  }
-
-  XCPointerEventPath *result = nil == eventPath ? [[XCPointerEventPath alloc] initForTextInput] : eventPath;
-  [result setModifiers:previousModifier | [modifier unsignedIntValue]
-mergeWithCurrentModifierFlags:NO
-              atOffset:FBMillisToSeconds(self.offset)];
-  return @[result];
+  return @[];
 }
 
 @end
