@@ -34,20 +34,22 @@ NSString *_Nullable FBRequireValue(NSDictionary<NSString *, id> *actionItem, NSE
 NSNumber *_Nullable FBOptDuration(NSDictionary<NSString *, id> *actionItem, NSNumber *_Nullable defaultValue, NSError **error);
 
 /**
- * Checks whether the given key action value is a W3C meta modifier
- * @param value key action value
- * @returns YES if the value is a meta modifier
- */
-BOOL FBIsMetaModifier(NSString *value);
-
-/**
  * Maps W3C meta modifier to XCTest compatible-one
+ * See https://w3c.github.io/webdriver/#actions
  *
  * @param value key action value
- * @param reverse whether to reverse the modifier value, so it cancels the previusly set one
- * @returns the mapped modifier value or 0 in case of failure
+ * @returns the mapped modifier value or nil
  */
-NSUInteger FBToMetaModifier(NSString *value, BOOL reverse);
+NSNumber *_Nullable AMToMetaModifier(NSString *value);
+
+/**
+ * Maps W3C special key to XCTest compatible-one
+ * See https://w3c.github.io/webdriver/#actions
+ *
+ * @param value key action value
+ * @returns the mapped modifier value or nil
+ */
+NSString *_Nullable AMToSpecialKey(NSString *value);
 
 /**
  * Maps W3C button code to a XCTest compatible-one

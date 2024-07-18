@@ -76,6 +76,32 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
 
 @end
 
+@interface FBW3CKeyItem : FBBaseActionItem
+
+@property (nullable, readonly, nonatomic) FBW3CKeyItem *previousItem;
+
+- (NSUInteger)calculateModifierForChain:(NSArray *)allItems
+                          lastItemIndex:(NSUInteger)lastItemIndex;
+
+@end
+
+@interface FBKeyUpItem : FBW3CKeyItem
+
+@property (readonly, nonatomic) NSString *value;
+
+@end
+
+@interface FBKeyDownItem : FBW3CKeyItem
+
+@property (readonly, nonatomic) NSString *value;
+
+@end
+
+@interface FBKeyPauseItem : FBW3CKeyItem
+
+@property (readonly, nonatomic) double duration;
+
+@end
 
 
 @implementation FBW3CGestureItem
@@ -392,6 +418,280 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
 @end
 
 
+@implementation FBW3CKeyItem
+
+- (nullable instancetype)initWithActionItem:(NSDictionary<NSString *, id> *)actionItem
+                                application:(XCUIApplication *)application
+                               previousItem:(nullable FBW3CKeyItem *)previousItem
+                                     offset:(double)offset
+                                      error:(NSError **)error
+{
+  self = [super init];
+  if (self) {
+    self.actionItem = actionItem;
+    self.application = application;
+    self.offset = offset;
+    _previousItem = previousItem;
+  }
+  return self;
+}
+
+- (NSUInteger)calculateModifierForChain:(NSArray *)allItems
+                          lastItemIndex:(NSUInteger)lastItemIndex
+{
+  NSUInteger result = 0;
+  for (NSUInteger index = 0; index <= lastItemIndex; index++) {
+    FBW3CKeyItem *item = [allItems objectAtIndex:index];
+    NSNumber *modifier = nil;
+    BOOL isKeyDown = [item isKindOfClass:FBKeyDownItem.class];
+    BOOL isKeyUp = !isKeyDown && [item isKindOfClass:FBKeyUpItem.class];
+    if (isKeyDown || isKeyUp) {
+      NSString *value = [item performSelector:@selector(value)];
+      modifier = AMToMetaModifier(value);
+    }
+    if (nil == modifier) {
+      continue;
+    }
+    if (isKeyDown) {
+      result |= [modifier unsignedIntValue];
+    } else {
+      result &= ~[modifier unsignedIntValue];
+    }
+  }
+  return result;
+}
+
+@end
+
+
+@implementation FBKeyUpItem : FBW3CKeyItem
+
+- (nullable instancetype)initWithActionItem:(NSDictionary<NSString *, id> *)actionItem
+                                application:(XCUIApplication *)application
+                               previousItem:(nullable FBW3CKeyItem *)previousItem
+                                     offset:(double)offset
+                                      error:(NSError **)error
+{
+  self = [super initWithActionItem:actionItem
+                       application:application
+                      previousItem:previousItem
+                            offset:offset
+                             error:error];
+  if (self) {
+    NSString *value = FBRequireValue(actionItem, error);
+    if (nil == value) {
+      return nil;
+    }
+    _value = value;
+  }
+  return self;
+}
+
++ (NSString *)actionName
+{
+  return FB_ACTION_ITEM_TYPE_KEY_UP;
+}
+
+- (BOOL)hasDownPairInItems:(NSArray *)allItems
+          currentItemIndex:(NSUInteger)currentItemIndex
+{
+  NSInteger balance = 1;
+  for (NSInteger index = currentItemIndex - 1; index >= 0; index--) {
+    FBW3CKeyItem *item = [allItems objectAtIndex:index];
+    BOOL isKeyDown = [item isKindOfClass:FBKeyDownItem.class];
+    BOOL isKeyUp = !isKeyDown && [item isKindOfClass:FBKeyUpItem.class];
+    if (!isKeyUp && !isKeyDown) {
+      break;
+    }
+
+    NSString *value = [item performSelector:@selector(value)];
+    if (isKeyDown && [value isEqualToString:self.value]) {
+      balance--;
+    }
+    if (isKeyUp && [value isEqualToString:self.value]) {
+      balance++;
+    }
+  }
+  return 0 == balance;
+}
+
++ (NSUInteger)defaultTypingFrequency
+{
+  NSInteger defaultFreq = [[NSUserDefaults standardUserDefaults]
+                           integerForKey:@"com.apple.xctest.iOSMaximumTypingFrequency"];
+  return defaultFreq > 0 ? defaultFreq : 60;
+}
+
+- (NSArray<XCPointerEventPath *> *)addToEventPath:(XCPointerEventPath *)eventPath
+                                         allItems:(NSArray *)allItems
+                                 currentItemIndex:(NSUInteger)currentItemIndex
+                                            error:(NSError **)error
+{
+  if (![self hasDownPairInItems:allItems currentItemIndex:currentItemIndex]) {
+    NSString *description = [NSString stringWithFormat:@"Key Up action '%@' is not balanced with a preceding Key Down one in '%@'", self.value, self.actionItem];
+    if (error) {
+      *error = [[FBErrorBuilder.builder withDescription:description] build];
+    }
+    return nil;
+  }
+
+  NSNumber *modifier = AMToMetaModifier(self.value);
+  NSTimeInterval offsetSeconds = FBMillisToSeconds(self.offset);
+  XCPointerEventPath *result = nil == eventPath ? [[XCPointerEventPath alloc] initForTextInput] : eventPath;
+  if (nil != modifier) {
+    NSUInteger previousModifier = [self calculateModifierForChain:allItems lastItemIndex:currentItemIndex - 1];
+    [result setModifiers:previousModifier & ~[modifier unsignedIntValue]
+mergeWithCurrentModifierFlags:NO
+                atOffset:offsetSeconds];
+    return @[result];
+  }
+
+  NSString *specialKey = AMToSpecialKey(self.value);
+  if (nil != specialKey) {
+    NSUInteger previousModifier = [self calculateModifierForChain:allItems lastItemIndex:currentItemIndex];
+    if ([specialKey isEqualToString:@""]) {
+      // NOOP
+      [result setModifiers:previousModifier
+mergeWithCurrentModifierFlags:NO
+                  atOffset:offsetSeconds];
+    } else {
+      [result typeKey:specialKey
+            modifiers:previousModifier
+             atOffset:offsetSeconds];
+    }
+    return @[result];
+  }
+
+  [result typeText:self.value
+          atOffset:offsetSeconds
+       typingSpeed:[self.class defaultTypingFrequency]
+      shouldRedact:NO];
+  return @[result];
+}
+
+@end
+
+@implementation FBKeyDownItem : FBW3CKeyItem
+
+- (nullable instancetype)initWithActionItem:(NSDictionary<NSString *, id> *)actionItem
+                                application:(XCUIApplication *)application
+                               previousItem:(nullable FBW3CKeyItem *)previousItem
+                                     offset:(double)offset
+                                      error:(NSError **)error
+{
+  self = [super initWithActionItem:actionItem
+                       application:application
+                      previousItem:previousItem
+                            offset:offset
+                             error:error];
+  if (self) {
+    NSString *value = FBRequireValue(actionItem, error);
+    if (nil == value) {
+      return nil;
+    }
+    _value = value;
+  }
+  return self;
+}
+
++ (NSString *)actionName
+{
+  return FB_ACTION_ITEM_TYPE_KEY_DOWN;
+}
+
+- (BOOL)hasUpPairInItems:(NSArray *)allItems
+        currentItemIndex:(NSUInteger)currentItemIndex
+{
+  NSInteger balance = 1;
+  for (NSUInteger index = currentItemIndex + 1; index < allItems.count; index++) {
+    FBW3CKeyItem *item = [allItems objectAtIndex:index];
+    BOOL isKeyDown = [item isKindOfClass:FBKeyDownItem.class];
+    BOOL isKeyUp = !isKeyDown && [item isKindOfClass:FBKeyUpItem.class];
+    if (!isKeyUp && !isKeyDown) {
+      break;
+    }
+
+    NSString *value = [item performSelector:@selector(value)];
+    if (isKeyUp && [value isEqualToString:self.value]) {
+      balance--;
+    }
+    if (isKeyDown && [value isEqualToString:self.value]) {
+      balance++;
+    }
+  }
+  return 0 == balance;
+}
+
+- (NSArray<XCPointerEventPath *> *)addToEventPath:(XCPointerEventPath *)eventPath
+                                         allItems:(NSArray *)allItems
+                                 currentItemIndex:(NSUInteger)currentItemIndex
+                                            error:(NSError **)error
+{
+  if (![self hasUpPairInItems:allItems currentItemIndex:currentItemIndex]) {
+    NSString *description = [NSString stringWithFormat:@"Key Down action '%@' must have a closing Key Up successor in '%@'", self.value, self.actionItem];
+    if (error) {
+      *error = [[FBErrorBuilder.builder withDescription:description] build];
+    }
+    return nil;
+  }
+
+  NSNumber *modifier = AMToMetaModifier(self.value);
+  if (nil == modifier) {
+    return @[];
+  }
+  NSUInteger previousModifier = [self calculateModifierForChain:allItems lastItemIndex:currentItemIndex - 1];
+  if ([modifier unsignedIntValue] == previousModifier) {
+    return @[];
+  }
+
+  XCPointerEventPath *result = nil == eventPath ? [[XCPointerEventPath alloc] initForTextInput] : eventPath;
+  [result setModifiers:previousModifier | [modifier unsignedIntValue]
+mergeWithCurrentModifierFlags:NO
+              atOffset:FBMillisToSeconds(self.offset)];
+  return @[result];
+}
+
+@end
+
+@implementation FBKeyPauseItem
+
+- (nullable instancetype)initWithActionItem:(NSDictionary<NSString *, id> *)actionItem
+                                application:(XCUIApplication *)application
+                               previousItem:(nullable FBW3CKeyItem *)previousItem
+                                     offset:(double)offset
+                                      error:(NSError **)error
+{
+  self = [super initWithActionItem:actionItem
+                       application:application
+                      previousItem:previousItem
+                            offset:offset
+                             error:error];
+  if (self) {
+    NSNumber *duration = FBOptDuration(actionItem, nil, error);
+    if (nil == duration) {
+      return nil;
+    }
+    _duration = [duration doubleValue];
+  }
+  return self;
+}
+
++ (NSString *)actionName
+{
+  return FB_ACTION_ITEM_TYPE_PAUSE;
+}
+
+- (NSArray<XCPointerEventPath *> *)addToEventPath:(XCPointerEventPath *)eventPath
+                                         allItems:(NSArray *)allItems
+                                 currentItemIndex:(NSUInteger)currentItemIndex
+                                            error:(NSError **)error
+{
+  return @[];
+}
+
+@end
+
+
 @interface FBW3CGestureItemsChain : FBBaseActionItemsChain
 
 @end
@@ -474,7 +774,74 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
   return [[result reverseObjectEnumerator] allObjects];
 }
 
-- (nullable NSArray<XCPointerEventPath *> *)eventPathsWithGestureAction:(NSDictionary<NSString *, id> *)actionDescription forActionId:(NSString *)actionId error:(NSError **)error
+- (nullable NSArray<XCPointerEventPath *> *)eventPathsWithKeyAction:(NSDictionary<NSString *, id> *)actionDescription
+                                                        forActionId:(NSString *)actionId
+                                                              error:(NSError **)error
+{
+  static NSDictionary<NSString *, Class> *keyItemsMapping;
+  static NSArray<NSString *> *supportedActionItemTypes;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    NSMutableDictionary<NSString *, Class> *itemsMapping = [NSMutableDictionary dictionary];
+    for (Class cls in @[FBKeyDownItem.class,
+                        FBKeyPauseItem.class,
+                        FBKeyUpItem.class]) {
+      [itemsMapping setObject:cls forKey:[cls actionName]];
+    }
+    keyItemsMapping = itemsMapping.copy;
+    supportedActionItemTypes = @[FB_ACTION_ITEM_TYPE_PAUSE,
+                                 FB_ACTION_ITEM_TYPE_KEY_UP,
+                                 FB_ACTION_ITEM_TYPE_KEY_DOWN];
+  });
+
+  NSArray<NSDictionary<NSString *, id> *> *actionItems = [actionDescription objectForKey:FB_KEY_ACTIONS];
+  if (nil == actionItems || 0 == actionItems.count) {
+    NSString *description = [NSString stringWithFormat:@"It is mandatory to have at least one item defined for each action. Action with id '%@' contains none", actionId];
+    if (error) {
+      *error = [[FBErrorBuilder.builder withDescription:description] build];
+    }
+    return nil;
+  }
+
+  FBW3CKeyItemsChain *chain = [[FBW3CKeyItemsChain alloc] init];
+  NSArray<NSDictionary<NSString *, id> *> *processedItems = [self preprocessedActionItemsWith:actionItems];
+  for (NSDictionary<NSString *, id> *actionItem in processedItems) {
+    id actionItemType = [actionItem objectForKey:FB_ACTION_ITEM_KEY_TYPE];
+    if (![actionItemType isKindOfClass:NSString.class]) {
+      NSString *description = [NSString stringWithFormat:@"The %@ property is mandatory to set for '%@' action item", FB_ACTION_ITEM_KEY_TYPE, actionItem];
+      if (error) {
+        *error = [[FBErrorBuilder.builder withDescription:description] build];
+      }
+      return nil;
+    }
+
+    Class keyItemClass = [keyItemsMapping objectForKey:actionItemType];
+    if (nil == keyItemClass) {
+      NSString *description = [NSString stringWithFormat:@"'%@' action item type '%@' is not supported. Only the following action item types are supported: %@", actionId, actionItemType, supportedActionItemTypes];
+      if (error) {
+        *error = [[FBErrorBuilder.builder withDescription:description] build];
+      }
+      return nil;
+    }
+
+    FBW3CKeyItem *keyItem = [[keyItemClass alloc] initWithActionItem:actionItem
+                                                         application:self.application
+                                                        previousItem:[chain.items lastObject]
+                                                              offset:chain.durationOffset
+                                                               error:error];
+    if (nil == keyItem) {
+      return nil;
+    }
+
+    [chain addItem:keyItem];
+  }
+
+  return [chain asEventPathsWithError:error];
+}
+
+- (nullable NSArray<XCPointerEventPath *> *)eventPathsWithGestureAction:(NSDictionary<NSString *, id> *)actionDescription
+                                                            forActionId:(NSString *)actionId
+                                                                  error:(NSError **)error
 {
   static NSDictionary<NSString *, Class> *gestureItemsMapping;
   static NSArray<NSString *> *supportedActionItemTypes;
@@ -559,16 +926,19 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
 {
   id actionType = [actionDescription objectForKey:FB_KEY_TYPE];
   if (![actionType isKindOfClass:NSString.class] ||
-      !([actionType isEqualToString:FB_ACTION_TYPE_POINTER])) {
-    NSString *description = [NSString stringWithFormat:@"Only actions of '%@' types are supported. '%@' is given instead for action with id '%@'",
-                             @[FB_ACTION_TYPE_POINTER], actionType, actionId];
+      !([actionType isEqualToString:FB_ACTION_TYPE_POINTER] || [actionType isEqualToString:FB_ACTION_TYPE_KEY])) {
+    NSString *description = [NSString stringWithFormat:@"Only actions of '%@' types are supported. '%@' is given instead for action with id '%@'", @[FB_ACTION_TYPE_POINTER, FB_ACTION_TYPE_KEY], actionType, actionId];
     if (error) {
       *error = [[FBErrorBuilder.builder withDescription:description] build];
     }
     return nil;
   }
 
-  return [self eventPathsWithGestureAction:actionDescription forActionId:actionId error:error];
+  if ([actionType isEqualToString:FB_ACTION_TYPE_POINTER]) {
+    return [self eventPathsWithGestureAction:actionDescription forActionId:actionId error:error];
+  }
+
+  return [self eventPathsWithKeyAction:actionDescription forActionId:actionId error:error];
 }
 
 - (nullable XCSynthesizedEventRecord *)synthesizeWithError:(NSError **)error
