@@ -455,7 +455,7 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
     if (isKeyDown) {
       result |= [modifier unsignedIntValue];
     } else {
-      result |= ~[modifier unsignedIntValue];
+      result &= ~[modifier unsignedIntValue];
     }
   }
   return result;
@@ -540,7 +540,7 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
   XCPointerEventPath *result = nil == eventPath ? [[XCPointerEventPath alloc] initForTextInput] : eventPath;
   if (nil != modifier) {
     NSUInteger previousModifier = [self calculateModifierForChain:allItems lastItemIndex:currentItemIndex - 1];
-    [result setModifiers:previousModifier | ~[modifier unsignedIntValue]
+    [result setModifiers:previousModifier & ~[modifier unsignedIntValue]
 mergeWithCurrentModifierFlags:NO
                 atOffset:offsetSeconds];
     return @[result];
