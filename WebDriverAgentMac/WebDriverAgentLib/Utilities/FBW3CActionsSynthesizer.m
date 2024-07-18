@@ -549,9 +549,16 @@ mergeWithCurrentModifierFlags:NO
   NSString *specialKey = AMToSpecialKey(self.value);
   if (nil != specialKey) {
     NSUInteger previousModifier = [self calculateModifierForChain:allItems lastItemIndex:currentItemIndex];
-    [result typeKey:specialKey
-          modifiers:previousModifier
-           atOffset:offsetSeconds];
+    if ([specialKey isEqualToString:@""]) {
+      // NOOP
+      [result setModifiers:previousModifier
+mergeWithCurrentModifierFlags:NO
+                  atOffset:offsetSeconds];
+    } else {
+      [result typeKey:specialKey
+            modifiers:previousModifier
+             atOffset:offsetSeconds];
+    }
     return @[result];
   }
 
