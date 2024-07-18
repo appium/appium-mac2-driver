@@ -209,7 +209,7 @@ NSString* AMToSpecialKey(NSString *value)
     case 0xE053:
       return XCUIKeyboardKeyCommand;
     default:
-      return nil;
+      return charCode >= 0xE000 && charCode <= 0xE05D ? @"" : nil;
   }
 }
 
