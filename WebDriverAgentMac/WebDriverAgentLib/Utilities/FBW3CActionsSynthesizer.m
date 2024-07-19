@@ -260,7 +260,7 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
     }
     return nil;
   }
-  
+
   XCUIElement *element = isOriginAnElement ? (XCUIElement *)origin : nil;
   NSNumber *x = [self.actionItem objectForKey:FB_ACTION_ITEM_KEY_X];
   NSNumber *y = [self.actionItem objectForKey:FB_ACTION_ITEM_KEY_Y];
@@ -272,7 +272,7 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
     }
     return nil;
   }
-  
+
   if (nil != element) {
     if (nil == x && nil == y) {
       return [self hitpointWithElement:element
@@ -283,13 +283,13 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
                       positionOffset:[NSValue am_valueWithCGPoint:CGPointMake(x.floatValue, y.floatValue)]
                                error:error];
   }
-  
+
   if ([origin isKindOfClass:NSString.class] && [origin isEqualToString:FB_ORIGIN_TYPE_VIEWPORT]) {
     return [self hitpointWithElement:nil
                       positionOffset:[NSValue am_valueWithCGPoint:CGPointMake(x.floatValue, y.floatValue)]
                                error:error];
   }
-  
+
   // origin == FB_ORIGIN_TYPE_POINTER
   if (nil == self.previousItem) {
     NSString *errorDescription = [NSString stringWithFormat:@"There is no previous item for '%@' action item, however %@ is set to '%@'", self.actionItem, FB_ACTION_ITEM_KEY_ORIGIN, FB_ORIGIN_TYPE_POINTER];
@@ -737,7 +737,7 @@ mergeWithCurrentModifierFlags:NO
       shouldCancelNextItem = YES;
       continue;
     }
-    
+
     if (nil == self.elementCache) {
       [result addObject:actionItem];
       continue;
@@ -795,14 +795,6 @@ mergeWithCurrentModifierFlags:NO
   });
 
   NSArray<NSDictionary<NSString *, id> *> *actionItems = [actionDescription objectForKey:FB_KEY_ACTIONS];
-  if (nil == actionItems || 0 == actionItems.count) {
-    NSString *description = [NSString stringWithFormat:@"It is mandatory to have at least one item defined for each action. Action with id '%@' contains none", actionId];
-    if (error) {
-      *error = [[FBErrorBuilder.builder withDescription:description] build];
-    }
-    return nil;
-  }
-
   FBW3CKeyItemsChain *chain = [[FBW3CKeyItemsChain alloc] init];
   NSArray<NSDictionary<NSString *, id> *> *processedItems = [self preprocessedActionItemsWith:actionItems];
   for (NSDictionary<NSString *, id> *actionItem in processedItems) {
