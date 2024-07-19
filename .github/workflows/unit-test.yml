@@ -37,6 +37,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install --no-package-lock
       name: Install dev dependencies
+    - run: npm i -g eslint@8.57.0
     - run: npm run lint
       name: Run linter
     - run: npm run test
