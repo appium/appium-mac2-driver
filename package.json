@@ -58,7 +58,7 @@
     "clean": "npm run build -- --clean",
     "rebuild": "npm run clean; npm run build",
     "dev": "npm run build -- --watch",
-    "lint": "eslint .",
+    "lint": "npx eslint .",
     "lint:fix": "npm run lint -- --fix",
     "prepare": "npm run rebuild",
     "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.js\"",
@@ -68,7 +68,6 @@
     "appium": "^2.4.1"
   },
   "devDependencies": {
-    "@appium/eslint-config-appium": "^8.0.5",
     "@appium/eslint-config-appium-ts": "^0.x",
     "@appium/tsconfig": "^0.x",
     "@appium/types": "^0.x",
