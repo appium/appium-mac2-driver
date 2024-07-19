@@ -1,3 +1,10 @@
+## [1.18.0](https://github.com/appium/appium-mac2-driver/compare/v1.17.5...v1.18.0) (2024-07-18)
+
+
+### Features
+
+* Add support of W3C key actions ([#309](https://github.com/appium/appium-mac2-driver/issues/309)) ([f83ff9f](https://github.com/appium/appium-mac2-driver/commit/f83ff9f41c972b64b45c88bd5a66d441d307267d))
+
 ## [1.17.5](https://github.com/appium/appium-mac2-driver/compare/v1.17.4...v1.17.5) (2024-07-09)
 
 
