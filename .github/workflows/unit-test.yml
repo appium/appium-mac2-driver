@@ -35,15 +35,11 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    # - run: npm i -g eslint@8.57.0
-    # - run: npm i -g mocha
     - run: npm install --no-package-lock
       name: Install dev dependencies
-    - run: ls "$(pwd)/node_modules/.bin"
-    - run: ls "$(pwd)/node_modules"
-    - run: PATH=$(pwd)/node_modules/.bin:$PATH npm run lint
+    - run: npm run lint
       name: Run linter
-    - run: PATH=$(pwd)/node_modules/.bin:$PATH npm run test
+    - run: npm run test
       name: Run unit tests
 
   analyze_wda:
