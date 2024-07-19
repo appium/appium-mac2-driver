@@ -35,6 +35,7 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+        check-latest: true
     - run: npm install --no-package-lock
       name: Install dev dependencies
     - run: npm run lint
