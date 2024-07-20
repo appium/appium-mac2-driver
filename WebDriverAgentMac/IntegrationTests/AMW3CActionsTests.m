@@ -261,6 +261,18 @@
     },
     ],
 
+    // Keys are not balanced
+    @[@{
+      @"type": @"key",
+      @"id": @"keyboard",
+      @"actions": @[
+        @{@"type": @"keyDown", @"value": @"n"},
+        @{@"type": @"keyUp", @"value": @"n"},
+        @{@"type": @"keyUp", @"value": @"b"},
+      ],
+    },
+    ],
+
   ];
 
   for (NSArray<NSDictionary<NSString *, id> *> *invalidGesture in invalidGestures) {
@@ -274,6 +286,7 @@
 
 - (void)testClick
 {
+  [self switchToButtonsTab];
   XCUIElement *checkbox = self.testedApplication.checkBoxes.firstMatch;
   NSNumber *value = checkbox.value;
 
@@ -300,6 +313,7 @@
 
 - (void)testRightClick
 {
+  [self switchToButtonsTab];
   XCUIElement *checkbox = self.testedApplication.checkBoxes.firstMatch;
   NSNumber *value = checkbox.value;
 
@@ -324,5 +338,36 @@
   XCTAssertTrue([checkbox.value boolValue] == [value boolValue]);
 }
 
+- (void)testKeys
+{
+  [self switchToEditsTab];
+  XCUIElement *edit = self.testedApplication.textFields.firstMatch;
+  [edit click];
+
+  NSArray<NSDictionary<NSString *, id> *> *gesture =
+  @[@{
+    @"type": @"key",
+    @"id": @"keyboard",
+    @"actions": @[
+      @{@"type": @"keyDown", @"value": @"\uE008"},
+      @{@"type": @"pause", @"duration": @500},
+      @{@"type": @"keyDown", @"value": @"n"},
+      @{@"type": @"keyUp", @"value": @"n"},
+      @{@"type": @"keyDown", @"value": @"b"},
+      @{@"type": @"keyUp", @"value": @"b"},
+      @{@"type": @"keyDown", @"value": @"a"},
+      @{@"type": @"keyUp", @"value": @"a"},
+      @{@"type": @"pause", @"duration": @500},
+      @{@"type": @"keyUp", @"value": @"\uE008"},
+    ],
+  },
+  ];
+  NSError *error;
+  XCTAssertTrue([self.testedApplication fb_performW3CActions:gesture
+                                                elementCache:nil
+                                                       error:&error]);
+  XCTAssertNil(error);
+  XCTAssertEqualObjects(edit.value, @"NBA");
+}
 
 @end
