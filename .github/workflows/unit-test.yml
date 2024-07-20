@@ -35,6 +35,7 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+        check-latest: true
     - run: npm install --no-package-lock
       name: Install dev dependencies
     - run: npm run lint
@@ -45,11 +46,15 @@ jobs:
   analyze_wda:
     strategy:
       matrix:
-        os: [macos-11, macos-12]
-        xcode_version: [13, 14]
+        os: [macos-12, macos-13, macos-14]
+        xcode_version: [13, 14, 15]
         exclude:
-          - os: macos-11
-            xcode_version: 14
+        - os: macos-13
+          xcode_version: 13
+        - os: macos-14
+          xcode_version: 13
+        - os: macos-12
+          xcode_version: 15
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
