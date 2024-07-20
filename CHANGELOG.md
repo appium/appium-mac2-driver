@@ -1,3 +1,10 @@
+## [1.18.1](https://github.com/appium/appium-mac2-driver/compare/v1.18.0...v1.18.1) (2024-07-20)
+
+
+### Bug Fixes
+
+* Add a test for the keyboard input and perform related fixes ([#311](https://github.com/appium/appium-mac2-driver/issues/311)) ([af826e8](https://github.com/appium/appium-mac2-driver/commit/af826e83f60dd278f44042e2ef36b81390f3ef19))
+
 ## [1.18.0](https://github.com/appium/appium-mac2-driver/compare/v1.17.5...v1.18.0) (2024-07-18)
 
 
