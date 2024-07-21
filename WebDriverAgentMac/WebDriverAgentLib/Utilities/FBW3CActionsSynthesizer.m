@@ -877,7 +877,7 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
     NSString *description = [NSString stringWithFormat:@"It is mandatory to have at least one gesture item defined for each action. Action with id '%@' contains none", actionId];
     if (error) {
       *error = [[FBErrorBuilder.builder withDescription:description] build];
-      }
+    }
     return nil;
   }
 
