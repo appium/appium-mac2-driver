@@ -370,4 +370,25 @@
   XCTAssertEqualObjects(edit.value, @"NBA");
 }
 
+- (void)testKeysWithEmptyActions
+{
+  [self switchToEditsTab];
+  XCUIElement *edit = self.testedApplication.textFields.firstMatch;
+  [edit click];
+
+  NSArray<NSDictionary<NSString *, id> *> *gesture =
+  @[@{
+    @"type": @"key",
+    @"id": @"keyboard",
+    @"actions": @[],
+  },
+  ];
+  NSError *error;
+  XCTAssertTrue([self.testedApplication fb_performW3CActions:gesture
+                                                elementCache:nil
+                                                       error:&error]);
+  XCTAssertNil(error);
+  XCTAssertEqualObjects(edit.value, @"");
+}
+
 @end

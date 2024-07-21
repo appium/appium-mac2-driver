@@ -260,7 +260,7 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
     }
     return nil;
   }
-  
+
   XCUIElement *element = isOriginAnElement ? (XCUIElement *)origin : nil;
   NSNumber *x = [self.actionItem objectForKey:FB_ACTION_ITEM_KEY_X];
   NSNumber *y = [self.actionItem objectForKey:FB_ACTION_ITEM_KEY_Y];
@@ -272,7 +272,7 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
     }
     return nil;
   }
-  
+
   if (nil != element) {
     if (nil == x && nil == y) {
       return [self hitpointWithElement:element
@@ -283,13 +283,13 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
                       positionOffset:[NSValue am_valueWithCGPoint:CGPointMake(x.floatValue, y.floatValue)]
                                error:error];
   }
-  
+
   if ([origin isKindOfClass:NSString.class] && [origin isEqualToString:FB_ORIGIN_TYPE_VIEWPORT]) {
     return [self hitpointWithElement:nil
                       positionOffset:[NSValue am_valueWithCGPoint:CGPointMake(x.floatValue, y.floatValue)]
                                error:error];
   }
-  
+
   // origin == FB_ORIGIN_TYPE_POINTER
   if (nil == self.previousItem) {
     NSString *errorDescription = [NSString stringWithFormat:@"There is no previous item for '%@' action item, however %@ is set to '%@'", self.actionItem, FB_ACTION_ITEM_KEY_ORIGIN, FB_ORIGIN_TYPE_POINTER];
@@ -734,7 +734,7 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
       shouldCancelNextItem = YES;
       continue;
     }
-    
+
     if (nil == self.elementCache) {
       [result addObject:actionItem];
       continue;
@@ -874,7 +874,7 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
 
   NSArray<NSDictionary<NSString *, id> *> *actionItems = [actionDescription objectForKey:FB_KEY_ACTIONS];
   if (nil == actionItems || 0 == actionItems.count) {
-   NSString *description = [NSString stringWithFormat:@"It is mandatory to have at least one gesture item defined for each action. Action with id '%@' contains none", actionId];
+    NSString *description = [NSString stringWithFormat:@"It is mandatory to have at least one gesture item defined for each action. Action with id '%@' contains none", actionId];
     if (error) {
       *error = [[FBErrorBuilder.builder withDescription:description] build];
     }
@@ -959,6 +959,19 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
       }
       return nil;
     }
+    NSArray<NSDictionary<NSString *, id> *> *actionItems = [action objectForKey:FB_KEY_ACTIONS];
+    if (nil == actionItems) {
+     NSString *description = [NSString stringWithFormat:@"It is mandatory to have at least one item defined for each action. Action with id '%@' contains none", actionId];
+      if (error) {
+        *error = [[FBErrorBuilder.builder withDescription:description] build];
+      }
+      return nil;
+    }
+    if (0 == actionItems.count) {
+      [FBLogger logFmt:@"Action items in the action id '%@' had an empty array. Skipping the action.", actionId];
+      continue;
+    }
+
     [actionIds addObject:actionId];
     [actionsMapping setObject:action forKey:actionId];
   }
