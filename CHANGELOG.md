@@ -1,3 +1,10 @@
+## [1.18.2](https://github.com/appium/appium-mac2-driver/compare/v1.18.1...v1.18.2) (2024-07-21)
+
+
+### Bug Fixes
+
+* do nothing for an empty array in w3c actions ([#308](https://github.com/appium/appium-mac2-driver/issues/308)) ([a1aa636](https://github.com/appium/appium-mac2-driver/commit/a1aa636d8856c97b8edb1c091b3919a45a6d6716))
+
 ## [1.18.1](https://github.com/appium/appium-mac2-driver/compare/v1.18.0...v1.18.1) (2024-07-20)
 
 
