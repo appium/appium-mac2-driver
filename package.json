@@ -32,6 +32,9 @@
       "Mac"
     ],
     "mainClass": "Mac2Driver",
+    "scripts": {
+      "open-wda": "./scripts/open-wda.js"
+    },
     "doctor": {
       "checks": [
         "./build/lib/doctor/required-checks.js",
@@ -93,6 +96,7 @@
     "lib",
     "build/index.js",
     "build/lib",
+    "scripts",
     "WebDriverAgentMac/Scripts",
     "WebDriverAgentMac/Cartfile",
     "WebDriverAgentMac/Cartfile.resolved",
