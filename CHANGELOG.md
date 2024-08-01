@@ -1,3 +1,10 @@
+## [1.19.0](https://github.com/appium/appium-mac2-driver/compare/v1.18.2...v1.19.0) (2024-08-01)
+
+
+### Features
+
+* Add open-wda script ([#312](https://github.com/appium/appium-mac2-driver/issues/312)) ([f5cfa81](https://github.com/appium/appium-mac2-driver/commit/f5cfa8104b11d569a19122482543e90dfa2e4735))
+
 ## [1.18.2](https://github.com/appium/appium-mac2-driver/compare/v1.18.1...v1.18.2) (2024-07-21)
 
 
