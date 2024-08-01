@@ -730,6 +730,15 @@ boundElementsByIndex | boolean | Whether to use elements binding by index (`true
 useDefaultUiInterruptionsHandling | boolean | Whether to use the default XCTest UI interruptions handling (`true`, the default setting) or to disable it for the [Application Under Test](#application-under-test-concept) (`false`). It makes sense to disable the default handler if it is necessary to validate the interrupting element's presence in your test or do some other actions on it rather than just closing the view implicitly. Check [this WWDC presentation](https://developer.apple.com/videos/play/wwdc2020/10220/) from Apple to get more details on the UI interruptions handling.
 
 
+## Scripts
+
+The Mac2 driver supports the following scripts:
+
+### open-wda
+
+Run `appium driver run mac2 open-wda` to open the bundled WebDriverAgentMac source in Xcode and to print the path to the main .xcodeproj file into the Terminal.
+
+
 ## Examples
 
 ```python
