@@ -1,3 +1,10 @@
+## [1.19.1](https://github.com/appium/appium-mac2-driver/compare/v1.19.0...v1.19.1) (2024-08-02)
+
+
+### Bug Fixes
+
+* Update script import ([22ee3f5](https://github.com/appium/appium-mac2-driver/commit/22ee3f5613022e8a0f4fac3b81510308cb275be0))
+
 ## [1.19.0](https://github.com/appium/appium-mac2-driver/compare/v1.18.2...v1.19.0) (2024-08-01)
 
 
