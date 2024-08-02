@@ -1,6 +1,6 @@
 const path = require('node:path');
 const {exec} = require('teen_process');
-const {logger} = require('@appium/support');
+const {logger} = require('appium/support');
 const XCODEPROJ_NAME = 'WebDriverAgentMac.xcodeproj';
 
 const log = logger.getLogger('WDA');
