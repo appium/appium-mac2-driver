@@ -739,6 +739,17 @@ The Mac2 driver supports the following scripts:
 Run `appium driver run mac2 open-wda` to open the bundled WebDriverAgentMac source in Xcode and to print the path to the main .xcodeproj file into the Terminal.
 
 
+## Troubleshooting
+
+### "WebDriverAgentRunner-Runner is from unidentified developer" system alert is shown on session startup
+
+This is a macOS security feature and it cannot be disabled.
+The only way to workaround this behavior is to configure digital signing for WDA.
+Check [the Stackoverlow thread](https://stackoverflow.com/questions/41062607/osx-complains-that-app-is-from-unidentified-developer-although-it-passes-all-va)
+for more details on how to do it. Use the [open-wda driver script](#open-wda) to quickly
+open WebDriverAgent sources in Xcode.
+
+
 ## Examples
 
 ```python
