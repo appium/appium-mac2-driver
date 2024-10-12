@@ -95,6 +95,16 @@
   XCTAssertEqualObjects([matches objectAtIndex:2].identifier, @"_XCUI:MinimizeWindow");
 }
 
+- (void)testMultipleDescendantsWithXPath2
+{
+  NSString *query = @"*//XCUIElementTypeButton[matches(@identifier, \"_xcui:\", \"i\")]";
+  NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingXPathQuery:query
+                                                                 shouldReturnAfterFirstMatch:NO];
+  XCTAssertTrue(matches.count >= 3);
+  XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
+  XCTAssertEqualObjects([matches objectAtIndex:2].identifier, @"_XCUI:MinimizeWindow");
+}
+
 - (void)testSingleDescendantWithClassChain
 {
   NSString *query = @"**/XCUIElementTypeButton[`identifier == '_XCUI:CloseWindow'`]";

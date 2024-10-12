@@ -125,7 +125,6 @@
 		714CA7022566475200353B27 /* XCUIApplication+AMSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA7002566475200353B27 /* XCUIApplication+AMSource.m */; };
 		714CA7062566487B00353B27 /* FBXPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA7042566487B00353B27 /* FBXPath.h */; };
 		714CA7072566487B00353B27 /* FBXPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA7052566487B00353B27 /* FBXPath.m */; };
-		714CA70A256648B200353B27 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 714CA709256648A100353B27 /* libxml2.tbd */; };
 		71688A98256461ED0007F55B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 71688A97256461ED0007F55B /* AppDelegate.m */; };
 		71688A9B256461ED0007F55B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71688A9A256461ED0007F55B /* ViewController.m */; };
 		71688A9D256461F00007F55B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71688A9C256461F00007F55B /* Assets.xcassets */; };
@@ -455,7 +454,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				714CA70A256648B200353B27 /* libxml2.tbd in Frameworks */,
 				7199B3CD2565B1CD000B5C51 /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
