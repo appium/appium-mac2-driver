@@ -1,3 +1,10 @@
+## [1.20.0](https://github.com/appium/appium-mac2-driver/compare/v1.19.1...v1.20.0) (2024-10-13)
+
+
+### Features
+
+* Switch the XML-related stuff to use NSXMLDocument ([#314](https://github.com/appium/appium-mac2-driver/issues/314)) ([5ef3581](https://github.com/appium/appium-mac2-driver/commit/5ef35813eb1c66b5e9231f70f1dfb8a2c89e0642))
+
 ## [1.19.1](https://github.com/appium/appium-mac2-driver/compare/v1.19.0...v1.19.1) (2024-08-02)
 
 
