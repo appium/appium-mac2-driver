@@ -114,7 +114,7 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
     return nil;
   }
 
-  return [self xmlRepresentationWithRootElement:snapshot].XMLString;
+  return [[self xmlRepresentationWithRootElement:snapshot] XMLStringWithOptions:NSXMLNodePrettyPrint];
 }
 
 + (NSArray<XCUIElement *> *)matchesWithRootElement:(XCUIElement *)root
