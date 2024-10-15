@@ -114,7 +114,7 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
     return nil;
   }
 
-  return [[self xmlRepresentationWithRootElement:snapshot] XMLStringWithOptions:NSXMLNodePrettyPrint];
+  return [[self xmlRepresentationWithSnapshot:snapshot] XMLStringWithOptions:NSXMLNodePrettyPrint];
 }
 
 + (NSArray<XCUIElement *> *)matchesWithRootElement:(XCUIElement *)root
@@ -130,8 +130,8 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
                                  userInfo:@{}];
   }
 
-  NSXMLElement *rootElement = [self writeXmlWithRootSnapshot:snapshot
-                                                   indexPath:[AMSnapshotUtils hashWithSnapshot:snapshot]];
+  NSXMLElement *rootElement = [self makeXmlWithRootSnapshot:snapshot
+                                                  indexPath:[AMSnapshotUtils hashWithSnapshot:snapshot]];
   NSArray<__kindof NSXMLNode *> *matches = [rootElement nodesForXPath:xpathQuery error:&error];
   if (nil == matches) {
     @throw [NSException exceptionWithName:FBInvalidXPathException
@@ -186,9 +186,9 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
     : matchingElements.copy;
 }
 
-+ (NSXMLDocument *)xmlRepresentationWithRootElement:(id<XCUIElementSnapshot>)root
++ (NSXMLDocument *)xmlRepresentationWithSnapshot:(id<XCUIElementSnapshot>)root
 {
-  NSXMLElement *rootElement = [self writeXmlWithRootSnapshot:root indexPath:nil];
+  NSXMLElement *rootElement = [self makeXmlWithRootSnapshot:root indexPath:nil];
   NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithRootElement:rootElement];
   [xmlDoc setVersion:@"1.0"];
   [xmlDoc setCharacterEncoding:@"UTF-8"];
@@ -214,8 +214,8 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
   }
 }
 
-+ (NSXMLElement *)writeXmlWithRootSnapshot:(id<XCUIElementSnapshot>)root
-                                 indexPath:(nullable NSString *)indexPath
++ (NSXMLElement *)makeXmlWithRootSnapshot:(id<XCUIElementSnapshot>)root
+                                indexPath:(nullable NSString *)indexPath
 {
   NSString *type = [FBElementTypeTransformer stringWithElementType:root.elementType];
   NSXMLElement *rootElement = [NSXMLElement elementWithName:type];
@@ -228,8 +228,8 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
     NSString *newIndexPath = (indexPath != nil)
       ? [AMSnapshotUtils hashWithSnapshot:childSnapshot]
       : nil;
-    NSXMLElement *childElement = [self writeXmlWithRootSnapshot:childSnapshot
-                                                      indexPath:newIndexPath];
+    NSXMLElement *childElement = [self makeXmlWithRootSnapshot:childSnapshot
+                                                     indexPath:newIndexPath];
     [rootElement addChild:childElement];
   }
   return rootElement;
