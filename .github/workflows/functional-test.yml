@@ -18,10 +18,16 @@ env:
 jobs:
   build:
 
+    # https://github.com/actions/runner-images/tree/main/images/macos
     strategy:
       matrix:
-        xcodeVersion: ['13.4', '14.2']
-        platform: ['macos-12']
+        include:
+        - xcodeVersion: '14.3.1'
+          platform: macos-13
+        - xcodeVersion: '15.4'
+          platform: macos-14
+        - xcodeVersion: '16.0'
+          platform: macos-15
       fail-fast: false
 
     runs-on: ${{ matrix.platform }}
