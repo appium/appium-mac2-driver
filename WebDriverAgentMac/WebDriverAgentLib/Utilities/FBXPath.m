@@ -93,6 +93,31 @@
 
 @end
 
+@interface NSString (FBXPathFixes)
+
+/**
+ https://discuss.appium.io/t/cannot-find-element-with-mac2/44959
+ */
+- (NSString *)fb_toFixedXPathQuery;
+
+@end
+
+@implementation NSString (FBXPathFixes)
+
+- (NSString *)fb_toFixedXPathQuery
+{
+  NSString *replacePattern = @"^([(]*)(/)";
+  NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:replacePattern
+                                                                         options:NSRegularExpressionCaseInsensitive
+                                                                           error:nil];
+  return [regex stringByReplacingMatchesInString:self
+                                         options:0
+                                           range:NSMakeRange(0, [self length])
+                                    withTemplate:@"$1.$2"];
+}
+
+@end
+
 static NSString *const kXMLIndexPathKey = @"private_indexPath";
 
 
@@ -132,7 +157,8 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
 
   NSXMLElement *rootElement = [self makeXmlWithRootSnapshot:snapshot
                                                   indexPath:[AMSnapshotUtils hashWithSnapshot:snapshot]];
-  NSArray<__kindof NSXMLNode *> *matches = [rootElement nodesForXPath:xpathQuery error:&error];
+  NSArray<__kindof NSXMLNode *> *matches = [rootElement nodesForXPath:[xpathQuery fb_toFixedXPathQuery]
+                                                                error:&error];
   if (nil == matches) {
     @throw [NSException exceptionWithName:FBInvalidXPathException
                                    reason:error.description
