@@ -1,3 +1,10 @@
+## [1.20.2](https://github.com/appium/appium-mac2-driver/compare/v1.20.1...v1.20.2) (2024-10-28)
+
+
+### Bug Fixes
+
+* Support non-strict XPath queries ([#318](https://github.com/appium/appium-mac2-driver/issues/318)) ([f596a61](https://github.com/appium/appium-mac2-driver/commit/f596a6171440004089e2a890511e523c4d72bf2e))
+
 ## [1.20.1](https://github.com/appium/appium-mac2-driver/compare/v1.20.0...v1.20.1) (2024-10-16)
 
 
