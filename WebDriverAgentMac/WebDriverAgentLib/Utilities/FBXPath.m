@@ -110,11 +110,10 @@
   NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:replacePattern
                                                                          options:NSRegularExpressionCaseInsensitive
                                                                            error:nil];
-  NSString *result = [regex stringByReplacingMatchesInString:self
+  return [regex stringByReplacingMatchesInString:self
                                          options:0
                                            range:NSMakeRange(0, [self length])
                                     withTemplate:@"$1.$2"];
-  return result;
 }
 
 @end
