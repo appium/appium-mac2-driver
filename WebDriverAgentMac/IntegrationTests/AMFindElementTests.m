@@ -78,7 +78,7 @@
 
 - (void)testSingleDescendantWithXPath
 {
-  NSString *query = @"*//XCUIElementTypeButton[starts-with(@identifier, \"_XCUI:\")]";
+  NSString *query = @"//XCUIElementTypeButton[starts-with(@identifier, \"_XCUI:\")]";
   NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingXPathQuery:query
                                                                  shouldReturnAfterFirstMatch:YES];
   XCTAssertEqual(matches.count, 1);
