@@ -1,3 +1,10 @@
+## [1.20.3](https://github.com/appium/appium-mac2-driver/compare/v1.20.2...v1.20.3) (2024-12-01)
+
+
+### Miscellaneous Chores
+
+* Update deprecated method name ([#321](https://github.com/appium/appium-mac2-driver/issues/321)) ([dc577ec](https://github.com/appium/appium-mac2-driver/commit/dc577ec9d1022bf80c5e225296f117b5a490a1cb))
+
 ## [1.20.2](https://github.com/appium/appium-mac2-driver/compare/v1.20.1...v1.20.2) (2024-10-28)
 
 
