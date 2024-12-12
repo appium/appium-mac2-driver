@@ -1,3 +1,10 @@
+## [1.20.4](https://github.com/appium/appium-mac2-driver/compare/v1.20.3...v1.20.4) (2024-12-12)
+
+
+### Miscellaneous Chores
+
+* Replace occurrences of the deprecated errorAndThrow API ([#322](https://github.com/appium/appium-mac2-driver/issues/322)) ([11f8514](https://github.com/appium/appium-mac2-driver/commit/11f85149b18e752620b3f68a07824417ed0939c5))
+
 ## [1.20.3](https://github.com/appium/appium-mac2-driver/compare/v1.20.2...v1.20.3) (2024-12-01)
 
 
