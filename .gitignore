@@ -2,3 +2,4 @@ node_modules
 build
 *.xcuserstate
 package-lock.json
+.DS_Store

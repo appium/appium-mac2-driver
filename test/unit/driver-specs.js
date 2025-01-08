@@ -1,4 +1,4 @@
-import Mac2Driver from '../../lib/driver';
+import { Mac2Driver } from '../../lib/driver';
 
 describe('Mac2Driver', function () {
   let chai;
