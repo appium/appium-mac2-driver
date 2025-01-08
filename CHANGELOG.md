@@ -1,3 +1,10 @@
+## [1.20.5](https://github.com/appium/appium-mac2-driver/compare/v1.20.4...v1.20.5) (2025-01-08)
+
+
+### Miscellaneous Chores
+
+* bump eslint-config-appium-ts ([#326](https://github.com/appium/appium-mac2-driver/issues/326)) ([2c4ec3d](https://github.com/appium/appium-mac2-driver/commit/2c4ec3d850d1cee5ce83240b690c9e41839fd996))
+
 ## [1.20.4](https://github.com/appium/appium-mac2-driver/compare/v1.20.3...v1.20.4) (2024-12-12)
 
 
