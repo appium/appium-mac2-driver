@@ -152,7 +152,7 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 elementId ("element" prior to Appium v 1.22) | string | if `x` or `y` are unset | Unique identifier of the element to perform the click on. Either this property or/and x and y must be set. If both are set then x and y are considered as relative element coordinates. If only x and y are set then these are parsed as absolute coordinates. | 21045BC8-013C-43BD-9B1E-4C6DC7AB0744
 x | number | if `y` is set or `elementId` is unset | click X coordinate | 100
-y | number | if `y` is set or `elementId` is unset | click Y coordinate | 100
+y | number | if `x` is set or `elementId` is unset | click Y coordinate | 100
 keyModifierFlags | number | no | if set then the given key modifiers will be applied while click is performed. See the official documentation on [XCUIKeyModifierFlags enumeration](https://developer.apple.com/documentation/xctest/xcuikeymodifierflags) for more details | `1 << 1 | 1 << 2`
 
 #### References
