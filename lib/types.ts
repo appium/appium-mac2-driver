@@ -89,29 +89,6 @@ export interface ExecAppleScriptOptions {
   cwd?: string;
 }
 
-export interface SetValueOptions {
-  /**
-   * Uuid of the element to set value for
-   */
-  elementId: string;
-  /**
-   * Value to set. Could also be an array
-   */
-  value?: any;
-  /**
-   * Text to set. If both value and text are set
-   * then `value` is preferred
-   */
-  text?: string;
-  /**
-   * If set then the given key modifiers will be
-   * applied while the element value is being set. See
-   * https://developer.apple.com/documentation/xctest/xcuikeymodifierflags
-   * for more details
-   */
-  keyModifierFlags?: number;
-}
-
 export interface ClickOptions {
   /**
    * Uuid of the element to click. Either this property
