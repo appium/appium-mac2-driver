@@ -42,4 +42,20 @@ export const executeMethodMap = {
       ],
     },
   },
+  'macos: swipe': {
+    command: 'macosSwipe',
+    params: {
+      required: [
+          'elementId'
+      ],
+      optional: [
+        'x',
+        'y',
+        'direction',
+        'velocity',
+        'keyModifierFlags',
+      ],
+    },
+  },
+
 } as const satisfies ExecuteMethodMap<any>;

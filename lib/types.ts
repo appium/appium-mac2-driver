@@ -89,43 +89,6 @@ export interface ExecAppleScriptOptions {
   cwd?: string;
 }
 
-export interface SwipeOptions {
-  /**
-   * Uuid of the element to be swiped. Either this property
-   * or/and x and y must be set. If both are set then x and y are considered as relative
-   * element coordinates. If only x and y are set then these are parsed as
-   * absolute coordinates.
-   */
-  elementId?: string;
-  /**
-   * Swipe X coordinate
-   */
-  x?: number;
-  /**
-   * Swipe Y coordinate
-   */
-  y?: number;
-  /**
-   * Swipe direction
-   */
-  direction: 'up'|'down'|'left'|'right';
-  /**
-   * The value is measured in pixels per second and same
-   * values could behave differently on different devices depending on their display
-   * density. Higher values make swipe gesture faster (which usually scrolls larger
-   * areas if we apply it to a list) and lower values slow it down.
-   * Only values greater than zero have effect.
-   */
-  velocity?: number;
-  /**
-   * If set then the given key modifiers will be
-   * applied while scroll is performed. See
-   * https://developer.apple.com/documentation/xctest/xcuikeymodifierflags
-   * for more details
-   */
-  keyModifierFlags?: number;
-}
-
 export interface RightClickOptions {
   /**
    * Uuid of the element to click. Either this property
