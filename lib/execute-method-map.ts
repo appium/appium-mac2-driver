@@ -111,4 +111,21 @@ export const executeMethodMap = {
       ],
     },
   },
+  'macos: clickAndDragAndHold': {
+    command: 'macosClickAndDragAndHold',
+    params: {
+      optional: [
+        'sourceElementId',
+        'destinationElementId',
+        'startX',
+        'startY',
+        'endX',
+        'endY',
+        'duration',
+        'holdDuration',
+        'velocity',
+        'keyModifierFlags'
+      ],
+    },
+  },
 } as const satisfies ExecuteMethodMap<any>;
