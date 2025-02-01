@@ -89,39 +89,6 @@ export interface ExecAppleScriptOptions {
   cwd?: string;
 }
 
-export interface ScrollOptions {
-  /**
-   * Uuid of the element to be scrolled. Either this property
-   * or/and x and y must be set. If both are set then x and y are considered as relative
-   * element coordinates. If only x and y are set then these are parsed as
-   * absolute coordinates.
-   */
-  elementId?: string;
-  /**
-   * Scroll X coordinate
-   */
-  x?: number;
-  /**
-   * Scroll Y coordinate
-   */
-  y?: number;
-  /**
-   * Horizontal delta as float number
-   */
-  deltaX?: number;
-  /**
-   * Vertical delta as float number
-   */
-  deltaY?: number;
-  /**
-   * If set then the given key modifiers will be
-   * applied while scroll is performed. See
-   * https://developer.apple.com/documentation/xctest/xcuikeymodifierflags
-   * for more details
-   */
-  keyModifierFlags?: number;
-}
-
 export interface SwipeOptions {
   /**
    * Uuid of the element to be swiped. Either this property

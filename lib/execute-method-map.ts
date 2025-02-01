@@ -26,4 +26,20 @@ export const executeMethodMap = {
         'keyModifierFlags',
       ],
     },
-  },} as const satisfies ExecuteMethodMap<any>;
+  },
+  'macos: scroll': {
+    command: 'macosScroll',
+    params: {
+      required: [
+          'elementId'
+      ],
+      optional: [
+        'x',
+        'y',
+        'deltaX',
+        'deltaY',
+        'keyModifierFlags',
+      ],
+    },
+  },
+} as const satisfies ExecuteMethodMap<any>;
