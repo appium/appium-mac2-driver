@@ -89,31 +89,6 @@ export interface ExecAppleScriptOptions {
   cwd?: string;
 }
 
-export interface HoverOptions {
-  /**
-   * Uuid of the element to hover. Either this property
-   * or/and x and y must be set. If both are set then x and y are considered as relative
-   * element coordinates. If only x and y are set then these are parsed as
-   * absolute coordinates.
-   */
-  elementId?: string;
-  /**
-   * Hover X coordinate
-   */
-  x?: number;
-  /**
-   * Hover Y coordinate
-   */
-  y?: number;
-  /**
-   * If set then the given key modifiers will be
-   * applied while hover is performed. See
-   * https://developer.apple.com/documentation/xctest/xcuikeymodifierflags
-   * for more details
-   */
-  keyModifierFlags?: number;
-}
-
 export interface DoubleClickOptions {
   /**
    * Uuid of the element to double click. Either this property

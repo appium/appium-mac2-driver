@@ -70,4 +70,17 @@ export const executeMethodMap = {
       ],
     },
   },
+  'macos: hover': {
+    command: 'macosHover',
+    params: {
+      required: [
+          'elementId'
+      ],
+      optional: [
+        'x',
+        'y',
+        'keyModifierFlags',
+      ],
+    },
+  },
 } as const satisfies ExecuteMethodMap<any>;
