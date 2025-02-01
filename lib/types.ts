@@ -89,48 +89,6 @@ export interface ExecAppleScriptOptions {
   cwd?: string;
 }
 
-export interface ClickAndDragOptions {
-  /**
-   * Uuid of the element to start the drag from. Either this property
-   * and `destinationElement` must be provided or `startX`, `startY`, `endX`, `endY` coordinates
-   * must be set.
-   */
-  sourceElementId?: string;
-  /**
-   * Uuid of the element to end the drag on. Either this property
-   * and `sourceElement` must be provided or `startX`, `startY`, `endX`, `endY` coordinates
-   * must be set.
-   */
-  destinationElementId?: string;
-  /**
-   * Starting X coordinate
-   */
-  startX?: number;
-  /**
-   * Starting Y coordinate
-   */
-  startY?: number;
-  /**
-   * Ending X coordinate
-   */
-  endX?: number;
-  /**
-   * Ending Y coordinate
-   */
-  endY?: number;
-  /**
-   * Long click duration in float seconds
-   */
-  duration: number;
-  /**
-   * If set then the given key modifiers will be
-   * applied while drag is performed. See
-   * https://developer.apple.com/documentation/xctest/xcuikeymodifierflags
-   * for more details
-   */
-  keyModifierFlags?: number;
-}
-
 export interface ClickAndDragAndHoldOptions {
   /**
    * Uuid of the element to start the drag from. Either this property
