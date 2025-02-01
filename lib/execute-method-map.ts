@@ -1,4 +1,4 @@
-import { ExecuteMethodMap } from "@appium/types";
+import { ExecuteMethodMap } from '@appium/types';
 
 export const executeMethodMap = {
   'macos: setValue': {
