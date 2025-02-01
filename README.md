@@ -140,7 +140,7 @@ object result = driver.ExecuteScript("macos: <methodName>", new Dictionary<strin
 
 ### maccos: setValue
 
-# TODO
+TODO
 
 ### macos: click
 
@@ -404,6 +404,10 @@ keyModifierFlags | number | no | if set then the given key modifiers will be app
 
 - [pressForDuration:thenDragToElement:withVelocity:thenHoldForDuration: (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/3551693-pressforduration?language=objc)
 - [pressForDuration:thenDragToCoordinate:withVelocity:thenHoldForDuration: (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/3551692-pressforduration?language=objc)
+
+### macos: pressAndHol
+
+TODO
 
 ### macos: keys
 

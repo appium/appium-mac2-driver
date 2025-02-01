@@ -5,7 +5,7 @@ export const executeMethodMap = {
     command: 'macosSetValue',
     params: {
       required: [
-          'elementId'
+          'elementId',
       ],
       optional: [
         'value',
@@ -95,7 +95,7 @@ export const executeMethodMap = {
         'endX',
         'endY',
         'duration',
-        'keyModifierFlags'
+        'keyModifierFlags',
       ],
     },
   },
@@ -112,7 +112,7 @@ export const executeMethodMap = {
         'duration',
         'holdDuration',
         'velocity',
-        'keyModifierFlags'
+        'keyModifierFlags',
       ],
     },
   },
@@ -124,6 +124,17 @@ export const executeMethodMap = {
       ],
       optional: [
         'elementId'
+      ],
+    },
+  },
+  'macos: tap': {
+    command: 'macosTap',
+    params: {
+      optional: [
+        'elementId',
+        'x',
+        'y',
+        'keyModifierFlags',
       ],
     },
   },
