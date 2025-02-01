@@ -17,10 +17,8 @@ export const executeMethodMap = {
   'macos: click': {
     command: 'macosClick',
     params: {
-      required: [
-          'elementId'
-      ],
       optional: [
+        'elementId',
         'x',
         'y',
         'keyModifierFlags',
@@ -30,10 +28,8 @@ export const executeMethodMap = {
   'macos: scroll': {
     command: 'macosScroll',
     params: {
-      required: [
-          'elementId'
-      ],
       optional: [
+        'elementId',
         'x',
         'y',
         'deltaX',
@@ -45,10 +41,8 @@ export const executeMethodMap = {
   'macos: swipe': {
     command: 'macosSwipe',
     params: {
-      required: [
-          'elementId'
-      ],
       optional: [
+        'elementId',
         'x',
         'y',
         'direction',
@@ -60,10 +54,8 @@ export const executeMethodMap = {
   'macos: rightClick': {
     command: 'macosRightClick',
     params: {
-      required: [
-          'elementId'
-      ],
       optional: [
+        'elementId',
         'x',
         'y',
         'keyModifierFlags',
@@ -73,10 +65,8 @@ export const executeMethodMap = {
   'macos: hover': {
     command: 'macosHover',
     params: {
-      required: [
-          'elementId'
-      ],
       optional: [
+        'elementId',
         'x',
         'y',
         'keyModifierFlags',
@@ -86,10 +76,8 @@ export const executeMethodMap = {
   'macos: doubleClick': {
     command: 'macosDoubleClick',
     params: {
-      required: [
-          'elementId'
-      ],
       optional: [
+        'elementId',
         'x',
         'y',
         'keyModifierFlags',
@@ -125,6 +113,17 @@ export const executeMethodMap = {
         'holdDuration',
         'velocity',
         'keyModifierFlags'
+      ],
+    },
+  },
+  'macos: keys': {
+    command: 'macosKeys',
+    params: {
+      required: [
+        'keys'
+      ],
+      optional: [
+        'elementId'
       ],
     },
   },

@@ -104,22 +104,6 @@ export interface KeyOptions {
   modifierFlags?: number;
 }
 
-export interface KeysOptions {
-  /**
-   * Uuid of the element to send keys to.
-   * If the element is not provided then the keys will be sent to the current application.
-   */
-  elementId?: string;
-  /**
-   * Array of keys to type.
-   * Each item could either be a string, that represents a key itself (see
-   * https://developer.apple.com/documentation/xctest/xcuielement/1500604-typekey?language=objc
-   * and https://developer.apple.com/documentation/xctest/xcuikeyboardkey?language=objc)
-   * or a dictionary, if the key should also be entered with modifiers.
-   */
-  keys: (KeyOptions | string)[];
-}
-
 export interface PressOptions {
   /**
    * Uuid of the Touch Bar element to be pressed. Either this property
