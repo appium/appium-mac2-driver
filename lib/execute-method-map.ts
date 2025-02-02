@@ -138,4 +138,15 @@ export const executeMethodMap = {
       ],
     },
   },
+  'macos: doubleTap': {
+    command: 'macosDoubleTap',
+    params: {
+      optional: [
+        'elementId',
+        'x',
+        'y',
+        'keyModifierFlags',
+      ],
+    },
+  },
 } as const satisfies ExecuteMethodMap<any>;

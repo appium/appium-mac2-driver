@@ -129,31 +129,6 @@ export interface PressOptions {
   keyModifierFlags?: number;
 }
 
-export interface DoubleTapOptions {
-  /**
-   * Uuid of the Touch Bar element to tap. Either this property
-   * or/and x and y must be set. If both are set then x and y are considered as relative
-   * element coordinates. If only x and y are set then these are parsed as
-   * absolute Touch Bar coordinates.
-   */
-  elementId?: string;
-  /**
-   * Tap X coordinate
-   */
-  x?: number;
-  /**
-   * Tap Y coordinate
-   */
-  y?: number;
-  /**
-   * If set then the given key modifiers will be
-   * applied while click is performed. See
-   * https://developer.apple.com/documentation/xctest/xcuikeymodifierflags
-   * for more details
-   */
-  keyModifierFlags?: number;
-}
-
 export interface PressAndDragOptions {
   /**
    * Uuid of a Touch Bar element to start the drag from. Either this property
