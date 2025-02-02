@@ -269,4 +269,36 @@ export const executeMethodMap = {
         'path',
       ],
     },
-  },} as const satisfies ExecuteMethodMap<any>;
+  },
+  'macos: startRecordingScreen': {
+    command: 'startRecordingScreen',
+    params: {
+      required: [
+        'deviceId'
+      ],
+      optional: [
+        'timeLimit',
+        'videoFilter',
+        'fps',
+        'preset',
+        'captureCursor',
+        'captureClicks',
+        'forceRestart'
+      ],
+    },
+  },
+  'macos: stopRecordingScreen': {
+    command: 'stopRecordingScreen',
+    params: {
+      optional: [
+        'remotePath',
+        'user',
+        'pass',
+        'method',
+        'headers',
+        'fileFieldName',
+        'formFields'
+      ],
+    },
+  },
+} as const satisfies ExecuteMethodMap<any>;
