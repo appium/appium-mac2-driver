@@ -222,15 +222,3 @@ export interface ScreenshotsOpts {
    */
   displayId?: number;
 }
-
-export interface SourceOptions {
-  /**
-   * The format of the application source to retrieve.
-   * Only two formats are supported:
-   * - xml: Returns the source formatted as XML document (the default setting)
-   * - description: Returns the source formatted as debugDescription output.
-   * See https://developer.apple.com/documentation/xctest/xcuielement/1500909-debugdescription?language=objc
-   * for more details.
-   */
-  format?: 'xml'|'description';
-}

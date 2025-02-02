@@ -192,4 +192,22 @@ export const executeMethodMap = {
         'keyModifierFlags',
       ],
     },
-  },} as const satisfies ExecuteMethodMap<any>;
+  },
+  'macos: source': {
+    command: 'macosSource',
+    params: {
+      optional: [
+        'sourceElementId',
+        'destinationElementId',
+        'startX',
+        'startY',
+        'endX',
+        'endY',
+        'duration',
+        'holdDuration',
+        'velocity',
+        'keyModifierFlags',
+      ],
+    },
+  },
+} as const satisfies ExecuteMethodMap<any>;
