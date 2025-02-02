@@ -197,16 +197,18 @@ export const executeMethodMap = {
     command: 'macosSource',
     params: {
       optional: [
-        'sourceElementId',
-        'destinationElementId',
-        'startX',
-        'startY',
-        'endX',
-        'endY',
-        'duration',
-        'holdDuration',
-        'velocity',
-        'keyModifierFlags',
+        'format',
+      ],
+    },
+  },
+  'macos: deepLink': {
+    command: 'macosDeepLink',
+    params: {
+      required: [
+        'url',
+      ],
+      optional: [
+        'bundleId'
       ],
     },
   },

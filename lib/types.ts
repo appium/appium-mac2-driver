@@ -104,16 +104,6 @@ export interface KeyOptions {
   modifierFlags?: number;
 }
 
-export interface DeepLinkOptions {
-  /** The URL to be opened. This parameter is manadatory. */
-  url: string;
-  /**
-   * The bundle identifier of an application to open the given url with.
-   * If not provided then the default application for the given url scheme is going to be used.
-   */
-  bundleId?: string;
-}
-
 export interface StopRecordingOptions {
   /**
    * The path to the remote location, where the resulting video should be uploaded.
