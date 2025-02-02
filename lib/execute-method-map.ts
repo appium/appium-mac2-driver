@@ -232,4 +232,41 @@ export const executeMethodMap = {
       ],
     },
   },
-} as const satisfies ExecuteMethodMap<any>;
+  'macos: launchApp': {
+    command: 'macosLaunchApp',
+    params: {
+      optional: [
+        'bundleId',
+        'path',
+        'arguments',
+        'environment',
+      ],
+    },
+  },
+  'macos: activateApp': {
+    command: 'macosActivateApp',
+    params: {
+      optional: [
+        'bundleId',
+        'path',
+      ],
+    },
+  },
+  'macos: terminateApp': {
+    command: 'macosTerminateApp',
+    params: {
+      optional: [
+        'bundleId',
+        'path',
+      ],
+    },
+  },
+  'macos: queryAppState': {
+    command: 'macosQueryAppState',
+    params: {
+      optional: [
+        'bundleId',
+        'path',
+      ],
+    },
+  },} as const satisfies ExecuteMethodMap<any>;
