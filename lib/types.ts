@@ -63,32 +63,6 @@ export interface QueryAppStateOptions {
   path?: string;
 }
 
-export interface ExecAppleScriptOptions {
-  /**
-   * A valid AppleScript to execute
-   */
-  script?: string;
-  /**
-   * Overrides the scripting language. Basically, sets the value of `-l` command
-   * line argument of `osascript` tool. If unset the AppleScript language is assumed.
-   */
-  language?: string;
-  /**
-   * A valid AppleScript as a single command (no line breaks) to execute
-   */
-  command?: string;
-  /**
-   * [20000] The number of seconds to wait until a long-running command is
-   * finished. An error is thrown if the command is still running after this timeout expires.
-   */
-  timeout?: number;
-  /**
-   * The path to an existing folder, which is going to be set as the
-   * working directory for the command/script being executed.
-   */
-  cwd?: string;
-}
-
 export interface KeyOptions {
   /**
    * A string, that represents a key to type (see

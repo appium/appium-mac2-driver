@@ -220,6 +220,16 @@ export const executeMethodMap = {
       ],
     },
   },
-
-  displayId
+  'macos: appleScript': {
+    command: 'macosExecAppleScript',
+    params: {
+      optional: [
+        'script',
+        'language',
+        'command',
+        'cwd',
+        'timeout',
+      ],
+    },
+  },
 } as const satisfies ExecuteMethodMap<any>;
