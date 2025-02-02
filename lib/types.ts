@@ -104,31 +104,6 @@ export interface KeyOptions {
   modifierFlags?: number;
 }
 
-export interface PressOptions {
-  /**
-   * Uuid of the Touch Bar element to be pressed. Either this property
-   * or/and x and y must be set. If both are set then x and y are considered as relative
-   * element coordinates. If only x and y are set then these are parsed as
-   * absolute Touch Bar coordinates.
-   */
-  elementId?: string;
-  /** Press X coordinate */
-  x?: number;
-  /** Press Y coordinate */
-  y?: number;
-  /**
-   * The number of float seconds to hold the mouse button
-   */
-  duration: number;
-  /**
-   * If set then the given key modifiers will be
-   * applied while click is performed. See
-   * https://developer.apple.com/documentation/xctest/xcuikeymodifierflags
-   * for more details
-   */
-  keyModifierFlags?: number;
-}
-
 export interface PressAndDragOptions {
   /**
    * Uuid of a Touch Bar element to start the drag from. Either this property

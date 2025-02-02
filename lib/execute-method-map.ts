@@ -149,4 +149,16 @@ export const executeMethodMap = {
       ],
     },
   },
+  'macos: press': {
+    command: 'macosPressAndHold',
+    params: {
+      optional: [
+        'elementId',
+        'x',
+        'y',
+        'duration',
+        'keyModifierFlags',
+      ],
+    },
+  },
 } as const satisfies ExecuteMethodMap<any>;
