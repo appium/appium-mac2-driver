@@ -138,10 +138,6 @@ object result = driver.ExecuteScript("macos: <methodName>", new Dictionary<strin
 });
 ```
 
-### maccos: setValue
-
-TODO
-
 ### macos: click
 
 Perform click gesture on an element or by relative/absolute coordinates
