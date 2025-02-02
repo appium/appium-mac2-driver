@@ -104,47 +104,6 @@ export interface KeyOptions {
   modifierFlags?: number;
 }
 
-export interface PressAndDragAndHoldOptions {
-  /**
-   * Uuid of a Touch Bar element to start the drag from. Either this property
-   * and `destinationElement` must be provided or `startX`, `startY`, `endX`, `endY` coordinates
-   * must be set.
-   */
-  sourceElementId?: string;
-  /**
-   * Uuid of a Touch Bar element to end the drag on. Either this property
-   * and `sourceElement` must be provided or `startX`, `startY`, `endX`, `endY` coordinates
-   * must be set.
-   */
-  destinationElementId?: string;
-  /** Starting X coordinate */
-  startX?: number;
-  /** Starting Y coordinate */
-  startY?: number;
-  /** Ending X coordinate */
-  endX?: number;
-  /** Ending Y coordinate */
-  endY?: number;
-  /** Long press duration in float seconds */
-  duration: number;
-  /** Touch hold duration in float seconds */
-  holdDuration: number;
-  /**
-   * Dragging velocity in pixels per second.
-   * If not provided then the default velocity is used. See
-   * https://developer.apple.com/documentation/xctest/xcuigesturevelocity
-   * for more details
-   */
-  velocity?: number;
-  /**
-   * If set then the given key modifiers will be
-   * applied while drag is performed. See
-   * https://developer.apple.com/documentation/xctest/xcuikeymodifierflags
-   * for more details
-   */
-  keyModifierFlags?: number;
-}
-
 export interface DeepLinkOptions {
   /** The URL to be opened. This parameter is manadatory. */
   url: string;
