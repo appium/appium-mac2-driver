@@ -203,12 +203,3 @@ export interface ScreenshotInfo {
 
 /** A dictionary where each key contains a unique display identifier */
 export type ScreenshotsInfo = StringRecord<ScreenshotInfo>;
-
-export interface ScreenshotsOpts {
-  /**
-   * macOS display identifier to take a screenshot for.
-   * If not provided then screenshots of all displays are going to be returned.
-   * If no matches were found then an error is thrown.
-   */
-  displayId?: number;
-}

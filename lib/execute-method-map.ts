@@ -212,4 +212,14 @@ export const executeMethodMap = {
       ],
     },
   },
+  'macos: screenshots': {
+    command: 'macosScreenshots',
+    params: {
+      optional: [
+        'displayId'
+      ],
+    },
+  },
+
+  displayId
 } as const satisfies ExecuteMethodMap<any>;
