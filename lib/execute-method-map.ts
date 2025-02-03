@@ -28,11 +28,13 @@ export const executeMethodMap = {
   'macos: swipe': {
     command: 'macosSwipe',
     params: {
+      required: [
+        'direction',
+      ],
       optional: [
         'elementId',
         'x',
         'y',
-        'direction',
         'velocity',
         'keyModifierFlags',
       ],
@@ -74,6 +76,9 @@ export const executeMethodMap = {
   'macos: clickAndDrag': {
     command: 'macosClickAndDrag',
     params: {
+      required: [
+        'duration',
+      ],
       optional: [
         'sourceElementId',
         'destinationElementId',
@@ -81,7 +86,6 @@ export const executeMethodMap = {
         'startY',
         'endX',
         'endY',
-        'duration',
         'keyModifierFlags',
       ],
     },
@@ -89,6 +93,9 @@ export const executeMethodMap = {
   'macos: clickAndDragAndHold': {
     command: 'macosClickAndDragAndHold',
     params: {
+      required: [
+        'duration',
+      ],
       optional: [
         'sourceElementId',
         'destinationElementId',
@@ -96,7 +103,6 @@ export const executeMethodMap = {
         'startY',
         'endX',
         'endY',
-        'duration',
         'holdDuration',
         'velocity',
         'keyModifierFlags',
@@ -139,11 +145,13 @@ export const executeMethodMap = {
   'macos: press': {
     command: 'macosPressAndHold',
     params: {
+      required: [
+        'duration',
+      ],
       optional: [
         'elementId',
         'x',
         'y',
-        'duration',
         'keyModifierFlags',
       ],
     },
@@ -151,6 +159,9 @@ export const executeMethodMap = {
   'macos: pressAndDrag': {
     command: 'macosPressAndDrag',
     params: {
+      required: [
+        'duration',
+      ],
       optional: [
         'sourceElementId',
         'destinationElementId',
@@ -158,7 +169,6 @@ export const executeMethodMap = {
         'startY',
         'endX',
         'endY',
-        'duration',
         'keyModifierFlags',
       ],
     },
@@ -166,6 +176,9 @@ export const executeMethodMap = {
   'macos: pressAndDragAndHold': {
     command: 'macosPressAndDragAndHold',
     params: {
+      required: [
+        'duration',
+      ],
       optional: [
         'sourceElementId',
         'destinationElementId',
@@ -173,7 +186,6 @@ export const executeMethodMap = {
         'startY',
         'endX',
         'endY',
-        'duration',
         'holdDuration',
         'velocity',
         'keyModifierFlags',
