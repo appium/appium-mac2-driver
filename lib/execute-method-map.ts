@@ -95,6 +95,7 @@ export const executeMethodMap = {
     params: {
       required: [
         'duration',
+        'holdDuration',
       ],
       optional: [
         'sourceElementId',
@@ -103,7 +104,6 @@ export const executeMethodMap = {
         'startY',
         'endX',
         'endY',
-        'holdDuration',
         'velocity',
         'keyModifierFlags',
       ],
@@ -178,6 +178,7 @@ export const executeMethodMap = {
     params: {
       required: [
         'duration',
+        'holdDuration',
       ],
       optional: [
         'sourceElementId',
@@ -186,7 +187,6 @@ export const executeMethodMap = {
         'startY',
         'endX',
         'endY',
-        'holdDuration',
         'velocity',
         'keyModifierFlags',
       ],
