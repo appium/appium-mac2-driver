@@ -15,12 +15,14 @@ export const executeMethodMap = {
   'macos: scroll': {
     command: 'macosScroll',
     params: {
+      required: [
+        'deltaX',
+        'deltaY',
+      ],
       optional: [
         'elementId',
         'x',
         'y',
-        'deltaX',
-        'deltaY',
         'keyModifierFlags',
       ],
     },
