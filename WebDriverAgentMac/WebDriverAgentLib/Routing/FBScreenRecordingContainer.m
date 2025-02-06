@@ -51,12 +51,7 @@
   self.fps = 0;
   self.codec = 0;
   self.displayID = nil;
-  if (nil != self.screenRecordingPromise) {
-    [XCTContext runActivityNamed:@"Video Cleanup" block:^(id<XCTActivity> activity){
-      [activity addAttachment:(XCTAttachment *)self.screenRecordingPromise.nativePromise];
-    }];
-    self.screenRecordingPromise = nil;
-  }
+  self.screenRecordingPromise = nil;
   self.startedAt = nil;
 }
 
@@ -69,7 +64,7 @@
   return @{
     @"fps": @(self.fps),
     @"codec": @(self.codec),
-    @"displayID": self.displayID ?: @"main",
+    @"displayID": self.displayID ?: @([[XCUIScreen.mainScreen valueForKey:@"_displayID"] longLongValue]),
     @"uuid": [self.screenRecordingPromise identifier].UUIDString ?: [NSNull null],
     @"startedAt": self.startedAt ?: [NSNull null],
   };

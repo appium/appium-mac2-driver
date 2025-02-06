@@ -19,7 +19,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) id nativePromise;
 
 /**
- Creates a wrapper object for a native screen recording promise
+ Creates a wrapper object for a native screen recording promise.
+ The actual screen recording file is stored as
+ $HOME/Library/Daemon Containers/<testmanagerd_id>Data/Attachments/<recording_id>
+ although this path is not is not accessible directly from within the XCTest container,
+ and must be accessed from elsewhere.
 
  @param promise Native promise object to be wrapped
  */

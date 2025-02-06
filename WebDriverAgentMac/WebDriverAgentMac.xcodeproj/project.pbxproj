@@ -132,6 +132,7 @@
 		71440CDB2D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 71440CD92D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.h */; };
 		71440CDC2D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 71440CDA2D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.m */; };
 		71440CDE2D54B2410048EA32 /* AMXCTRunnerDaemonSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 71440CDD2D54B2410048EA32 /* AMXCTRunnerDaemonSession.h */; };
+		71440CE02D54D8C90048EA32 /* AMVideoRecordingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71440CDF2D54D8C90048EA32 /* AMVideoRecordingTests.m */; };
 		714CA6FC2566461100353B27 /* FBDebugCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA6FA2566461100353B27 /* FBDebugCommands.h */; };
 		714CA6FD2566461100353B27 /* FBDebugCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA6FB2566461100353B27 /* FBDebugCommands.m */; };
 		714CA7012566475200353B27 /* XCUIApplication+AMSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA6FF2566475200353B27 /* XCUIApplication+AMSource.h */; };
@@ -298,6 +299,7 @@
 		71440CD92D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMXCTRunnerDaemonSessionWrapper.h; sourceTree = "<group>"; };
 		71440CDA2D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMXCTRunnerDaemonSessionWrapper.m; sourceTree = "<group>"; };
 		71440CDD2D54B2410048EA32 /* AMXCTRunnerDaemonSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMXCTRunnerDaemonSession.h; sourceTree = "<group>"; };
+		71440CDF2D54D8C90048EA32 /* AMVideoRecordingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMVideoRecordingTests.m; sourceTree = "<group>"; };
 		714CA6FA2566461100353B27 /* FBDebugCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDebugCommands.h; sourceTree = "<group>"; };
 		714CA6FB2566461100353B27 /* FBDebugCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBDebugCommands.m; sourceTree = "<group>"; };
 		714CA6FF2566475200353B27 /* XCUIApplication+AMSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIApplication+AMSource.h"; sourceTree = "<group>"; };
@@ -839,6 +841,7 @@
 				718D2C072567A028005F533B /* AMElementAttributesTests.m */,
 				718D2C202567D8A8005F533B /* AMEditElementTests.m */,
 				71336AF62BD15B4D00997FF4 /* AMDeviceTests.m */,
+				71440CDF2D54D8C90048EA32 /* AMVideoRecordingTests.m */,
 				71B00E9F2566D9570010DA73 /* AMFindElementTests.m */,
 				71B00E9C2566D7F10010DA73 /* AMIntegrationTestCase.h */,
 				71B00E8D2566D4BA0010DA73 /* AMIntegrationTestCase.m */,
@@ -1244,6 +1247,7 @@
 				7180C21D257AC27F008FA870 /* AMW3CActionsTests.m in Sources */,
 				71B8B684267265D7009CE50C /* AMVariousElementTests.m in Sources */,
 				718D2C292567E6D0005F533B /* AMSessionTests.m in Sources */,
+				71440CE02D54D8C90048EA32 /* AMVideoRecordingTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

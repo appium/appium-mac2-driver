@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param fps FPS value, see baove
  @param codec Codex value, see above
- @param displayID valid display identifier or nil to use the main display
+ @param displayID Valid display identifier or nil to use the main display
  */
 - (instancetype)initWithFps:(NSUInteger)fps
                       codec:(long long)codec
