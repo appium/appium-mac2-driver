@@ -1,3 +1,38 @@
+## [2.0.0](https://github.com/appium/appium-mac2-driver/compare/v1.20.5...v2.0.0) (2025-02-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* Arguments of the following driver methods were changed:
+- macosSetValue
+- macosClick
+- macosScroll
+- macosSwipe
+- macosRightClick
+- macosHover
+- macosClickAndDrag
+- macosClickAndDragAndHold
+- macosKeys
+- macosTap
+- doubleTap
+- macosPressAndHold
+- macosPressAndDrag
+- macosPressAndDragAndHold
+- macosSource
+- macosDeepLink
+- macosExecAppleScript
+- macosScreenshots
+- macosLaunchApp
+- macosActivateApp
+- macosTerminateApp
+- macosQueryAppState
+- startRecordingScreen
+- stopRecordingScreen
+
+### Features
+
+* Add support of executeMethodMap ([#327](https://github.com/appium/appium-mac2-driver/issues/327)) ([a6c9a6b](https://github.com/appium/appium-mac2-driver/commit/a6c9a6b0ae029bcbfebf027103eb9bc20622bf75))
+
 ## [1.20.5](https://github.com/appium/appium-mac2-driver/compare/v1.20.4...v1.20.5) (2025-01-08)
 
 
