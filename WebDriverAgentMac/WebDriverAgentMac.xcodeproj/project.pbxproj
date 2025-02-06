@@ -119,6 +119,19 @@
 		713A9D382566A83800118D07 /* FBElementCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D362566A83800118D07 /* FBElementCommands.m */; };
 		713A9D3C2566AA2300118D07 /* AMGeometryUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 713A9D3A2566AA2300118D07 /* AMGeometryUtils.h */; };
 		713A9D3D2566AA2300118D07 /* AMGeometryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */; };
+		71440CC72D54AB460048EA32 /* AMVideoCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 71440CC52D54AB460048EA32 /* AMVideoCommands.h */; };
+		71440CC82D54AB460048EA32 /* AMVideoCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 71440CC62D54AB460048EA32 /* AMVideoCommands.m */; };
+		71440CCF2D54AB9C0048EA32 /* FBScreenRecordingContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 71440CC92D54AB9C0048EA32 /* FBScreenRecordingContainer.h */; };
+		71440CD02D54AB9C0048EA32 /* FBScreenRecordingRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 71440CCD2D54AB9C0048EA32 /* FBScreenRecordingRequest.h */; };
+		71440CD12D54AB9C0048EA32 /* FBScreenRecordingPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = 71440CCB2D54AB9C0048EA32 /* FBScreenRecordingPromise.h */; };
+		71440CD22D54AB9C0048EA32 /* FBScreenRecordingPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 71440CCC2D54AB9C0048EA32 /* FBScreenRecordingPromise.m */; };
+		71440CD32D54AB9C0048EA32 /* FBScreenRecordingContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 71440CCA2D54AB9C0048EA32 /* FBScreenRecordingContainer.m */; };
+		71440CD42D54AB9C0048EA32 /* FBScreenRecordingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 71440CCE2D54AB9C0048EA32 /* FBScreenRecordingRequest.m */; };
+		71440CD72D54AC590048EA32 /* AMVideoRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 71440CD52D54AC590048EA32 /* AMVideoRecorder.h */; };
+		71440CD82D54AC590048EA32 /* AMVideoRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 71440CD62D54AC590048EA32 /* AMVideoRecorder.m */; };
+		71440CDB2D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 71440CD92D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.h */; };
+		71440CDC2D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 71440CDA2D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.m */; };
+		71440CDE2D54B2410048EA32 /* AMXCTRunnerDaemonSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 71440CDD2D54B2410048EA32 /* AMXCTRunnerDaemonSession.h */; };
 		714CA6FC2566461100353B27 /* FBDebugCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA6FA2566461100353B27 /* FBDebugCommands.h */; };
 		714CA6FD2566461100353B27 /* FBDebugCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA6FB2566461100353B27 /* FBDebugCommands.m */; };
 		714CA7012566475200353B27 /* XCUIApplication+AMSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA6FF2566475200353B27 /* XCUIApplication+AMSource.h */; };
@@ -272,6 +285,19 @@
 		713A9D362566A83800118D07 /* FBElementCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBElementCommands.m; sourceTree = "<group>"; };
 		713A9D3A2566AA2300118D07 /* AMGeometryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMGeometryUtils.h; sourceTree = "<group>"; };
 		713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMGeometryUtils.m; sourceTree = "<group>"; };
+		71440CC52D54AB460048EA32 /* AMVideoCommands.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMVideoCommands.h; sourceTree = "<group>"; };
+		71440CC62D54AB460048EA32 /* AMVideoCommands.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMVideoCommands.m; sourceTree = "<group>"; };
+		71440CC92D54AB9C0048EA32 /* FBScreenRecordingContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FBScreenRecordingContainer.h; sourceTree = "<group>"; };
+		71440CCA2D54AB9C0048EA32 /* FBScreenRecordingContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FBScreenRecordingContainer.m; sourceTree = "<group>"; };
+		71440CCB2D54AB9C0048EA32 /* FBScreenRecordingPromise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FBScreenRecordingPromise.h; sourceTree = "<group>"; };
+		71440CCC2D54AB9C0048EA32 /* FBScreenRecordingPromise.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FBScreenRecordingPromise.m; sourceTree = "<group>"; };
+		71440CCD2D54AB9C0048EA32 /* FBScreenRecordingRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FBScreenRecordingRequest.h; sourceTree = "<group>"; };
+		71440CCE2D54AB9C0048EA32 /* FBScreenRecordingRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FBScreenRecordingRequest.m; sourceTree = "<group>"; };
+		71440CD52D54AC590048EA32 /* AMVideoRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMVideoRecorder.h; sourceTree = "<group>"; };
+		71440CD62D54AC590048EA32 /* AMVideoRecorder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMVideoRecorder.m; sourceTree = "<group>"; };
+		71440CD92D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMXCTRunnerDaemonSessionWrapper.h; sourceTree = "<group>"; };
+		71440CDA2D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMXCTRunnerDaemonSessionWrapper.m; sourceTree = "<group>"; };
+		71440CDD2D54B2410048EA32 /* AMXCTRunnerDaemonSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMXCTRunnerDaemonSession.h; sourceTree = "<group>"; };
 		714CA6FA2566461100353B27 /* FBDebugCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDebugCommands.h; sourceTree = "<group>"; };
 		714CA6FB2566461100353B27 /* FBDebugCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBDebugCommands.m; sourceTree = "<group>"; };
 		714CA6FF2566475200353B27 /* XCUIApplication+AMSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIApplication+AMSource.h"; sourceTree = "<group>"; };
@@ -634,6 +660,8 @@
 		71688B00256469310007F55B /* Commands */ = {
 			isa = PBXGroup;
 			children = (
+				71440CC52D54AB460048EA32 /* AMVideoCommands.h */,
+				71440CC62D54AB460048EA32 /* AMVideoCommands.m */,
 				7180C1D8257A9369008FA870 /* AMActionCommands.h */,
 				7180C1D9257A9369008FA870 /* AMActionCommands.m */,
 				712FA08F288BD68100976DA8 /* AMWindowCommands.h */,
@@ -659,6 +687,9 @@
 		71688B01256469350007F55B /* Routing */ = {
 			isa = PBXGroup;
 			children = (
+				71440CDD2D54B2410048EA32 /* AMXCTRunnerDaemonSession.h */,
+				71440CD92D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.h */,
+				71440CDA2D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.m */,
 				7151AD3F2564F4C5008B8B2A /* FBCommandHandler.h */,
 				7151AD4D2564F4C6008B8B2A /* FBCommandStatus.h */,
 				7151AD442564F4C6008B8B2A /* FBCommandStatus.m */,
@@ -680,6 +711,12 @@
 				710527DC2565716600130763 /* FBRouteRequest-Private.h */,
 				7151AD422564F4C6008B8B2A /* FBRouteRequest.h */,
 				7151AD432564F4C6008B8B2A /* FBRouteRequest.m */,
+				71440CC92D54AB9C0048EA32 /* FBScreenRecordingContainer.h */,
+				71440CCA2D54AB9C0048EA32 /* FBScreenRecordingContainer.m */,
+				71440CCB2D54AB9C0048EA32 /* FBScreenRecordingPromise.h */,
+				71440CCC2D54AB9C0048EA32 /* FBScreenRecordingPromise.m */,
+				71440CCD2D54AB9C0048EA32 /* FBScreenRecordingRequest.h */,
+				71440CCE2D54AB9C0048EA32 /* FBScreenRecordingRequest.m */,
 				710527F22565744400130763 /* FBSession-Private.h */,
 				7151AD472564F4C6008B8B2A /* FBSession.h */,
 				7151AD4B2564F4C6008B8B2A /* FBSession.m */,
@@ -705,6 +742,8 @@
 				7151ADAC2564F570008B8B2A /* AMSettings.m */,
 				71B8B67F26726369009CE50C /* AMSwipeHelpers.h */,
 				71B8B68026726369009CE50C /* AMSwipeHelpers.m */,
+				71440CD52D54AC590048EA32 /* AMVideoRecorder.h */,
+				71440CD62D54AC590048EA32 /* AMVideoRecorder.m */,
 				71336AF22BD1348F00997FF4 /* AMXCUIDeviceWrapper.h */,
 				71336AF32BD1348F00997FF4 /* AMXCUIDeviceWrapper.m */,
 				7180C1C8257A9336008FA870 /* FBBaseActionsSynthesizer.h */,
@@ -834,6 +873,7 @@
 				7109C06B2565B607006BFD13 /* Route.h in Headers */,
 				7109BFB62565B4F0006BFD13 /* FBClassChainQueryParser.h in Headers */,
 				7109BFCC2565B512006BFD13 /* FBMacros.h in Headers */,
+				71440CC72D54AB460048EA32 /* AMVideoCommands.h in Headers */,
 				7109BFB02565B413006BFD13 /* WebDriverAgentLib.h in Headers */,
 				718D2C0D2567AA03005F533B /* XCUIElement+AMEditable.h in Headers */,
 				7109BFD42565B51E006BFD13 /* FBRunLoopSpinner.h in Headers */,
@@ -851,6 +891,7 @@
 				7109C0202565B593006BFD13 /* FBSession.h in Headers */,
 				713A9D3C2566AA2300118D07 /* AMGeometryUtils.h in Headers */,
 				7109C01C2565B58C006BFD13 /* FBSession-Private.h in Headers */,
+				71440CDB2D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.h in Headers */,
 				7109BFED2565B546006BFD13 /* FBElementUtils.h in Headers */,
 				7109C05D2565B5F6006BFD13 /* HTTPMessage.h in Headers */,
 				71B8B67D26725A01009CE50C /* XCUICoordinate+AMSwipe.h in Headers */,
@@ -882,6 +923,9 @@
 				713A9D312566A14200118D07 /* XCUIApplication+AMActiveElement.h in Headers */,
 				71A5C67A29A4FAF900421C37 /* FBFailureProofTestCase.h in Headers */,
 				714CA7062566487B00353B27 /* FBXPath.h in Headers */,
+				71440CCF2D54AB9C0048EA32 /* FBScreenRecordingContainer.h in Headers */,
+				71440CD02D54AB9C0048EA32 /* FBScreenRecordingRequest.h in Headers */,
+				71440CD12D54AB9C0048EA32 /* FBScreenRecordingPromise.h in Headers */,
 				7109BFF22565B54D006BFD13 /* FBExceptionHandler.h in Headers */,
 				7109C0532565B5EA006BFD13 /* HTTPErrorResponse.h in Headers */,
 				7180C1E9257A94F4008FA870 /* XCPointerEvent.h in Headers */,
@@ -890,6 +934,7 @@
 				718D2C322567FED3005F533B /* AMSessionCapabilities.h in Headers */,
 				7109BFE02565B536006BFD13 /* FBCommandHandler.h in Headers */,
 				7109C0732565B611006BFD13 /* RouteResponse.h in Headers */,
+				71440CD72D54AC590048EA32 /* AMVideoRecorder.h in Headers */,
 				7109C04F2565B5E5006BFD13 /* HTTPDataResponse.h in Headers */,
 				7109C0572565B5EE006BFD13 /* HTTPConnection.h in Headers */,
 				7109C05B2565B5F3006BFD13 /* HTTPLogging.h in Headers */,
@@ -917,6 +962,7 @@
 				7109C0612565B5FA006BFD13 /* HTTPResponse.h in Headers */,
 				7180C203257A9FAC008FA870 /* CDStructures.h in Headers */,
 				71221BDA2588945400B4FBF5 /* GCDAsyncUdpSocket.h in Headers */,
+				71440CDE2D54B2410048EA32 /* AMXCTRunnerDaemonSession.h in Headers */,
 				7109BFFF2565B55D006BFD13 /* FBResponseJSONPayload.h in Headers */,
 				7109BFE82565B540006BFD13 /* FBElementCache.h in Headers */,
 				7109BFF72565B553006BFD13 /* FBExceptions.h in Headers */,
@@ -1100,6 +1146,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71440CDC2D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.m in Sources */,
+				71440CC82D54AB460048EA32 /* AMVideoCommands.m in Sources */,
 				7109BFDC2565B529006BFD13 /* AMSettings.m in Sources */,
 				71221BD92588945400B4FBF5 /* GCDAsyncSocket.m in Sources */,
 				713A9D3D2566AA2300118D07 /* AMGeometryUtils.m in Sources */,
@@ -1114,6 +1162,9 @@
 				7109C0792565B618006BFD13 /* RoutingConnection.m in Sources */,
 				713A9D2325669A0F00118D07 /* FBFindElementCommands.m in Sources */,
 				7109BFD22565B51C006BFD13 /* FBProtocolHelpers.m in Sources */,
+				71440CD22D54AB9C0048EA32 /* FBScreenRecordingPromise.m in Sources */,
+				71440CD32D54AB9C0048EA32 /* FBScreenRecordingContainer.m in Sources */,
+				71440CD42D54AB9C0048EA32 /* FBScreenRecordingRequest.m in Sources */,
 				7109C0752565B613006BFD13 /* RouteResponse.m in Sources */,
 				7109C0402565B5C4006BFD13 /* NSPredicate+FBFormat.m in Sources */,
 				713A9D2725669A7000118D07 /* XCUIElement+FBFind.m in Sources */,
@@ -1131,6 +1182,7 @@
 				7109C0692565B605006BFD13 /* HTTPResponseProxy.m in Sources */,
 				718D2C0E2567AA03005F533B /* XCUIElement+AMEditable.m in Sources */,
 				71AA30C025EFF81900151CED /* AMKeyboardUtils.m in Sources */,
+				71440CD82D54AC590048EA32 /* AMVideoRecorder.m in Sources */,
 				713A9D382566A83800118D07 /* FBElementCommands.m in Sources */,
 				7109C05F2565B5F8006BFD13 /* HTTPMessage.m in Sources */,
 				714CA7022566475200353B27 /* XCUIApplication+AMSource.m in Sources */,
