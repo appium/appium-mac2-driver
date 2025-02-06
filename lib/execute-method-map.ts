@@ -302,4 +302,31 @@ export const executeMethodMap = {
       ],
     },
   },
+  'macos: startNativeScreenRecording': {
+    command: 'macosStartNativeScreenRecording',
+    params: {
+      optional: [
+        'fps',
+        'codec',
+        'displayID',
+      ],
+    },
+  },
+  'macos: getNativeScreenRecordingInfo': {
+    command: 'macosGetNativeScreenRecordingInfo',
+  },
+  'macos: stopNativeScreenRecording': {
+    command: 'macosStopNativeScreenRecording',
+    params: {
+      optional: [
+        'remotePath',
+        'user',
+        'pass',
+        'method',
+        'headers',
+        'fileFieldName',
+        'formFields'
+      ],
+    },
+  },
 } as const satisfies ExecuteMethodMap<any>;
