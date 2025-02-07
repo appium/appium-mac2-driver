@@ -586,7 +586,7 @@ Retrieves a screenshot of each display available to macOS.
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-displayId | number | no | Display identifier to take a screenshot for. If not provided then all display screenshots are going to be returned. If no matches were found then an error is thrown. | 1
+displayId | number | no | Display identifier to take a screenshot for. If not provided then all display screenshots are going to be returned. If no matches were found then an error is thrown. Use the `system_profiler -json SPDisplaysDataType` Terminal command to list IDs of connected displays or the [macos: listDisplays](#macos-listdisplays) API. | 1
 
 #### Returns
 
@@ -595,7 +595,7 @@ A list of dictionaries where each item has the following keys:
 - `isMain`: Whether this display is the main one
 - `payload`: The actual PNG screenshot data encoded to base64 string
 
-### mobile: deepLink
+### macos: deepLink
 
 Opens the given URL with the default or the given application.
 Xcode must be at version 14.3+.
@@ -606,6 +606,85 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 url | string | yes | The URL to be opened. This parameter is manadatory. | https://apple.com, myscheme:yolo
 bundleId | string | no | The bundle identifier of an application to open the given url with. If not provided then the default application for the given url scheme is going to be used. | com.myapp.yolo
+
+### macos: startNativeScreenRecording
+
+Initiates a new native screen recording session via XCTest.
+If the screen recording is already running then this call results in noop.
+A screen recording is running until a testing session is finished.
+If a recording has never been stopped explicitly during a test session
+then it would be stopped automatically upon the test session termination,
+and leftover videos would be deleted as well.
+Xcode must be at version 15+.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+fps | number | no | Frame Per Second setting for the resulting screen recording. 24 by default. Higher FPS values may significantly increase the size of the resulting video. | 60
+codec | number | no | Possible codec value, where `0` means H264 (the default setting), `1` means HEVC | 1
+displayId | number | no | Valid display identifier to record the video from. Main display ID is assumed by default. Use the `system_profiler -json SPDisplaysDataType` Terminal command to list IDs of connected displays or the [macos: listDisplays](#macos-listdisplays) API. | 1
+
+#### Returns
+
+The information about the asynchronously running video recording, which includes the following items:
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+fps | number | Frame Per Second value | 24
+codec | number | Codec value, where `0` means H264 (the default setting), `1` means HEVC | 1
+displayId | number | Display identifier used to record this video for. | 1
+uuid | string | Unique video identifier. It is also used by XCTest to store the video on the file system. Look for `$HOME/Library/Daemon Containers/<testmanager_id>/Data/Attachments/<uuid>` to find the appropriate video file. Add the `.mp4` extension to it to make it openable by video players.
+startedAt | number | Unix timestamp of the video startup moment | 123456789
+
+### macos: getNativeScreenRecordingInfo
+
+Fetches the information of the currently running native video recording.
+Xcode must be at version 15+.
+
+#### Returns
+
+Either `null` if no native video recording is currently active or the same map that [macos: startNativeScreenRecording](#macos-startnativescreenrecording) returns.
+
+### macos: stopNativeScreenRecording
+
+Stops native screen recording previously started by
+[macos: startNativeScreenRecording](#macos-startnativescreenrecording)
+and returns the video payload or uploads it to a remote location,
+depending on the provided arguments.
+The actual video file is removed from the local file system after the video payload is
+successfully consumed.
+If no screen recording has been started before then this API throws an exception.
+Xcode must be at version 15+.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+remotePath | string | no | The path to the remote location, where the resulting video should be uploaded. The following protocols are supported: http/https, ftp. Null or empty string value (the default setting) means the content of resulting file should be encoded as Base64 and passed as the endpoint response value. An exception will be thrown if the generated media file is too big to fit into the available process memory. | https://myserver.com/upload/video.mp4
+user | string | no | The name of the user for the remote authentication. | myname
+pass | string | no | The password for the remote authentication. | mypassword
+method | string | no | The http multipart upload method name. The 'PUT' one is used by default. | POST
+headers | map | no | Additional headers mapping for multipart http(s) uploads | `{"header": "value"}`
+fileFieldName | string | no | The name of the form field, where the file content BLOB should be stored for http(s) uploads. `file` by default | payload
+formFields | Map or `Array<Pair>` | no | Additional form fields for multipart http(s) uploads | `{"field1": "value1", "field2": "value2"}` or `[["field1", "value1"], ["field2", "value2"]]`
+
+#### Returns
+
+Base64-encoded content of the recorded media file if `remotePath` parameter is falsy or an empty string.
+
+### macos: listDisplays
+
+Fetches information about available displays.
+
+#### Returns
+
+A map where keys are display identifiers represented as strings and values are display infos containing the following items:
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+id | number | Display identifier | 12345
+isMain | boolean | Is `true` if the display is configured as a main system display | false
 
 
 ## Application Under Test Concept

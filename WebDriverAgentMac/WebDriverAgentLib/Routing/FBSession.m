@@ -17,6 +17,9 @@
 #import "FBExceptions.h"
 #import "FBMacros.h"
 #import "XCUIApplication+AMHelpers.h"
+#import "FBScreenRecordingContainer.h"
+#import "FBScreenRecordingPromise.h"
+#import "AMVideoRecorder.h"
 
 NSString *const FINDER_BUNDLE_ID = @"com.apple.finder";
 
@@ -69,6 +72,17 @@ static FBSession *_activeSession = nil;
     [self.testedApplication terminate];
   }
   self.testedApplication = nil;
+  FBScreenRecordingContainer *screenRecordingContainer = FBScreenRecordingContainer.sharedInstance;
+  NSUUID *videoRecordingId = screenRecordingContainer.screenRecordingPromise.identifier;
+  if (nil != videoRecordingId) {
+    NSError *error;
+    if (![AMVideoRecorder.sharedInstance stopScreenRecordingWithUUID:videoRecordingId error:&error]) {
+      NSLog(@"Could not stop the active video recording. Original error: %@", error.description);
+    }
+  }
+  if (nil != screenRecordingContainer.screenRecordingPromise) {
+    [screenRecordingContainer reset];
+  }
   [self.elementCache reset];
   _activeSession = nil;
 }

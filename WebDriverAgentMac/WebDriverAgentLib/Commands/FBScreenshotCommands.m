@@ -9,7 +9,7 @@
 
 #import "FBScreenshotCommands.h"
 
-#import "XCTest/XCTest.h"
+#import "AMScreenUtils.h"
 #import "FBRouteRequest.h"
 
 @implementation FBScreenshotCommands
@@ -49,21 +49,21 @@
   NSMutableDictionary <NSString *, NSDictionary<NSString *, id> *> *result = [NSMutableDictionary new];
   NSMutableArray <NSNumber *> *availableDisplayIds = [NSMutableArray new];
   for (XCUIScreen *screen in XCUIScreen.screens) {
-    NSNumber *displayId = [screen valueForKey:@"_displayID"];
-    if (nil == displayId || (nil != desiredId && ![desiredId isEqualToNumber:displayId])) {
+    long long currentScreenId = AMFetchScreenId(screen);
+    if (nil != desiredId && desiredId.longLongValue != currentScreenId) {
       continue;
     }
 
-    [availableDisplayIds addObject:displayId];
-    result[displayId.stringValue] = @{
-      @"id": displayId,
-      @"isMain": [screen valueForKey:@"_isMainScreen"] ?: NSNull.null,
+    [availableDisplayIds addObject:@(currentScreenId)];
+    result[[NSString stringWithFormat:@"%lld", currentScreenId]] = @{
+      @"id": @(currentScreenId),
+      @"isMain": @(AMIsMainScreen(screen)),
       @"payload": [screen.screenshot.PNGRepresentation base64EncodedStringWithOptions:0] ?: NSNull.null
     };
   }
   if (nil != desiredId && 0 == [result count]) {
     NSString *message = [NSString stringWithFormat:@"The screen identified by %@ is not available to XCTest. Only the following identifiers are available: %@",
-                         desiredId, availableDisplayIds];
+                         desiredId, [availableDisplayIds componentsJoinedByString:@","]];
     return FBResponseWithStatus([FBCommandStatus unableToCaptureScreenErrorWithMessage:message
                                                                              traceback:nil]);
   }
