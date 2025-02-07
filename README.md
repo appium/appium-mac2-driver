@@ -586,7 +586,7 @@ Retrieves a screenshot of each display available to macOS.
 
 Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
-displayId | number | no | Display identifier to take a screenshot for. If not provided then all display screenshots are going to be returned. If no matches were found then an error is thrown. | 1
+displayId | number | no | Display identifier to take a screenshot for. If not provided then all display screenshots are going to be returned. If no matches were found then an error is thrown. Use the `system_profiler -json SPDisplaysDataType` Terminal command to list IDs of connected displays or the [macos: listDisplays](#macos-listdisplays) API. | 1
 
 #### Returns
 
@@ -623,17 +623,17 @@ Name | Type | Required | Description | Example
 --- | --- | --- | --- | ---
 fps | number | no | Frame Per Second setting for the resulting screen recording. 24 by default. Higher FPS values may significantly increase the size of the resulting video. | 60
 codec | number | no | Possible codec value, where `0` means H264 (the default setting), `1` means HEVC | 1
-displayID | number | no | Valid display identifier to record the video from. Main display ID is assumed by default. Use the `system_profiler -json SPDisplaysDataType` Terminal command to list IDs of connected displays. | 1
+displayId | number | no | Valid display identifier to record the video from. Main display ID is assumed by default. Use the `system_profiler -json SPDisplaysDataType` Terminal command to list IDs of connected displays or the [macos: listDisplays](#macos-listdisplays) API. | 1
 
 #### Returns
 
 The information about the asynchronously running video recording, which includes the following items:
 
 Name | Type | Description | Example
---- | --- | --- | --- | ---
+--- | --- | --- | ---
 fps | number | Frame Per Second value | 24
 codec | number | Codec value, where `0` means H264 (the default setting), `1` means HEVC | 1
-displayID | number | Display identifier used to record this video for. | 1
+displayId | number | Display identifier used to record this video for. | 1
 uuid | string | Unique video identifier. It is also used by XCTest to store the video on the file system. Look for `$HOME/Library/Daemon Containers/<testmanager_id>/Data/Attachments/<uuid>` to find the appropriate video file. Add the `.mp4` extension to it to make it openable by video players.
 startedAt | number | Unix timestamp of the video startup moment | 123456789
 
@@ -672,6 +672,20 @@ formFields | Map or `Array<Pair>` | no | Additional form fields for multipart ht
 #### Returns
 
 Base64-encoded content of the recorded media file if `remotePath` parameter is falsy or an empty string.
+
+### macos: listDisplays
+
+Fetches information about available displays.
+
+#### Returns
+
+A map where keys are display identifiers represented as strings and values are display infos containing the following items:
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+id | number | Display identifier | 12345
+isMain | boolean | Is `true` if the display is configured as a main system display | false
+
 
 ## Application Under Test Concept
 

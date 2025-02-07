@@ -16,7 +16,7 @@ import type { StringRecord } from '@appium/types';
  * @since Xcode 15
  * @param fps Frame Per Second setting for the resulting screen recording. 24 by default.
  * @param codec Possible codec value, where `0` means H264 (the default setting), `1` means HEVC
- * @param displayID Valid display identifier to record the video from. Main display is assumed
+ * @param displayId Valid display identifier to record the video from. Main display is assumed
  * by default.
  * @returns The information about the asynchronously running video recording.
  */
@@ -24,12 +24,12 @@ export async function macosStartNativeScreenRecording(
   this: Mac2Driver,
   fps?: number,
   codec?: number,
-  displayID?: number,
+  displayId?: number,
 ): Promise<ActiveVideoInfo> {
   const result = await this.wda.proxy.command('/wda/video/start', 'POST', {
     fps,
     codec,
-    displayID,
+    displayId,
   }) as ActiveVideoInfo;
   this._recordedVideoIds.add(result.uuid);
   return result;
@@ -143,6 +143,15 @@ export async function cleanupNativeRecordedVideos(
   }
 }
 
+/**
+ * Fetches information about available displays
+ *
+ * @returns A map where keys are display identifiers and values are display infos
+ */
+export async function macosListDisplays(this: Mac2Driver): Promise<StringRecord<DisplayInfo>> {
+  return await this.wda.proxy.command('/wda/displays/list', 'GET') as StringRecord<DisplayInfo>;
+}
+
 // #region Private functions
 
 async function listAttachments(): Promise<string[]> {
@@ -158,9 +167,14 @@ async function listAttachments(): Promise<string[]> {
 interface ActiveVideoInfo {
   fps: number;
   codec: number;
-  displayID: number;
+  displayId: number;
   uuid: string;
   startedAt: number;
+}
+
+interface DisplayInfo {
+  id: number;
+  isMain: boolean;
 }
 
 // #endregion

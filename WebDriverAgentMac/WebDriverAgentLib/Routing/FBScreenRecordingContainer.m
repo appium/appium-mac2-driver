@@ -10,6 +10,7 @@
 
 #import "FBScreenRecordingContainer.h"
 
+#import "AMScreenUtils.h"
 #import "FBScreenRecordingPromise.h"
 
 @interface FBScreenRecordingContainer ()
@@ -64,7 +65,7 @@
   return @{
     @"fps": @(self.fps),
     @"codec": @(self.codec),
-    @"displayID": self.displayID ?: @([[XCUIScreen.mainScreen valueForKey:@"_displayID"] longLongValue]),
+    @"displayId": self.displayID ?: @(AMFetchScreenId(XCUIScreen.mainScreen)),
     @"uuid": [self.screenRecordingPromise identifier].UUIDString ?: [NSNull null],
     @"startedAt": self.startedAt ?: [NSNull null],
   };

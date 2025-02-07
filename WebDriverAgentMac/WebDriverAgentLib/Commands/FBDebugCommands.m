@@ -9,6 +9,7 @@
 
 #import "FBDebugCommands.h"
 
+#import "AMScreenUtils.h"
 #import "FBRouteRequest.h"
 #import "FBSession.h"
 #import "XCUIApplication+AMSource.h"
@@ -23,6 +24,9 @@
   @[
     [[FBRoute GET:@"/source"] respondWithTarget:self action:@selector(handleGetSourceCommand:)],
     [[FBRoute GET:@"/source"].withoutSession respondWithTarget:self action:@selector(handleGetSourceCommand:)],
+
+    [[FBRoute GET:@"/wda/displays/list"] respondWithTarget:self action:@selector(handleListDisplays:)],
+    [[FBRoute GET:@"/wda/displays/list"].withoutSession respondWithTarget:self action:@selector(handleListDisplays:)],
   ];
 }
 
@@ -51,6 +55,19 @@ static NSString *const SOURCE_FORMAT_DESCRIPTION = @"description";
     return FBResponseWithUnknownErrorFormat(@"Cannot get '%@' source of the current application", sourceType);
   }
   return FBResponseWithObject(result);
+}
+
++ (id<FBResponsePayload>)handleListDisplays:(FBRouteRequest *)request
+{
+  NSArray<AMScreenProperties *> *screenInfos = AMListScreens();
+  NSMutableDictionary <NSString *, NSDictionary<NSString *, id> *> *result = [NSMutableDictionary new];
+  for (AMScreenProperties *screenInfo in screenInfos) {
+    result[[NSString stringWithFormat:@"%lld", screenInfo.identifier]] = @{
+      @"id": @(screenInfo.identifier),
+      @"isMain": @(screenInfo.isMain),
+    };
+  }
+  return FBResponseWithObject(result.copy);
 }
 
 @end

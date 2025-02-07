@@ -207,6 +207,8 @@
 		71B8B68126726369009CE50C /* AMSwipeHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B8B67F26726369009CE50C /* AMSwipeHelpers.h */; };
 		71B8B68226726369009CE50C /* AMSwipeHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B8B68026726369009CE50C /* AMSwipeHelpers.m */; };
 		71B8B684267265D7009CE50C /* AMVariousElementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B8B683267265D7009CE50C /* AMVariousElementTests.m */; };
+		71E109222D55EBD0008A800D /* AMScreenUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E109212D55EBD0008A800D /* AMScreenUtils.m */; };
+		71E109232D55EBD0008A800D /* AMScreenUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E109202D55EBD0008A800D /* AMScreenUtils.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -459,6 +461,8 @@
 		71B8B67F26726369009CE50C /* AMSwipeHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMSwipeHelpers.h; sourceTree = "<group>"; };
 		71B8B68026726369009CE50C /* AMSwipeHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMSwipeHelpers.m; sourceTree = "<group>"; };
 		71B8B683267265D7009CE50C /* AMVariousElementTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMVariousElementTests.m; sourceTree = "<group>"; };
+		71E109202D55EBD0008A800D /* AMScreenUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMScreenUtils.h; sourceTree = "<group>"; };
+		71E109212D55EBD0008A800D /* AMScreenUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMScreenUtils.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -736,6 +740,8 @@
 				713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */,
 				71AA30BD25EFF81900151CED /* AMKeyboardUtils.h */,
 				71AA30BE25EFF81900151CED /* AMKeyboardUtils.m */,
+				71E109202D55EBD0008A800D /* AMScreenUtils.h */,
+				71E109212D55EBD0008A800D /* AMScreenUtils.m */,
 				718D2C302567FED3005F533B /* AMSessionCapabilities.h */,
 				718D2C312567FED3005F533B /* AMSessionCapabilities.m */,
 				718D2BF125678B4E005F533B /* AMSnapshotUtils.h */,
@@ -947,6 +953,7 @@
 				7180C1D3257A9348008FA870 /* FBW3CActionsHelpers.h in Headers */,
 				7109C0172565B581006BFD13 /* FBRouteRequest.h in Headers */,
 				7180C216257AA707008FA870 /* XCUIElement+AMHitPoint.h in Headers */,
+				71E109232D55EBD0008A800D /* AMScreenUtils.h in Headers */,
 				719E6A6E25822DB800777988 /* XCUIApplication+AMUIInterruptions.h in Headers */,
 				718D2BF325678B4E005F533B /* AMSnapshotUtils.h in Headers */,
 				7109BFCF2565B517006BFD13 /* FBProtocolHelpers.h in Headers */,
@@ -1153,6 +1160,7 @@
 				71440CC82D54AB460048EA32 /* AMVideoCommands.m in Sources */,
 				7109BFDC2565B529006BFD13 /* AMSettings.m in Sources */,
 				71221BD92588945400B4FBF5 /* GCDAsyncSocket.m in Sources */,
+				71E109222D55EBD0008A800D /* AMScreenUtils.m in Sources */,
 				713A9D3D2566AA2300118D07 /* AMGeometryUtils.m in Sources */,
 				7109C0712565B60F006BFD13 /* RouteRequest.m in Sources */,
 				7109C0312565B5AE006BFD13 /* FBScreenshotCommands.m in Sources */,

@@ -20,6 +20,7 @@
 #import "FBScreenRecordingContainer.h"
 #import "FBScreenRecordingPromise.h"
 #import "FBScreenRecordingRequest.h"
+#import "AMScreenUtils.h"
 #import "FBSession.h"
 #import "AMVideoRecorder.h"
 #import "FBErrorBuilder.h"
@@ -52,7 +53,7 @@ const NSUInteger DEFAULT_CODEC = 0;
 
   NSNumber *fps = (NSNumber *)request.arguments[@"fps"] ?: @(DEFAULT_FPS);
   NSNumber *codec = (NSNumber *)request.arguments[@"codec"] ?: @(DEFAULT_CODEC);
-  NSNumber *displayID = (NSNumber *)request.arguments[@"displayID"];
+  NSNumber *displayID = (NSNumber *)request.arguments[@"displayId"];
   if (nil != displayID) {
     NSError *error;
     if (![self verifyDisplayWithID:displayID.longLongValue error:&error]) {
@@ -104,18 +105,15 @@ const NSUInteger DEFAULT_CODEC = 0;
 {
   NSMutableArray* availableIds = [NSMutableArray array];
   for (XCUIScreen *screen in XCUIScreen.screens) {
-    NSNumber *currentDisplayId = [screen valueForKey:@"_displayID"];
-    if (nil == currentDisplayId) {
-      continue;
-    }
-    if (displayID == currentDisplayId.longLongValue) {
+    long long currentDisplayId = AMFetchScreenId(screen);
+    if (displayID == currentDisplayId) {
       return YES;
     }
-    [availableIds addObject:currentDisplayId];
+    [availableIds addObject:@(currentDisplayId)];
   }
   return [[[FBErrorBuilder builder]
            withDescriptionFormat:@"The provided display identifier %lld is not known. Only the following values are allowed: %@",
-           displayID, availableIds]
+           displayID, [availableIds componentsJoinedByString:@","]]
           buildError:error];
 }
 

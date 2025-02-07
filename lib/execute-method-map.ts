@@ -308,7 +308,7 @@ export const executeMethodMap = {
       optional: [
         'fps',
         'codec',
-        'displayID',
+        'displayId',
       ],
     },
   },
@@ -328,5 +328,8 @@ export const executeMethodMap = {
         'formFields'
       ],
     },
+  },
+  'macos: listDisplays': {
+    command: 'macosListDisplays',
   },
 } as const satisfies ExecuteMethodMap<any>;
