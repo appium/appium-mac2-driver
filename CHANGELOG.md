@@ -1,3 +1,10 @@
+## [2.1.0](https://github.com/appium/appium-mac2-driver/compare/v2.0.0...v2.1.0) (2025-02-07)
+
+
+### Features
+
+* Add support for native screen recording ([#330](https://github.com/appium/appium-mac2-driver/issues/330)) ([d2f5b25](https://github.com/appium/appium-mac2-driver/commit/d2f5b2564f4b25fefbcce60d77718031d438bf60))
+
 ## [2.0.0](https://github.com/appium/appium-mac2-driver/compare/v1.20.5...v2.0.0) (2025-02-06)
 
 
