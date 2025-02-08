@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/appium/appium-mac2-driver/compare/v2.1.0...v2.1.1) (2025-02-08)
+
+
+### Miscellaneous Chores
+
+* Update the documentation for the `macos: stopNativeScreenRecording` API ([#331](https://github.com/appium/appium-mac2-driver/issues/331)) ([612b0a0](https://github.com/appium/appium-mac2-driver/commit/612b0a04814fdebd4ec910ad0691aed460251d47))
+
 ## [2.1.0](https://github.com/appium/appium-mac2-driver/compare/v2.0.0...v2.1.0) (2025-02-07)
 
 
