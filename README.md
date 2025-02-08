@@ -662,6 +662,10 @@ Xcode must be at version 15+.
 > or its parent process (e.g. Terminal) must have the "Full Disk Access" permission granted
 > in 'System Preferences'→'Privacy & Security' tab.
 
+> [!NOTE]
+> Be careful while recording lengthy videos. They could be pretty large, and may easily exceed
+> the free space on the home partition.
+
 #### Arguments
 
 Name | Type | Required | Description | Example
