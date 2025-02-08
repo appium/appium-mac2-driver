@@ -95,7 +95,12 @@ export async function macosStopNativeScreenRecording(
   );
   if (!matchedVideoPath) {
     throw new Error(
-      `The screen recording identified by ${uuid} has not been found. Is it accessible?`
+      `The screen recording identified by ${uuid} cannot be retrieved. ` +
+      `Make sure the Appium Server process or its parent process (e.g. Terminal) ` +
+      `has Full Disk Access permission enabled in 'System Preferences' -> 'Privacy & Security' tab. ` +
+      `You may verify the presence of the recorded video manually by running the ` +
+      `'find "$HOME/Library/Daemon Containers/" -type f -name "${uuid}"' command from Terminal ` +
+      `if the latter has been granted the above access permission.`
     );
   }
   const options = {
