@@ -657,6 +657,15 @@ successfully consumed.
 If no screen recording has been started before then this API throws an exception.
 Xcode must be at version 15+.
 
+> [!IMPORTANT]
+> In order to retrieve the recorded video from the local file system the Appium Server process itself
+> or its parent process (e.g. Terminal) must have the "Full Disk Access" permission granted
+> in 'System Preferences'→'Privacy & Security' tab.
+
+> [!NOTE]
+> Be careful while recording lengthy videos. They could be pretty large, and may easily exceed
+> the free space on the home partition.
+
 #### Arguments
 
 Name | Type | Required | Description | Example
