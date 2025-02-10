@@ -219,8 +219,11 @@ export async function macosGetNativeScreenRecordingInfo(
  * @param fileFieldName The name of the form field, where the file content BLOB should
  *                                 be stored for http(s) uploads
  * @param formFields Additional form fields for multipart http(s) uploads
+ * @param ignorePayload Whether to ignore the resulting video payload
+ * and return an empty string. Useful if you prefer to fetch
+ * video chunks via a BiDi web socket.
  * @returns Base64-encoded content of the recorded media file if 'remotePath'
- * parameter is falsy or an empty string.
+ * parameter is falsy or an empty string or ignorePayload is set to `true`.
  * @throws {Error} If there was an error while getting the name of a media file
  * or the file content cannot be uploaded to the remote location
  * or screen recording is not supported on the device under test.
@@ -234,6 +237,7 @@ export async function macosStopNativeScreenRecording(
   headers?: StringRecord|[string, any][],
   fileFieldName?: string,
   formFields?: StringRecord|[string, string][],
+  ignorePayload?: boolean,
 ): Promise<string> {
   const response: ActiveVideoInfo | null = (
     await this.wda.proxy.command('/wda/video/stop', 'POST', {})
@@ -242,6 +246,9 @@ export async function macosStopNativeScreenRecording(
     throw new Error(
       'There is no active screen recording, thus nothing to stop. Did you start it before?'
     );
+  }
+  if (ignorePayload) {
+    return '';
   }
 
   const { uuid } = response;
@@ -267,37 +274,6 @@ export async function macosStopNativeScreenRecording(
     formFields
   };
   return await uploadRecordedMedia.bind(this)(matchedVideoPath, remotePath, options);
-}
-
-/**
- * Deletes previously recorded videos with given ids.
- * This call is safe and does not raise any errors.
- *
- * @param uuids One or more video UUIDs to be deleted
- */
-export async function cleanupNativeRecordedVideos(
-  this: Mac2Driver,
-  uuids: string | Set<string>,
-): Promise<void> {
-  const attachments = await listAttachments();
-  if (_.isEmpty(attachments)) {
-    return;
-  }
-  const tasks: Promise<any>[] = attachments
-    .map((attachmentPath) => [path.basename(attachmentPath), attachmentPath])
-    .filter(([name,]) => _.isString(uuids) ? uuids === name : uuids.has(name))
-    .map(([, attachmentPath]) => fs.rimraf(attachmentPath));
-  if (_.isEmpty(tasks)) {
-    return;
-  }
-  try {
-    await Promise.all(tasks);
-    this.log.debug(
-      `Successfully deleted ${util.pluralize('leftover video recording', tasks.length, true)}`
-    );
-  } catch (e) {
-    this.log.warn(`Could not cleanup some leftover video recordings: ${e.message}`);
-  }
 }
 
 /**

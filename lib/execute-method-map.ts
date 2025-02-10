@@ -325,7 +325,8 @@ export const executeMethodMap = {
         'method',
         'headers',
         'fileFieldName',
-        'formFields'
+        'formFields',
+        'ignorePayload',
       ],
     },
   },

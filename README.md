@@ -617,6 +617,12 @@ then it would be stopped automatically upon the test session termination,
 and leftover videos would be deleted as well.
 Xcode must be at version 15+.
 
+> [!TIP]
+> Invocation of this API also triggers broadcasting of
+> [appium:mac2.nativeVideoRecordingChunkAdded](./docs/bidi.md#appiummac2nativevideorecordingchunkadded)
+> BiDi events. Make sure to subscribe to such events **before** this API is invoked to ensure
+> all video chunks are being properly consumed on the client side.
+
 #### Arguments
 
 Name | Type | Required | Description | Example
@@ -677,6 +683,7 @@ method | string | no | The http multipart upload method name. The 'PUT' one is u
 headers | map | no | Additional headers mapping for multipart http(s) uploads | `{"header": "value"}`
 fileFieldName | string | no | The name of the form field, where the file content BLOB should be stored for http(s) uploads. `file` by default | payload
 formFields | Map or `Array<Pair>` | no | Additional form fields for multipart http(s) uploads | `{"field1": "value1", "field2": "value2"}` or `[["field1", "value1"], ["field2", "value2"]]`
+ignorePayload | boolean | no | Whether to ignore the resulting video payload and return an empty string. Useful if you prefer to fetch video chunks via the [appium:mac2.nativeVideoRecordingChunkAdded](./docs/bidi.md#appiummac2nativevideorecordingchunkadded) BiDi event. false by default. | true
 
 #### Returns
 
