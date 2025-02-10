@@ -1,9 +1,164 @@
 import _ from 'lodash';
+import B from 'bluebird';
 import path from 'node:path';
 import { fs, util } from 'appium/support';
 import type { Mac2Driver } from '../driver';
 import { uploadRecordedMedia } from './helpers';
-import type { StringRecord } from '@appium/types';
+import type { AppiumLogger, StringRecord } from '@appium/types';
+import type EventEmitter from 'node:events';
+import { waitForCondition } from 'asyncbox';
+import { exec } from 'teen_process';
+import { BIDI_EVENT_NAME } from './bidi/constants';
+import { toNativeVideoChunkAddedEvent } from './bidi/models';
+
+const RECORDING_STARTUP_TIMEOUT_MS = 5000;
+const BUFFER_SIZE = 0xFFFF;
+const MONITORING_INTERVAL_DURATION_MS = 1000;
+const MAX_MONITORING_DURATION_MS = 24 * 60 * 60 * 1000; // 1 day
+
+export class NativeVideoChunksBroadcaster {
+  private _ee: EventEmitter;
+  private _log: AppiumLogger;
+  private _publishers: Map<string, Promise<void>>;
+  private _terminated: boolean;
+
+  constructor (ee: EventEmitter, log: AppiumLogger) {
+    this._ee = ee;
+    this._log = log;
+    this._publishers = new Map();
+    this._terminated = false;
+  }
+
+  get hasPublishers(): boolean {
+    return this._publishers.size > 0;
+  }
+
+  schedule(uuid: string): void {
+    if (!this._publishers.has(uuid)) {
+      this._publishers.set(uuid, this._createPublisher(uuid));
+    }
+  }
+
+  async shutdown(timeoutMs: number): Promise<void> {
+    try {
+      await this._wait(timeoutMs);
+    } catch (e) {
+      this._log.warn(e.message);
+    }
+
+    await this._cleanup();
+
+    this._publishers = new Map();
+  }
+
+  private async _createPublisher(uuid: string): Promise<void> {
+    let fullPath = '';
+    let bytesRead = 0n;
+    try {
+      await waitForCondition(async () => {
+        const paths = await listAttachments();
+        const result = paths.find((name) => name.endsWith(uuid));
+        if (result) {
+          fullPath = result;
+          return true;
+        }
+        return false;
+      }, {
+        waitMs: RECORDING_STARTUP_TIMEOUT_MS,
+        intervalMs: 300,
+      });
+    } catch {
+      throw new Error(
+        `The video recording identified by ${uuid} did not ` +
+        `start within ${RECORDING_STARTUP_TIMEOUT_MS}ms timeout`
+      );
+    }
+
+    const startedMs = performance.now();
+    while (!this._terminated && performance.now() - startedMs < MAX_MONITORING_DURATION_MS) {
+      const isCompleted = !(await isFileUsed(fullPath, 'testman'));
+
+      const { size } = await fs.stat(fullPath, {bigint: true});
+      if (bytesRead < size) {
+        const handle = await fs.open(fullPath, 'r');
+        try {
+          while (bytesRead < size) {
+            const bufferSize = Number(size - bytesRead > BUFFER_SIZE ? BUFFER_SIZE : size - bytesRead);
+            const buf = Buffer.alloc(bufferSize);
+            await fs.read(handle, buf as any, 0, bufferSize, bytesRead as any);
+            this._ee.emit(BIDI_EVENT_NAME, toNativeVideoChunkAddedEvent(uuid, buf));
+            bytesRead += BigInt(bufferSize);
+          }
+        } finally {
+          await fs.close(handle);
+        }
+      }
+
+      if (isCompleted) {
+        this._log.debug(
+          `The native video recording identified by ${uuid} has been detected as completed`
+        );
+        return;
+      }
+
+      await B.delay(MONITORING_INTERVAL_DURATION_MS);
+    }
+
+    this._log.warn(
+      `Stopped monitoring of the native video recording identified by ${uuid} ` +
+      `because of the timeout`
+    );
+  }
+
+  private async _wait(timeoutMs: number): Promise<void> {
+    if (!this.hasPublishers) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      this._terminated = true;
+    }, timeoutMs);
+    const publishingErrors: string[] = [];
+    for (const publisher of this._publishers.values()) {
+      try {
+        await publisher;
+      } catch (e) {
+        publishingErrors.push(e.message);
+      }
+    }
+    clearTimeout(timer);
+
+    if (!_.isEmpty(publishingErrors)) {
+      throw new Error(publishingErrors.join('\n'));
+    }
+  }
+
+  private async _cleanup(): Promise<void> {
+    if (!this.hasPublishers) {
+      return;
+    }
+
+    const attachments = await listAttachments();
+    if (_.isEmpty(attachments)) {
+      return;
+    }
+    const tasks: Promise<any>[] = attachments
+      .map((attachmentPath) => [path.basename(attachmentPath), attachmentPath])
+      .filter(([name,]) => this._publishers.has(name))
+      .map(([, attachmentPath]) => fs.rimraf(attachmentPath));
+    if (_.isEmpty(tasks)) {
+      return;
+    }
+    try {
+      await Promise.all(tasks);
+      this._log.debug(
+        `Successfully deleted ${util.pluralize('leftover video recording', tasks.length, true)}`
+      );
+    } catch (e) {
+      this._log.warn(`Could not cleanup some leftover video recordings: ${e.message}`);
+    }
+  }
+}
 
 /**
  * Initiates a new native screen recording session via XCTest.
@@ -31,7 +186,7 @@ export async function macosStartNativeScreenRecording(
     codec,
     displayId,
   }) as ActiveVideoInfo;
-  this._recordedVideoIds.add(result.uuid);
+  this._videoChunksBroadcaster.schedule(result.uuid);
   return result;
 }
 
@@ -111,10 +266,7 @@ export async function macosStopNativeScreenRecording(
     fileFieldName,
     formFields
   };
-  const result = await uploadRecordedMedia.bind(this)(matchedVideoPath, remotePath, options);
-  await cleanupNativeRecordedVideos.bind(this)(uuid);
-  this._recordedVideoIds.delete(uuid);
-  return result;
+  return await uploadRecordedMedia.bind(this)(matchedVideoPath, remotePath, options);
 }
 
 /**
@@ -167,6 +319,11 @@ async function listAttachments(): Promise<string[]> {
     cwd: deamonContainersRoot,
     absolute: true,
   });
+}
+
+async function isFileUsed(fpath: string, userProcessName: string): Promise<boolean> {
+  const { stdout } = await exec('lsof', [fpath]);
+  return stdout.includes(userProcessName);
 }
 
 interface ActiveVideoInfo {
