@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import B from 'bluebird';
+import B, {TimeoutError} from 'bluebird';
 import path from 'node:path';
 import { fs, util } from 'appium/support';
 import type { Mac2Driver } from '../driver';
@@ -36,6 +36,13 @@ export class NativeVideoChunksBroadcaster {
   schedule(uuid: string): void {
     if (!this._publishers.has(uuid)) {
       this._publishers.set(uuid, this._createPublisher(uuid));
+    }
+  }
+
+  async waitFor(uuid: string): Promise<void> {
+    const publisher = this._publishers.get(uuid);
+    if (publisher) {
+      await publisher;
     }
   }
 
@@ -247,11 +254,25 @@ export async function macosStopNativeScreenRecording(
       'There is no active screen recording, thus nothing to stop. Did you start it before?'
     );
   }
+
+  const { uuid } = response;
+  try {
+    await B.resolve(this._videoChunksBroadcaster.waitFor(uuid)).timeout(5000);
+  } catch (e) {
+    if (e instanceof TimeoutError) {
+      this.log.debug(
+        `The BiDi chunks broadcaster for the native screen recording identified ` +
+        `by ${uuid} cannot complete within 5000ms timeout`
+      );
+    } else {
+      this.log.debug(e.stack);
+    }
+  }
+
   if (ignorePayload) {
     return '';
   }
 
-  const { uuid } = response;
   const matchedVideoPath = _.first(
     (await listAttachments()).filter((name) => name.endsWith(uuid))
   );
