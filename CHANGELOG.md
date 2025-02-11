@@ -1,3 +1,10 @@
+## [2.2.0](https://github.com/appium/appium-mac2-driver/compare/v2.1.1...v2.2.0) (2025-02-11)
+
+
+### Features
+
+* Publish native video chunks over bidi ([#333](https://github.com/appium/appium-mac2-driver/issues/333)) ([6cf4f6d](https://github.com/appium/appium-mac2-driver/commit/6cf4f6d341798290e8416120de2ac93e1263f051))
+
 ## [2.1.1](https://github.com/appium/appium-mac2-driver/compare/v2.1.0...v2.1.1) (2025-02-08)
 
 
