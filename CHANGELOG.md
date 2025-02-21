@@ -1,3 +1,10 @@
+## [2.2.2](https://github.com/appium/appium-mac2-driver/compare/v2.2.1...v2.2.2) (2025-02-21)
+
+
+### Bug Fixes
+
+* Tune session startup ([#335](https://github.com/appium/appium-mac2-driver/issues/335)) ([7dbdbe8](https://github.com/appium/appium-mac2-driver/commit/7dbdbe8dccb74d337c2d9f5381c326803d9d61a4))
+
 ## [2.2.1](https://github.com/appium/appium-mac2-driver/compare/v2.2.0...v2.2.1) (2025-02-21)
 
 
