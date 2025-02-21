@@ -1,3 +1,10 @@
+## [2.2.1](https://github.com/appium/appium-mac2-driver/compare/v2.2.0...v2.2.1) (2025-02-21)
+
+
+### Bug Fixes
+
+* Accept reqBasePath proxy option ([#334](https://github.com/appium/appium-mac2-driver/issues/334)) ([52585cc](https://github.com/appium/appium-mac2-driver/commit/52585cc32558d40771a3dab17e975c9712f32def))
+
 ## [2.2.0](https://github.com/appium/appium-mac2-driver/compare/v2.1.1...v2.2.0) (2025-02-11)
 
 
