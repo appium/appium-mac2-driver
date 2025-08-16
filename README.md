@@ -12,7 +12,7 @@ The driver operates in scope of [W3C WebDriver protocol](https://www.w3.org/TR/w
 The original idea and parts of the source code are borrowed from the Facebook's [WebDriverAgent](https://github.com/facebookarchive/WebDriverAgent) project.
 
 > [!IMPORTANT]
-> Since major version *2.0.0* this driver is only compatible to Appium 3. Use the `appium driver install mac2`
+> Since major version *2.0.0*, this driver is only compatible with Appium 3. Use the `appium driver install mac2`
 > command to add it to your dist.
 
 
