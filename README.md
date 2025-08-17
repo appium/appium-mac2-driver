@@ -11,9 +11,9 @@ This is Appium driver for automating macOS applications using Apple's [XCTest](h
 The driver operates in scope of [W3C WebDriver protocol](https://www.w3.org/TR/webdriver/) with several custom extensions to cover operating-system specific scenarios.
 The original idea and parts of the source code are borrowed from the Facebook's [WebDriverAgent](https://github.com/facebookarchive/WebDriverAgent) project.
 
-> [!NOTE]
-> Since version 1.0.0 Mac2 driver has dropped the support of Appium 1, and is only compatible to Appium 2. Use the `appium driver install mac2`
-> command to add it to your Appium 2 dist.
+> [!IMPORTANT]
+> Since major version *2.0.0*, this driver is only compatible with Appium 3. Use the `appium driver install mac2`
+> command to add it to your dist.
 
 
 ## Requirements
