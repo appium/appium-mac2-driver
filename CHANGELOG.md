@@ -1,3 +1,16 @@
+## [3.0.0](https://github.com/appium/appium-mac2-driver/compare/v2.2.2...v3.0.0) (2025-08-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* Required Node.js version has been bumped to ^20.19.0 || ^22.12.0 || >=24.0.0
+* Required npm version has been bumped to >=10
+* Required Appium server version has been bumped to >=3.0.0-rc.2
+
+### Features
+
+* Update server compatibility ([#342](https://github.com/appium/appium-mac2-driver/issues/342)) ([7aa4858](https://github.com/appium/appium-mac2-driver/commit/7aa4858f61d44adbcf65dbdd888064d3980128bd))
+
 ## [2.2.2](https://github.com/appium/appium-mac2-driver/compare/v2.2.1...v2.2.2) (2025-02-21)
 
 
