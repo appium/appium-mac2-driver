@@ -68,7 +68,7 @@
     "e2e-test": "mocha --exit --timeout 10m \"./test/functional/**/*-specs.js\""
   },
   "peerDependencies": {
-    "appium": "^3.0.0-rc.2"
+    "appium": "^3.0.0"
   },
   "devDependencies": {
     "@appium/eslint-config-appium-ts": "^2.0.0-rc.1",
