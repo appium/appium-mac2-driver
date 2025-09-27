@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** YES if the corresponding screen is a main screen */
 @property (readonly, nonatomic) BOOL isMain;
-/** The integer indentifier of a screen */
+/** The integer identifier of a screen */
 @property (readonly, nonatomic) long long identifier;
 
 @end

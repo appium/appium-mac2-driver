@@ -15,7 +15,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Class that represents WebDriverAgent JSON repsonse
+ Class that represents WebDriverAgent JSON response
  */
 @interface FBResponseJSONPayload : NSObject <FBResponsePayload>
 

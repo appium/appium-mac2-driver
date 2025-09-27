@@ -15,10 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Returns an array of descendants matching given xpath query
- 
+
  @param root the root element to execute XPath query for
  @param xpathQuery requested xpath query
- @param firstMatch whether to only resulve the first matched element (if YES) or all of them
+ @param firstMatch whether to only resolve the first matched element (if YES) or all of them
  @return an array of descendants matching the given xpath query or an empty array if no matches were found
  @throws NSException if there is an unexpected internal error during xml parsing
  */

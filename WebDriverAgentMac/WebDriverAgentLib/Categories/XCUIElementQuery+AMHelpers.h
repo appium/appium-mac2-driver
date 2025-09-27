@@ -23,14 +23,14 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Retrieves the first match from the query
 
- @returns Matched element instance ot nil if no element is found
+ @returns Matched element instance or nil if no element is found
  */
 - (nullable XCUIElement *)am_firstMatch;
 
 /**
  Retrieves all matches from the query
 
- @returns Matched element instances ot an empty array if no matches are found
+ @returns Matched element instances or an empty array if no matches are found
  */
 - (NSArray<XCUIElement *> *)am_allMatches;
 

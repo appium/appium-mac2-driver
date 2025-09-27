@@ -58,8 +58,8 @@ DDRange DDRangeFromString(NSString *aString)
 NSInteger DDRangeCompare(DDRangePointer pDDRange1, DDRangePointer pDDRange2)
 {
   // Comparison basis:
-  // Which range would you encouter first if you started at zero, and began walking towards infinity.
-  // If you encouter both ranges at the same time, which range would end first.
+  // Which range would you encounter first if you started at zero, and began walking towards infinity.
+  // If you encounter both ranges at the same time, which range would end first.
   
   if(pDDRange1->location < pDDRange2->location)
   {

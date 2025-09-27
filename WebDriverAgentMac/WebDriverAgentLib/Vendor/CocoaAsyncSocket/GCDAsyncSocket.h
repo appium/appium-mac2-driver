@@ -123,8 +123,8 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  * By default, both IPv4 and IPv6 are enabled.
  * 
  * For accepting incoming connections, this means GCDAsyncSocket automatically supports both protocols,
- * and can simulataneously accept incoming connections on either protocol.
- * 
+ * and can simultaneously accept incoming connections on either protocol.
+ *
  * For outgoing connections, this means GCDAsyncSocket can connect to remote hosts running either protocol.
  * If a DNS lookup returns only IPv4 results, GCDAsyncSocket will automatically use IPv4.
  * If a DNS lookup returns only IPv6 results, GCDAsyncSocket will automatically use IPv6.
@@ -416,7 +416,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
 // When a write is complete the socket:didWriteDataWithTag: delegate method is dispatched on the delegateQueue.
 // 
 // You may optionally set a timeout for any read/write operation. (To not timeout, use a negative time interval.)
-// If a read/write opertion times out, the corresponding "socket:shouldTimeout..." delegate method
+// If a read/write operation times out, the corresponding "socket:shouldTimeout..." delegate method
 // is called to optionally allow you to extend the timeout.
 // Upon a timeout, the "socket:didDisconnectWithError:" method is called
 // 
@@ -686,7 +686,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  * - GCDAsyncSocketManuallyEvaluateTrust
  *     The value must be of type NSNumber, encapsulating a BOOL value.
  *     If you set this to YES, then the underlying SecureTransport system will not evaluate the SecTrustRef of the peer.
- *     Instead it will pause at the moment evaulation would typically occur,
+ *     Instead it will pause at the moment evaluation would typically occur,
  *     and allow us to handle the security evaluation however we see fit.
  *     So GCDAsyncSocket will invoke the delegate method socket:shouldTrustPeer: passing the SecTrustRef.
  *
@@ -712,7 +712,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  *     
  *     Thus all the other keys in the given dictionary will be ignored by GCDAsyncSocket,
  *     and will passed directly CFReadStreamSetProperty / CFWriteStreamSetProperty.
- *     For more infomation on these keys, please see the documentation for kCFStreamPropertySSLSettings.
+ *     For more information on these keys, please see the documentation for kCFStreamPropertySSLSettings.
  *
  *     If unspecified, the default value is NO.
  *
@@ -740,7 +740,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  *
  * - GCDAsyncSocketSSLProtocolVersionMin
  * - GCDAsyncSocketSSLProtocolVersionMax
- *     The value(s) must be of type NSNumber, encapsulting a SSLProtocol value.
+ *     The value(s) must be of type NSNumber, encapsulating a SSLProtocol value.
  *     See Apple's documentation for SSLSetProtocolVersionMin & SSLSetProtocolVersionMax.
  *     See also the SSLProtocol typedef.
  * 
@@ -810,7 +810,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
 
 /**
  * Traditionally sockets are not closed until the conversation is over.
- * However, it is technically possible for the remote enpoint to close its write stream.
+ * However, it is technically possible for the remote endpoint to close its write stream.
  * Our socket would then be notified that there is no more data to be read,
  * but our socket would still be writeable and the remote endpoint could continue to receive our data.
  * 
@@ -1183,9 +1183,9 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  * This is a generally rare, but is possible if one writes code like this:
  * 
  * asyncSocket = nil; // I'm implicitly disconnecting the socket
- * 
- * In this case it may preferrable to nil the delegate beforehand, like this:
- * 
+ *
+ * In this case it may preferable to nil the delegate beforehand, like this:
+ *
  * asyncSocket.delegate = nil; // Don't invoke my delegate method
  * asyncSocket = nil; // I'm implicitly disconnecting the socket
  * 

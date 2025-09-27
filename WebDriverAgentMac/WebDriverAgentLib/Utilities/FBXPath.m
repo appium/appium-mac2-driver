@@ -279,13 +279,13 @@ static NSString *const FBAbstractMethodInvocationException = @"AbstractMethodInv
 
 + (NSString *)name
 {
-  NSString *errMsg = [NSString stringWithFormat:@"The abstract method +(NSString *)name is expected to be overriden by %@", NSStringFromClass(self.class)];
+  NSString *errMsg = [NSString stringWithFormat:@"The abstract method +(NSString *)name is expected to be overridden by %@", NSStringFromClass(self.class)];
   @throw [NSException exceptionWithName:FBAbstractMethodInvocationException reason:errMsg userInfo:nil];
 }
 
 + (NSString *)valueForElement:(id<XCUIElementSnapshot>)element
 {
-  NSString *errMsg = [NSString stringWithFormat:@"The abstract method -(NSString *)value is expected to be overriden by %@", NSStringFromClass(self.class)];
+  NSString *errMsg = [NSString stringWithFormat:@"The abstract method -(NSString *)value is expected to be overridden by %@", NSStringFromClass(self.class)];
   @throw [NSException exceptionWithName:FBAbstractMethodInvocationException reason:errMsg userInfo:nil];
 }
 
