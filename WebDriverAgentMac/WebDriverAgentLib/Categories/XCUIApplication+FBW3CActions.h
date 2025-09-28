@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
  Perform complex touch action in scope of the current application.
  
  @param actions Array of dictionaries, whose format is described in W3C spec (https://github.com/jlipps/simple-wd-spec#perform-actions)
- @param elementCache Cached elements mapping for the currrent application. The method assumes all elements are already represented by their actual instances if nil value is set
+ @param elementCache Cached elements mapping for the current application. The method assumes all elements are already represented by their actual instances if nil value is set
  @param error If there is an error, upon return contains an NSError object that describes the problem
  @return YES If the touch action has been successfully performed without errors
  */

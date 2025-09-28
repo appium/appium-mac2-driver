@@ -136,7 +136,7 @@
     },
     ],
 
-    // Chain element with singe up action
+    // Chain element with single up action
     @[@{
         @"type": @"pointer",
         @"id": @"finger1",

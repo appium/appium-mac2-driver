@@ -37,7 +37,7 @@
   SEL videoEncodingConstructorSelector = NSSelectorFromString(@"initWithCodec:frameRate:");
   if (![videoEncodingAllocated respondsToSelector:videoEncodingConstructorSelector]) {
     [[[FBErrorBuilder builder]
-      withDescription:@"'initWithCodec:frameRate:' contructor is not found on XCTVideoEncoding class"]
+      withDescription:@"'initWithCodec:frameRate:' constructor is not found on XCTVideoEncoding class"]
      buildError:error];
     return nil;
   }
@@ -69,7 +69,7 @@
   SEL screenRecordingRequestConstructorSelector = NSSelectorFromString(@"initWithScreenID:rect:preferredEncoding:");
   if (![screenRecordingRequestAllocated respondsToSelector:screenRecordingRequestConstructorSelector]) {
     [[[FBErrorBuilder builder]
-      withDescription:@"'initWithScreenID:rect:preferredEncoding:' contructor is not found on XCTScreenRecordingRequest class"]
+      withDescription:@"'initWithScreenID:rect:preferredEncoding:' constructor is not found on XCTScreenRecordingRequest class"]
      buildError:error];
     return nil;
   }

@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic, nullable) NSNumber *position;
 /*! Element's type */
 @property (readonly, nonatomic) XCUIElementType type;
-/*! Whether an element is a descendant of the previos element */
+/*! Whether an element is a descendant of the previous element */
 @property (readonly, nonatomic) BOOL isDescendant;
 /*! The ordered list of matching predicates for the current element */
 @property (readonly, nonatomic) NSArray<FBAbstractPredicateItem *> *predicates;
@@ -84,14 +84,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Method used to interpret class chain queries
- 
+
  @param classChainQuery class chain query as string. See the documentation of
    XCUIElement+FBClassChain category for more details about the expected query format
- @param error standard NSError object, which is going to be initializaed if
+ @param error standard NSError object, which is going to be initialized if
    there are query parsing errors
  @return list of parsed primitives packed to FBClassChainElement class or nil in case
    there was parsing error (the parameter will be initialized with detailed error description in such case)
- @throws FBUnknownAttributeException if any of predicates in the chain contains unknown attribute 
+ @throws FBUnknownAttributeException if any of predicates in the chain contains unknown attribute
  */
 + (nullable FBClassChain*)parseQuery:(NSString*)classChainQuery error:(NSError **)error;
 

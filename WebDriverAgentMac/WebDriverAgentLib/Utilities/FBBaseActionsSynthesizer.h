@@ -23,14 +23,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) double offset;
 
 /**
- Get the name of the corresponding raw action item. This method is expected to be overriden in subclasses.
- 
- @return The corresponding action item key in object's raw JSON reprsentation
+ Get the name of the corresponding raw action item. This method is expected to be overridden in subclasses.
+
+ @return The corresponding action item key in object's raw JSON representation
  */
 + (NSString *)actionName;
 
 /**
- Add the current gesture to XCPointerEventPath instance. This method is expected to be overriden in subclasses.
+ Add the current gesture to XCPointerEventPath instance. This method is expected to be overridden in subclasses.
  
  @param eventPath The destination XCPointerEventPath instance. If nil value is passed then a new XCPointerEventPath instance is going to be created
  @param allItems The existing actions chain to be transformed into event path
@@ -66,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
  Calculate absolute gesture position on the screen based on provided element and positionOffset values.
 
  @param element The element instance to perform the gesture on. If element equals to nil then positionOffset is considered as absolute coordinates
- @param positionOffset The actual coordinate offset. If this calue equals to nil then element's hitpoint is taken as gesture position. If element is not nil then this offset is calculated relatively to the top-left cordner of the element's position
+ @param positionOffset The actual coordinate offset. If this value equals to nil then element's hitpoint is taken as gesture position. If element is not nil then this offset is calculated relatively to the top-left cordner of the element's position
  @param error If there is an error, upon return contains an NSError object that describes the problem
  @return Adbsolute gesture position on the screen or nil if the calculation fails (for example, the element is invisible)
  */
@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) double durationOffset;
 
 /**
- Add a new gesture item to the current chain. The method is expected to be overriden in subclasses.
+ Add a new gesture item to the current chain. The method is expected to be overridden in subclasses.
  
  @param item The actual gesture instance to be added
  */
@@ -113,8 +113,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Initializes actions synthesizer. This initializer should be used only by subclasses.
- 
- @param actions The raw actions chain received from request's JSON. The format of this chain is defined by the standard, implemented in the correspoding subclass.
+
+ @param actions The raw actions chain received from request's JSON. The format of this chain is defined by the standard, implemented in the corresponding subclass.
  @param application Current application instance
  @param elementCache Elements cache, which is used to replace elements references in the chain with their instances. We assume the chain already contains element instances if this parameter is set to nil
  @param error If there is an error, upon return contains an NSError object that describes the problem
@@ -126,7 +126,7 @@ NS_ASSUME_NONNULL_BEGIN
                                    error:(NSError **)error;
 
 /**
- Synthesizes XCTest-compatible event record to be performed in the UI. This method is supposed to be overriden by subclasses.
+ Synthesizes XCTest-compatible event record to be performed in the UI. This method is supposed to be overridden by subclasses.
  
  @param error If there is an error, upon return contains an NSError object that describes the problem
  @return The generated event record or nil in case of failure

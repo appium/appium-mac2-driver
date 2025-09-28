@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic, nullable) NSNumber *displayID;
 
 /**
- Creates a custom wrapper for a screen recording reqeust
+ Creates a custom wrapper for a screen recording request
 
  @param fps FPS value, see baove
  @param codec Codex value, see above

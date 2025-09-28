@@ -18,7 +18,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/*!Controls elements binding strategy. By default elements are bind by accessiblity identifier */
+/*!Controls elements binding strategy. By default elements are bind by accessibility identifier */
 extern NSString* const AM_BOUND_ELEMENTS_BY_INDEX_SETTING;
 
 /*!Whether to use the default XCTest UI interruptions hanfling (YES by default).

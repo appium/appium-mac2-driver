@@ -32,21 +32,21 @@
 {
   return [self performClickWithButtonId:@"_XCUI:FullScreenWindow"
                                 request:request
-                           errorMessage:[NSString stringWithFormat:@"%@ window cannot be maximized because the correponding button is not available", request.session.currentApplication.description]];
+                           errorMessage:[NSString stringWithFormat:@"%@ window cannot be maximized because the corresponding button is not available", request.session.currentApplication.description]];
 }
 
 + (id<FBResponsePayload>)handleFullscreenWindow:(FBRouteRequest *)request
 {
   return [self performClickWithButtonId:@"_XCUI:FullScreenWindow"
                                 request:request
-                           errorMessage:[NSString stringWithFormat:@"%@ window cannot be put into fullscreen mode because the correponding button is not available", request.session.currentApplication.description]];
+                           errorMessage:[NSString stringWithFormat:@"%@ window cannot be put into fullscreen mode because the corresponding button is not available", request.session.currentApplication.description]];
 }
 
 + (id<FBResponsePayload>)handleMinimizeWindow:(FBRouteRequest *)request
 {
   return [self performClickWithButtonId:@"_XCUI:MinimizeWindow"
                                 request:request
-                           errorMessage:[NSString stringWithFormat:@"%@ window cannot be minimized because the correponding button is not available", request.session.currentApplication.description]];
+                           errorMessage:[NSString stringWithFormat:@"%@ window cannot be minimized because the corresponding button is not available", request.session.currentApplication.description]];
 }
 
 + (id<FBResponsePayload>)performClickWithButtonId:(NSString *)buttonId

@@ -93,19 +93,19 @@ NS_ASSUME_NONNULL_END
 
 + (NSCharacterSet *)allowedCharacters
 {
-  // This method is expected to be overriden by subclasses
+  // This method is expected to be overridden by subclasses
   return [NSCharacterSet characterSetWithCharactersInString:@""];
 }
 
 + (NSUInteger)maxLength
 {
-  // This method is expected to be overriden by subclasses
+  // This method is expected to be overridden by subclasses
   return ULONG_MAX;
 }
 
 - (NSArray<Class> *)followingTokens
 {
-  // This method is expected to be overriden by subclasses
+  // This method is expected to be overridden by subclasses
   return @[];
 }
 
@@ -314,7 +314,7 @@ static NSString *const FBAbstractMethodInvocationException = @"FBAbstractMethodI
 
 + (NSString *)enclosingMarker
 {
-  NSString *errMsg = [NSString stringWithFormat:@"The + (NSString *)enclosingMarker method is expected to be overriden by %@ class", NSStringFromClass(self.class)];
+  NSString *errMsg = [NSString stringWithFormat:@"The + (NSString *)enclosingMarker method is expected to be overridden by %@ class", NSStringFromClass(self.class)];
   @throw [NSException exceptionWithName:FBAbstractMethodInvocationException reason:errMsg userInfo:nil];
 }
 

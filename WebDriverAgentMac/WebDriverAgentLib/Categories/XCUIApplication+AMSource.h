@@ -21,12 +21,12 @@ NS_ASSUME_NONNULL_BEGIN
 @interface XCUIApplication (AMSource)
 
 /**
- Retrives XML application source representation
+ Retrieves XML application source representation
  */
 - (NSString *)am_xmlRepresentation;
 
 /**
- Retrives description application source representation.
+ Retrieves description application source representation.
  Actually, the value of debugDescription property
  */
 - (NSString *)am_descriptionRepresentation;

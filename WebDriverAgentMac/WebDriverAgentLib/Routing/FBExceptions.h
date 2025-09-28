@@ -30,16 +30,16 @@ extern NSString *const FBElementNotVisibleException;
 extern NSString *const FBTimeoutException;
 
 /**
- The exception happends if the cached element does not exist in DOM anymore
+ The exception happens if the cached element does not exist in DOM anymore
  */
 extern NSString *const FBStaleElementException;
 
 /**
- The exception happends if the provided XPath expession cannot be compiled because of a syntax error
+ The exception happens if the provided XPath expression cannot be compiled because of a syntax error
  */
 extern NSString *const FBInvalidXPathException;
 /**
- The exception happends if any internal error is triggered during XPath matching procedure
+ The exception happens if any internal error is triggered during XPath matching procedure
  */
 extern NSString *const FBXPathQueryEvaluationException;
 
