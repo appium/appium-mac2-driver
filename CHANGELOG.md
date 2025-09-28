@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/appium/appium-mac2-driver/compare/v3.0.0...v3.0.1) (2025-09-28)
+
+
+### Miscellaneous Chores
+
+* fix typos ([#344](https://github.com/appium/appium-mac2-driver/issues/344)) ([3687efa](https://github.com/appium/appium-mac2-driver/commit/3687efa3b43c83e2ec2a3f1414c6fa3b7f7da5c0))
+
 ## [3.0.0](https://github.com/appium/appium-mac2-driver/compare/v2.2.2...v3.0.0) (2025-08-17)
 
 
