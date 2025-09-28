@@ -71,8 +71,8 @@ NS_ASSUME_NONNULL_BEGIN
  @return Adbsolute gesture position on the screen or nil if the calculation fails (for example, the element is invisible)
  */
 - (nullable NSValue *)hitpointWithElement:(nullable XCUIElement *)element
-                            positionOffset:(nullable NSValue *)positionOffset
-                                     error:(NSError **)error;
+                           positionOffset:(nullable NSValue *)positionOffset
+                                    error:(NSError **)error;
 
 @end
 
@@ -121,9 +121,9 @@ NS_ASSUME_NONNULL_BEGIN
  @return The corresponding synthesizer instance or nil in case of failure (for example if `actions` is nil or empty)
  */
 - (nullable instancetype)initWithActions:(NSArray *)actions
-                           forApplication:(XCUIApplication *)application
-                             elementCache:(nullable FBElementCache *)elementCache
-                                    error:(NSError **)error;
+                          forApplication:(XCUIApplication *)application
+                            elementCache:(nullable FBElementCache *)elementCache
+                                   error:(NSError **)error;
 
 /**
  Synthesizes XCTest-compatible event record to be performed in the UI. This method is supposed to be overridden by subclasses.
