@@ -163,7 +163,7 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_INFO; // | HTTP_LOG_FLAG_TRACE;
 
 /**
  * The connection class is the class that will be used to handle connections.
- * That is, when a new connection is created, an instance of this class will be initialized.
+ * That is, when a new connection is created, an instance of this class will be intialized.
  * The default connection class is HTTPConnection.
  * If you use a different connection class, it is assumed that the class extends HTTPConnection
  **/

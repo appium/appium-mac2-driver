@@ -486,8 +486,8 @@ enum GCDAsyncSocketConfig
 		// Since we don't know the size of the read in advance,
 		// the shouldPreBuffer decision is based upon whether the returned value would fit
 		// in the current buffer without requiring a resize of the buffer.
-		//
-		// This is because, in all likelihood, the amount read from the socket will be less than the default value.
+		// 
+		// This is because, in all likelyhood, the amount read from the socket will be less than the default value.
 		// Thus we should avoid over-allocating the read buffer when we can simply use the pre-buffer instead.
 		
 		if (shouldPreBufferPtr)
@@ -601,8 +601,8 @@ enum GCDAsyncSocketConfig
 	// 5. Removing underflow from prebuffer (memmove)
 	// 
 	// Comparing the performance of the two we can see that reading
-	// data into the prebuffer first is slower due to the extra memmove.
-	//
+	// data into the prebuffer first is slower due to the extra memove.
+	// 
 	// However:
 	// The implementation of NSMutableData is open source via core foundation's CFMutableData.
 	// Decreasing the length of a mutable data object doesn't cause a realloc.
@@ -4069,8 +4069,8 @@ enum GCDAsyncSocketConfig
 
 /**
  * Finds the address of an interface description.
- * An interface description may be an interface name (en0, en1, lo0) or corresponding IP (192.168.4.34).
- *
+ * An inteface description may be an interface name (en0, en1, lo0) or corresponding IP (192.168.4.34).
+ * 
  * The interface description may optionally contain a port number at the end, separated by a colon.
  * If a non-zero port parameter is provided, any port number in the interface description is ignored.
  * 
@@ -4734,7 +4734,7 @@ enum GCDAsyncSocketConfig
 	if ([preBuffer availableBytes] > 0)
 	{
 		// Only flush the ssl buffers if the prebuffer is empty.
-		// This is to avoid growing the prebuffer infinitely large.
+		// This is to avoid growing the prebuffer inifinitely large.
 		
 		return;
 	}
@@ -4919,7 +4919,7 @@ enum GCDAsyncSocketConfig
 			// 
 			// The first buffer is one we create.
 			// SecureTransport often requests small amounts of data.
-			// This has to do with the encrypted packets that are coming across the TCP stream.
+			// This has to do with the encypted packets that are coming across the TCP stream.
 			// But it's non-optimal to do a bunch of small reads from the BSD socket.
 			// So our SSLReadFunction reads all available data from the socket (optimizing the sys call)
 			// and may store excess in the sslPreBuffer.
@@ -5170,7 +5170,7 @@ enum GCDAsyncSocketConfig
 				// - how many decypted bytes are sitting in the sslContext
 				//
 				// But we do NOT know:
-				// - how many encrypted bytes are sitting in the sslContext
+				// - how many encypted bytes are sitting in the sslContext
 				//
 				// So we play the regular game of using an upper bound instead.
 				
@@ -6306,7 +6306,7 @@ enum GCDAsyncSocketConfig
 	}
 	
 	// We're done with our writing.
-	// If we explicitly ran into a situation where the socket told us there was no room in the buffer,
+	// If we explictly ran into a situation where the socket told us there was no room in the buffer,
 	// then we immediately resume listening for notifications.
 	// 
 	// We must do this before we dequeue another write,
@@ -7560,7 +7560,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 	// Although there isn't anything in the documentation to suggest that the second attempt would fail.
 	// 
 	// Furthermore, this only seems to affect streams that are negotiating a security upgrade.
-	// In other words, the socket gets connected, there is some back-and-forth communication over the insecure
+	// In other words, the socket gets connected, there is some back-and-forth communication over the unsecure
 	// connection, and then a startTLS is issued.
 	// So this mostly affects newer protocols (XMPP, IMAP) as opposed to older protocols (HTTPS).
 	

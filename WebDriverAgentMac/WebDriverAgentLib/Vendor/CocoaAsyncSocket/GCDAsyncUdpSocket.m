@@ -1274,8 +1274,8 @@ enum GCDAsyncUdpSocketConfig
 
 /**
  * This method picks an address from the given list of addresses.
- * The address picked depends upon which protocols are disabled, deactivated, & preferred.
- *
+ * The address picked depends upon which protocols are disabled, deactived, & preferred.
+ * 
  * Returns the address family (AF_INET or AF_INET6) of the picked address,
  * or AF_UNSPEC and the corresponding error is there's a problem.
 **/
@@ -1420,8 +1420,8 @@ enum GCDAsyncUdpSocketConfig
 
 /**
  * Finds the address(es) of an interface description.
- * An interface description may be an interface name (en0, en1, lo0) or corresponding IP (192.168.4.34).
- **/
+ * An inteface description may be an interface name (en0, en1, lo0) or corresponding IP (192.168.4.34).
+**/
 - (void)convertIntefaceDescription:(NSString *)interfaceDescription
                               port:(uint16_t)port
                       intoAddress4:(NSData **)interfaceAddr4Ptr

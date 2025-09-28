@@ -94,8 +94,8 @@
  * This is the recommended port value, as it avoids possible port conflicts with other applications.
  * Technologies such as Bonjour can be used to allow other applications to automatically discover the port number.
  * 
- * Note: As is common on most OS's, you need root privileges to bind to port numbers below 1024.
- *
+ * Note: As is common on most OS's, you need root privledges to bind to port numbers below 1024.
+ * 
  * You can change the port property while the server is running, but it won't affect the running server.
  * To actually change the port the server is listening for connections on you'll need to restart the server.
  * 
@@ -172,7 +172,7 @@
  * 
  * Some examples of errors that might occur:
  * - You specified the server listen on a port which is already in use by another application.
- * - You specified the server listen on a port number below 1024, which requires root privileges.
+ * - You specified the server listen on a port number below 1024, which requires root priviledges.
  * 
  * Code Example:
  * 

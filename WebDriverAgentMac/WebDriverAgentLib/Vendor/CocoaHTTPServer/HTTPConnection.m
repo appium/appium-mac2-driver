@@ -371,7 +371,7 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_WARN; // | HTTP_LOG_FLAG_TRACE;
 
 /**
  * Attempts to parse the given range header into a series of sequential non-overlapping ranges.
- * If successful, the variables 'ranges' and 'rangeIndex' will be updated, and YES will be returned.
+ * If successfull, the variables 'ranges' and 'rangeIndex' will be updated, and YES will be returned.
  * Otherwise, NO is returned, and the range request should be ignored.
  **/
 - (BOOL)parseRangeRequest:(NSString *)rangeHeader withContentLength:(UInt64)contentLength
@@ -610,7 +610,7 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_WARN; // | HTTP_LOG_FLAG_TRACE;
   HTTPMessage *response = [[HTTPMessage alloc] initResponseWithStatusCode:206 description:nil version:HTTPVersion1_1];
   
   // We have to send each range using multipart/byteranges
-  // So each byterange has to be prefix'd and suffix'd with the boundary
+  // So each byterange has to be prefix'd and suffix'd with the boundry
   // Example:
   //
   // HTTP/1.1 206 Partial Content
@@ -1094,7 +1094,7 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_WARN; // | HTTP_LOG_FLAG_TRACE;
     }
     else
     {
-      // We're not done yet - we still have to send the closing boundary tag
+      // We're not done yet - we still have to send the closing boundry tag
       NSString *endingBoundryStr = [NSString stringWithFormat:@"\r\n--%@--\r\n", ranges_boundry];
       NSData *endingBoundryData = [endingBoundryStr dataUsingEncoding:NSUTF8StringEncoding];
       
@@ -1561,7 +1561,7 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_WARN; // | HTTP_LOG_FLAG_TRACE;
         // This could be an attempted DOS attack
         [asyncSocket disconnect];
         
-        // Explicitly return to ensure we don't do anything after the socket disconnect
+        // Explictly return to ensure we don't do anything after the socket disconnect
         return;
       }
       else
@@ -1828,7 +1828,7 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_WARN; // | HTTP_LOG_FLAG_TRACE;
         // This could be an attempted DOS attack
         [asyncSocket disconnect];
         
-        // Explicitly return to ensure we don't do anything after the socket disconnect
+        // Explictly return to ensure we don't do anything after the socket disconnect
         return;
       }
       
@@ -1961,7 +1961,7 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_WARN; // | HTTP_LOG_FLAG_TRACE;
       // Terminate the connection
       [asyncSocket disconnect];
       
-      // Explicitly return to ensure we don't do anything after the socket disconnects
+      // Explictly return to ensure we don't do anything after the socket disconnects
       return;
     }
     else
@@ -2063,7 +2063,7 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_WARN; // | HTTP_LOG_FLAG_TRACE;
 
 /**
  * This method is called if the response encounters some critical error,
- * and it will be unable to fulfill the request.
+ * and it will be unable to fullfill the request.
  **/
 - (void)responseDidAbort:(NSObject<HTTPResponse> *)sender
 {

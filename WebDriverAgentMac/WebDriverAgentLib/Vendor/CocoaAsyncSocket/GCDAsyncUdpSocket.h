@@ -64,8 +64,8 @@ typedef NS_ERROR_ENUM(GCDAsyncUdpSocketErrorDomain, GCDAsyncUdpSocketError) {
 
 /**
  * Called if an error occurs while trying to send a datagram.
- * This could be due to a timeout, or something more serious such as the data being too large to fit in a single packet.
- **/
+ * This could be due to a timeout, or something more serious such as the data being too large to fit in a sigle packet.
+**/
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError * _Nullable)error;
 
 /**
@@ -543,7 +543,7 @@ typedef BOOL (^GCDAsyncUdpSocketSendFilterBlock)(NSData *data, NSData *address, 
  *     If passing NSMutableData, please read the thread-safety notice below.
  * 
  * @param timeout
- *    The timeout for the send operation.
+ *    The timeout for the send opeartion.
  *    If the timeout value is negative, the send operation will not use a timeout.
  * 
  * @param tag
@@ -592,7 +592,7 @@ typedef BOOL (^GCDAsyncUdpSocketSendFilterBlock)(NSData *data, NSData *address, 
  *    The port of the host to send to.
  * 
  * @param timeout
- *    The timeout for the send operation.
+ *    The timeout for the send opeartion.
  *    If the timeout value is negative, the send operation will not use a timeout.
  * 
  * @param tag
@@ -640,7 +640,7 @@ typedef BOOL (^GCDAsyncUdpSocketSendFilterBlock)(NSData *data, NSData *address, 
  *     The address to send the data to (specified as a sockaddr structure wrapped in a NSData object).
  * 
  * @param timeout
- *    The timeout for the send operation.
+ *    The timeout for the send opeartion.
  *    If the timeout value is negative, the send operation will not use a timeout.
  * 
  * @param tag
@@ -710,12 +710,12 @@ typedef BOOL (^GCDAsyncUdpSocketSendFilterBlock)(NSData *data, NSData *address, 
 
 /**
  * There are two modes of operation for receiving packets: one-at-a-time & continuous.
- *
- * In one-at-a-time mode, you call receiveOnce every time your delegate is ready to process an incoming udp packet.
+ * 
+ * In one-at-a-time mode, you call receiveOnce everytime your delegate is ready to process an incoming udp packet.
  * Receiving packets one-at-a-time may be better suited for implementing certain state machine code,
  * where your state machine may not always be ready to process incoming packets.
- *
- * In continuous mode, the delegate is invoked immediately every time incoming udp packets are received.
+ * 
+ * In continuous mode, the delegate is invoked immediately everytime incoming udp packets are received.
  * Receiving packets continuously is better suited to real-time streaming applications.
  * 
  * You may switch back and forth between one-at-a-time mode and continuous mode.
@@ -736,12 +736,12 @@ typedef BOOL (^GCDAsyncUdpSocketSendFilterBlock)(NSData *data, NSData *address, 
 
 /**
  * There are two modes of operation for receiving packets: one-at-a-time & continuous.
- *
- * In one-at-a-time mode, you call receiveOnce every time your delegate is ready to process an incoming udp packet.
+ * 
+ * In one-at-a-time mode, you call receiveOnce everytime your delegate is ready to process an incoming udp packet.
  * Receiving packets one-at-a-time may be better suited for implementing certain state machine code,
  * where your state machine may not always be ready to process incoming packets.
- *
- * In continuous mode, the delegate is invoked immediately every time incoming udp packets are received.
+ * 
+ * In continuous mode, the delegate is invoked immediately everytime incoming udp packets are received.
  * Receiving packets continuously is better suited to real-time streaming applications.
  * 
  * You may switch back and forth between one-at-a-time mode and continuous mode.
@@ -968,7 +968,7 @@ typedef BOOL (^GCDAsyncUdpSocketSendFilterBlock)(NSData *data, NSData *address, 
  * See the documentation for the performBlock: method above.
  * 
  * Provides access to the socket's file descriptor(s).
- * If the socket isn't connected, or explicitly bound to a particular interface,
+ * If the socket isn't connected, or explicity bound to a particular interface,
  * it might actually have multiple internal socket file descriptors - one for IPv4 and one for IPv6.
 **/
 - (int)socketFD;
