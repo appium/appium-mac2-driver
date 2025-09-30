@@ -702,6 +702,32 @@ Name | Type | Description | Example
 id | number | Display identifier | 12345
 isMain | boolean | Is `true` if the display is configured as a main system display | false
 
+### macos: setClipboard
+
+Set the macOS clipboard content as base64-encoded string. The existing clipboard content (if present) will be cleared.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+content | string | yes | The content to be set as base64 encoded string | hello
+contentType | string | no | The type of the content to set. Only `plaintext` (default), `image` and `url` are supported. If set to `url`, then `content` must be a valid URL. If set to `image`, then `content` must contain a valid PNG or TIFF image payload. | url
+
+### macos: getClipboard
+
+Get the macOS clipboard content as base64-encoded string.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+contentType | string | no | The type of the content to get. Only `plaintext` (default), `image` and `url` are supported. | image
+
+#### Returns
+
+The actual clipboard content encoded into base64 string. An empty string is returned if the clipboard
+contains no data for the given content type.
+
 
 ## Application Under Test Concept
 

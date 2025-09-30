@@ -333,4 +333,15 @@ export const executeMethodMap = {
   'macos: listDisplays': {
     command: 'macosListDisplays',
   },
+  'macos: getClipboard': {
+    command: 'macosGetClipboard',
+    params: {optional: ['contentType']},
+  },
+  'macos: setClipboard': {
+    command: 'macosSetClipboard',
+    params: {
+      required: ['content'],
+      optional: ['contentType'],
+    },
+  },
 } as const satisfies ExecuteMethodMap<any>;
