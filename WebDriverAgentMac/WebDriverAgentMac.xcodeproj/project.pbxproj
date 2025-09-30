@@ -139,6 +139,9 @@
 		714CA7022566475200353B27 /* XCUIApplication+AMSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA7002566475200353B27 /* XCUIApplication+AMSource.m */; };
 		714CA7062566487B00353B27 /* FBXPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA7042566487B00353B27 /* FBXPath.h */; };
 		714CA7072566487B00353B27 /* FBXPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA7052566487B00353B27 /* FBXPath.m */; };
+		715117522E8C452E00C90122 /* AMPasteboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 715117512E8C452E00C90122 /* AMPasteboard.m */; };
+		715117532E8C452E00C90122 /* AMPasteboard.h in Headers */ = {isa = PBXBuildFile; fileRef = 715117502E8C452E00C90122 /* AMPasteboard.h */; };
+		715117552E8C4C3300C90122 /* AMPasteboardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715117542E8C4C3300C90122 /* AMPasteboardTests.m */; };
 		71688A98256461ED0007F55B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 71688A97256461ED0007F55B /* AppDelegate.m */; };
 		71688A9B256461ED0007F55B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71688A9A256461ED0007F55B /* ViewController.m */; };
 		71688A9D256461F00007F55B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71688A9C256461F00007F55B /* Assets.xcassets */; };
@@ -310,6 +313,9 @@
 		714CA7052566487B00353B27 /* FBXPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBXPath.m; sourceTree = "<group>"; };
 		714CA709256648A100353B27 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		714CA732256668F600353B27 /* XCTAutomationSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTAutomationSupport.framework; path = Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework; sourceTree = DEVELOPER_DIR; };
+		715117502E8C452E00C90122 /* AMPasteboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMPasteboard.h; sourceTree = "<group>"; };
+		715117512E8C452E00C90122 /* AMPasteboard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMPasteboard.m; sourceTree = "<group>"; };
+		715117542E8C4C3300C90122 /* AMPasteboardTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMPasteboardTests.m; sourceTree = "<group>"; };
 		7151ACE12564EF5F008B8B2A /* RouteRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouteRequest.m; sourceTree = "<group>"; };
 		7151ACE22564EF5F008B8B2A /* HTTPResponseProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPResponseProxy.m; sourceTree = "<group>"; };
 		7151ACE32564EF5F008B8B2A /* Route.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Route.m; sourceTree = "<group>"; };
@@ -740,6 +746,8 @@
 				713A9D3B2566AA2300118D07 /* AMGeometryUtils.m */,
 				71AA30BD25EFF81900151CED /* AMKeyboardUtils.h */,
 				71AA30BE25EFF81900151CED /* AMKeyboardUtils.m */,
+				715117502E8C452E00C90122 /* AMPasteboard.h */,
+				715117512E8C452E00C90122 /* AMPasteboard.m */,
 				71E109202D55EBD0008A800D /* AMScreenUtils.h */,
 				71E109212D55EBD0008A800D /* AMScreenUtils.m */,
 				718D2C302567FED3005F533B /* AMSessionCapabilities.h */,
@@ -852,6 +860,7 @@
 				71B00E9C2566D7F10010DA73 /* AMIntegrationTestCase.h */,
 				71B00E8D2566D4BA0010DA73 /* AMIntegrationTestCase.m */,
 				718D2C282567E6D0005F533B /* AMSessionTests.m */,
+				715117542E8C4C3300C90122 /* AMPasteboardTests.m */,
 				71B00EA52566DBAF0010DA73 /* AMSourceTests.m */,
 				71B8B683267265D7009CE50C /* AMVariousElementTests.m */,
 				7180C21C257AC27F008FA870 /* AMW3CActionsTests.m */,
@@ -968,6 +977,7 @@
 				7168D5AD258B849B00EEFA12 /* LRUCacheNode.h in Headers */,
 				7109C0672565B603006BFD13 /* HTTPResponseProxy.h in Headers */,
 				7109C0242565B59A006BFD13 /* FBWebServer.h in Headers */,
+				715117532E8C452E00C90122 /* AMPasteboard.h in Headers */,
 				7109C0092565B56B006BFD13 /* FBRuntimeUtils.h in Headers */,
 				7109C0612565B5FA006BFD13 /* HTTPResponse.h in Headers */,
 				7180C203257A9FAC008FA870 /* CDStructures.h in Headers */,
@@ -1210,6 +1220,7 @@
 				713A9D12256683E900118D07 /* XCUIElementQuery+AMHelpers.m in Sources */,
 				7109C01A2565B58A006BFD13 /* FBRouteRequest.m in Sources */,
 				71B8B67A26724B9F009CE50C /* XCUIElement+AMSwipe.m in Sources */,
+				715117522E8C452E00C90122 /* AMPasteboard.m in Sources */,
 				719E6A6F25822DB800777988 /* XCUIApplication+AMUIInterruptions.m in Sources */,
 				7109C07D2565B61D006BFD13 /* RoutingHTTPServer.m in Sources */,
 				7109C06D2565B60A006BFD13 /* Route.m in Sources */,
@@ -1249,6 +1260,7 @@
 				71336AF72BD15B4D00997FF4 /* AMDeviceTests.m in Sources */,
 				71B00EA62566DBAF0010DA73 /* AMSourceTests.m in Sources */,
 				718D2C212567D8A8005F533B /* AMEditElementTests.m in Sources */,
+				715117552E8C4C3300C90122 /* AMPasteboardTests.m in Sources */,
 				71B00E8E2566D4BA0010DA73 /* AMIntegrationTestCase.m in Sources */,
 				71B00EA02566D9570010DA73 /* AMFindElementTests.m in Sources */,
 				718D2C082567A028005F533B /* AMElementAttributesTests.m in Sources */,
