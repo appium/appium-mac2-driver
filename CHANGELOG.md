@@ -1,3 +1,10 @@
+## [3.1.0](https://github.com/appium/appium-mac2-driver/compare/v3.0.1...v3.1.0) (2025-10-01)
+
+
+### Features
+
+* Add clipboard support ([#346](https://github.com/appium/appium-mac2-driver/issues/346)) ([a3652fd](https://github.com/appium/appium-mac2-driver/commit/a3652fd2e29c68a30f677200ad8a2dd9148898d8))
+
 ## [3.0.1](https://github.com/appium/appium-mac2-driver/compare/v3.0.0...v3.0.1) (2025-09-28)
 
 
