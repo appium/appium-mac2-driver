@@ -30,6 +30,9 @@ NS_ASSUME_NONNULL_BEGIN
 /*! Enables XCTest automated screen recordings taking in Xcode 15+ */
 @property BOOL automaticScreenRecordings;
 
+/*! Whether to use custom snapshotting mechanism to fetch full element's text payload instead of the first 512 chars  */
+@property BOOL fetchFullText;
+
 /**
  The range of ports that the HTTP Server should attempt to bind on launch
  */

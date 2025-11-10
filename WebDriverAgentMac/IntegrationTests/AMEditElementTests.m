@@ -38,8 +38,7 @@
 
 - (void)testSendingTextIntoNonFocusedEdit
 {
-  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"placeholderValue.length == 0"];
-  XCUIElement *edit = [self.testedApplication.textFields matchingPredicate:predicate].firstMatch;
+  XCUIElement *edit = self.testedApplication.textFields.firstMatch;
   NSString *text = @"yolo😎";
   [edit am_setValue:text];
   XCTAssertTrue(edit.am_hasKeyboardInputFocus);
@@ -50,8 +49,7 @@
 
 - (void)testSendingTextIntoNonFocusedEditWithPlaceholderText
 {
-  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"placeholderValue.length > 0"];
-  XCUIElement *edit = [self.testedApplication.textFields matchingPredicate:predicate].firstMatch;
+  XCUIElement *edit = self.testedApplication.textFields.firstMatch;
   NSString *text = @"yolo😎";
   [edit am_setValue:text];
   XCTAssertTrue(edit.am_hasKeyboardInputFocus);

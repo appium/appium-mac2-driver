@@ -17,5 +17,5 @@
 #import "AMSettings.h"
 
 NSString* const AM_BOUND_ELEMENTS_BY_INDEX_SETTING = @"boundElementsByIndex";
-
 NSString* const AM_USE_DEFAULT_UI_INTERRUPTIONS_HANDLING_SETTING = @"useDefaultUiInterruptionsHandling";
+NSString* const AM_FETCH_FULL_TEXT = @"fetchFullText";

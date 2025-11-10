@@ -11,6 +11,7 @@
 
 static NSUInteger const DefaultStartingPort = 10100;
 static NSUInteger const DefaultPortRange = 100;
+static BOOL FBFetchFullText = NO;
 
 @implementation FBConfiguration
 
@@ -73,6 +74,16 @@ static FBConfiguration *instance;
 {
   [[NSUserDefaults standardUserDefaults] setBool:!automaticScreenRecordings
                                           forKey:@"DisableDiagnosticScreenRecordings"];
+}
+
+- (BOOL)fetchFullText
+{
+  return FBFetchFullText;
+}
+
+- (void)setFetchFullText:(BOOL)fetchFullText
+{
+  FBFetchFullText = fetchFullText;
 }
 
 - (NSRange)bindingPortRange

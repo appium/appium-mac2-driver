@@ -25,4 +25,7 @@ extern NSString* const AM_BOUND_ELEMENTS_BY_INDEX_SETTING;
  See https://developer.apple.com/videos/play/wwdc2020/10220/ for more details  */
 extern NSString* const AM_USE_DEFAULT_UI_INTERRUPTIONS_HANDLING_SETTING;
 
+/*! Whether to use custom snapshotting mechanism to fetch full element's text payload instead of the first 512 chars  */
+extern NSString* const AM_FETCH_FULL_TEXT;
+
 NS_ASSUME_NONNULL_END

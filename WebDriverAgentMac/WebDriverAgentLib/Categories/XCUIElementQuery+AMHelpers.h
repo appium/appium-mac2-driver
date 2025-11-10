@@ -34,6 +34,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSArray<XCUIElement *> *)am_allMatches;
 
+/**
+ Returns single unique matching snapshot for the given query
+
+ @param error The error instance if there was a failure while retrieveing the snapshot
+ @returns The unqiue snapshot or nil if the element is stale
+ */
+- (nullable id<XCUIElementSnapshot>)am_uniqueSnapshotWithError:(NSError **)error;
+
 @end
 
 NS_ASSUME_NONNULL_END

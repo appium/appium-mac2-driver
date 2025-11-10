@@ -34,9 +34,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSDictionary<NSString *, NSNumber *> *)am_rect;
 
 /**
- Element text
+ Element text. If no text is found then an empty string is returned.
+
+ @throws Error if `fetchFullText` setting is enabled and there was an error while fetching the snapshot
  */
-- (nullable NSString *)am_text;
+- (NSString *)am_text;
 
 /**
  Element type represented as string
