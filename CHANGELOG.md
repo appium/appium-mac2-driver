@@ -1,3 +1,10 @@
+## [3.2.0](https://github.com/appium/appium-mac2-driver/compare/v3.1.0...v3.2.0) (2025-11-11)
+
+
+### Features
+
+* Add a setting that allows to fetch full element text ([#347](https://github.com/appium/appium-mac2-driver/issues/347)) ([a8b9e7e](https://github.com/appium/appium-mac2-driver/commit/a8b9e7ee1c0b576c04eaafb8af0d8649330ffc3b))
+
 ## [3.1.0](https://github.com/appium/appium-mac2-driver/compare/v3.0.1...v3.1.0) (2025-10-01)
 
 
