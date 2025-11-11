@@ -1,4 +1,4 @@
-import WDA_MAC_SERVER from '../../lib/wda-mac';
+import { WDA_MAC_SERVER } from '../../lib/wda-mac';
 
 describe('WDAMacServer', function () {
   let chai;
