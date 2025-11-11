@@ -17,10 +17,12 @@
 #import "XCUIElement+AMAttributes.h"
 
 #import "AMGeometryUtils.h"
+#import "FBConfiguration.h"
 #import "FBElementTypeTransformer.h"
 #import "FBElementUtils.h"
 #import "FBExceptions.h"
 #import "FBMacros.h"
+#import "XCUIElementQuery+AMHelpers.h"
 
 @implementation XCUIElement (AMAttributes)
 
@@ -64,23 +66,20 @@
 
 - (NSString *)am_text
 {
-  NSString *value = [FBElementUtils stringValueWithValue:self.value];
-  if (nil != value && value.length > 0) {
-    return value;
+  if (!FBConfiguration.sharedConfiguration.fetchFullText) {
+    return [self am_textWithSource:self];
   }
-  NSString *label = self.label;
-  if (nil != label && label.length > 0) {
-    return label;
+
+  NSError *error;
+  XCUIElementQuery *query = [self valueForKey:@"query"];
+  id<XCUIElementAttributes> snapshot = [query am_uniqueSnapshotWithError:&error];
+  if (nil != snapshot) {
+    return [self am_textWithSource:snapshot];
   }
-  NSString *placeholderValue = self.placeholderValue;
-  if (nil != placeholderValue && placeholderValue.length > 0) {
-    return placeholderValue;
-  }
-  NSString *title = self.title;
-  if (nil != title && title.length > 0) {
-    return title;
-  }
-  return @"";
+
+  NSString *reason = [NSString stringWithFormat:@"Cannot extract the full text of '%@' element. Original error: %@",
+    self.description, error.description];
+  @throw [NSException exceptionWithName:FBInvalidElementStateException reason:reason userInfo:@{}];
 }
 
 - (NSString *)am_type
@@ -92,6 +91,22 @@
 {
   NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hasKeyboardFocus == YES"];
   return [predicate evaluateWithObject:self];
+}
+
+- (NSString *)am_textWithSource:(id<XCUIElementAttributes>)source
+{
+  NSArray<NSString *> *candidates = @[
+    [FBElementUtils stringValueWithValue:source.value],
+    source.label,
+    source.placeholderValue,
+    source.title
+  ];
+  for (NSString *text in candidates) {
+    if (nil != text && text.length > 0) {
+      return text;
+    }
+  }
+  return @"";
 }
 
 @end

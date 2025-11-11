@@ -32,4 +32,21 @@
     : self.allElementsBoundByAccessibilityElement;
 }
 
+- (id<XCUIElementSnapshot>)am_uniqueSnapshotWithError:(NSError **)error
+{
+  SEL selector = NSSelectorFromString(@"uniqueMatchingSnapshotWithError:");
+  NSMethodSignature *signature = [self methodSignatureForSelector:selector];
+  NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+  invocation.target = self;
+  invocation.selector = selector;
+
+  [invocation setArgument:&error atIndex:2]; // index 0 = self, 1 = _cmd, 2 = first real argument
+
+  [invocation invoke];
+
+  __unsafe_unretained id returnValue = nil;
+  [invocation getReturnValue:&returnValue];
+  return returnValue;
+}
+
 @end

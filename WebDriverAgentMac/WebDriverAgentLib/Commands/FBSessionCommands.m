@@ -237,6 +237,7 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
     @{
       AM_BOUND_ELEMENTS_BY_INDEX_SETTING: @(FBSession.activeSession.boundElementsByIndex),
       AM_USE_DEFAULT_UI_INTERRUPTIONS_HANDLING_SETTING: @(!application.am_doesNotHandleUIInterruptions),
+      AM_FETCH_FULL_TEXT: @(FBConfiguration.sharedConfiguration.fetchFullText),
     }
   );
 }
@@ -251,6 +252,9 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
   if (nil != [settings objectForKey:AM_USE_DEFAULT_UI_INTERRUPTIONS_HANDLING_SETTING]) {
     XCUIApplication *application = FBSession.activeSession.currentApplication;
     application.am_doesNotHandleUIInterruptions = ![[settings objectForKey:AM_USE_DEFAULT_UI_INTERRUPTIONS_HANDLING_SETTING] boolValue];
+  }
+  if (nil != [settings objectForKey:AM_FETCH_FULL_TEXT]) {
+    FBConfiguration.sharedConfiguration.fetchFullText = [settings objectForKey:AM_FETCH_FULL_TEXT];
   }
 
   return [self handleGetSettings:request];
