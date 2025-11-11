@@ -16,21 +16,19 @@ env:
   CI: true
 
 jobs:
-  build:
+  macos_matrix:
+    uses: ./.github/workflows/macos-matrix.yml
 
+  build:
+    needs:
+    - macos_matrix
     # https://github.com/actions/runner-images/tree/main/images/macos
     strategy:
       matrix:
-        include:
-        - xcodeVersion: '14.3.1'
-          platform: macos-13
-        - xcodeVersion: '15.4'
-          platform: macos-14
-        - xcodeVersion: '16.0'
-          platform: macos-15
+        include: ${{ fromJSON(needs.macos_matrix.outputs.matrix) }}
       fail-fast: false
 
-    runs-on: ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
 
     name: e2e
     steps:
@@ -44,7 +42,7 @@ jobs:
     - name: Select Xcode
       uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: "${{ matrix.xcodeVersion }}"
+        xcode-version: "${{ matrix.xcode_version }}"
 
     - run: |
         appium_ver=$(node -p "require('./package.json').peerDependencies?.appium")
