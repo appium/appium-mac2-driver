@@ -1,0 +1,26 @@
+name: macOS Matrix
+
+on:
+  workflow_call:
+    outputs:
+      matrix:
+        description: "macOS and Xcode version matrix"
+        value: ${{ jobs.matrix.outputs.matrix }}
+
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        # https://github.com/actions/runner-images/tree/main/images/macos
+        run: |
+          matrix='[
+            {"os":"macos-14","xcode_version":"15.4"},
+            {"os":"macos-15","xcode_version":"16.4"},
+            {"os":"macos-26","xcode_version":"26.0"}
+          ]'
+          compact_matrix=$(echo "$matrix" | jq -c . 2>/dev/null || echo "$matrix" | tr -d '\n')
+          echo "matrix=$compact_matrix" >> $GITHUB_OUTPUT
+

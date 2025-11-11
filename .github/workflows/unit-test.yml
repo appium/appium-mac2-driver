@@ -23,11 +23,13 @@ jobs:
       id: generate-matrix
       uses: msimerson/node-lts-versions@v1
 
+  macos_matrix:
+    uses: ./.github/workflows/macos-matrix.yml
+
   test:
     needs:
     - prepare_matrix
     strategy:
-      # TODO: remove after nodejs 22.5.1 is available
       fail-fast: false
       matrix:
         node-version: ${{ fromJSON(needs.prepare_matrix.outputs.versions) }}
@@ -46,15 +48,11 @@ jobs:
       name: Run unit tests
 
   analyze_wda:
+    needs:
+    - macos_matrix
     strategy:
       matrix:
-        include:
-        - os: macos-13
-          xcode_version: 14.3.1
-        - os: macos-14
-          xcode_version: 15.4
-        - os: macos-15
-          xcode_version: 16.1
+        include: ${{ fromJSON(needs.macos_matrix.outputs.matrix) }}
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
