@@ -22,7 +22,6 @@ jobs:
   build:
     needs:
     - macos_matrix
-    # https://github.com/actions/runner-images/tree/main/images/macos
     strategy:
       matrix:
         include: ${{ fromJSON(needs.macos_matrix.outputs.matrix) }}
