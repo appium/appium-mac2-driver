@@ -10,6 +10,12 @@ import { SubProcess, exec } from 'teen_process';
 import { waitForCondition } from 'asyncbox';
 import { checkPortStatus } from 'portscanner';
 import { execSync } from 'child_process';
+import type {
+  HTTPMethod,
+  HTTPBody,
+  ProxyResponse,
+  ProxyOptions,
+} from '@appium/types';
 import { listChildrenProcessIds, getModuleRoot } from './utils';
 
 const log = logger.getLogger('WebDriverAgentMac');
@@ -24,69 +30,55 @@ const STARTUP_TIMEOUT_MS = 120000;
 const DEFAULT_SYSTEM_PORT = 10100;
 const DEFAULT_SYSTEM_HOST = '127.0.0.1';
 const DEFAULT_SHOW_SERVER_LOGS = false;
-const RUNNING_PROCESS_IDS = [];
+const RUNNING_PROCESS_IDS: (string | number)[] = [];
 const RECENT_UPGRADE_TIMESTAMP_PATH = path.join('.appium', 'webdriveragent_mac', 'upgrade.time');
 const RECENT_MODULE_VERSION_ITEM_NAME = 'recentWdaModuleVersion';
 
-
-async function cleanupObsoleteProcesses () {
-  if (!_.isEmpty(RUNNING_PROCESS_IDS)) {
-    log.debug(`Cleaning up ${RUNNING_PROCESS_IDS.length} obsolete ` +
-      util.pluralize('process', RUNNING_PROCESS_IDS.length, false));
-    try {
-      await exec('kill', ['-9', ...RUNNING_PROCESS_IDS]);
-    } catch {}
-    _.pullAll(RUNNING_PROCESS_IDS, RUNNING_PROCESS_IDS);
-  }
+export interface SessionOptions {
+  reqBasePath?: string;
 }
 
-process.once('exit', () => {
-  if (!_.isEmpty(RUNNING_PROCESS_IDS)) {
-    try {
-      execSync(`kill -9 ${RUNNING_PROCESS_IDS.join(' ')}`);
-    } catch {}
-    _.pullAll(RUNNING_PROCESS_IDS, RUNNING_PROCESS_IDS);
-  }
-});
-
-
 export class WDAMacProxy extends JWProxy {
-  /** @type {boolean|undefined} */
-  didProcessExit;
+  public didProcessExit: boolean = false;
 
-  async proxyCommand (url, method, body = null) {
+  override async proxyCommand(
+    url: string,
+    method: HTTPMethod,
+    body: HTTPBody = null,
+  ): Promise<[ProxyResponse, HTTPBody]> {
     if (this.didProcessExit) {
       throw new errors.InvalidContextError(
         `'${method} ${url}' cannot be proxied to Mac2 Driver server because ` +
-        'its process is not running (probably crashed). Check the Appium log for more details');
+          'its process is not running (probably crashed). Check the Appium log for more details',
+      );
     }
     return await super.proxyCommand(url, method, body);
   }
 }
 
 class WDAMacProcess {
-  constructor () {
-    this.showServerLogs = DEFAULT_SHOW_SERVER_LOGS;
-    this.port = DEFAULT_SYSTEM_PORT;
-    this.host = DEFAULT_SYSTEM_HOST;
-    this.bootstrapRoot = DEFAULT_WDA_ROOT;
-    this.proc = null;
-  }
+  public port: number = DEFAULT_SYSTEM_PORT;
+  public host: string = DEFAULT_SYSTEM_HOST;
+  public bootstrapRoot: string = DEFAULT_WDA_ROOT;
+  public proc: SubProcess | null = null;
+  private _showServerLogs: boolean = DEFAULT_SHOW_SERVER_LOGS;
 
-  get isRunning () {
+  get isRunning (): boolean {
     return !!(this.proc?.isRunning);
   }
 
-  get pid () {
+  get pid (): number | null {
     return this.isRunning && this.proc ? this.proc.pid : null;
   }
 
-  async listChildrenPids () {
+  async listChildrenPids (): Promise<string[]> {
     return this.pid ? (await listChildrenProcessIds(this.pid)) : [];
   }
 
-  async cleanupProjectIfFresh () {
-    const packageInfo = JSON.parse(await fs.readFile(path.join(getModuleRoot(), 'package.json'), 'utf8'));
+  async cleanupProjectIfFresh (): Promise<void> {
+    const packageInfo = JSON.parse(
+      await fs.readFile(path.join(getModuleRoot(), 'package.json'), 'utf8')
+    ) as { name: string; version: string };
     const box = strongbox(packageInfo.name);
     let boxItem = box.getItem(RECENT_MODULE_VERSION_ITEM_NAME);
     if (!boxItem) {
@@ -97,7 +89,7 @@ class WDAMacProcess {
         // TODO: to switch from a hardcoded file path to the strongbox usage.
         try {
           boxItem = await box.createItemWithValue(RECENT_MODULE_VERSION_ITEM_NAME, '1.5.4');
-        } catch (e) {
+        } catch (e: any) {
           log.warn(`The actual module version cannot be persisted: ${e.message}`);
           return;
         }
@@ -105,7 +97,7 @@ class WDAMacProcess {
         log.info('There is no need to perform the project cleanup. A fresh install has been detected');
         try {
           await box.createItemWithValue(RECENT_MODULE_VERSION_ITEM_NAME, packageInfo.version);
-        } catch (e) {
+        } catch (e: any) {
           log.warn(`The actual module version cannot be persisted: ${e.message}`);
         }
         return;
@@ -115,7 +107,7 @@ class WDAMacProcess {
     let recentModuleVersion = await boxItem.read();
     try {
       recentModuleVersion = util.coerceVersion(recentModuleVersion, true);
-    } catch (e) {
+    } catch (e: any) {
       log.warn(`The persisted module version string has been damaged: ${e.message}`);
       log.info(`Updating it to '${packageInfo.version}' assuming the project cleanup is not needed`);
       await boxItem.write(packageInfo.version);
@@ -139,39 +131,17 @@ class WDAMacProcess {
       ];
       await exec(XCODEBUILD, args, {cwd: this.bootstrapRoot});
       await boxItem.write(packageInfo.version);
-    } catch (e) {
+    } catch (e: any) {
       log.warn(`Cannot perform project cleanup. Original error: ${e.stderr || e.message}`);
     }
   }
 
-  hasSameOpts ({ showServerLogs, systemPort, systemHost, bootstrapRoot }) {
-    if (_.isBoolean(showServerLogs) && this.showServerLogs !== showServerLogs
-      || _.isNil(showServerLogs) && this.showServerLogs !== DEFAULT_SHOW_SERVER_LOGS) {
-      return false;
-    }
-    if (systemPort && this.port !== systemPort
-      || !systemPort && this.port !== DEFAULT_SYSTEM_PORT) {
-      return false;
-    }
-    if (systemHost && this.host !== systemHost
-      || !systemHost && this.host !== DEFAULT_SYSTEM_HOST) {
-      return false;
-    }
-    if (bootstrapRoot && this.bootstrapRoot !== bootstrapRoot
-      || !bootstrapRoot && this.bootstrapRoot !== DEFAULT_WDA_ROOT) {
-      return false;
-    }
-
-    return true;
-  }
-
-  async init (opts = {}) {
-    // @ts-ignore TODO: Make opts typed
+  async init (opts: WDAMacProcessInitOptions = {}): Promise<boolean> {
     if (this.isRunning && this.hasSameOpts(opts)) {
       return false;
     }
 
-    this.showServerLogs = opts.showServerLogs ?? this.showServerLogs;
+    this._showServerLogs = opts.showServerLogs ?? this._showServerLogs;
     this.port = opts.systemPort ?? this.port;
     this.host = opts.systemHost ?? this.host;
     this.bootstrapRoot = opts.bootstrapRoot ?? this.bootstrapRoot;
@@ -185,7 +155,7 @@ class WDAMacProcess {
     await this.kill();
     await cleanupObsoleteProcesses();
 
-    let xcodebuild;
+    let xcodebuild: string;
     try {
       xcodebuild = await fs.which(XCODEBUILD);
     } catch {
@@ -198,7 +168,7 @@ class WDAMacProcess {
 
     log.debug(`Using ${this.host} as server host`);
     log.debug(`Using port ${this.port}`);
-    const isPortBusy = async () => (await checkPortStatus(this.port, this.host)) === 'open';
+    const isPortBusy = async (): Promise<boolean> => (await checkPortStatus(this.port, this.host)) === 'open';
     if (await isPortBusy()) {
       log.warn(`The port #${this.port} at ${this.host} is busy. ` +
         `Assuming it is an obsolete WDA server instance and ` +
@@ -214,7 +184,7 @@ class WDAMacProcess {
           waitMs: 3000,
           intervalMs: 100,
         });
-      } catch (e) {
+      } catch (e: any) {
         log.warn(`Did not know how to terminate the process at ${this.host}:${this.port}: ${e.message}. ` +
           `Perhaps, it is not a WDA server, which is hogging the port?`);
         throw new Error(`The port #${this.port} at ${this.host} is busy. ` +
@@ -239,13 +209,13 @@ class WDAMacProcess {
       cwd: this.bootstrapRoot,
       env,
     });
-    if (!this.showServerLogs) {
+    if (!this._showServerLogs) {
       log.info(`Mac2Driver host process logging is disabled. ` +
         `All the ${XCODEBUILD} output is going to be suppressed. ` +
         `Set the 'showServerLogs' capability to 'true' if this is an undesired behavior`);
     }
     this.proc.on('output', (stdout, stderr) => {
-      if (!this.showServerLogs) {
+      if (!this._showServerLogs) {
         return;
       }
 
@@ -262,7 +232,7 @@ class WDAMacProcess {
     return true;
   }
 
-  async stop () {
+  async stop (): Promise<void> {
     if (!this.isRunning) {
       return;
     }
@@ -276,7 +246,7 @@ class WDAMacProcess {
     await this.proc?.stop('SIGTERM', 3000);
   }
 
-  async kill () {
+  async kill (): Promise<void> {
     if (!this.isRunning) {
       return;
     }
@@ -291,70 +261,183 @@ class WDAMacProcess {
       await this.proc?.stop('SIGKILL');
     } catch {}
   }
+
+  private hasSameOpts (opts: WDAMacProcessInitOptions): boolean {
+    const { showServerLogs, systemPort, systemHost, bootstrapRoot } = opts;
+    if (_.isBoolean(showServerLogs) && this._showServerLogs !== showServerLogs
+      || _.isNil(showServerLogs) && this._showServerLogs !== DEFAULT_SHOW_SERVER_LOGS) {
+      return false;
+    }
+    if (systemPort && this.port !== systemPort
+      || !systemPort && this.port !== DEFAULT_SYSTEM_PORT) {
+      return false;
+    }
+    if (systemHost && this.host !== systemHost
+      || !systemHost && this.host !== DEFAULT_SYSTEM_HOST) {
+      return false;
+    }
+    if (bootstrapRoot && this.bootstrapRoot !== bootstrapRoot
+      || !bootstrapRoot && this.bootstrapRoot !== DEFAULT_WDA_ROOT) {
+      return false;
+    }
+
+    return true;
+  }
 }
 
 export class WDAMacServer {
-  /** @type {WDAMacProxy} */
-  proxy;
+  private _proxy: WDAMacProxy | null = null;
+  private _process: WDAMacProcess | null = null;
+  private _serverStartupTimeoutMs: number = STARTUP_TIMEOUT_MS;
+  private _isProxyingToRemoteServer: boolean = false;
 
-  constructor () {
-    this.process = null;
-    this.serverStartupTimeoutMs = STARTUP_TIMEOUT_MS;
-    // @ts-ignore this is ok
-    this.proxy = null;
-
-    // To handle if the WDAMac server is proxying requests to a remote WDAMac app instance
-    this.isProxyingToRemoteServer = false;
+  get proxy (): WDAMacProxy {
+    if (!this._proxy) {
+      throw new Error('Proxy is not initialized. Did you call startSession()?');
+    }
+    return this._proxy;
   }
 
-  async isProxyReady (throwOnExit = true) {
-    if (!this.proxy) {
+  async startSession (caps: StartSessionCapabilities, opts: SessionOptions = {}): Promise<void> {
+    this._serverStartupTimeoutMs = caps.serverStartupTimeout ?? this._serverStartupTimeoutMs;
+
+    this._isProxyingToRemoteServer = !!caps.webDriverAgentMacUrl;
+
+    let wasProcessInitNecessary: boolean;
+    if (this._isProxyingToRemoteServer) {
+      if (this._process) {
+        await this._process.kill();
+        await cleanupObsoleteProcesses();
+        this._process = null;
+      }
+      wasProcessInitNecessary = false;
+    } else {
+      if (!this._process) {
+        this._process = new WDAMacProcess();
+      }
+      wasProcessInitNecessary = await this._process.init(caps);
+    }
+
+    if (wasProcessInitNecessary || this._isProxyingToRemoteServer || !this._proxy) {
+      const {scheme, host, port, path} = this.parseProxyProperties(caps);
+      const proxyOpts: ProxyOptions = {
+        scheme,
+        server: host,
+        port,
+        base: path,
+        keepAlive: true,
+      };
+      if (caps.reqBasePath) {
+        proxyOpts.reqBasePath = opts.reqBasePath;
+      }
+      this._proxy = new WDAMacProxy(proxyOpts);
+      this._proxy.didProcessExit = false;
+
+      if (this._process?.proc) {
+        this._process.proc.on('exit', () => {
+          if (this._proxy) {
+            this._proxy.didProcessExit = true;
+          }
+        });
+      }
+
+      const timer = new timing.Timer().start();
+      try {
+        await waitForCondition(async () => await this.isProxyReady(), {
+          waitMs: this._serverStartupTimeoutMs,
+          intervalMs: 1000,
+        });
+      } catch (e: any) {
+        if (this._process?.isRunning) {
+          // avoid "frozen" processes,
+          await this._process.kill();
+        }
+        if (/Condition unmet/.test(e.message)) {
+          const msg = this._isProxyingToRemoteServer
+            ? `No response from '${scheme}://${host}:${port}${path}' within ${this._serverStartupTimeoutMs}ms timeout.` +
+            `Please make sure the remote server is running and accessible by Appium`
+            : `Mac2Driver server is not listening within ${this._serverStartupTimeoutMs}ms timeout. ` +
+            `Try to increase the value of 'serverStartupTimeout' capability, check the server logs ` +
+            `and make sure the ${XCODEBUILD} host process could be started manually from a terminal`;
+          throw new Error(msg);
+        }
+        throw e;
+      }
+
+      if (this._process) {
+        const pid = this._process.pid;
+        const childrenPids = await this._process.listChildrenPids();
+        if (pid !== null) {
+          RUNNING_PROCESS_IDS.push(...childrenPids, pid);
+          this._process.proc?.on('exit', () => void _.pull(RUNNING_PROCESS_IDS, pid));
+        }
+        log.info(`The host process is ready within ${timer.getDuration().asMilliSeconds.toFixed(0)}ms`);
+      }
+    } else {
+      log.info('The host process has already been listening. Proceeding with session creation');
+    }
+
+    await this._proxy.command('/session', 'POST', {
+      capabilities: {
+        firstMatch: [{}],
+        alwaysMatch: caps,
+      }
+    });
+  }
+
+  async stopSession (): Promise<void> {
+    if (!this._isProxyingToRemoteServer && !(this._process?.isRunning)) {
+      log.info(`Mac2Driver session cannot be stopped, because the server is not running`);
+      return;
+    }
+
+    if (this._proxy?.sessionId) {
+      try {
+        await this._proxy.command(`/session/${this._proxy.sessionId}`, 'DELETE');
+      } catch (e: any) {
+        log.info(`Mac2Driver session cannot be deleted. Original error: ${e.message}`);
+      }
+    }
+  }
+
+  private async isProxyReady (throwOnExit = true): Promise<boolean> {
+    if (!this._proxy) {
       return false;
     }
 
     try {
-      await this.proxy.command('/status', 'GET');
+      await this._proxy.command('/status', 'GET');
       return true;
-    } catch (err) {
-      if (throwOnExit && this.proxy.didProcessExit) {
+    } catch (err: any) {
+      if (throwOnExit && this._proxy.didProcessExit) {
         throw new Error(err.message);
       }
       return false;
     }
   }
 
-
-  /**
-   * @typedef {Object} ProxyProperties
-   *
-   * @property {string} scheme - The scheme proxy to.
-   * @property {string} host - The host name proxy to.
-   * @property {number} port - The port number proxy to.
-   * @property {string} path - The path proxy to.
-   */
-
   /**
    * Returns proxy information where WDAMacServer proxy to.
    *
-   * @param {Object} caps - The capabilities in the session.
-   * @return {ProxyProperties}
+   * @param caps - The capabilities in the session.
+   * @return ProxyProperties
    * @throws Error if 'webDriverAgentMacUrl' had invalid URL
    */
-  parseProxyProperties (caps) {
+  private parseProxyProperties (caps: StartSessionCapabilities): ProxyProperties {
     let scheme = 'http';
     if (!caps.webDriverAgentMacUrl) {
       return {
         scheme,
-        host: (this.process?.host ?? caps.systemHost) ?? DEFAULT_SYSTEM_HOST,
-        port: (this.process?.port ?? caps.systemPort) ?? DEFAULT_SYSTEM_PORT,
+        host: (this._process?.host ?? caps.systemHost) ?? DEFAULT_SYSTEM_HOST,
+        port: (this._process?.port ?? caps.systemPort) ?? DEFAULT_SYSTEM_PORT,
         path: ''
       };
     }
 
-    let parsedUrl;
+    let parsedUrl: url.URL;
     try {
       parsedUrl = new url.URL(caps.webDriverAgentMacUrl);
-    } catch (e) {
+    } catch (e: any) {
       throw new Error(`webDriverAgentMacUrl, '${caps.webDriverAgentMacUrl}', ` +
         `in the capabilities is invalid. ${e.message}`);
     }
@@ -370,119 +453,51 @@ export class WDAMacServer {
       path: pathname === '/' ? '' : pathname
     };
   }
+}
 
-  /**
-   *
-   * @param {import('@appium/types').StringRecord} caps
-   * @param {SessionOptions} [opts={}]
-   */
-  async startSession (caps, opts = {}) {
-    this.serverStartupTimeoutMs = caps.serverStartupTimeout ?? this.serverStartupTimeoutMs;
+export const WDA_MAC_SERVER = new WDAMacServer();
 
-    this.isProxyingToRemoteServer = !!caps.webDriverAgentMacUrl;
-
-    let wasProcessInitNecessary;
-    if (this.isProxyingToRemoteServer) {
-      if (this.process) {
-        await this.process.kill();
-        await cleanupObsoleteProcesses();
-        this.process = null;
-      }
-
-      wasProcessInitNecessary = false;
-    } else {
-      if (!this.process) {
-        this.process = new WDAMacProcess();
-      }
-      wasProcessInitNecessary = await this.process.init(caps);
-    }
-
-    if (wasProcessInitNecessary || this.isProxyingToRemoteServer || !this.proxy) {
-      const {scheme, host, port, path} = this.parseProxyProperties(caps);
-      const proxyOpts = {
-        scheme,
-        server: host,
-        port,
-        base: path,
-        keepAlive: true,
-      };
-      if (caps.reqBasePath) {
-        proxyOpts.reqBasePath = opts.reqBasePath;
-      }
-      this.proxy = new WDAMacProxy(proxyOpts);
-      this.proxy.didProcessExit = false;
-
-      if (this.process?.proc) {
-        this.process.proc.on('exit', () => {
-          if (this.proxy) {
-            this.proxy.didProcessExit = true;
-          }
-        });
-      }
-
-      const timer = new timing.Timer().start();
-      try {
-        await waitForCondition(async () => await this.isProxyReady(), {
-          waitMs: this.serverStartupTimeoutMs,
-          intervalMs: 1000,
-        });
-      } catch (e) {
-        if (this.process?.isRunning) {
-          // avoid "frozen" processes,
-          await this.process.kill();
-        }
-        if (/Condition unmet/.test(e.message)) {
-          const msg = this.isProxyingToRemoteServer
-            ? `No response from '${scheme}://${host}:${port}${path}' within ${this.serverStartupTimeoutMs}ms timeout.` +
-            `Please make sure the remote server is running and accessible by Appium`
-            : `Mac2Driver server is not listening within ${this.serverStartupTimeoutMs}ms timeout. ` +
-            `Try to increase the value of 'serverStartupTimeout' capability, check the server logs ` +
-            `and make sure the ${XCODEBUILD} host process could be started manually from a terminal`;
-          throw new Error(msg);
-        }
-        throw e;
-      }
-
-      if (this.process) {
-        const pid = this.process.pid;
-        const childrenPids = await this.process.listChildrenPids();
-        RUNNING_PROCESS_IDS.push(...childrenPids, pid);
-        this.process.proc?.on('exit', () => void _.pull(RUNNING_PROCESS_IDS, pid));
-        log.info(`The host process is ready within ${timer.getDuration().asMilliSeconds.toFixed(0)}ms`);
-      }
-    } else {
-      log.info('The host process has already been listening. Proceeding with session creation');
-    }
-
-    await this.proxy.command('/session', 'POST', {
-      capabilities: {
-        firstMatch: [{}],
-        alwaysMatch: caps,
-      }
-    });
-  }
-
-  async stopSession () {
-    if (!this.isProxyingToRemoteServer && !(this.process?.isRunning)) {
-      log.info(`Mac2Driver session cannot be stopped, because the server is not running`);
-      return;
-    }
-
-    if (this.proxy?.sessionId) {
-      try {
-        await this.proxy.command(`/session/${this.proxy.sessionId}`, 'DELETE');
-      } catch (e) {
-        log.info(`Mac2Driver session cannot be deleted. Original error: ${e.message}`);
-      }
-    }
+// Private functions
+async function cleanupObsoleteProcesses (): Promise<void> {
+  if (!_.isEmpty(RUNNING_PROCESS_IDS)) {
+    log.debug(`Cleaning up ${RUNNING_PROCESS_IDS.length} obsolete ` +
+      util.pluralize('process', RUNNING_PROCESS_IDS.length, false));
+    try {
+      await exec('kill', ['-9', ...RUNNING_PROCESS_IDS.map(String)]);
+    } catch {}
+    _.pullAll(RUNNING_PROCESS_IDS, RUNNING_PROCESS_IDS);
   }
 }
 
-const WDA_MAC_SERVER = new WDAMacServer();
+process.once('exit', () => {
+  if (!_.isEmpty(RUNNING_PROCESS_IDS)) {
+    try {
+      execSync(`kill -9 ${RUNNING_PROCESS_IDS.map(String).join(' ')}`);
+    } catch {}
+    _.pullAll(RUNNING_PROCESS_IDS, RUNNING_PROCESS_IDS);
+  }
+});
 
-export default WDA_MAC_SERVER;
+// Private type definitions
+interface WDAMacProcessInitOptions {
+  showServerLogs?: boolean;
+  systemPort?: number;
+  systemHost?: string;
+  bootstrapRoot?: string;
+}
 
-/**
- * @typedef {Object} SessionOptions
- * @property {string} [reqBasePath]
- */
+interface ProxyProperties {
+  scheme: string;
+  host: string;
+  port: number;
+  path: string;
+}
+
+interface StartSessionCapabilities {
+  webDriverAgentMacUrl?: string;
+  systemHost?: string;
+  systemPort?: number;
+  serverStartupTimeout?: number;
+  reqBasePath?: string;
+  [key: string]: unknown;
+}
