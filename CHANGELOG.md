@@ -1,3 +1,10 @@
+## [3.2.1](https://github.com/appium/appium-mac2-driver/compare/v3.2.0...v3.2.1) (2025-11-12)
+
+
+### Miscellaneous Chores
+
+* Port lib/wda-mac.js to Typescript ([#348](https://github.com/appium/appium-mac2-driver/issues/348)) ([0a5a78a](https://github.com/appium/appium-mac2-driver/commit/0a5a78ac0e615b5af30da1128a9ac83b007d324d))
+
 ## [3.2.0](https://github.com/appium/appium-mac2-driver/compare/v3.1.0...v3.2.0) (2025-11-11)
 
 
