@@ -1,3 +1,10 @@
+## [3.2.2](https://github.com/appium/appium-mac2-driver/compare/v3.2.1...v3.2.2) (2025-11-14)
+
+
+### Miscellaneous Chores
+
+* Migrate driver.js to typescript ([#350](https://github.com/appium/appium-mac2-driver/issues/350)) ([e1b351f](https://github.com/appium/appium-mac2-driver/commit/e1b351f05de0c48d2c67bfaff22f04193e699943))
+
 ## [3.2.1](https://github.com/appium/appium-mac2-driver/compare/v3.2.0...v3.2.1) (2025-11-12)
 
 
