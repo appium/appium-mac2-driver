@@ -1,3 +1,7 @@
+## <small>3.2.5 (2025-11-15)</small>
+
+* chore: publish via trusted publisher (#354) ([31fc388](https://github.com/appium/appium-mac2-driver/commit/31fc388)), closes [#354](https://github.com/appium/appium-mac2-driver/issues/354)
+
 ## [3.2.4](https://github.com/appium/appium-mac2-driver/compare/v3.2.3...v3.2.4) (2025-11-15)
 
 
