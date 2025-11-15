@@ -1,3 +1,11 @@
+## [3.2.3](https://github.com/appium/appium-mac2-driver/compare/v3.2.2...v3.2.3) (2025-11-15)
+
+
+### Miscellaneous Chores
+
+* Migrate doctor checks to typescript ([#351](https://github.com/appium/appium-mac2-driver/issues/351)) ([66057a4](https://github.com/appium/appium-mac2-driver/commit/66057a41612d5ac71cfa10a04da1eea4fddbdc17))
+* Migrate logger and utils to typescipt ([#352](https://github.com/appium/appium-mac2-driver/issues/352)) ([9a51427](https://github.com/appium/appium-mac2-driver/commit/9a514271f1169ff29b878b7ea53b330bed5ab3c5))
+
 ## [3.2.2](https://github.com/appium/appium-mac2-driver/compare/v3.2.1...v3.2.2) (2025-11-14)
 
 
