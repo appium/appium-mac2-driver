@@ -43,6 +43,7 @@
     }
   },
   "main": "./build/index.js",
+  "types": "./build/index.d.ts",
   "bin": {},
   "dependencies": {
     "@appium/strongbox": "^1.0.0-rc.1",
@@ -93,7 +94,7 @@
   "files": [
     "index.js",
     "lib",
-    "build/index.js",
+    "build/index.*",
     "build/lib",
     "scripts",
     "WebDriverAgentMac/Scripts",
