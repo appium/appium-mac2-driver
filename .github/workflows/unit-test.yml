@@ -14,9 +14,6 @@ on:
 
 
 jobs:
-  security-scan:
-    uses: appium/appium-workflows/.github/workflows/socket-scan.yml@main
-
   prepare_matrix:
     uses: appium/appium-workflows/.github/workflows/node-lts-matrix.yml@main
 
@@ -37,7 +34,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         check-latest: true
-    - run: npm install --no-package-lock
+    - uses: SocketDev/action@v1
+      with:
+        mode: firewall-free
+    - run: sfw npm install --no-package-lock
       name: Install dev dependencies
     - run: npm run lint
       name: Run linter

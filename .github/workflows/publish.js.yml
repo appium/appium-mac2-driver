@@ -12,9 +12,6 @@ permissions:
   id-token: write # to enable use of OIDC for trusted publishing and npm provenance
 
 jobs:
-  security-scan:
-    uses: appium/appium-workflows/.github/workflows/socket-scan.yml@main
-
   build:
     needs:
     - security-scan
@@ -25,7 +22,10 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: lts/*
-    - run: npm install --no-package-lock
+    - uses: SocketDev/action@v1
+      with:
+        mode: firewall-free
+    - run: sfw npm install --no-package-lock
       name: Install dependencies
     - run: npm run test
       name: Run NPM Test
