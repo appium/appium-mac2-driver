@@ -12,7 +12,12 @@ permissions:
   id-token: write # to enable use of OIDC for trusted publishing and npm provenance
 
 jobs:
+  security-scan:
+    uses: appium/appium-workflows/.github/workflows/socket-scan.yml@main
+
   build:
+    needs:
+    - security-scan
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2

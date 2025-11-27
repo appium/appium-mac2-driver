@@ -14,14 +14,11 @@ on:
 
 
 jobs:
+  security-scan:
+    uses: appium/appium-workflows/.github/workflows/socket-scan.yml@main
+
   prepare_matrix:
-    runs-on: ubuntu-latest
-    outputs:
-      versions: ${{ steps.generate-matrix.outputs.lts }}
-    steps:
-    - name: Select all current LTS versions of Node.js
-      id: generate-matrix
-      uses: msimerson/node-lts-versions@v1
+    uses: appium/appium-workflows/.github/workflows/node-lts-matrix.yml@main
 
   macos_matrix:
     uses: ./.github/workflows/macos-matrix.yml
