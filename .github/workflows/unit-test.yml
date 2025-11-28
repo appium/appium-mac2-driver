@@ -14,7 +14,7 @@ on:
 
 
 jobs:
-  prepare_matrix:
+  node_matrix:
     uses: appium/appium-workflows/.github/workflows/node-lts-matrix.yml@main
 
   macos_matrix:
@@ -22,11 +22,11 @@ jobs:
 
   test:
     needs:
-    - prepare_matrix
+    - node_matrix
     strategy:
       fail-fast: false
       matrix:
-        node-version: ${{ fromJSON(needs.prepare_matrix.outputs.versions) }}
+        node-version: ${{ fromJSON(needs.node_matrix.outputs.versions) }}
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v3

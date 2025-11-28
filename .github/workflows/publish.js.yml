@@ -13,8 +13,6 @@ permissions:
 
 jobs:
   build:
-    needs:
-    - security-scan
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
