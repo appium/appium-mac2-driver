@@ -1,3 +1,12 @@
+## [3.2.7](https://github.com/appium/appium-mac2-driver/compare/v3.2.6...v3.2.7) (2025-11-29)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/node from 20.19.25 to 24.10.1 ([#359](https://github.com/appium/appium-mac2-driver/issues/359)) ([3910da3](https://github.com/appium/appium-mac2-driver/commit/3910da3ecc999d306c9da8951cb0aaf20b77e738))
+* **deps-dev:** bump conventional-changelog-conventionalcommits ([#361](https://github.com/appium/appium-mac2-driver/issues/361)) ([7366476](https://github.com/appium/appium-mac2-driver/commit/7366476a81feb0866cb6b3880adbb39a1408fcdd))
+* **deps-dev:** bump sinon from 17.0.2 to 21.0.0 ([#363](https://github.com/appium/appium-mac2-driver/issues/363)) ([41c9ba6](https://github.com/appium/appium-mac2-driver/commit/41c9ba6625109ce29ed0561ec8c94b6d620fd98e))
+* **deps:** bump actions/setup-node from 3 to 6 ([#358](https://github.com/appium/appium-mac2-driver/issues/358)) ([bd8f310](https://github.com/appium/appium-mac2-driver/commit/bd8f310d1dca643a25f5e46581492aa08380bb7e))
+
 ## <small>3.2.6 (2025-11-15)</small>
 
 * chore: add index.d.ts (#355) ([86d5ecd](https://github.com/appium/appium-mac2-driver/commit/86d5ecd)), closes [#355](https://github.com/appium/appium-mac2-driver/issues/355)
