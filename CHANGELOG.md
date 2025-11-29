@@ -1,3 +1,11 @@
+## [3.2.8](https://github.com/appium/appium-mac2-driver/compare/v3.2.7...v3.2.8) (2025-11-29)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump chai from 5.3.3 to 6.2.1 ([#360](https://github.com/appium/appium-mac2-driver/issues/360)) ([3d3f75e](https://github.com/appium/appium-mac2-driver/commit/3d3f75e084a13eee8889bb3c8d89a42aa16acc29))
+* **deps-dev:** bump mocha from 10.8.2 to 11.7.5 ([#362](https://github.com/appium/appium-mac2-driver/issues/362)) ([097c8e5](https://github.com/appium/appium-mac2-driver/commit/097c8e5cac8fc08dc178a3092393c97f697db04b))
+* **deps:** bump actions/checkout from 2 to 6 ([#357](https://github.com/appium/appium-mac2-driver/issues/357)) ([5bff976](https://github.com/appium/appium-mac2-driver/commit/5bff9764034c73ba0bcc23fcf9abd5de8361a41e))
+
 ## [3.2.7](https://github.com/appium/appium-mac2-driver/compare/v3.2.6...v3.2.7) (2025-11-29)
 
 ### Miscellaneous Chores
