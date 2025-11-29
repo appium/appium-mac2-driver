@@ -84,7 +84,7 @@
     "chai": "^6.2.1",
     "chai-as-promised": "^8.0.0",
     "conventional-changelog-conventionalcommits": "^9.1.0",
-    "mocha": "^10.0.0",
+    "mocha": "^11.7.5",
     "semantic-release": "^25.0.2",
     "sinon": "^21.0.0",
     "ts-node": "^10.9.1",
