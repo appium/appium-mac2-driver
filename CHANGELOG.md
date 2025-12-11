@@ -1,3 +1,9 @@
+## [3.2.9](https://github.com/appium/appium-mac2-driver/compare/v3.2.8...v3.2.9) (2025-12-11)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/node from 24.10.3 to 25.0.0 ([#365](https://github.com/appium/appium-mac2-driver/issues/365)) ([5524282](https://github.com/appium/appium-mac2-driver/commit/55242822dd3c94e9bfaf432d6ed0044589d00d22))
+
 ## [3.2.8](https://github.com/appium/appium-mac2-driver/compare/v3.2.7...v3.2.8) (2025-11-29)
 
 ### Miscellaneous Chores
