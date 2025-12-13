@@ -1,3 +1,9 @@
+## [3.2.10](https://github.com/appium/appium-mac2-driver/compare/v3.2.9...v3.2.10) (2025-12-13)
+
+### Miscellaneous Chores
+
+* **deps:** remove source-map-support ([#366](https://github.com/appium/appium-mac2-driver/issues/366)) ([c86daf8](https://github.com/appium/appium-mac2-driver/commit/c86daf865764b70c5ce08f5a47fd74c171dbfec9))
+
 ## [3.2.9](https://github.com/appium/appium-mac2-driver/compare/v3.2.8...v3.2.9) (2025-12-11)
 
 ### Miscellaneous Chores
