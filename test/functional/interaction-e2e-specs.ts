@@ -44,13 +44,13 @@ describe('Mac2Driver - elements interaction', function () {
 
   it('should set a text to a text view', async function () {
     const el = await driver!.findElement('class name', 'XCUIElementTypeTextView');
-    await driver!.elementSendKeys(el as any, 'hello world');
-    await expect(driver!.getElementText(el as any)).eventually.eql('hello world');
+    await driver!.elementSendKeys(_.toString(el), 'hello world');
+    await expect(driver!.getElementText(_.toString(el))).eventually.eql('hello world');
   });
 
   it('should click a button by absolute coordinate', async function () {
     const el = _.first(await driver!.findElements('-ios predicate string', 'elementType == 12 AND label == "bold"'))!;
-    const {x, y, width, height} = await driver!.getElementAttribute(el as any, 'frame') as any;
+    const {x, y, width, height} = await driver!.getElementAttribute(_.toString(el), 'frame') as any;
     await driver!.executeScript('macos: click', [{
       x: x + width / 2,
       y: y + height / 2,
@@ -61,15 +61,15 @@ describe('Mac2Driver - elements interaction', function () {
 
   it('should clear a text view', async function () {
     const el = await driver!.findElement('class name', 'XCUIElementTypeTextView');
-    await driver!.elementSendKeys(el as any, 'hello world');
-    await expect(driver!.getElementText(el as any)).eventually.eql('hello world');
-    await driver!.elementClear(el as any);
-    await expect(driver!.getElementText(el as any)).eventually.eql('');
+    await driver!.elementSendKeys(_.toString(el), 'hello world');
+    await expect(driver!.getElementText(_.toString(el))).eventually.eql('hello world');
+    await driver!.elementClear(_.toString(el));
+    await expect(driver!.getElementText(_.toString(el))).eventually.eql('');
   });
 
   it('should send keys with modifiers into a text view', async function () {
     const el = await driver!.findElement('class name', 'XCUIElementTypeTextView');
-    await driver!.elementClick(el as any);
+    await driver!.elementClick(_.toString(el));
     const flagsShift = 1 << 1;
     await driver!.executeScript('macos: keys', [{
       keys: [{
@@ -80,7 +80,7 @@ describe('Mac2Driver - elements interaction', function () {
         modifierFlags: flagsShift,
       }]
     }]);
-    await expect(driver!.getElementText(el as any)).eventually.eql('HI');
+    await expect(driver!.getElementText(_.toString(el))).eventually.eql('HI');
   });
 
   it('should open context menu if left click with Ctrl depressed', async function () {

@@ -7,30 +7,26 @@ use(chaiAsPromised);
 describe('WDAMacServer', function () {
   describe('parseProxyProperties', function () {
     it('should default', function () {
-      // eslint-disable-next-line
-      expect(WDA_MAC_SERVER['parseProxyProperties']({})).eql(
+      expect((WDA_MAC_SERVER as any).parseProxyProperties({})).eql(
         {scheme: 'http', host: '127.0.0.1', port: 10100, path: ''}
       );
     });
 
     it('should follow WebDriverAgentMacUrl', function () {
-      // eslint-disable-next-line
-      expect(WDA_MAC_SERVER['parseProxyProperties']({ webDriverAgentMacUrl: 'http://customhost:9999' })).eql(
+      expect((WDA_MAC_SERVER as any).parseProxyProperties({ webDriverAgentMacUrl: 'http://customhost:9999' })).eql(
         {scheme: 'http', host: 'customhost', port: 9999, path: ''}
       );
     });
 
     it('should follow WebDriverAgentMacUrl with custom path', function () {
-      // eslint-disable-next-line
-      expect(WDA_MAC_SERVER['parseProxyProperties']({ webDriverAgentMacUrl: 'https://customhost/path' })).eql(
+      expect((WDA_MAC_SERVER as any).parseProxyProperties({ webDriverAgentMacUrl: 'https://customhost/path' })).eql(
         {scheme: 'https', host: 'customhost', port: 10100, path: '/path'}
       );
     });
 
     it('should follow WebDriverAgentMacUrl with invalid url', function () {
       try {
-      // eslint-disable-next-line
-        WDA_MAC_SERVER['parseProxyProperties']({ webDriverAgentMacUrl: 'invalid url' });
+        (WDA_MAC_SERVER as any).parseProxyProperties({ webDriverAgentMacUrl: 'invalid url' });
       } catch (e: any) {
         expect(e.message).contain('is invalid');
       }

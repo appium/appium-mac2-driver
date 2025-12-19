@@ -29,21 +29,21 @@ describe('listChildrenProcessIds', function () {
 
   it('should return empty array for no output', async function () {
     sandbox.stub(teen_process, 'exec');
-    (teen_process.exec as any).returns({stdout: '', stderr: ''});
+    teen_process.exec.returns({stdout: '', stderr: ''});
     const result = await listChildrenProcessIds(1234);
     expect(result).eql([]);
   });
 
   it('should return valid array of process ids', async function () {
     sandbox.stub(teen_process, 'exec');
-    (teen_process.exec as any).returns({stdout: EXAMPLE_PS_OUTPUT, stderr: ''});
+    teen_process.exec.returns({stdout: EXAMPLE_PS_OUTPUT, stderr: ''});
     const result = await listChildrenProcessIds(2412);
     expect(result).eql(['8131', '2434']);
   });
 
   it('should return empty array for no matches', async function () {
     sandbox.stub(teen_process, 'exec');
-    (teen_process.exec as any).returns({stdout: EXAMPLE_PS_OUTPUT, stderr: ''});
+    teen_process.exec.returns({stdout: EXAMPLE_PS_OUTPUT, stderr: ''});
     const result = await listChildrenProcessIds('241266');
     expect(result).eql([]);
   });
