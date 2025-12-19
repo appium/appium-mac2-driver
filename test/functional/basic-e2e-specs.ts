@@ -11,7 +11,7 @@ const CAPS = {
   'appium:bundleId': TEXT_EDIT_BUNDLE_ID,
 };
 
-use(chaiAsPromised)
+use(chaiAsPromised);
 
 describe('Mac2Driver - basic', function () {
   this.timeout(MOCHA_TIMEOUT);
