@@ -1,8 +1,8 @@
 import { Mac2Driver } from '../../lib/driver';
 
 describe('Mac2Driver', function () {
-  let chai;
-  let should;
+  let chai: any;
+  let should: any;
 
   before(async function () {
     chai = await import('chai');

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { remote } from 'webdriverio';
+import { remote, Browser } from 'webdriverio';
 import { HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID } from '../utils';
 
 const CAPS = {
@@ -11,8 +11,8 @@ const CAPS = {
 describe('Mac2Driver - basic', function () {
   this.timeout(MOCHA_TIMEOUT);
 
-  let driver;
-  let chai;
+  let driver: Browser<'async'> | null;
+  let chai: any;
 
   before(async function () {
     chai = await import('chai');
@@ -40,22 +40,20 @@ describe('Mac2Driver - basic', function () {
   });
 
   it('should retrieve xml source', async function () {
-    const source = await driver.getPageSource();
+    const source = await driver!.getPageSource();
     _.includes(source, '<?xml version="1.0" encoding="UTF-8"?>').should.be.true;
   });
 
   it('should take screenshots', async function () {
-    const screenshot = await driver.takeScreenshot();
+    const screenshot = await driver!.takeScreenshot();
     _.startsWith(screenshot, 'iVBOR').should.be.true;
   });
 
   it('should retrieve description source', async function () {
-    const source = await driver.executeScript('macos: source', [{
+    const source = await driver!.executeScript('macos: source', [{
       format: 'description',
     }]);
-    _.includes(source, 'Element subtree').should.be.true;
+    _.includes(source as string, 'Element subtree').should.be.true;
   });
 
 });
-
-

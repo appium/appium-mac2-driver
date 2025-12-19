@@ -1,20 +1,13 @@
 import sinon from 'sinon';
 import * as teen_process from 'teen_process';
 import { listChildrenProcessIds } from '../../lib/utils';
+import { expect, use } from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
 const sandbox = sinon.createSandbox();
+use(chaiAsPromised);
 
 describe('listChildrenProcessIds', function () {
-  let chai;
-
-  before(async function () {
-    chai = await import('chai');
-    const chaiAsPromised = await import('chai-as-promised');
-
-    chai.should();
-    chai.use(chaiAsPromised.default);
-  });
-
   const EXAMPLE_PS_OUTPUT = `
   USER                PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND           PPID
   _coreaudiod         236   3.1  0.0  4343236   4124   ??  Ss   Thu10AM  42:23.82 /usr/sbin/coreau     1
@@ -36,22 +29,22 @@ describe('listChildrenProcessIds', function () {
 
   it('should return empty array for no output', async function () {
     sandbox.stub(teen_process, 'exec');
-    teen_process.exec.returns({stdout: '', stderr: ''});
+    (teen_process.exec as any).returns({stdout: '', stderr: ''});
     const result = await listChildrenProcessIds(1234);
-    result.should.eql([]);
+    expect(result).eql([]);
   });
 
   it('should return valid array of process ids', async function () {
     sandbox.stub(teen_process, 'exec');
-    teen_process.exec.returns({stdout: EXAMPLE_PS_OUTPUT, stderr: ''});
+    (teen_process.exec as any).returns({stdout: EXAMPLE_PS_OUTPUT, stderr: ''});
     const result = await listChildrenProcessIds(2412);
-    result.should.eql(['8131', '2434']);
+    expect(result).eql(['8131', '2434']);
   });
 
   it('should return empty array for no matches', async function () {
     sandbox.stub(teen_process, 'exec');
-    teen_process.exec.returns({stdout: EXAMPLE_PS_OUTPUT, stderr: ''});
+    (teen_process.exec as any).returns({stdout: EXAMPLE_PS_OUTPUT, stderr: ''});
     const result = await listChildrenProcessIds('241266');
-    result.should.eql([]);
+    expect(result).eql([]);
   });
 });

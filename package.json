@@ -33,7 +33,7 @@
     ],
     "mainClass": "Mac2Driver",
     "scripts": {
-      "open-wda": "./scripts/open-wda.js"
+      "open-wda": "./scripts/open-wda.mjs"
     },
     "doctor": {
       "checks": [
@@ -64,8 +64,8 @@
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "prepare": "npm run rebuild",
-    "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.js\"",
-    "e2e-test": "mocha --exit --timeout 10m \"./test/functional/**/*-specs.js\""
+    "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.ts\"",
+    "e2e-test": "mocha --exit --timeout 10m \"./test/functional/**/*-specs.ts\""
   },
   "peerDependencies": {
     "appium": "^3.0.0-rc.2"
@@ -77,9 +77,11 @@
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
     "@types/bluebird": "^3.5.38",
+    "@types/chai-as-promised": "^8.0.2",
     "@types/lodash": "^4.14.196",
     "@types/mocha": "^10.0.1",
     "@types/node": "^25.0.0",
+    "@types/sinon": "^21.0.0",
     "chai": "^6.2.1",
     "chai-as-promised": "^8.0.0",
     "conventional-changelog-conventionalcommits": "^9.1.0",
@@ -91,10 +93,10 @@
     "webdriverio": "^9.0.0"
   },
   "files": [
-    "index.js",
     "lib",
     "build/index.*",
     "build/lib",
+    "!build/test",
     "scripts",
     "WebDriverAgentMac/Scripts",
     "WebDriverAgentMac/Cartfile",

@@ -68,7 +68,7 @@ class WDAMacProcess {
   }
 
   get pid (): number | null {
-    return this.isRunning && this.proc ? this.proc.pid : null;
+    return this.isRunning && this.proc ? (this.proc.pid ?? null) : null;
   }
 
   async listChildrenPids (): Promise<string[]> {

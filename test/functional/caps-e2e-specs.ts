@@ -1,4 +1,4 @@
-import { remote } from 'webdriverio';
+import { remote, Browser } from 'webdriverio';
 import os from 'os';
 import path from 'path';
 import { fs } from 'appium/support';
@@ -17,8 +17,8 @@ const CAPS = {
 describe('Mac2Driver - caps', function () {
   this.timeout(MOCHA_TIMEOUT);
 
-  let driver;
-  let chai;
+  let driver: Browser<'async'> | null;
+  let chai: any;
 
   before(async function () {
     chai = await import('chai');
@@ -48,7 +48,7 @@ describe('Mac2Driver - caps', function () {
   it('should execute scripts from capabilities', async function () {
     await fs.exists(TEST_FILE).should.eventually.be.true;
     try {
-      await driver.deleteSession();
+      await driver!.deleteSession();
     } finally {
       driver = null;
     }
