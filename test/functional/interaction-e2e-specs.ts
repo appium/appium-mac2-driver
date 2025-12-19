@@ -1,6 +1,8 @@
 import _ from 'lodash';
-import { remote, Browser } from 'webdriverio';
+import { remote } from 'webdriverio';
+import type { Browser } from 'webdriverio';
 import { HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID } from '../utils';
+import { expect } from 'chai';
 
 const CAPS = {
   platformName: 'mac',
@@ -12,7 +14,7 @@ const CAPS = {
 describe('Mac2Driver - elements interaction', function () {
   this.timeout(MOCHA_TIMEOUT);
 
-  let driver: Browser<'async'> | null;
+  let driver: Browser | null;
   let chai: any;
 
   before(async function () {
@@ -42,32 +44,32 @@ describe('Mac2Driver - elements interaction', function () {
 
   it('should set a text to a text view', async function () {
     const el = await driver!.findElement('class name', 'XCUIElementTypeTextView');
-    await driver!.elementSendKeys(el, 'hello world');
-    await driver!.getElementText(el).should.eventually.eql('hello world');
+    await driver!.elementSendKeys(el as any, 'hello world');
+    await expect(driver!.getElementText(el as any)).eventually.eql('hello world');
   });
 
   it('should click a button by absolute coordinate', async function () {
     const el = _.first(await driver!.findElements('-ios predicate string', 'elementType == 12 AND label == "bold"'))!;
-    const {x, y, width, height} = await driver!.getElementAttribute(el, 'frame') as any;
+    const {x, y, width, height} = await driver!.getElementAttribute(el as any, 'frame') as any;
     await driver!.executeScript('macos: click', [{
       x: x + width / 2,
       y: y + height / 2,
     }]);
     const els = await driver!.findElements('-ios predicate string', 'value == "Bold" AND label == "type face"');
-    els.length.should.eql(1);
+    expect(els.length).eql(1);
   });
 
   it('should clear a text view', async function () {
     const el = await driver!.findElement('class name', 'XCUIElementTypeTextView');
-    await driver!.elementSendKeys(el, 'hello world');
-    await driver!.getElementText(el).should.eventually.eql('hello world');
-    await driver!.elementClear(el);
-    await driver!.getElementText(el).should.eventually.eql('');
+    await driver!.elementSendKeys(el as any, 'hello world');
+    await expect(driver!.getElementText(el as any)).eventually.eql('hello world');
+    await driver!.elementClear(el as any);
+    await expect(driver!.getElementText(el as any)).eventually.eql('');
   });
 
   it('should send keys with modifiers into a text view', async function () {
     const el = await driver!.findElement('class name', 'XCUIElementTypeTextView');
-    await driver!.elementClick(el);
+    await driver!.elementClick(el as any);
     const flagsShift = 1 << 1;
     await driver!.executeScript('macos: keys', [{
       keys: [{
@@ -78,7 +80,7 @@ describe('Mac2Driver - elements interaction', function () {
         modifierFlags: flagsShift,
       }]
     }]);
-    await driver!.getElementText(el).should.eventually.eql('HI');
+    await expect(driver!.getElementText(el as any)).eventually.eql('HI');
   });
 
   it('should open context menu if left click with Ctrl depressed', async function () {
@@ -89,7 +91,7 @@ describe('Mac2Driver - elements interaction', function () {
       keyModifierFlags: flagsCtrl,
     }]);
     const els = await driver!.findElements('-ios predicate string', `title == 'Import Image'`);
-    els.length.should.be.above(1);
+    expect(els.length).be.above(1);
   });
 
 });

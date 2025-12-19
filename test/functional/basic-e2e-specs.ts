@@ -1,6 +1,9 @@
 import _ from 'lodash';
-import { remote, Browser } from 'webdriverio';
+import { remote } from 'webdriverio';
+import type { Browser } from 'webdriverio';
 import { HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID } from '../utils';
+import { expect, use } from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
 const CAPS = {
   platformName: 'mac',
@@ -8,19 +11,12 @@ const CAPS = {
   'appium:bundleId': TEXT_EDIT_BUNDLE_ID,
 };
 
+use(chaiAsPromised)
+
 describe('Mac2Driver - basic', function () {
   this.timeout(MOCHA_TIMEOUT);
 
-  let driver: Browser<'async'> | null;
-  let chai: any;
-
-  before(async function () {
-    chai = await import('chai');
-    const chaiAsPromised = await import('chai-as-promised');
-
-    chai.should();
-    chai.use(chaiAsPromised.default);
-  });
+  let driver: Browser | null;
 
   beforeEach(async function () {
     driver = await remote({
@@ -41,19 +37,19 @@ describe('Mac2Driver - basic', function () {
 
   it('should retrieve xml source', async function () {
     const source = await driver!.getPageSource();
-    _.includes(source, '<?xml version="1.0" encoding="UTF-8"?>').should.be.true;
+    expect(_.includes(source, '<?xml version="1.0" encoding="UTF-8"?>')).be.true;
   });
 
   it('should take screenshots', async function () {
     const screenshot = await driver!.takeScreenshot();
-    _.startsWith(screenshot, 'iVBOR').should.be.true;
+    expect(_.startsWith(screenshot, 'iVBOR')).be.true;
   });
 
   it('should retrieve description source', async function () {
     const source = await driver!.executeScript('macos: source', [{
       format: 'description',
     }]);
-    _.includes(source as string, 'Element subtree').should.be.true;
+    expect(_.includes(source as string, 'Element subtree')).be.true;
   });
 
 });

@@ -1,15 +1,8 @@
+import { expect } from 'chai';
 import { Mac2Driver } from '../../lib/driver';
 
 describe('Mac2Driver', function () {
-  let chai: any;
-  let should: any;
-
-  before(async function () {
-    chai = await import('chai');
-    should = chai.should();
-  });
-
   it('should exist', function () {
-    should.exist(Mac2Driver);
+    expect(Mac2Driver).exist;
   });
 });
