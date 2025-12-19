@@ -1,3 +1,9 @@
+## [3.2.12](https://github.com/appium/appium-mac2-driver/compare/v3.2.11...v3.2.12) (2025-12-19)
+
+### Miscellaneous Chores
+
+* convert remianing js to ts ([#368](https://github.com/appium/appium-mac2-driver/issues/368)) ([ccef9ea](https://github.com/appium/appium-mac2-driver/commit/ccef9ea92a5081fb220167f5a7e7509e6f670a95))
+
 ## [3.2.11](https://github.com/appium/appium-mac2-driver/compare/v3.2.10...v3.2.11) (2025-12-18)
 
 ### Miscellaneous Chores
