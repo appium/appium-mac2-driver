@@ -1,3 +1,9 @@
+## [3.2.13](https://github.com/appium/appium-mac2-driver/compare/v3.2.12...v3.2.13) (2025-12-22)
+
+### Miscellaneous Chores
+
+* bump teen_process ([#369](https://github.com/appium/appium-mac2-driver/issues/369)) ([ef313f7](https://github.com/appium/appium-mac2-driver/commit/ef313f7b4973ba5f74c792c90bc7a3e3b0fd0eca))
+
 ## [3.2.12](https://github.com/appium/appium-mac2-driver/compare/v3.2.11...v3.2.12) (2025-12-19)
 
 ### Miscellaneous Chores
