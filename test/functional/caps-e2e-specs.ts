@@ -1,7 +1,7 @@
 import { remote } from 'webdriverio';
 import type { Browser } from 'webdriverio';
-import os from 'os';
-import path from 'path';
+import os from 'node:os';
+import path from 'node:path';
 import { fs } from 'appium/support';
 import { HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID } from '../utils';
 import { expect, use } from 'chai';

@@ -241,9 +241,9 @@ export async function macosStopNativeScreenRecording(
   user?: string,
   pass?: string,
   method?: string,
-  headers?: StringRecord|[string, any][],
+  headers?: StringRecord | [string, any][],
   fileFieldName?: string,
-  formFields?: StringRecord|[string, string][],
+  formFields?: StringRecord | [string, string][],
   ignorePayload?: boolean,
 ): Promise<string> {
   const response: ActiveVideoInfo | null = (

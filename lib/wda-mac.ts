@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import path from 'path';
-import url from 'url';
+import path from 'node:path';
+import url from 'node:url';
 import axios from 'axios';
 import B from 'bluebird';
 import { JWProxy, errors } from 'appium/driver';
@@ -9,7 +9,7 @@ import { strongbox } from '@appium/strongbox';
 import { SubProcess, exec } from 'teen_process';
 import { waitForCondition } from 'asyncbox';
 import { checkPortStatus } from 'portscanner';
-import { execSync } from 'child_process';
+import { execSync } from 'node:child_process';
 import type {
   HTTPMethod,
   HTTPBody,
