@@ -1,5 +1,5 @@
-import type { Mac2Driver } from '../driver';
-import type { ScreenshotsInfo } from '../types';
+import type {Mac2Driver} from '../driver';
+import type {ScreenshotsInfo} from '../types';
 
 /**
  * Retrieves screenshots of each display available to macOS
@@ -11,8 +11,7 @@ import type { ScreenshotsInfo } from '../types';
  */
 export async function macosScreenshots(
   this: Mac2Driver,
-  displayId?: number
+  displayId?: number,
 ): Promise<ScreenshotsInfo> {
-  return (await this.wda.proxy.command('/wda/screenshots', 'POST', { displayId })) as ScreenshotsInfo;
+  return (await this.wda.proxy.command('/wda/screenshots', 'POST', {displayId})) as ScreenshotsInfo;
 }
-

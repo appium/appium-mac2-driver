@@ -34,7 +34,6 @@ export class OptionalFfmpegCheck implements IDoctorCheck {
 }
 export const optionalFfmpegCheck = new OptionalFfmpegCheck();
 
-
 export class OptionalAutomationModeCheck implements IDoctorCheck {
   log!: AppiumLogger;
 
@@ -43,7 +42,9 @@ export class OptionalAutomationModeCheck implements IDoctorCheck {
     try {
       ({stdout} = await exec('automationmodetool'));
     } catch (err) {
-      return doctor.nokOptional(`Cannot run 'automationmodetool': ${(err as any).stderr || (err as Error).message}`);
+      return doctor.nokOptional(
+        `Cannot run 'automationmodetool': ${(err as any).stderr || (err as Error).message}`,
+      );
     }
     if (stdout.includes('DOES NOT REQUIRE')) {
       return doctor.okOptional(`Automation Mode does not require user authentication`);
@@ -64,4 +65,3 @@ export class OptionalAutomationModeCheck implements IDoctorCheck {
   }
 }
 export const optionalAutomationModeCheck = new OptionalAutomationModeCheck();
-

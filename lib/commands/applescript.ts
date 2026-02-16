@@ -1,7 +1,7 @@
-import { fs, tempDir, util } from 'appium/support';
-import { exec } from 'teen_process';
+import {fs, tempDir, util} from 'appium/support';
+import {exec} from 'teen_process';
 import path from 'node:path';
-import type { Mac2Driver } from '../driver';
+import type {Mac2Driver} from '../driver';
 
 const OSASCRIPT = 'osascript';
 const APPLE_SCRIPT_FEATURE = 'apple_script';
@@ -36,7 +36,7 @@ export async function macosExecAppleScript(
   language?: string,
   command?: string,
   cwd?: string,
-  timeout?: number
+  timeout?: number,
 ): Promise<string> {
   this.assertFeatureEnabled(APPLE_SCRIPT_FEATURE);
 
@@ -71,7 +71,7 @@ export async function macosExecAppleScript(
     }
     this.log.info(`Running ${OSASCRIPT} with arguments: ${util.quote(args)}`);
     try {
-      const { stdout } = await exec(OSASCRIPT, args, { cwd, timeout });
+      const {stdout} = await exec(OSASCRIPT, args, {cwd, timeout});
       return stdout;
     } catch (e: any) {
       throw new Error(e.stderr || e.message);
@@ -82,4 +82,3 @@ export async function macosExecAppleScript(
     }
   }
 }
-

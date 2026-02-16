@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import { util } from 'appium/support';
-import { errors } from 'appium/driver';
-import type { Mac2Driver } from '../driver';
-import type { KeyOptions } from '../types';
+import {util} from 'appium/support';
+import {errors} from 'appium/driver';
+import type {Mac2Driver} from '../driver';
+import type {KeyOptions} from '../types';
 
 /**
  * Set value to the given element.
@@ -23,7 +23,7 @@ export async function macosSetValue(
   elementId: string,
   value?: any,
   text?: string,
-  keyModifierFlags?: number
+  keyModifierFlags?: number,
 ): Promise<unknown> {
   return await this.wda.proxy.command(`/element/${elementId}/value`, 'POST', {
     value,
@@ -51,7 +51,7 @@ export async function macosClick(
   elementId?: string,
   x?: number,
   y?: number,
-  keyModifierFlags?: number
+  keyModifierFlags?: number,
 ): Promise<unknown> {
   requireElementIdOrXY(elementId, x, y);
   const url = elementId ? `/element/${elementId}/click` : '/wda/click';
@@ -85,7 +85,7 @@ export async function macosScroll(
   elementId?: string,
   x?: number,
   y?: number,
-  keyModifierFlags?: number
+  keyModifierFlags?: number,
 ): Promise<unknown> {
   requireElementIdOrXY(elementId, x, y);
   const url = elementId ? `/wda/element/${elementId}/scroll` : '/wda/scroll';
@@ -125,7 +125,7 @@ export async function macosSwipe(
   x?: number,
   y?: number,
   velocity?: number,
-  keyModifierFlags?: number
+  keyModifierFlags?: number,
 ): Promise<unknown> {
   requireElementIdOrXY(elementId, x, y);
   const url = elementId ? `/wda/element/${elementId}/swipe` : `/wda/swipe`;
@@ -157,7 +157,7 @@ export async function macosRightClick(
   elementId?: string,
   x?: number,
   y?: number,
-  keyModifierFlags?: number
+  keyModifierFlags?: number,
 ): Promise<unknown> {
   requireElementIdOrXY(elementId, x, y);
   const url = elementId ? `/wda/element/${elementId}/rightClick` : '/wda/rightClick';
@@ -187,7 +187,7 @@ export async function macosHover(
   elementId?: string,
   x?: number,
   y?: number,
-  keyModifierFlags?: number
+  keyModifierFlags?: number,
 ): Promise<unknown> {
   requireElementIdOrXY(elementId, x, y);
   const url = elementId ? `/wda/element/${elementId}/hover` : '/wda/hover';
@@ -217,7 +217,7 @@ export async function macosDoubleClick(
   elementId?: string,
   x?: number,
   y?: number,
-  keyModifierFlags?: number
+  keyModifierFlags?: number,
 ): Promise<unknown> {
   requireElementIdOrXY(elementId, x, y);
   const url = elementId ? `/wda/element/${elementId}/doubleClick` : '/wda/doubleClick';
@@ -256,7 +256,7 @@ export async function macosClickAndDrag(
   startY?: number,
   endX?: number,
   endY?: number,
-  keyModifierFlags?: number
+  keyModifierFlags?: number,
 ): Promise<unknown> {
   requireSourceDestWithElementsOrCoordinates(
     sourceElementId,
@@ -264,7 +264,7 @@ export async function macosClickAndDrag(
     startX,
     startY,
     endX,
-    endY
+    endY,
   );
   const url =
     sourceElementId && destinationElementId
@@ -317,7 +317,7 @@ export async function macosClickAndDragAndHold(
   endX?: number,
   endY?: number,
   velocity?: number,
-  keyModifierFlags?: number
+  keyModifierFlags?: number,
 ): Promise<unknown> {
   requireSourceDestWithElementsOrCoordinates(
     sourceElementId,
@@ -325,7 +325,7 @@ export async function macosClickAndDragAndHold(
     startX,
     startY,
     endX,
-    endY
+    endY,
   );
   const url =
     sourceElementId && destinationElementId
@@ -360,10 +360,10 @@ export async function macosClickAndDragAndHold(
 export async function macosKeys(
   this: Mac2Driver,
   keys: (KeyOptions | string)[],
-  elementId?: string
+  elementId?: string,
 ): Promise<unknown> {
   const url = elementId ? `/wda/element/${elementId}/keys` : '/wda/keys';
-  return await this.wda.proxy.command(url, 'POST', { keys });
+  return await this.wda.proxy.command(url, 'POST', {keys});
 }
 
 /**
@@ -385,7 +385,7 @@ export async function macosTap(
   elementId?: string,
   x?: number,
   y?: number,
-  keyModifierFlags?: number
+  keyModifierFlags?: number,
 ): Promise<unknown> {
   requireElementIdOrXY(elementId, x, y);
   const url = elementId ? `/wda/element/${elementId}/tap` : '/wda/tap';
@@ -415,7 +415,7 @@ export async function macosDoubleTap(
   elementId?: string,
   x?: number,
   y?: number,
-  keyModifierFlags?: number
+  keyModifierFlags?: number,
 ): Promise<unknown> {
   requireElementIdOrXY(elementId, x, y);
   const url = elementId ? `/wda/element/${elementId}/doubleTap` : '/wda/doubleTap';
@@ -447,7 +447,7 @@ export async function macosPressAndHold(
   elementId?: string,
   x?: number,
   y?: number,
-  keyModifierFlags?: number
+  keyModifierFlags?: number,
 ): Promise<unknown> {
   const url = elementId ? `/wda/element/${elementId}/press` : '/wda/press';
   return await this.wda.proxy.command(url, 'POST', {
@@ -486,7 +486,7 @@ export async function macosPressAndDrag(
   startY?: number,
   endX?: number,
   endY?: number,
-  keyModifierFlags?: number
+  keyModifierFlags?: number,
 ): Promise<unknown> {
   // requireSourceDestWithElementsOrCoordinates(
   //   sourceElementId, destinationElementId,
@@ -543,7 +543,7 @@ export async function macosPressAndDragAndHold(
   endX?: number,
   endY?: number,
   velocity?: number,
-  keyModifierFlags?: number
+  keyModifierFlags?: number,
 ): Promise<unknown> {
   requireSourceDestWithElementsOrCoordinates(
     sourceElementId,
@@ -551,7 +551,7 @@ export async function macosPressAndDragAndHold(
     startX,
     startY,
     endX,
-    endY
+    endY,
   );
   const url =
     sourceElementId && destinationElementId
@@ -599,7 +599,7 @@ function requireSourceDestWithElementsOrCoordinates(
   startX?: number,
   startY?: number,
   endX?: number,
-  endY?: number
+  endY?: number,
 ): void {
   if (
     !(_.isString(sourceElementId) && _.isString(destinationElementId)) &&
@@ -607,8 +607,7 @@ function requireSourceDestWithElementsOrCoordinates(
   ) {
     throw new errors.InvalidArgumentError(
       `'sourceElementId' and 'destinationElementId' ` +
-        `or 'startX', 'startY', 'endX' and 'endY' are required.`
+        `or 'startX', 'startY', 'endX' and 'endY' are required.`,
     );
   }
 }
-

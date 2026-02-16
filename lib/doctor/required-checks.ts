@@ -1,9 +1,8 @@
 import {doctor} from 'appium/support';
 import {exec} from 'teen_process';
-import { getPath as getXcodePath } from 'appium-xcode';
+import {getPath as getXcodePath} from 'appium-xcode';
 import type {IDoctorCheck, AppiumLogger, DoctorCheckResult} from '@appium/types';
 import '@colors/colors';
-
 
 export class XcodeCheck implements IDoctorCheck {
   log!: AppiumLogger;
@@ -31,7 +30,6 @@ export class XcodeCheck implements IDoctorCheck {
 }
 export const xcodeCheck = new XcodeCheck();
 
-
 export class XcodebuildCheck implements IDoctorCheck {
   log!: AppiumLogger;
   static readonly XCODE_VER_PATTERN = /^Xcode\s+([\d.]+)$/m;
@@ -45,18 +43,24 @@ export class XcodebuildCheck implements IDoctorCheck {
       ({stdout, stderr} = await exec('xcodebuild', ['-version']));
       xcodeVerMatch = XcodebuildCheck.XCODE_VER_PATTERN.exec(stdout);
     } catch (err) {
-      return doctor.nok(`Cannot run 'xcodebuild': ${(err as any).stderr || (err as Error).message}`);
+      return doctor.nok(
+        `Cannot run 'xcodebuild': ${(err as any).stderr || (err as Error).message}`,
+      );
     }
     if (!xcodeVerMatch) {
       return doctor.nok(`Cannot determine Xcode version. stdout: ${stdout}; stderr: ${stderr}`);
     }
     const xcodeMajorVer = parseInt(xcodeVerMatch[1], 10);
     if (xcodeMajorVer < XcodebuildCheck.MIN_XCODE_VERSION) {
-      return doctor.nok(`The actual Xcode version (${xcodeVerMatch[0]}) is older than the expected ` +
-        `one (${XcodebuildCheck.MIN_XCODE_VERSION})`);
+      return doctor.nok(
+        `The actual Xcode version (${xcodeVerMatch[0]}) is older than the expected ` +
+          `one (${XcodebuildCheck.MIN_XCODE_VERSION})`,
+      );
     }
-    return doctor.ok(`xcodebuild is installed and has a matching version number ` +
-      `(${xcodeVerMatch[1]} >= ${XcodebuildCheck.MIN_XCODE_VERSION})`);
+    return doctor.ok(
+      `xcodebuild is installed and has a matching version number ` +
+        `(${xcodeVerMatch[1]} >= ${XcodebuildCheck.MIN_XCODE_VERSION})`,
+    );
   }
 
   async fix(): Promise<string> {
@@ -72,4 +76,3 @@ export class XcodebuildCheck implements IDoctorCheck {
   }
 }
 export const xcodebuildCheck = new XcodebuildCheck();
-

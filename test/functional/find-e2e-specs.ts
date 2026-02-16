@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import { remote } from 'webdriverio';
-import type { Browser } from 'webdriverio';
-import { HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID } from '../utils';
-import { expect, use } from 'chai';
+import {remote} from 'webdriverio';
+import type {Browser} from 'webdriverio';
+import {HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID} from '../utils';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 const CAPS = {
@@ -43,7 +43,9 @@ describe('Mac2Driver - find elements', function () {
   it('should find multiple by accessibility id', async function () {
     const els = await driver!.findElements('accessibility id', 'duplicateDocument:');
     expect(els.length).eql(1);
-    await expect(driver!.getElementAttribute(_.toString(els[0]), 'identifier')).eventually.eql('duplicateDocument:');
+    await expect(driver!.getElementAttribute(_.toString(els[0]), 'identifier')).eventually.eql(
+      'duplicateDocument:',
+    );
   });
 
   it('should find by class name', async function () {
@@ -59,20 +61,26 @@ describe('Mac2Driver - find elements', function () {
   it('should find by predicate', async function () {
     const els = await driver!.findElements('-ios predicate string', 'elementType == 2');
     expect(els.length).be.above(0);
-    await expect(driver!.getElementAttribute(_.toString(els[0]), 'elementType')).eventually.eql('2');
+    await expect(driver!.getElementAttribute(_.toString(els[0]), 'elementType')).eventually.eql(
+      '2',
+    );
   });
 
   it('should find by class chain', async function () {
     const els = await driver!.findElements('-ios class chain', '**/XCUIElementTypePopUpButton');
     expect(els.length).be.above(0);
-    await expect(driver!.getElementAttribute(_.toString(els[0]), 'elementType')).eventually.eql('14');
-    await expect(driver!.getElementAttribute(_.toString(els[0]), 'elementType')).eventually.eql('14');
+    await expect(driver!.getElementAttribute(_.toString(els[0]), 'elementType')).eventually.eql(
+      '14',
+    );
+    await expect(driver!.getElementAttribute(_.toString(els[0]), 'elementType')).eventually.eql(
+      '14',
+    );
   });
 
   it('should find by xpath', async function () {
     const el = await driver!.findElement(
       'xpath',
-      '//XCUIElementTypePopUpButton[@value="Regular" and @label="type face"]'
+      '//XCUIElementTypePopUpButton[@value="Regular" and @label="type face"]',
     );
     expect(el).exist;
   });
@@ -81,7 +89,7 @@ describe('Mac2Driver - find elements', function () {
     // xpath index starts from 1
     const el = await driver!.findElement(
       'xpath',
-      '/XCUIElementTypeApplication[@title="TextEdit"]/XCUIElementTypeWindow[1]/XCUIElementTypeScrollView[1]'
+      '/XCUIElementTypeApplication[@title="TextEdit"]/XCUIElementTypeWindow[1]/XCUIElementTypeScrollView[1]',
     );
     expect(el).exist;
   });
@@ -89,11 +97,15 @@ describe('Mac2Driver - find elements', function () {
   it('should find multiple by xpath', async function () {
     const els = await driver!.findElements(
       'xpath',
-      '//XCUIElementTypePopUpButton[@enabled="true"]'
+      '//XCUIElementTypePopUpButton[@enabled="true"]',
     );
     expect(els.length).be.above(1);
-    await expect(driver!.getElementAttribute(_.toString(els[0]), 'elementType')).eventually.eql('14');
-    await expect(driver!.getElementAttribute(_.toString(els[0]), 'elementType')).eventually.eql('14');
+    await expect(driver!.getElementAttribute(_.toString(els[0]), 'elementType')).eventually.eql(
+      '14',
+    );
+    await expect(driver!.getElementAttribute(_.toString(els[0]), 'elementType')).eventually.eql(
+      '14',
+    );
   });
 
   it('should find subelements', async function () {
@@ -101,7 +113,11 @@ describe('Mac2Driver - find elements', function () {
     expect(el).exist;
     const subEls = await driver!.findElementsFromElement(_.toString(el), '-ios class chain', '*');
     expect(subEls.length).be.above(1);
-    await expect(driver!.getElementAttribute(_.toString(subEls), 'elementType')).eventually.eql('72');
-    await expect(driver!.getElementAttribute(_.toString(subEls), 'elementType')).eventually.eql('72');
+    await expect(driver!.getElementAttribute(_.toString(subEls), 'elementType')).eventually.eql(
+      '72',
+    );
+    await expect(driver!.getElementAttribute(_.toString(subEls), 'elementType')).eventually.eql(
+      '72',
+    );
   });
 });

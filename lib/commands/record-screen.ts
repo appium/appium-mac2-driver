@@ -1,11 +1,11 @@
 import _ from 'lodash';
-import { waitForCondition } from 'asyncbox';
-import { util, fs, tempDir } from 'appium/support';
-import { SubProcess } from 'teen_process';
+import {waitForCondition} from 'asyncbox';
+import {util, fs, tempDir} from 'appium/support';
+import {SubProcess} from 'teen_process';
 import B from 'bluebird';
-import { uploadRecordedMedia } from './helpers';
-import type { Mac2Driver } from '../driver';
-import type { AppiumLogger, StringRecord } from '@appium/types';
+import {uploadRecordedMedia} from './helpers';
+import type {Mac2Driver} from '../driver';
+import type {AppiumLogger, StringRecord} from '@appium/types';
 
 const RETRY_PAUSE = 300;
 const RETRY_TIMEOUT = 5000;
@@ -16,7 +16,16 @@ const FFMPEG_BINARY = 'ffmpeg';
 const DEFAULT_FPS = 15;
 const DEFAULT_PRESET = 'veryfast';
 
-type Preset = 'ultrafast' | 'superfast' | 'veryfast' | 'faster' | 'fast' | 'medium' | 'slow' | 'slower' | 'veryslow';
+type Preset =
+  | 'ultrafast'
+  | 'superfast'
+  | 'veryfast'
+  | 'faster'
+  | 'fast'
+  | 'medium'
+  | 'slow'
+  | 'slower'
+  | 'veryslow';
 
 interface ScreenRecorderOptions {
   fps?: number;
@@ -36,7 +45,7 @@ async function requireFfmpegPath(log: AppiumLogger): Promise<string> {
     return await fs.which(FFMPEG_BINARY);
   } catch {
     throw log.errorWithException(
-      `${FFMPEG_BINARY} has not been found in PATH. ` + `Please make sure it is installed`
+      `${FFMPEG_BINARY} has not been found in PATH. ` + `Please make sure it is installed`,
     );
   }
 }
@@ -69,8 +78,7 @@ export class ScreenRecorder {
     this._captureClicks = opts.captureClicks;
     this._preset = opts.preset || DEFAULT_PRESET;
     this._videoFilter = opts.videoFilter;
-    this._timeLimit =
-      opts.timeLimit && opts.timeLimit > 0 ? opts.timeLimit : DEFAULT_TIME_LIMIT;
+    this._timeLimit = opts.timeLimit && opts.timeLimit > 0 ? opts.timeLimit : DEFAULT_TIME_LIMIT;
   }
 
   async getVideoPath(): Promise<string> {
@@ -78,7 +86,7 @@ export class ScreenRecorder {
   }
 
   isRunning(): boolean {
-    return !!(this._process?.isRunning);
+    return !!this._process?.isRunning;
   }
 
   async start(): Promise<void> {
@@ -148,17 +156,17 @@ export class ScreenRecorder {
         {
           waitMs: RETRY_TIMEOUT,
           intervalMs: RETRY_PAUSE,
-        }
+        },
       );
     } catch {
       await this._enforceTermination();
       throw this._log.errorWithException(
         `The expected screen record file '${this._videoPath}' does not exist. ` +
-          `Check the server log for more details`
+          `Check the server log for more details`,
       );
     }
     this._log.info(
-      `The video recording has started. Will timeout in ${util.pluralize('second', this._timeLimit, true)}`
+      `The video recording has started. Will timeout in ${util.pluralize('second', this._timeLimit, true)}`,
     );
   }
 
@@ -176,7 +184,7 @@ export class ScreenRecorder {
       const timer = setTimeout(async () => {
         await this._enforceTermination();
         reject(
-          new Error(`Screen recording has failed to exit after ${PROCESS_SHUTDOWN_TIMEOUT}ms`)
+          new Error(`Screen recording has failed to exit after ${PROCESS_SHUTDOWN_TIMEOUT}ms`),
         );
       }, PROCESS_SHUTDOWN_TIMEOUT);
 
@@ -254,12 +262,12 @@ export async function startRecordingScreen(
   preset?: Preset,
   captureCursor?: boolean,
   captureClicks?: boolean,
-  forceRestart: boolean = true
+  forceRestart: boolean = true,
 ): Promise<void> {
   if (_.isNil(deviceId)) {
     throw new Error(
       `'deviceId' option must be provided. Run 'ffmpeg -f avfoundation -list_devices true -i' ` +
-        'to fetch the list of available device ids'
+        'to fetch the list of available device ids',
     );
   }
 
@@ -278,19 +286,15 @@ export async function startRecordingScreen(
     prefix: util.uuidV4().substring(0, 8),
     suffix: `.${DEFAULT_EXT}`,
   });
-  this._screenRecorder = new ScreenRecorder(
-    videoPath,
-    this.log,
-    {
-      fps: parseInt(`${fps}`, 10),
-      timeLimit: parseInt(`${timeLimit}`, 10),
-      preset,
-      captureCursor,
-      captureClicks,
-      videoFilter,
-      deviceId,
-    }
-  );
+  this._screenRecorder = new ScreenRecorder(videoPath, this.log, {
+    fps: parseInt(`${fps}`, 10),
+    timeLimit: parseInt(`${timeLimit}`, 10),
+    preset,
+    captureCursor,
+    captureClicks,
+    videoFilter,
+    deviceId,
+  });
   try {
     await this._screenRecorder.start();
   } catch (e) {
@@ -330,7 +334,7 @@ export async function stopRecordingScreen(
   method?: string,
   headers?: StringRecord | [string, any][],
   fileFieldName?: string,
-  formFields?: StringRecord | [string, string][]
+  formFields?: StringRecord | [string, string][],
 ): Promise<string> {
   if (!this._screenRecorder) {
     this.log.debug('No screen recording has been started. Doing nothing');
@@ -353,4 +357,3 @@ export async function stopRecordingScreen(
   };
   return await uploadRecordedMedia.bind(this)(videoPath, remotePath, options);
 }
-

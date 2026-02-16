@@ -1,4 +1,4 @@
-import type { Mac2Driver } from '../driver';
+import type {Mac2Driver} from '../driver';
 
 /**
  * Sets the content of the clipboard.
@@ -10,7 +10,7 @@ import type { Mac2Driver } from '../driver';
 export async function macosSetClipboard(
   this: Mac2Driver,
   content: string,
-  contentType: string = 'plaintext'
+  contentType: string = 'plaintext',
 ): Promise<void> {
   await this.proxyCommand('/wda/setPasteboard', 'POST', {
     content,
@@ -26,10 +26,11 @@ export async function macosSetClipboard(
  * @returns {Promise<string>} The actual clipboard content encoded into base64 string.
  * An empty string is returned if the clipboard contains no data for the given content type.
  */
-export async function macosGetClipboard(this: Mac2Driver, contentType: string = 'plaintext'): Promise<string> {
-  return /** @type {string} */ (
-    await this.proxyCommand('/wda/getPasteboard', 'POST', {
-      contentType,
-    })
-  );
+export async function macosGetClipboard(
+  this: Mac2Driver,
+  contentType: string = 'plaintext',
+): Promise<string> {
+  return /** @type {string} */ await this.proxyCommand('/wda/getPasteboard', 'POST', {
+    contentType,
+  });
 }

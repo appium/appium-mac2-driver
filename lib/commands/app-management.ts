@@ -1,5 +1,5 @@
-import type { Mac2Driver } from '../driver';
-import type { StringRecord } from '@appium/types';
+import type {Mac2Driver} from '../driver';
+import type {StringRecord} from '@appium/types';
 
 /**
  * Start an app with given bundle identifier or activates it
@@ -20,7 +20,7 @@ export async function macosLaunchApp(
   bundleId?: string,
   path?: string,
   args?: string[],
-  environment?: StringRecord
+  environment?: StringRecord,
 ): Promise<unknown> {
   return await this.wda.proxy.command('/wda/apps/launch', 'POST', {
     arguments: args,
@@ -42,9 +42,9 @@ export async function macosLaunchApp(
 export async function macosActivateApp(
   this: Mac2Driver,
   bundleId?: string,
-  path?: string
+  path?: string,
 ): Promise<unknown> {
-  return await this.wda.proxy.command('/wda/apps/activate', 'POST', { bundleId, path });
+  return await this.wda.proxy.command('/wda/apps/activate', 'POST', {bundleId, path});
 }
 
 /**
@@ -61,9 +61,9 @@ export async function macosActivateApp(
 export async function macosTerminateApp(
   this: Mac2Driver,
   bundleId?: string,
-  path?: string
+  path?: string,
 ): Promise<boolean> {
-  return (await this.wda.proxy.command('/wda/apps/terminate', 'POST', { bundleId, path })) as boolean;
+  return (await this.wda.proxy.command('/wda/apps/terminate', 'POST', {bundleId, path})) as boolean;
 }
 
 /**
@@ -81,8 +81,7 @@ export async function macosTerminateApp(
 export async function macosQueryAppState(
   this: Mac2Driver,
   bundleId?: string,
-  path?: string
+  path?: string,
 ): Promise<number> {
-  return (await this.wda.proxy.command('/wda/apps/state', 'POST', { bundleId, path })) as number;
+  return (await this.wda.proxy.command('/wda/apps/state', 'POST', {bundleId, path})) as number;
 }
-

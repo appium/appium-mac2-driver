@@ -1,4 +1,4 @@
-import type { Mac2Driver } from '../driver';
+import type {Mac2Driver} from '../driver';
 
 /**
  * Retrieves the string representation of the current application
@@ -11,10 +11,9 @@ import type { Mac2Driver } from '../driver';
  *                 for more details.
  * @returns the page source in the requested format
  */
-export async function macosSource(
-  this: Mac2Driver,
-  format: string = 'xml'
-): Promise<string> {
-  return (await this.wda.proxy.command(`/source?format=${encodeURIComponent(format)}`, 'GET')) as string;
+export async function macosSource(this: Mac2Driver, format: string = 'xml'): Promise<string> {
+  return (await this.wda.proxy.command(
+    `/source?format=${encodeURIComponent(format)}`,
+    'GET',
+  )) as string;
 }
-

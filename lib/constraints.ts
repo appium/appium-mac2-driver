@@ -57,4 +57,3 @@ const MAC2_CONSTRAINTS = {
 export default MAC2_CONSTRAINTS;
 
 export type Mac2Constraints = typeof MAC2_CONSTRAINTS;
-

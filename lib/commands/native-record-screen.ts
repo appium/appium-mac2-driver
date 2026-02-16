@@ -1,18 +1,18 @@
 import _ from 'lodash';
 import B, {TimeoutError} from 'bluebird';
 import path from 'node:path';
-import { fs, util } from 'appium/support';
-import type { Mac2Driver } from '../driver';
-import { uploadRecordedMedia } from './helpers';
-import type { AppiumLogger, StringRecord } from '@appium/types';
+import {fs, util} from 'appium/support';
+import type {Mac2Driver} from '../driver';
+import {uploadRecordedMedia} from './helpers';
+import type {AppiumLogger, StringRecord} from '@appium/types';
 import type EventEmitter from 'node:events';
-import { waitForCondition } from 'asyncbox';
-import { exec } from 'teen_process';
-import { BIDI_EVENT_NAME } from './bidi/constants';
-import { toNativeVideoChunkAddedEvent } from './bidi/models';
+import {waitForCondition} from 'asyncbox';
+import {exec} from 'teen_process';
+import {BIDI_EVENT_NAME} from './bidi/constants';
+import {toNativeVideoChunkAddedEvent} from './bidi/models';
 
 const RECORDING_STARTUP_TIMEOUT_MS = 5000;
-const BUFFER_SIZE = 0xFFFF;
+const BUFFER_SIZE = 0xffff;
 const MONITORING_INTERVAL_DURATION_MS = 1000;
 const MAX_MONITORING_DURATION_MS = 24 * 60 * 60 * 1000; // 1 day
 
@@ -22,7 +22,7 @@ export class NativeVideoChunksBroadcaster {
   private _publishers: Map<string, Promise<void>>;
   private _terminated: boolean;
 
-  constructor (ee: EventEmitter, log: AppiumLogger) {
+  constructor(ee: EventEmitter, log: AppiumLogger) {
     this._ee = ee;
     this._log = log;
     this._publishers = new Map();
@@ -62,22 +62,25 @@ export class NativeVideoChunksBroadcaster {
     let fullPath = '';
     let bytesRead = 0n;
     try {
-      await waitForCondition(async () => {
-        const paths = await listAttachments();
-        const result = paths.find((name) => name.endsWith(uuid));
-        if (result) {
-          fullPath = result;
-          return true;
-        }
-        return false;
-      }, {
-        waitMs: RECORDING_STARTUP_TIMEOUT_MS,
-        intervalMs: 300,
-      });
+      await waitForCondition(
+        async () => {
+          const paths = await listAttachments();
+          const result = paths.find((name) => name.endsWith(uuid));
+          if (result) {
+            fullPath = result;
+            return true;
+          }
+          return false;
+        },
+        {
+          waitMs: RECORDING_STARTUP_TIMEOUT_MS,
+          intervalMs: 300,
+        },
+      );
     } catch {
       throw new Error(
         `The video recording identified by ${uuid} did not ` +
-        `start within ${RECORDING_STARTUP_TIMEOUT_MS}ms timeout`
+          `start within ${RECORDING_STARTUP_TIMEOUT_MS}ms timeout`,
       );
     }
 
@@ -85,12 +88,14 @@ export class NativeVideoChunksBroadcaster {
     while (!this._terminated && performance.now() - startedMs < MAX_MONITORING_DURATION_MS) {
       const isCompleted = !(await isFileUsed(fullPath, 'testman'));
 
-      const { size } = await fs.stat(fullPath, {bigint: true});
+      const {size} = await fs.stat(fullPath, {bigint: true});
       if (bytesRead < size) {
         const handle = await fs.open(fullPath, 'r');
         try {
           while (bytesRead < size) {
-            const bufferSize = Number(size - bytesRead > BUFFER_SIZE ? BUFFER_SIZE : size - bytesRead);
+            const bufferSize = Number(
+              size - bytesRead > BUFFER_SIZE ? BUFFER_SIZE : size - bytesRead,
+            );
             const buf = Buffer.alloc(bufferSize);
             await fs.read(handle, buf as any, 0, bufferSize, bytesRead as any);
             this._ee.emit(BIDI_EVENT_NAME, toNativeVideoChunkAddedEvent(uuid, buf));
@@ -103,7 +108,7 @@ export class NativeVideoChunksBroadcaster {
 
       if (isCompleted) {
         this._log.debug(
-          `The native video recording identified by ${uuid} has been detected as completed`
+          `The native video recording identified by ${uuid} has been detected as completed`,
         );
         return;
       }
@@ -113,7 +118,7 @@ export class NativeVideoChunksBroadcaster {
 
     this._log.warn(
       `Stopped monitoring of the native video recording identified by ${uuid} ` +
-      `because of the timeout`
+        `because of the timeout`,
     );
   }
 
@@ -151,7 +156,7 @@ export class NativeVideoChunksBroadcaster {
     }
     const tasks: Promise<any>[] = attachments
       .map((attachmentPath) => [path.basename(attachmentPath), attachmentPath])
-      .filter(([name,]) => this._publishers.has(name))
+      .filter(([name]) => this._publishers.has(name))
       .map(([, attachmentPath]) => fs.rimraf(attachmentPath));
     if (_.isEmpty(tasks)) {
       return;
@@ -159,7 +164,7 @@ export class NativeVideoChunksBroadcaster {
     try {
       await Promise.all(tasks);
       this._log.debug(
-        `Successfully deleted ${util.pluralize('leftover video recording', tasks.length, true)}`
+        `Successfully deleted ${util.pluralize('leftover video recording', tasks.length, true)}`,
       );
     } catch (e) {
       this._log.warn(`Could not cleanup some leftover video recordings: ${e.message}`);
@@ -188,11 +193,11 @@ export async function macosStartNativeScreenRecording(
   codec?: number,
   displayId?: number,
 ): Promise<ActiveVideoInfo> {
-  const result = await this.wda.proxy.command('/wda/video/start', 'POST', {
+  const result = (await this.wda.proxy.command('/wda/video/start', 'POST', {
     fps,
     codec,
     displayId,
-  }) as ActiveVideoInfo;
+  })) as ActiveVideoInfo;
   this._videoChunksBroadcaster.schedule(result.uuid);
   return result;
 }
@@ -203,9 +208,9 @@ export async function macosStartNativeScreenRecording(
  * null if no native video recording has been started.
  */
 export async function macosGetNativeScreenRecordingInfo(
-  this: Mac2Driver
+  this: Mac2Driver,
 ): Promise<ActiveVideoInfo | null> {
-  return await this.wda.proxy.command('/wda/video', 'GET') as ActiveVideoInfo | null;
+  return (await this.wda.proxy.command('/wda/video', 'GET')) as ActiveVideoInfo | null;
 }
 
 /**
@@ -246,23 +251,25 @@ export async function macosStopNativeScreenRecording(
   formFields?: StringRecord | [string, string][],
   ignorePayload?: boolean,
 ): Promise<string> {
-  const response: ActiveVideoInfo | null = (
-    await this.wda.proxy.command('/wda/video/stop', 'POST', {})
-  ) as ActiveVideoInfo | null;
+  const response: ActiveVideoInfo | null = (await this.wda.proxy.command(
+    '/wda/video/stop',
+    'POST',
+    {},
+  )) as ActiveVideoInfo | null;
   if (!response || !_.isPlainObject(response)) {
     throw new Error(
-      'There is no active screen recording, thus nothing to stop. Did you start it before?'
+      'There is no active screen recording, thus nothing to stop. Did you start it before?',
     );
   }
 
-  const { uuid } = response;
+  const {uuid} = response;
   try {
     await B.resolve(this._videoChunksBroadcaster.waitFor(uuid)).timeout(5000);
   } catch (e) {
     if (e instanceof TimeoutError) {
       this.log.debug(
         `The BiDi chunks broadcaster for the native screen recording identified ` +
-        `by ${uuid} cannot complete within 5000ms timeout`
+          `by ${uuid} cannot complete within 5000ms timeout`,
       );
     } else {
       this.log.debug(e.stack);
@@ -273,17 +280,15 @@ export async function macosStopNativeScreenRecording(
     return '';
   }
 
-  const matchedVideoPath = _.first(
-    (await listAttachments()).filter((name) => name.endsWith(uuid))
-  );
+  const matchedVideoPath = _.first((await listAttachments()).filter((name) => name.endsWith(uuid)));
   if (!matchedVideoPath) {
     throw new Error(
       `The screen recording identified by ${uuid} cannot be retrieved. ` +
-      `Make sure the Appium Server process or its parent process (e.g. Terminal) ` +
-      `has Full Disk Access permission enabled in 'System Preferences' -> 'Privacy & Security' tab. ` +
-      `You may verify the presence of the recorded video manually by running the ` +
-      `'find "$HOME/Library/Daemon Containers/" -type f -name "${uuid}"' command from Terminal ` +
-      `if the latter has been granted the above access permission.`
+        `Make sure the Appium Server process or its parent process (e.g. Terminal) ` +
+        `has Full Disk Access permission enabled in 'System Preferences' -> 'Privacy & Security' tab. ` +
+        `You may verify the presence of the recorded video manually by running the ` +
+        `'find "$HOME/Library/Daemon Containers/" -type f -name "${uuid}"' command from Terminal ` +
+        `if the latter has been granted the above access permission.`,
     );
   }
   const options = {
@@ -292,7 +297,7 @@ export async function macosStopNativeScreenRecording(
     method,
     headers,
     fileFieldName,
-    formFields
+    formFields,
   };
   return await uploadRecordedMedia.bind(this)(matchedVideoPath, remotePath, options);
 }
@@ -303,7 +308,7 @@ export async function macosStopNativeScreenRecording(
  * @returns A map where keys are display identifiers and values are display infos
  */
 export async function macosListDisplays(this: Mac2Driver): Promise<StringRecord<DisplayInfo>> {
-  return await this.wda.proxy.command('/wda/displays/list', 'GET') as StringRecord<DisplayInfo>;
+  return (await this.wda.proxy.command('/wda/displays/list', 'GET')) as StringRecord<DisplayInfo>;
 }
 
 // #region Private functions
@@ -311,7 +316,11 @@ export async function macosListDisplays(this: Mac2Driver): Promise<StringRecord<
 async function listAttachments(): Promise<string[]> {
   // The expected path looks like
   // $HOME/Library/Daemon Containers/EFDD24BF-F856-411F-8954-CD5F0D6E6F3E/Data/Attachments/CAE7E5E2-5AC9-4D33-A47B-C491D644DE06
-  const deamonContainersRoot = path.resolve(process.env.HOME as string, 'Library', 'Daemon Containers');
+  const deamonContainersRoot = path.resolve(
+    process.env.HOME as string,
+    'Library',
+    'Daemon Containers',
+  );
   return await fs.glob(`*/Data/Attachments/*`, {
     cwd: deamonContainersRoot,
     absolute: true,
@@ -319,7 +328,7 @@ async function listAttachments(): Promise<string[]> {
 }
 
 async function isFileUsed(fpath: string, userProcessName: string): Promise<boolean> {
-  const { stdout } = await exec('lsof', [fpath]);
+  const {stdout} = await exec('lsof', [fpath]);
   return stdout.includes(userProcessName);
 }
 

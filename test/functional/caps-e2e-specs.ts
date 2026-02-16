@@ -1,10 +1,10 @@
-import { remote } from 'webdriverio';
-import type { Browser } from 'webdriverio';
+import {remote} from 'webdriverio';
+import type {Browser} from 'webdriverio';
 import os from 'node:os';
 import path from 'node:path';
-import { fs } from 'appium/support';
-import { HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID } from '../utils';
-import { expect, use } from 'chai';
+import {fs} from 'appium/support';
+import {HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID} from '../utils';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 const TEST_FILE = path.resolve(os.tmpdir(), 'test.test');
@@ -50,5 +50,4 @@ describe('Mac2Driver - caps', function () {
     }
     await expect(fs.exists(TEST_FILE)).eventually.be.false;
   });
-
 });

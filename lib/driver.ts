@@ -12,8 +12,8 @@ import type {
   DriverOpts,
   W3CDriverCaps,
 } from '@appium/types';
-import { BaseDriver, DeviceSettings } from 'appium/driver';
-import { WDA_MAC_SERVER, type WDAMacServer } from './wda-mac';
+import {BaseDriver, DeviceSettings} from 'appium/driver';
+import {WDA_MAC_SERVER, type WDAMacServer} from './wda-mac';
 import MAC2_CONSTRAINTS, {type Mac2Constraints} from './constraints';
 import * as appManagemenetCommands from './commands/app-management';
 import * as appleScriptCommands from './commands/applescript';
@@ -27,8 +27,8 @@ import * as sourceCommands from './commands/source';
 import * as clipboardCommands from './commands/clipboard';
 import * as nativeScreenRecordingCommands from './commands/native-record-screen';
 import log from './logger';
-import { newMethodMap } from './method-map';
-import { executeMethodMap } from './execute-method-map';
+import {newMethodMap} from './method-map';
+import {executeMethodMap} from './execute-method-map';
 
 const NO_PROXY: RouteMatcher[] = [
   ['GET', new RegExp('^/session/[^/]+/appium')],
@@ -81,7 +81,7 @@ export class Mac2Driver
       return;
     }
     return await this._wda.proxy.command('/appium/settings', 'POST', {
-      settings: {[key]: value}
+      settings: {[key]: value},
     });
   }
 
@@ -132,7 +132,7 @@ export class Mac2Driver
     w3cCaps1: W3CMac2DriverCaps,
     w3cCaps2?: W3CMac2DriverCaps,
     w3cCaps3?: W3CMac2DriverCaps,
-    driverData?: DriverData[]
+    driverData?: DriverData[],
   ): Promise<DefaultCreateSessionResult<Mac2Constraints>> {
     const [sessionId, caps] = await super.createSession(w3cCaps1, w3cCaps2, w3cCaps3, driverData);
     this._wda = WDA_MAC_SERVER;
@@ -142,15 +142,13 @@ export class Mac2Driver
       const prerun = caps.prerun as PrerunCapability | undefined;
       if (prerun) {
         if (!_.isString(prerun.command) && !_.isString(prerun.script)) {
-          throw new Error(`'prerun' capability value must either contain ` +
-            `'script' or 'command' entry of string type`);
+          throw new Error(
+            `'prerun' capability value must either contain ` +
+              `'script' or 'command' entry of string type`,
+          );
         }
         log.info('Executing prerun AppleScript');
-        const output = await this.macosExecAppleScript(
-          prerun.script,
-          undefined,
-          prerun.command
-        );
+        const output = await this.macosExecAppleScript(prerun.script, undefined, prerun.command);
         if (_.trim(output)) {
           log.info(`Prerun script output: ${output}`);
         }
@@ -184,15 +182,17 @@ export class Mac2Driver
     const postrun = this.opts.postrun as PostrunCapability | undefined;
     if (postrun) {
       if (!_.isString(postrun.command) && !_.isString(postrun.script)) {
-        log.error(`'postrun' capability value must either contain ` +
-          `'script' or 'command' entry of string type`);
+        log.error(
+          `'postrun' capability value must either contain ` +
+            `'script' or 'command' entry of string type`,
+        );
       } else {
         log.info('Executing postrun AppleScript');
         try {
           const output = await this.macosExecAppleScript(
             postrun.script,
             undefined,
-            postrun.command
+            postrun.command,
           );
           if (_.trim(output)) {
             log.info(`Postrun script output: ${output}`);
@@ -212,7 +212,8 @@ export class Mac2Driver
     this._wda = null;
     this.isProxyActive = false;
     this._videoChunksBroadcaster = new nativeScreenRecordingCommands.NativeVideoChunksBroadcaster(
-      this.eventEmitter, this.log
+      this.eventEmitter,
+      this.log,
     );
     this._screenRecorder = null;
   }
@@ -253,7 +254,8 @@ export class Mac2Driver
   stopRecordingScreen = recordScreenCommands.stopRecordingScreen;
 
   macosStartNativeScreenRecording = nativeScreenRecordingCommands.macosStartNativeScreenRecording;
-  macosGetNativeScreenRecordingInfo = nativeScreenRecordingCommands.macosGetNativeScreenRecordingInfo;
+  macosGetNativeScreenRecordingInfo =
+    nativeScreenRecordingCommands.macosGetNativeScreenRecordingInfo;
   macosStopNativeScreenRecording = nativeScreenRecordingCommands.macosStopNativeScreenRecording;
   macosListDisplays = nativeScreenRecordingCommands.macosListDisplays;
 

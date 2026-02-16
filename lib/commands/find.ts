@@ -1,5 +1,5 @@
-import { util } from 'appium/support';
-import type { Mac2Driver } from '../driver';
+import {util} from 'appium/support';
+import type {Mac2Driver} from '../driver';
 
 /**
  * This is needed to make lookup by image working
@@ -14,7 +14,7 @@ export async function findElOrEls(
   strategy: string,
   selector: string,
   mult: boolean,
-  context?: string
+  context?: string,
 ): Promise<any> {
   const contextId = context ? util.unwrapElement(context) : context;
   const endpoint = `/element${contextId ? `/${contextId}/element` : ''}${mult ? 's' : ''}`;
@@ -31,4 +31,3 @@ export async function findElOrEls(
     value: selector,
   });
 }
-

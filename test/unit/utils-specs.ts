@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 import * as teen_process from 'teen_process';
-import { listChildrenProcessIds } from '../../lib/utils';
-import { expect, use } from 'chai';
+import {listChildrenProcessIds} from '../../lib/utils';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 const sandbox = sinon.createSandbox();
@@ -31,7 +31,7 @@ describe('listChildrenProcessIds', function () {
    * teen_process exports `exec` via a getter, so here stubs the getter to return
    * our stub function to return expected output.
    */
-  function stubExec (stdout: string) {
+  function stubExec(stdout: string) {
     const execStub = sandbox.stub().resolves({stdout, stderr: '', code: null});
     sandbox.stub(teen_process, 'exec').get(() => execStub);
   }

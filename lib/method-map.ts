@@ -12,4 +12,3 @@ export const newMethodMap = {
     },
   },
 } as const;
-

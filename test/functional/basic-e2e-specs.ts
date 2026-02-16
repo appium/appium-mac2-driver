@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import { remote } from 'webdriverio';
-import type { Browser } from 'webdriverio';
-import { HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID } from '../utils';
-import { expect, use } from 'chai';
+import {remote} from 'webdriverio';
+import type {Browser} from 'webdriverio';
+import {HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID} from '../utils';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 const CAPS = {
@@ -46,10 +46,11 @@ describe('Mac2Driver - basic', function () {
   });
 
   it('should retrieve description source', async function () {
-    const source = await driver!.executeScript('macos: source', [{
-      format: 'description',
-    }]);
+    const source = await driver!.executeScript('macos: source', [
+      {
+        format: 'description',
+      },
+    ]);
     expect(_.includes(source as string, 'Element subtree')).be.true;
   });
-
 });

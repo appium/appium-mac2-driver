@@ -1,4 +1,4 @@
-import type { StringRecord } from '@appium/types';
+import type {StringRecord} from '@appium/types';
 
 export interface KeyOptions {
   /**
