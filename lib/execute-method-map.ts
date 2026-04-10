@@ -235,4 +235,10 @@ export const executeMethodMap = {
       optional: ['contentType'],
     },
   },
+  'macos: performAccessibilityAudit': {
+    command: 'macosPerformAccessibilityAudit',
+    params: {
+      optional: ['auditTypes'],
+    },
+  },
 } as const satisfies ExecuteMethodMap<any>;

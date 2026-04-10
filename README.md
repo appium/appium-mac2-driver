@@ -728,6 +728,26 @@ contentType | string | no | The type of the content to get. Only `plaintext` (de
 The actual clipboard content encoded into base64 string. An empty string is returned if the clipboard
 contains no data for the given content type.
 
+### macos: performAccessibilityAudit
+
+Performs an accessibility audit for the current application under test.
+Xcode must be at version 15+.
+
+#### Arguments
+
+Name | Type | Required | Description | Example
+--- | --- | --- | --- | ---
+auditTypes | array\<string\> | no | A list of audit type names as defined by [XCUIAccessibilityAuditType](https://developer.apple.com/documentation/xcuiautomation/xcuiaccessibilityaudittype?language=objc). If not provided then `XCUIAccessibilityAuditTypeAll` is used. | `['XCUIAccessibilityAuditTypeContrast']`
+
+#### Returns
+
+An array of audit issue objects. Each item includes:
+- `detailedDescription`: human-readable issue details
+- `compactDescription`: short issue summary
+- `auditType`: the resolved audit type name
+- `element`: string representation of the affected element
+- `elementDescription`: debug description of the affected element
+
 
 ## Application Under Test Concept
 

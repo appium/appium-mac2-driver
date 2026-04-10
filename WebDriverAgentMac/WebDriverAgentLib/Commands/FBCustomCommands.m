@@ -14,6 +14,7 @@
 #import "FBRoute.h"
 #import "FBRouteRequest.h"
 #import "FBSession.h"
+#import "XCUIApplication+AMAccessibilityAudit.h"
 
 @implementation FBCustomCommands
 
@@ -26,6 +27,7 @@
     [[FBRoute POST:@"/wda/setPasteboard"].withoutSession respondWithTarget:self action:@selector(handleSetPasteboard:)],
     [[FBRoute POST:@"/wda/getPasteboard"] respondWithTarget:self action:@selector(handleGetPasteboard:)],
     [[FBRoute POST:@"/wda/getPasteboard"].withoutSession respondWithTarget:self action:@selector(handleGetPasteboard:)],
+    [[FBRoute POST:@"/wda/performAccessibilityAudit"] respondWithTarget:self action:@selector(handlePerformAccessibilityAudit:)],
     [[FBRoute OPTIONS:@"/*"].withoutSession respondWithTarget:self action:@selector(handlePingCommand:)],
   ];
 }
@@ -70,6 +72,18 @@
 + (id<FBResponsePayload>)handlePingCommand:(FBRouteRequest *)request
 {
   return FBResponseWithOK();
+}
+
++ (id<FBResponsePayload>)handlePerformAccessibilityAudit:(FBRouteRequest *)request
+{
+  XCUIApplication *application = request.session.currentApplication;
+  NSArray *requestedTypes = request.arguments[@"auditTypes"];
+  NSError *error;
+  NSArray *result = [application am_performAccessibilityAuditWithAuditTypeNames:requestedTypes error:&error];
+  if (nil == result) {
+    return FBResponseWithUnknownError(error);
+  }
+  return FBResponseWithObject(result);
 }
 
 @end

@@ -65,6 +65,8 @@
 		7109C0402565B5C4006BFD13 /* NSPredicate+FBFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 710527E82565731200130763 /* NSPredicate+FBFormat.m */; };
 		7109C0422565B5C7006BFD13 /* XCUIApplication+AMHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 710527FD2565802200130763 /* XCUIApplication+AMHelpers.h */; };
 		7109C0452565B5CB006BFD13 /* XCUIApplication+AMHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 710527FE2565802200130763 /* XCUIApplication+AMHelpers.m */; };
+		715AAB102F9C450000C90123 /* XCUIApplication+AMAccessibilityAudit.h in Headers */ = {isa = PBXBuildFile; fileRef = 715AAB122F9C450000C90123 /* XCUIApplication+AMAccessibilityAudit.h */; };
+		715AAB112F9C450000C90123 /* XCUIApplication+AMAccessibilityAudit.m in Sources */ = {isa = PBXBuildFile; fileRef = 715AAB132F9C450000C90123 /* XCUIApplication+AMAccessibilityAudit.m */; };
 		7109C0472565B5DB006BFD13 /* DDNumber.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD1E2564EFAC008B8B2A /* DDNumber.h */; };
 		7109C0492565B5DD006BFD13 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 7151AD1D2564EFAC008B8B2A /* DDNumber.m */; };
 		7109C04B2565B5E0006BFD13 /* DDRange.h in Headers */ = {isa = PBXBuildFile; fileRef = 7151AD1F2564EFAC008B8B2A /* DDRange.h */; };
@@ -133,6 +135,7 @@
 		71440CDC2D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 71440CDA2D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.m */; };
 		71440CDE2D54B2410048EA32 /* AMXCTRunnerDaemonSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 71440CDD2D54B2410048EA32 /* AMXCTRunnerDaemonSession.h */; };
 		71440CE02D54D8C90048EA32 /* AMVideoRecordingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71440CDF2D54D8C90048EA32 /* AMVideoRecordingTests.m */; };
+		71440CE42D54D8C90048EA32 /* AMAccessibilityAuditTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71440CE32D54D8C90048EA32 /* AMAccessibilityAuditTests.m */; };
 		714CA6FC2566461100353B27 /* FBDebugCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA6FA2566461100353B27 /* FBDebugCommands.h */; };
 		714CA6FD2566461100353B27 /* FBDebugCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 714CA6FB2566461100353B27 /* FBDebugCommands.m */; };
 		714CA7012566475200353B27 /* XCUIApplication+AMSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 714CA6FF2566475200353B27 /* XCUIApplication+AMSource.h */; };
@@ -261,6 +264,8 @@
 		710527F22565744400130763 /* FBSession-Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FBSession-Private.h"; sourceTree = "<group>"; };
 		710527FD2565802200130763 /* XCUIApplication+AMHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIApplication+AMHelpers.h"; sourceTree = "<group>"; };
 		710527FE2565802200130763 /* XCUIApplication+AMHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIApplication+AMHelpers.m"; sourceTree = "<group>"; };
+		715AAB122F9C450000C90123 /* XCUIApplication+AMAccessibilityAudit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIApplication+AMAccessibilityAudit.h"; sourceTree = "<group>"; };
+		715AAB132F9C450000C90123 /* XCUIApplication+AMAccessibilityAudit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XCUIApplication+AMAccessibilityAudit.m"; sourceTree = "<group>"; };
 		710528162565A09100130763 /* FBScreenshotCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBScreenshotCommands.m; sourceTree = "<group>"; };
 		710528172565A09100130763 /* FBScreenshotCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBScreenshotCommands.h; sourceTree = "<group>"; };
 		7105281C2565A33300130763 /* FBSessionCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBSessionCommands.m; sourceTree = "<group>"; };
@@ -305,6 +310,7 @@
 		71440CDA2D54AFC60048EA32 /* AMXCTRunnerDaemonSessionWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMXCTRunnerDaemonSessionWrapper.m; sourceTree = "<group>"; };
 		71440CDD2D54B2410048EA32 /* AMXCTRunnerDaemonSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMXCTRunnerDaemonSession.h; sourceTree = "<group>"; };
 		71440CDF2D54D8C90048EA32 /* AMVideoRecordingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMVideoRecordingTests.m; sourceTree = "<group>"; };
+		71440CE32D54D8C90048EA32 /* AMAccessibilityAuditTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMAccessibilityAuditTests.m; sourceTree = "<group>"; };
 		714CA6FA2566461100353B27 /* FBDebugCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDebugCommands.h; sourceTree = "<group>"; };
 		714CA6FB2566461100353B27 /* FBDebugCommands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBDebugCommands.m; sourceTree = "<group>"; };
 		714CA6FF2566475200353B27 /* XCUIApplication+AMSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUIApplication+AMSource.h"; sourceTree = "<group>"; };
@@ -641,6 +647,8 @@
 				713A9D302566A14200118D07 /* XCUIApplication+AMActiveElement.m */,
 				710527FD2565802200130763 /* XCUIApplication+AMHelpers.h */,
 				710527FE2565802200130763 /* XCUIApplication+AMHelpers.m */,
+				715AAB122F9C450000C90123 /* XCUIApplication+AMAccessibilityAudit.h */,
+				715AAB132F9C450000C90123 /* XCUIApplication+AMAccessibilityAudit.m */,
 				714CA6FF2566475200353B27 /* XCUIApplication+AMSource.h */,
 				714CA7002566475200353B27 /* XCUIApplication+AMSource.m */,
 				719E6A6C25822DB800777988 /* XCUIApplication+AMUIInterruptions.h */,
@@ -855,6 +863,7 @@
 				718D2C072567A028005F533B /* AMElementAttributesTests.m */,
 				718D2C202567D8A8005F533B /* AMEditElementTests.m */,
 				71336AF62BD15B4D00997FF4 /* AMDeviceTests.m */,
+				71440CE32D54D8C90048EA32 /* AMAccessibilityAuditTests.m */,
 				71440CDF2D54D8C90048EA32 /* AMVideoRecordingTests.m */,
 				71B00E9F2566D9570010DA73 /* AMFindElementTests.m */,
 				71B00E9C2566D7F10010DA73 /* AMIntegrationTestCase.h */,
@@ -920,6 +929,7 @@
 				71A5C67029A4E41A00421C37 /* XCTIssue+AMPatcher.h in Headers */,
 				713A9D2D25669E4F00118D07 /* XCUIElement+FBClassChain.h in Headers */,
 				7109C0422565B5C7006BFD13 /* XCUIApplication+AMHelpers.h in Headers */,
+				715AAB102F9C450000C90123 /* XCUIApplication+AMAccessibilityAudit.h in Headers */,
 				71B8B67926724B9F009CE50C /* XCUIElement+AMSwipe.h in Headers */,
 				7109BFBD2565B4FC006BFD13 /* FBElementTypeTransformer.h in Headers */,
 				7180C1D2257A9348008FA870 /* FBW3CActionsSynthesizer.h in Headers */,
@@ -1192,6 +1202,7 @@
 				7109BFCA2565B50F006BFD13 /* FBLogger.m in Sources */,
 				7109C0512565B5E7006BFD13 /* HTTPDataResponse.m in Sources */,
 				7109C0452565B5CB006BFD13 /* XCUIApplication+AMHelpers.m in Sources */,
+				715AAB112F9C450000C90123 /* XCUIApplication+AMAccessibilityAudit.m in Sources */,
 				718D2BDA25670A76005F533B /* XCUIElement+AMAttributes.m in Sources */,
 				714CA6FD2566461100353B27 /* FBDebugCommands.m in Sources */,
 				7168D5B0258B849B00EEFA12 /* LRUCache.m in Sources */,
@@ -1267,6 +1278,7 @@
 				7180C21D257AC27F008FA870 /* AMW3CActionsTests.m in Sources */,
 				71B8B684267265D7009CE50C /* AMVariousElementTests.m in Sources */,
 				718D2C292567E6D0005F533B /* AMSessionTests.m in Sources */,
+				71440CE42D54D8C90048EA32 /* AMAccessibilityAuditTests.m in Sources */,
 				71440CE02D54D8C90048EA32 /* AMVideoRecordingTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

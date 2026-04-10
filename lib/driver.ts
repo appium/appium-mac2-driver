@@ -18,6 +18,7 @@ import MAC2_CONSTRAINTS, {type Mac2Constraints} from './constraints';
 import * as appManagemenetCommands from './commands/app-management';
 import * as appleScriptCommands from './commands/applescript';
 import * as executeCommands from './commands/execute';
+import * as auditCommands from './commands/audit';
 import * as findCommands from './commands/find';
 import * as gesturesCommands from './commands/gestures';
 import * as navigationCommands from './commands/navigation';
@@ -247,6 +248,7 @@ export class Mac2Driver
 
   macosGetClipboard = clipboardCommands.macosGetClipboard;
   macosSetClipboard = clipboardCommands.macosSetClipboard;
+  macosPerformAccessibilityAudit = auditCommands.macosPerformAccessibilityAudit;
 
   macosDeepLink = navigationCommands.macosDeepLink;
 
