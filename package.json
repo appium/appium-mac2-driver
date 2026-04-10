@@ -42,8 +42,8 @@
       ]
     }
   },
-  "main": "./build/index.js",
-  "types": "./build/index.d.ts",
+  "main": "./build/lib/index.js",
+  "types": "./build/lib/index.d.ts",
   "bin": {},
   "dependencies": {
     "@appium/strongbox": "^1.0.0-rc.1",
@@ -97,9 +97,7 @@
   },
   "files": [
     "lib",
-    "build/index.*",
     "build/lib",
-    "!build/test",
     "scripts",
     "WebDriverAgentMac/Scripts",
     "WebDriverAgentMac/Cartfile",
