@@ -276,7 +276,7 @@ export class ScreenRecorder {
  */
 export async function macosStartRecordingScreen(
   this: Mac2Driver,
-  deviceId: string | number,
+  deviceId?: string | number,
   timeLimit?: string | number,
   videoFilter?: string,
   fps?: string | number,
@@ -334,7 +334,7 @@ export async function startRecordingScreen(
   options: StartRecordingScreenOptions = {},
 ): Promise<void> {
   return await this.macosStartRecordingScreen(
-    options.deviceId as string | number,
+    options.deviceId,
     options.timeLimit,
     options.videoFilter,
     options.fps,
