@@ -37,6 +37,27 @@ interface ScreenRecorderOptions {
   timeLimit?: number;
 }
 
+interface StartRecordingScreenOptions {
+  deviceId?: string | number;
+  timeLimit?: string | number;
+  videoFilter?: string;
+  fps?: string | number;
+  preset?: Preset;
+  captureCursor?: boolean;
+  captureClicks?: boolean;
+  forceRestart?: boolean;
+}
+
+interface StopRecordingScreenOptions {
+  remotePath?: string | null;
+  user?: string;
+  pass?: string;
+  method?: string;
+  headers?: StringRecord | [string, any][];
+  fileFieldName?: string;
+  formFields?: StringRecord | [string, string][];
+}
+
 /**
  * @param log - Logger instance
  */
@@ -253,7 +274,7 @@ export class ScreenRecorder {
  *                if running (`true`). The default value is `true`.
  * @throws {Error} If screen recording has failed to start or is not supported on the device under test.
  */
-export async function startRecordingScreen(
+export async function macosStartRecordingScreen(
   this: Mac2Driver,
   deviceId: string | number,
   timeLimit?: string | number,
@@ -304,6 +325,27 @@ export async function startRecordingScreen(
 }
 
 /**
+ * `/appium/start_recording_screen` route wrapper.
+ *
+ * @see macosStartRecordingScreen
+ */
+export async function startRecordingScreen(
+  this: Mac2Driver,
+  options: StartRecordingScreenOptions = {},
+): Promise<void> {
+  return await this.macosStartRecordingScreen(
+    options.deviceId as string | number,
+    options.timeLimit,
+    options.videoFilter,
+    options.fps,
+    options.preset,
+    options.captureCursor,
+    options.captureClicks,
+    options.forceRestart,
+  );
+}
+
+/**
  * Stop recording the screen.
  * If no screen recording has been started before then the method returns an empty string.
  *
@@ -326,7 +368,7 @@ export async function startRecordingScreen(
  * or the file content cannot be uploaded to the remote location
  * or screen recording is not supported on the device under test.
  */
-export async function stopRecordingScreen(
+export async function macosStopRecordingScreen(
   this: Mac2Driver,
   remotePath?: string | null,
   user?: string,
@@ -356,4 +398,24 @@ export async function stopRecordingScreen(
     formFields,
   };
   return await uploadRecordedMedia.bind(this)(videoPath, remotePath, options);
+}
+
+/**
+ * `/appium/stop_recording_screen` route wrapper.
+ *
+ * @see macosStopRecordingScreen
+ */
+export async function stopRecordingScreen(
+  this: Mac2Driver,
+  options: StopRecordingScreenOptions = {},
+): Promise<string> {
+  return await this.macosStopRecordingScreen(
+    options.remotePath,
+    options.user,
+    options.pass,
+    options.method,
+    options.headers,
+    options.fileFieldName,
+    options.formFields,
+  );
 }

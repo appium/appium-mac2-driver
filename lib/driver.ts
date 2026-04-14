@@ -254,6 +254,8 @@ export class Mac2Driver
 
   startRecordingScreen = recordScreenCommands.startRecordingScreen;
   stopRecordingScreen = recordScreenCommands.stopRecordingScreen;
+  macosStartRecordingScreen = recordScreenCommands.macosStartRecordingScreen;
+  macosStopRecordingScreen = recordScreenCommands.macosStopRecordingScreen;
 
   macosStartNativeScreenRecording = nativeScreenRecordingCommands.macosStartNativeScreenRecording;
   macosGetNativeScreenRecordingInfo =
