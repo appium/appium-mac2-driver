@@ -1,3 +1,9 @@
+## [3.3.1](https://github.com/appium/appium-mac2-driver/compare/v3.3.0...v3.3.1) (2026-04-15)
+
+### Bug Fixes
+
+* video record API args parsing ([#378](https://github.com/appium/appium-mac2-driver/issues/378)) ([3bafa83](https://github.com/appium/appium-mac2-driver/commit/3bafa83d45d74dc28b81a473f1978655abc0226c))
+
 ## [3.3.0](https://github.com/appium/appium-mac2-driver/compare/v3.2.17...v3.3.0) (2026-04-11)
 
 ### Features
