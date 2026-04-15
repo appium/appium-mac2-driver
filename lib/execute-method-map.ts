@@ -177,7 +177,7 @@ export const executeMethodMap = {
     },
   },
   'macos: startRecordingScreen': {
-    command: 'startRecordingScreen',
+    command: 'macosStartRecordingScreen',
     params: {
       required: ['deviceId'],
       optional: [
@@ -192,7 +192,7 @@ export const executeMethodMap = {
     },
   },
   'macos: stopRecordingScreen': {
-    command: 'stopRecordingScreen',
+    command: 'macosStopRecordingScreen',
     params: {
       optional: ['remotePath', 'user', 'pass', 'method', 'headers', 'fileFieldName', 'formFields'],
     },
