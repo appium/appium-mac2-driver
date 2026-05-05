@@ -9,20 +9,12 @@ import {waitForCondition} from 'asyncbox';
 import {exec} from 'teen_process';
 import {BIDI_EVENT_NAME} from './bidi/constants';
 import {toNativeVideoChunkAddedEvent} from './bidi/models';
+import {isPlainObject} from '../common-utils';
 
 const RECORDING_STARTUP_TIMEOUT_MS = 5000;
 const BUFFER_SIZE = 0xffff;
 const MONITORING_INTERVAL_DURATION_MS = 1000;
 const MAX_MONITORING_DURATION_MS = 24 * 60 * 60 * 1000; // 1 day
-
-// Todo: use isPlainObject from the appium/support in the future.
-function isPlainObject(value: unknown): value is Record<string, unknown> {
-  if (value === null || typeof value !== 'object') {
-    return false;
-  }
-  const proto = Object.getPrototypeOf(value);
-  return proto === Object.prototype || proto === null;
-}
 
 export class NativeVideoChunksBroadcaster {
   private _ee: EventEmitter;

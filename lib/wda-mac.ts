@@ -11,6 +11,7 @@ import {checkPortStatus} from 'portscanner';
 import {execSync} from 'node:child_process';
 import type {HTTPMethod, HTTPBody, ProxyResponse, ProxyOptions} from '@appium/types';
 import {listChildrenProcessIds, getModuleRoot} from './utils';
+import {clearArray, removeAllOccurrences} from './common-utils';
 
 const log = logger.getLogger('WebDriverAgentMac');
 
@@ -27,18 +28,6 @@ const DEFAULT_SHOW_SERVER_LOGS = false;
 const RUNNING_PROCESS_IDS: (string | number)[] = [];
 const RECENT_UPGRADE_TIMESTAMP_PATH = path.join('.appium', 'webdriveragent_mac', 'upgrade.time');
 const RECENT_MODULE_VERSION_ITEM_NAME = 'recentWdaModuleVersion';
-
-function clearArray<T>(items: T[]): void {
-  items.length = 0;
-}
-
-function removeAllOccurrences<T>(items: T[], value: T): void {
-  let index = items.indexOf(value);
-  while (index >= 0) {
-    items.splice(index, 1);
-    index = items.indexOf(value);
-  }
-}
 
 export interface SessionOptions {
   reqBasePath?: string;
@@ -243,7 +232,7 @@ class WDAMacProcess {
         return;
       }
 
-      const line = (stdout || stderr).trim();
+      const line = (stdout ?? stderr ?? '').trim();
       if (line) {
         log.debug(`[${XCODEBUILD}] ${line}`);
       }

@@ -148,8 +148,9 @@ export class ScreenRecorder {
     this._process = new SubProcess(fullCmd[0], fullCmd.slice(1));
     this._log.debug(`Starting ${FFMPEG_BINARY}: ${util.quote(fullCmd)}`);
     this._process.on('output', (stdout, stderr) => {
-      if ((stdout || stderr).trim()) {
-        this._log.debug(`[${FFMPEG_BINARY}] ${stdout || stderr}`);
+      const output = stdout ?? stderr ?? '';
+      if (output.trim()) {
+        this._log.debug(`[${FFMPEG_BINARY}] ${output}`);
       }
     });
     this._process.once('exit', async (code, signal) => {
