@@ -60,20 +60,14 @@ describe('Mac2Driver - find elements', function () {
   it('should find by predicate', async function () {
     const els = await driver!.findElements('-ios predicate string', 'elementType == 2');
     expect(els.length).be.above(0);
-    await expect(driver!.getElementAttribute(String(els[0]), 'elementType')).eventually.eql(
-      '2',
-    );
+    await expect(driver!.getElementAttribute(String(els[0]), 'elementType')).eventually.eql('2');
   });
 
   it('should find by class chain', async function () {
     const els = await driver!.findElements('-ios class chain', '**/XCUIElementTypePopUpButton');
     expect(els.length).be.above(0);
-    await expect(driver!.getElementAttribute(String(els[0]), 'elementType')).eventually.eql(
-      '14',
-    );
-    await expect(driver!.getElementAttribute(String(els[0]), 'elementType')).eventually.eql(
-      '14',
-    );
+    await expect(driver!.getElementAttribute(String(els[0]), 'elementType')).eventually.eql('14');
+    await expect(driver!.getElementAttribute(String(els[0]), 'elementType')).eventually.eql('14');
   });
 
   it('should find by xpath', async function () {
@@ -99,12 +93,8 @@ describe('Mac2Driver - find elements', function () {
       '//XCUIElementTypePopUpButton[@enabled="true"]',
     );
     expect(els.length).be.above(1);
-    await expect(driver!.getElementAttribute(String(els[0]), 'elementType')).eventually.eql(
-      '14',
-    );
-    await expect(driver!.getElementAttribute(String(els[0]), 'elementType')).eventually.eql(
-      '14',
-    );
+    await expect(driver!.getElementAttribute(String(els[0]), 'elementType')).eventually.eql('14');
+    await expect(driver!.getElementAttribute(String(els[0]), 'elementType')).eventually.eql('14');
   });
 
   it('should find subelements', async function () {
@@ -112,11 +102,7 @@ describe('Mac2Driver - find elements', function () {
     expect(el).exist;
     const subEls = await driver!.findElementsFromElement(String(el), '-ios class chain', '*');
     expect(subEls.length).be.above(1);
-    await expect(driver!.getElementAttribute(String(subEls), 'elementType')).eventually.eql(
-      '72',
-    );
-    await expect(driver!.getElementAttribute(String(subEls), 'elementType')).eventually.eql(
-      '72',
-    );
+    await expect(driver!.getElementAttribute(String(subEls), 'elementType')).eventually.eql('72');
+    await expect(driver!.getElementAttribute(String(subEls), 'elementType')).eventually.eql('72');
   });
 });
