@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import B, {TimeoutError} from 'bluebird';
 import path from 'node:path';
 import {fs, util} from 'appium/support';
@@ -15,6 +14,15 @@ const RECORDING_STARTUP_TIMEOUT_MS = 5000;
 const BUFFER_SIZE = 0xffff;
 const MONITORING_INTERVAL_DURATION_MS = 1000;
 const MAX_MONITORING_DURATION_MS = 24 * 60 * 60 * 1000; // 1 day
+
+// Todo: use isPlainObject from the appium/support in the future.
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  if (value === null || typeof value !== 'object') {
+    return false;
+  }
+  const proto = Object.getPrototypeOf(value);
+  return proto === Object.prototype || proto === null;
+}
 
 export class NativeVideoChunksBroadcaster {
   private _ee: EventEmitter;
@@ -140,7 +148,7 @@ export class NativeVideoChunksBroadcaster {
     }
     clearTimeout(timer);
 
-    if (!_.isEmpty(publishingErrors)) {
+    if (publishingErrors.length > 0) {
       throw new Error(publishingErrors.join('\n'));
     }
   }
@@ -151,14 +159,14 @@ export class NativeVideoChunksBroadcaster {
     }
 
     const attachments = await listAttachments();
-    if (_.isEmpty(attachments)) {
+    if (attachments.length === 0) {
       return;
     }
     const tasks: Promise<any>[] = attachments
       .map((attachmentPath) => [path.basename(attachmentPath), attachmentPath])
       .filter(([name]) => this._publishers.has(name))
       .map(([, attachmentPath]) => fs.rimraf(attachmentPath));
-    if (_.isEmpty(tasks)) {
+    if (tasks.length === 0) {
       return;
     }
     try {
@@ -256,7 +264,7 @@ export async function macosStopNativeScreenRecording(
     'POST',
     {},
   )) as ActiveVideoInfo | null;
-  if (!response || !_.isPlainObject(response)) {
+  if (!response || !isPlainObject(response)) {
     throw new Error(
       'There is no active screen recording, thus nothing to stop. Did you start it before?',
     );
@@ -280,7 +288,7 @@ export async function macosStopNativeScreenRecording(
     return '';
   }
 
-  const matchedVideoPath = _.first((await listAttachments()).filter((name) => name.endsWith(uuid)));
+  const matchedVideoPath = (await listAttachments()).find((name) => name.endsWith(uuid));
   if (!matchedVideoPath) {
     throw new Error(
       `The screen recording identified by ${uuid} cannot be retrieved. ` +

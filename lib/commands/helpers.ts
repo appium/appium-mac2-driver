@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {util, fs, net} from 'appium/support';
 import type {Mac2Driver} from '../driver';
 import type {StringRecord} from '@appium/types';
@@ -9,7 +8,7 @@ export async function uploadRecordedMedia(
   remotePath: string | null,
   uploadOptions: StringRecord = {},
 ): Promise<string> {
-  if (_.isEmpty(remotePath) || _.isNil(remotePath)) {
+  if (remotePath == null || remotePath.length === 0) {
     const {size} = await fs.stat(localFile);
     this.log.debug(
       `The size of the resulting screen recording is ${util.toReadableSizeString(size)}`,

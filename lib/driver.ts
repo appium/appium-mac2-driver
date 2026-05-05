@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import type {
   RouteMatcher,
   HTTPMethod,
@@ -57,7 +56,7 @@ export class Mac2Driver
 
   constructor(opts: InitialOpts = {} as InitialOpts) {
     super(opts);
-    this.desiredCapConstraints = _.cloneDeep(MAC2_CONSTRAINTS);
+    this.desiredCapConstraints = structuredClone(MAC2_CONSTRAINTS);
     this.locatorStrategies = [
       'id',
       'name',
@@ -142,7 +141,7 @@ export class Mac2Driver
     try {
       const prerun = caps.prerun as PrerunCapability | undefined;
       if (prerun) {
-        if (!_.isString(prerun.command) && !_.isString(prerun.script)) {
+        if (typeof prerun.command !== 'string' && typeof prerun.script !== 'string') {
           throw new Error(
             `'prerun' capability value must either contain ` +
               `'script' or 'command' entry of string type`,
@@ -150,7 +149,7 @@ export class Mac2Driver
         }
         log.info('Executing prerun AppleScript');
         const output = await this.macosExecAppleScript(prerun.script, undefined, prerun.command);
-        if (_.trim(output)) {
+        if (output.trim()) {
           log.info(`Prerun script output: ${output}`);
         }
       }
@@ -182,7 +181,7 @@ export class Mac2Driver
 
     const postrun = this.opts.postrun as PostrunCapability | undefined;
     if (postrun) {
-      if (!_.isString(postrun.command) && !_.isString(postrun.script)) {
+      if (typeof postrun.command !== 'string' && typeof postrun.script !== 'string') {
         log.error(
           `'postrun' capability value must either contain ` +
             `'script' or 'command' entry of string type`,
@@ -195,7 +194,7 @@ export class Mac2Driver
             undefined,
             postrun.command,
           );
-          if (_.trim(output)) {
+          if (output.trim()) {
             log.info(`Postrun script output: ${output}`);
           }
         } catch (e: any) {

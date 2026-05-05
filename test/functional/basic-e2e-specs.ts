@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {remote} from 'webdriverio';
 import type {Browser} from 'webdriverio';
 import {HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID} from '../utils';
@@ -37,12 +36,12 @@ describe('Mac2Driver - basic', function () {
 
   it('should retrieve xml source', async function () {
     const source = await driver!.getPageSource();
-    expect(_.includes(source, '<?xml version="1.0" encoding="UTF-8"?>')).be.true;
+    expect(source.includes('<?xml version="1.0" encoding="UTF-8"?>')).be.true;
   });
 
   it('should take screenshots', async function () {
     const screenshot = await driver!.takeScreenshot();
-    expect(_.startsWith(screenshot, 'iVBOR')).be.true;
+    expect(screenshot.startsWith('iVBOR')).be.true;
   });
 
   it('should retrieve description source', async function () {
@@ -51,6 +50,6 @@ describe('Mac2Driver - basic', function () {
         format: 'description',
       },
     ]);
-    expect(_.includes(source as string, 'Element subtree')).be.true;
+    expect((source as string).includes('Element subtree')).be.true;
   });
 });

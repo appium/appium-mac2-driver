@@ -52,7 +52,6 @@
     "asyncbox": "^6.0.1",
     "axios": "^1.x",
     "bluebird": "^3.5.1",
-    "lodash": "^4.17.4",
     "portscanner": "2.2.0",
     "teen_process": "^4.0.4"
   },
@@ -80,7 +79,6 @@
     "@semantic-release/git": "^10.0.1",
     "@types/bluebird": "^3.5.38",
     "@types/chai-as-promised": "^8.0.2",
-    "@types/lodash": "^4.14.196",
     "@types/mocha": "^10.0.1",
     "@types/node": "^25.0.0",
     "@types/sinon": "^21.0.0",

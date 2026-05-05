@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {remote} from 'webdriverio';
 import type {Browser} from 'webdriverio';
 import {HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID} from '../utils';
@@ -44,16 +43,17 @@ describe('Mac2Driver - elements interaction', function () {
 
   it('should set a text to a text view', async function () {
     const el = await driver!.findElement('class name', 'XCUIElementTypeTextView');
-    await driver!.elementSendKeys(_.toString(el), 'hello world');
-    await expect(driver!.getElementText(_.toString(el))).eventually.eql('hello world');
+    await driver!.elementSendKeys(String(el), 'hello world');
+    await expect(driver!.getElementText(String(el))).eventually.eql('hello world');
   });
 
   it('should click a button by absolute coordinate', async function () {
-    const el = _.first(
-      await driver!.findElements('-ios predicate string', 'elementType == 12 AND label == "bold"'),
-    )!;
+    const [el] = await driver!.findElements(
+      '-ios predicate string',
+      'elementType == 12 AND label == "bold"',
+    );
     const {x, y, width, height} = (await driver!.getElementAttribute(
-      _.toString(el),
+      String(el),
       'frame',
     )) as any;
     await driver!.executeScript('macos: click', [
@@ -71,15 +71,15 @@ describe('Mac2Driver - elements interaction', function () {
 
   it('should clear a text view', async function () {
     const el = await driver!.findElement('class name', 'XCUIElementTypeTextView');
-    await driver!.elementSendKeys(_.toString(el), 'hello world');
-    await expect(driver!.getElementText(_.toString(el))).eventually.eql('hello world');
-    await driver!.elementClear(_.toString(el));
-    await expect(driver!.getElementText(_.toString(el))).eventually.eql('');
+    await driver!.elementSendKeys(String(el), 'hello world');
+    await expect(driver!.getElementText(String(el))).eventually.eql('hello world');
+    await driver!.elementClear(String(el));
+    await expect(driver!.getElementText(String(el))).eventually.eql('');
   });
 
   it('should send keys with modifiers into a text view', async function () {
     const el = await driver!.findElement('class name', 'XCUIElementTypeTextView');
-    await driver!.elementClick(_.toString(el));
+    await driver!.elementClick(String(el));
     const flagsShift = 1 << 1;
     await driver!.executeScript('macos: keys', [
       {
@@ -95,7 +95,7 @@ describe('Mac2Driver - elements interaction', function () {
         ],
       },
     ]);
-    await expect(driver!.getElementText(_.toString(el))).eventually.eql('HI');
+    await expect(driver!.getElementText(String(el))).eventually.eql('HI');
   });
 
   it('should open context menu if left click with Ctrl depressed', async function () {

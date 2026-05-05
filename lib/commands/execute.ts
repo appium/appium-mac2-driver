@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import type {Mac2Driver} from '../driver';
 import type {StringRecord} from '@appium/types';
 
@@ -29,5 +28,5 @@ export async function execute(
  * @returns Preprocessed arguments as StringRecord
  */
 function preprocessExecuteMethodArgs(args?: readonly any[] | StringRecord): StringRecord {
-  return (_.isArray(args) ? _.first(args) : args) ?? {};
+  return (Array.isArray(args) ? args[0] : args) ?? {};
 }
