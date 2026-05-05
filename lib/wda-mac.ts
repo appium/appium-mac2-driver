@@ -32,6 +32,14 @@ function clearArray<T>(items: T[]): void {
   items.length = 0;
 }
 
+function removeAllOccurrences<T>(items: T[], value: T): void {
+  let index = items.indexOf(value);
+  while (index >= 0) {
+    items.splice(index, 1);
+    index = items.indexOf(value);
+  }
+}
+
 export interface SessionOptions {
   reqBasePath?: string;
 }
@@ -394,10 +402,7 @@ export class WDAMacServer {
         if (pid !== null) {
           RUNNING_PROCESS_IDS.push(...childrenPids, pid);
           this._process.proc?.on('exit', () => {
-            const index = RUNNING_PROCESS_IDS.indexOf(pid);
-            if (index >= 0) {
-              RUNNING_PROCESS_IDS.splice(index, 1);
-            }
+            removeAllOccurrences(RUNNING_PROCESS_IDS, pid);
           });
         }
         log.info(

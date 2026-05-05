@@ -52,6 +52,7 @@ describe('Mac2Driver - elements interaction', function () {
       '-ios predicate string',
       'elementType == 12 AND label == "bold"',
     );
+    expect(el).to.exist;
     const {x, y, width, height} = (await driver!.getElementAttribute(String(el), 'frame')) as any;
     await driver!.executeScript('macos: click', [
       {
