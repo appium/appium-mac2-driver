@@ -1,3 +1,9 @@
+## [3.3.4](https://github.com/appium/appium-mac2-driver/compare/v3.3.3...v3.3.4) (2026-05-06)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump sinon from 21.1.2 to 22.0.0 ([#381](https://github.com/appium/appium-mac2-driver/issues/381)) ([82ad104](https://github.com/appium/appium-mac2-driver/commit/82ad1048958ba57f4fe1b56fe336889b1e195c61))
+
 ## [3.3.3](https://github.com/appium/appium-mac2-driver/compare/v3.3.2...v3.3.3) (2026-05-06)
 
 ### Miscellaneous Chores
