@@ -9,7 +9,7 @@ import {waitForCondition} from 'asyncbox';
 import {exec} from 'teen_process';
 import {BIDI_EVENT_NAME} from './bidi/constants';
 import {toNativeVideoChunkAddedEvent} from './bidi/models';
-import {isPlainObject} from '../common-utils';
+import {isPlainObject} from '../utils';
 
 const RECORDING_STARTUP_TIMEOUT_MS = 5000;
 const BUFFER_SIZE = 0xffff;

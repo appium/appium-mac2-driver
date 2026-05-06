@@ -10,8 +10,7 @@ import {waitForCondition} from 'asyncbox';
 import {checkPortStatus} from 'portscanner';
 import {execSync} from 'node:child_process';
 import type {HTTPMethod, HTTPBody, ProxyResponse, ProxyOptions} from '@appium/types';
-import {listChildrenProcessIds, getModuleRoot} from './utils';
-import {clearArray, removeAllOccurrences} from './common-utils';
+import {listChildrenProcessIds, getModuleRoot, clearArray, removeAllOccurrences} from './utils';
 
 const log = logger.getLogger('WebDriverAgentMac');
 
