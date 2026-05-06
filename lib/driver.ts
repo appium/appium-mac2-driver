@@ -46,8 +46,6 @@ interface PrerunCapability {
   script?: string;
 }
 
-export default Mac2Driver;
-
 interface PostrunCapability {
   command?: string;
   script?: string;
@@ -283,3 +281,5 @@ export class Mac2Driver
     this._screenRecorder = null;
   }
 }
+
+export default Mac2Driver;
