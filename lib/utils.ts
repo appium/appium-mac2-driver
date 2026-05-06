@@ -46,10 +46,19 @@ export async function listChildrenProcessIds(parentPid: number | string): Promis
     .map(([pid]) => String(pid));
 }
 
+/**
+ * Clears the content of the given array.
+ * @param items The array to clear.
+ */
 export function clearArray<T>(items: T[]): void {
   items.length = 0;
 }
 
+/**
+ * Removes all occurrences of the given value from the array.
+ * @param items The array to remove the value from.
+ * @param value The value to remove.
+ */
 export function removeAllOccurrences<T>(items: T[], value: T): void {
   let index = items.indexOf(value);
   while (index >= 0) {
@@ -58,6 +67,12 @@ export function removeAllOccurrences<T>(items: T[], value: T): void {
   }
 }
 
+/**
+ * Determines whether the given value is a plain object
+ * (i.e., an object created by the Object constructor or with a null prototype).
+ * @param value The value to check.
+ * @returns True if the value is a plain object, false otherwise.
+ */
 export function isPlainObject(value: unknown): value is Record<string, unknown> {
   if (value === null || typeof value !== 'object') {
     return false;

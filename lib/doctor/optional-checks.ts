@@ -5,9 +5,10 @@ import type {IDoctorCheck, AppiumLogger, DoctorCheckResult} from '@appium/types'
 import '@colors/colors';
 
 export class OptionalFfmpegCheck implements IDoctorCheck {
-  log!: AppiumLogger;
   static readonly FFMPEG_BINARY = 'ffmpeg';
   static readonly FFMPEG_INSTALL_LINK = 'https://www.ffmpeg.org/download.html';
+
+  log!: AppiumLogger;
 
   async diagnose(): Promise<DoctorCheckResult> {
     const ffmpegPath = await resolveExecutablePath(OptionalFfmpegCheck.FFMPEG_BINARY);

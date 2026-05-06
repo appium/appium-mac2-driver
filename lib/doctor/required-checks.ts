@@ -31,9 +31,10 @@ export class XcodeCheck implements IDoctorCheck {
 export const xcodeCheck = new XcodeCheck();
 
 export class XcodebuildCheck implements IDoctorCheck {
-  log!: AppiumLogger;
   static readonly XCODE_VER_PATTERN = /^Xcode\s+([\d.]+)$/m;
   static readonly MIN_XCODE_VERSION = 13;
+
+  log!: AppiumLogger;
 
   async diagnose(): Promise<DoctorCheckResult> {
     let xcodeVerMatch: RegExpExecArray | null;

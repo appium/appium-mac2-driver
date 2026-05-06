@@ -16,6 +16,19 @@ const BUFFER_SIZE = 0xffff;
 const MONITORING_INTERVAL_DURATION_MS = 1000;
 const MAX_MONITORING_DURATION_MS = 24 * 60 * 60 * 1000; // 1 day
 
+interface ActiveVideoInfo {
+  fps: number;
+  codec: number;
+  displayId: number;
+  uuid: string;
+  startedAt: number;
+}
+
+interface DisplayInfo {
+  id: number;
+  isMain: boolean;
+}
+
 export class NativeVideoChunksBroadcaster {
   private _ee: EventEmitter;
   private _log: AppiumLogger;
@@ -213,6 +226,8 @@ export async function macosGetNativeScreenRecordingInfo(
   return (await this.wda.proxy.command('/wda/video', 'GET')) as ActiveVideoInfo | null;
 }
 
+// #region Private functions
+
 /**
  * Stops native screen recordind.
  * If no screen recording has been started before then the method throws an exception.
@@ -311,8 +326,6 @@ export async function macosListDisplays(this: Mac2Driver): Promise<StringRecord<
   return (await this.wda.proxy.command('/wda/displays/list', 'GET')) as StringRecord<DisplayInfo>;
 }
 
-// #region Private functions
-
 async function listAttachments(): Promise<string[]> {
   // The expected path looks like
   // $HOME/Library/Daemon Containers/EFDD24BF-F856-411F-8954-CD5F0D6E6F3E/Data/Attachments/CAE7E5E2-5AC9-4D33-A47B-C491D644DE06
@@ -330,19 +343,6 @@ async function listAttachments(): Promise<string[]> {
 async function isFileUsed(fpath: string, userProcessName: string): Promise<boolean> {
   const {stdout} = await exec('lsof', [fpath]);
   return stdout.includes(userProcessName);
-}
-
-interface ActiveVideoInfo {
-  fps: number;
-  codec: number;
-  displayId: number;
-  uuid: string;
-  startedAt: number;
-}
-
-interface DisplayInfo {
-  id: number;
-  isMain: boolean;
 }
 
 // #endregion

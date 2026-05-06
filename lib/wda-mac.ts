@@ -32,24 +32,6 @@ export interface SessionOptions {
   reqBasePath?: string;
 }
 
-export class WDAMacProxy extends JWProxy {
-  public didProcessExit: boolean = false;
-
-  override async proxyCommand(
-    url: string,
-    method: HTTPMethod,
-    body: HTTPBody = null,
-  ): Promise<[ProxyResponse, HTTPBody]> {
-    if (this.didProcessExit) {
-      throw new errors.InvalidContextError(
-        `'${method} ${url}' cannot be proxied to Mac2 Driver server because ` +
-          'its process is not running (probably crashed). Check the Appium log for more details',
-      );
-    }
-    return await super.proxyCommand(url, method, body);
-  }
-}
-
 class WDAMacProcess {
   public port: number = DEFAULT_SYSTEM_PORT;
   public host: string = DEFAULT_SYSTEM_HOST;
@@ -302,6 +284,24 @@ class WDAMacProcess {
     }
 
     return true;
+  }
+}
+
+export class WDAMacProxy extends JWProxy {
+  public didProcessExit: boolean = false;
+
+  override async proxyCommand(
+    url: string,
+    method: HTTPMethod,
+    body: HTTPBody = null,
+  ): Promise<[ProxyResponse, HTTPBody]> {
+    if (this.didProcessExit) {
+      throw new errors.InvalidContextError(
+        `'${method} ${url}' cannot be proxied to Mac2 Driver server because ` +
+          'its process is not running (probably crashed). Check the Appium log for more details',
+      );
+    }
+    return await super.proxyCommand(url, method, body);
   }
 }
 

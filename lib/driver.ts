@@ -41,18 +41,83 @@ const NO_PROXY: RouteMatcher[] = [
   ['POST', new RegExp('^/session/[^/]+/timeouts$')],
 ];
 
+interface PrerunCapability {
+  command?: string;
+  script?: string;
+}
+
+export default Mac2Driver;
+
+interface PostrunCapability {
+  command?: string;
+  script?: string;
+}
+
+type Mac2DriverOpts = DriverOpts<Mac2Constraints>;
+
+type Mac2DriverCaps = DriverCaps<Mac2Constraints>;
+type W3CMac2DriverCaps = W3CDriverCaps<Mac2Constraints>;
 export class Mac2Driver
   extends BaseDriver<Mac2Constraints, StringRecord>
   implements ExternalDriver<Mac2Constraints, string, StringRecord>
 {
-  private isProxyActive: boolean;
-  private _wda: WDAMacServer | null;
+  static newMethodMap = newMethodMap;
+  static executeMethodMap = executeMethodMap;
+
+  macosLaunchApp = appManagemenetCommands.macosLaunchApp;
+  macosActivateApp = appManagemenetCommands.macosActivateApp;
+  macosTerminateApp = appManagemenetCommands.macosTerminateApp;
+  macosQueryAppState = appManagemenetCommands.macosQueryAppState;
+
+  macosExecAppleScript = appleScriptCommands.macosExecAppleScript;
+
+  execute = executeCommands.execute;
+
+  findElOrEls = findCommands.findElOrEls;
+
+  macosSetValue = gesturesCommands.macosSetValue;
+  macosClick = gesturesCommands.macosClick;
+  macosScroll = gesturesCommands.macosScroll;
+  macosSwipe = gesturesCommands.macosSwipe;
+  macosRightClick = gesturesCommands.macosRightClick;
+  macosHover = gesturesCommands.macosHover;
+  macosDoubleClick = gesturesCommands.macosDoubleClick;
+  macosClickAndDrag = gesturesCommands.macosClickAndDrag;
+  macosClickAndDragAndHold = gesturesCommands.macosClickAndDragAndHold;
+  macosKeys = gesturesCommands.macosKeys;
+  macosPressAndHold = gesturesCommands.macosPressAndHold;
+  macosTap = gesturesCommands.macosTap;
+  macosDoubleTap = gesturesCommands.macosDoubleTap;
+  macosPressAndDrag = gesturesCommands.macosPressAndDrag;
+  macosPressAndDragAndHold = gesturesCommands.macosPressAndDragAndHold;
+
+  macosGetClipboard = clipboardCommands.macosGetClipboard;
+  macosSetClipboard = clipboardCommands.macosSetClipboard;
+  macosPerformAccessibilityAudit = auditCommands.macosPerformAccessibilityAudit;
+
+  macosDeepLink = navigationCommands.macosDeepLink;
+
+  startRecordingScreen = recordScreenCommands.startRecordingScreen;
+  stopRecordingScreen = recordScreenCommands.stopRecordingScreen;
+  macosStartRecordingScreen = recordScreenCommands.macosStartRecordingScreen;
+  macosStopRecordingScreen = recordScreenCommands.macosStopRecordingScreen;
+
+  macosStartNativeScreenRecording = nativeScreenRecordingCommands.macosStartNativeScreenRecording;
+  macosGetNativeScreenRecordingInfo =
+    nativeScreenRecordingCommands.macosGetNativeScreenRecordingInfo;
+  macosStopNativeScreenRecording = nativeScreenRecordingCommands.macosStopNativeScreenRecording;
+  macosListDisplays = nativeScreenRecordingCommands.macosListDisplays;
+
+  macosScreenshots = screenshotCommands.macosScreenshots;
+
+  macosSource = sourceCommands.macosSource;
+
   _videoChunksBroadcaster: nativeScreenRecordingCommands.NativeVideoChunksBroadcaster;
   _screenRecorder: recordScreenCommands.ScreenRecorder | null;
   public proxyReqRes: (...args: any) => any;
 
-  static newMethodMap = newMethodMap;
-  static executeMethodMap = executeMethodMap;
+  private isProxyActive: boolean;
+  private _wda: WDAMacServer | null;
 
   constructor(opts: InitialOpts = {} as InitialOpts) {
     super(opts);
@@ -76,6 +141,13 @@ export class Mac2Driver
     this.settings = new DeviceSettings({}, this.onSettingsUpdate.bind(this));
   }
 
+  get wda(): WDAMacServer {
+    if (!this._wda) {
+      throw new Error('WDA server is not initialized');
+    }
+    return this._wda;
+  }
+
   async onSettingsUpdate(key: string, value: unknown): Promise<void> {
     if (!this._wda) {
       return;
@@ -83,13 +155,6 @@ export class Mac2Driver
     return await this._wda.proxy.command('/appium/settings', 'POST', {
       settings: {[key]: value},
     });
-  }
-
-  get wda(): WDAMacServer {
-    if (!this._wda) {
-      throw new Error('WDA server is not initialized');
-    }
-    return this._wda;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -217,68 +282,4 @@ export class Mac2Driver
     );
     this._screenRecorder = null;
   }
-
-  macosLaunchApp = appManagemenetCommands.macosLaunchApp;
-  macosActivateApp = appManagemenetCommands.macosActivateApp;
-  macosTerminateApp = appManagemenetCommands.macosTerminateApp;
-  macosQueryAppState = appManagemenetCommands.macosQueryAppState;
-
-  macosExecAppleScript = appleScriptCommands.macosExecAppleScript;
-
-  execute = executeCommands.execute;
-
-  findElOrEls = findCommands.findElOrEls;
-
-  macosSetValue = gesturesCommands.macosSetValue;
-  macosClick = gesturesCommands.macosClick;
-  macosScroll = gesturesCommands.macosScroll;
-  macosSwipe = gesturesCommands.macosSwipe;
-  macosRightClick = gesturesCommands.macosRightClick;
-  macosHover = gesturesCommands.macosHover;
-  macosDoubleClick = gesturesCommands.macosDoubleClick;
-  macosClickAndDrag = gesturesCommands.macosClickAndDrag;
-  macosClickAndDragAndHold = gesturesCommands.macosClickAndDragAndHold;
-  macosKeys = gesturesCommands.macosKeys;
-  macosPressAndHold = gesturesCommands.macosPressAndHold;
-  macosTap = gesturesCommands.macosTap;
-  macosDoubleTap = gesturesCommands.macosDoubleTap;
-  macosPressAndDrag = gesturesCommands.macosPressAndDrag;
-  macosPressAndDragAndHold = gesturesCommands.macosPressAndDragAndHold;
-
-  macosGetClipboard = clipboardCommands.macosGetClipboard;
-  macosSetClipboard = clipboardCommands.macosSetClipboard;
-  macosPerformAccessibilityAudit = auditCommands.macosPerformAccessibilityAudit;
-
-  macosDeepLink = navigationCommands.macosDeepLink;
-
-  startRecordingScreen = recordScreenCommands.startRecordingScreen;
-  stopRecordingScreen = recordScreenCommands.stopRecordingScreen;
-  macosStartRecordingScreen = recordScreenCommands.macosStartRecordingScreen;
-  macosStopRecordingScreen = recordScreenCommands.macosStopRecordingScreen;
-
-  macosStartNativeScreenRecording = nativeScreenRecordingCommands.macosStartNativeScreenRecording;
-  macosGetNativeScreenRecordingInfo =
-    nativeScreenRecordingCommands.macosGetNativeScreenRecordingInfo;
-  macosStopNativeScreenRecording = nativeScreenRecordingCommands.macosStopNativeScreenRecording;
-  macosListDisplays = nativeScreenRecordingCommands.macosListDisplays;
-
-  macosScreenshots = screenshotCommands.macosScreenshots;
-
-  macosSource = sourceCommands.macosSource;
 }
-
-export default Mac2Driver;
-
-interface PrerunCapability {
-  command?: string;
-  script?: string;
-}
-
-interface PostrunCapability {
-  command?: string;
-  script?: string;
-}
-
-type Mac2DriverOpts = DriverOpts<Mac2Constraints>;
-type Mac2DriverCaps = DriverCaps<Mac2Constraints>;
-type W3CMac2DriverCaps = W3CDriverCaps<Mac2Constraints>;
