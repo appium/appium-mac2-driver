@@ -1,3 +1,9 @@
+## [3.3.2](https://github.com/appium/appium-mac2-driver/compare/v3.3.1...v3.3.2) (2026-05-06)
+
+### Miscellaneous Chores
+
+* drop lodash ([#379](https://github.com/appium/appium-mac2-driver/issues/379)) ([9501e03](https://github.com/appium/appium-mac2-driver/commit/9501e030b659bad833f987dff597de8f7f358ad9))
+
 ## [3.3.1](https://github.com/appium/appium-mac2-driver/compare/v3.3.0...v3.3.1) (2026-04-15)
 
 ### Bug Fixes
