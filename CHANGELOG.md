@@ -1,3 +1,9 @@
+## [3.3.3](https://github.com/appium/appium-mac2-driver/compare/v3.3.2...v3.3.3) (2026-05-06)
+
+### Miscellaneous Chores
+
+* fix lint warnings ([#380](https://github.com/appium/appium-mac2-driver/issues/380)) ([d380f37](https://github.com/appium/appium-mac2-driver/commit/d380f375e9aaf76e80b1163bda4518cfdff18c82))
+
 ## [3.3.2](https://github.com/appium/appium-mac2-driver/compare/v3.3.1...v3.3.2) (2026-05-06)
 
 ### Miscellaneous Chores
