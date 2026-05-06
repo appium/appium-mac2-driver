@@ -57,19 +57,6 @@ interface StopRecordingScreenOptions {
   formFields?: StringRecord | [string, string][];
 }
 
-/**
- * @param log - Logger instance
- */
-async function requireFfmpegPath(log: AppiumLogger): Promise<string> {
-  try {
-    return await fs.which(FFMPEG_BINARY);
-  } catch {
-    throw log.errorWithException(
-      `${FFMPEG_BINARY} has not been found in PATH. ` + `Please make sure it is installed`,
-    );
-  }
-}
-
 export class ScreenRecorder {
   private readonly _log: AppiumLogger;
   private readonly _videoPath: string;
@@ -418,4 +405,17 @@ export async function stopRecordingScreen(
     options.fileFieldName,
     options.formFields,
   );
+}
+
+/**
+ * @param log - Logger instance
+ */
+async function requireFfmpegPath(log: AppiumLogger): Promise<string> {
+  try {
+    return await fs.which(FFMPEG_BINARY);
+  } catch {
+    throw log.errorWithException(
+      `${FFMPEG_BINARY} has not been found in PATH. ` + `Please make sure it is installed`,
+    );
+  }
 }
