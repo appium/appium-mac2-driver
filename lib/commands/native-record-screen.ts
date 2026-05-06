@@ -226,8 +226,6 @@ export async function macosGetNativeScreenRecordingInfo(
   return (await this.wda.proxy.command('/wda/video', 'GET')) as ActiveVideoInfo | null;
 }
 
-// #region Private functions
-
 /**
  * Stops native screen recordind.
  * If no screen recording has been started before then the method throws an exception.
@@ -344,5 +342,3 @@ async function isFileUsed(fpath: string, userProcessName: string): Promise<boole
   const {stdout} = await exec('lsof', [fpath]);
   return stdout.includes(userProcessName);
 }
-
-// #endregion
