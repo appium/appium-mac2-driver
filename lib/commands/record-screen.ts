@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {waitForCondition} from 'asyncbox';
 import {util, fs, tempDir} from 'appium/support';
 import {SubProcess} from 'teen_process';
@@ -149,8 +148,9 @@ export class ScreenRecorder {
     this._process = new SubProcess(fullCmd[0], fullCmd.slice(1));
     this._log.debug(`Starting ${FFMPEG_BINARY}: ${util.quote(fullCmd)}`);
     this._process.on('output', (stdout, stderr) => {
-      if (_.trim(stdout || stderr)) {
-        this._log.debug(`[${FFMPEG_BINARY}] ${stdout || stderr}`);
+      const output = stdout ?? stderr ?? '';
+      if (output.trim()) {
+        this._log.debug(`[${FFMPEG_BINARY}] ${output}`);
       }
     });
     this._process.once('exit', async (code, signal) => {
@@ -285,7 +285,7 @@ export async function macosStartRecordingScreen(
   captureClicks?: boolean,
   forceRestart: boolean = true,
 ): Promise<void> {
-  if (_.isNil(deviceId)) {
+  if (deviceId == null) {
     throw new Error(
       `'deviceId' option must be provided. Run 'ffmpeg -f avfoundation -list_devices true -i' ` +
         'to fetch the list of available device ids',

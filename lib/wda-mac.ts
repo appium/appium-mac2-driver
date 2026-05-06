@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import path from 'node:path';
 import url from 'node:url';
 import axios from 'axios';
@@ -11,7 +10,7 @@ import {waitForCondition} from 'asyncbox';
 import {checkPortStatus} from 'portscanner';
 import {execSync} from 'node:child_process';
 import type {HTTPMethod, HTTPBody, ProxyResponse, ProxyOptions} from '@appium/types';
-import {listChildrenProcessIds, getModuleRoot} from './utils';
+import {listChildrenProcessIds, getModuleRoot, clearArray, removeAllOccurrences} from './utils';
 
 const log = logger.getLogger('WebDriverAgentMac');
 
@@ -232,7 +231,7 @@ class WDAMacProcess {
         return;
       }
 
-      const line = _.trim(stdout || stderr);
+      const line = (stdout ?? stderr ?? '').trim();
       if (line) {
         log.debug(`[${XCODEBUILD}] ${line}`);
       }
@@ -251,7 +250,7 @@ class WDAMacProcess {
     }
 
     const childrenPids = await this.listChildrenPids();
-    if (!_.isEmpty(childrenPids)) {
+    if (childrenPids.length > 0) {
       try {
         await exec('kill', childrenPids);
       } catch {}
@@ -265,7 +264,7 @@ class WDAMacProcess {
     }
 
     const childrenPids = await this.listChildrenPids();
-    if (!_.isEmpty(childrenPids)) {
+    if (childrenPids.length > 0) {
       try {
         await exec('kill', ['-9', ...childrenPids]);
       } catch {}
@@ -278,8 +277,8 @@ class WDAMacProcess {
   private hasSameOpts(opts: WDAMacProcessInitOptions): boolean {
     const {showServerLogs, systemPort, systemHost, bootstrapRoot} = opts;
     if (
-      (_.isBoolean(showServerLogs) && this._showServerLogs !== showServerLogs) ||
-      (_.isNil(showServerLogs) && this._showServerLogs !== DEFAULT_SHOW_SERVER_LOGS)
+      (typeof showServerLogs === 'boolean' && this._showServerLogs !== showServerLogs) ||
+      (showServerLogs == null && this._showServerLogs !== DEFAULT_SHOW_SERVER_LOGS)
     ) {
       return false;
     }
@@ -390,7 +389,9 @@ export class WDAMacServer {
         const childrenPids = await this._process.listChildrenPids();
         if (pid !== null) {
           RUNNING_PROCESS_IDS.push(...childrenPids, pid);
-          this._process.proc?.on('exit', () => void _.pull(RUNNING_PROCESS_IDS, pid));
+          this._process.proc?.on('exit', () => {
+            removeAllOccurrences(RUNNING_PROCESS_IDS, pid);
+          });
         }
         log.info(
           `The host process is ready within ${timer.getDuration().asMilliSeconds.toFixed(0)}ms`,
@@ -468,13 +469,13 @@ export class WDAMacServer {
     }
 
     const {protocol, hostname, port, pathname} = parsedUrl;
-    if (_.isString(protocol)) {
+    if (typeof protocol === 'string') {
       scheme = protocol.split(':')[0];
     }
     return {
       scheme,
       host: hostname ?? DEFAULT_SYSTEM_HOST,
-      port: _.isEmpty(port) ? DEFAULT_SYSTEM_PORT : _.parseInt(port),
+      port: port.length === 0 ? DEFAULT_SYSTEM_PORT : Number.parseInt(port, 10),
       path: pathname === '/' ? '' : pathname,
     };
   }
@@ -484,7 +485,7 @@ export const WDA_MAC_SERVER = new WDAMacServer();
 
 // Private functions
 async function cleanupObsoleteProcesses(): Promise<void> {
-  if (!_.isEmpty(RUNNING_PROCESS_IDS)) {
+  if (RUNNING_PROCESS_IDS.length > 0) {
     log.debug(
       `Cleaning up ${RUNNING_PROCESS_IDS.length} obsolete ` +
         util.pluralize('process', RUNNING_PROCESS_IDS.length, false),
@@ -492,16 +493,16 @@ async function cleanupObsoleteProcesses(): Promise<void> {
     try {
       await exec('kill', ['-9', ...RUNNING_PROCESS_IDS.map(String)]);
     } catch {}
-    _.pullAll(RUNNING_PROCESS_IDS, RUNNING_PROCESS_IDS);
+    clearArray(RUNNING_PROCESS_IDS);
   }
 }
 
 process.once('exit', () => {
-  if (!_.isEmpty(RUNNING_PROCESS_IDS)) {
+  if (RUNNING_PROCESS_IDS.length > 0) {
     try {
       execSync(`kill -9 ${RUNNING_PROCESS_IDS.map(String).join(' ')}`);
     } catch {}
-    _.pullAll(RUNNING_PROCESS_IDS, RUNNING_PROCESS_IDS);
+    clearArray(RUNNING_PROCESS_IDS);
   }
 });
 

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import B, {TimeoutError} from 'bluebird';
 import path from 'node:path';
 import {fs, util} from 'appium/support';
@@ -10,6 +9,7 @@ import {waitForCondition} from 'asyncbox';
 import {exec} from 'teen_process';
 import {BIDI_EVENT_NAME} from './bidi/constants';
 import {toNativeVideoChunkAddedEvent} from './bidi/models';
+import {isPlainObject} from '../utils';
 
 const RECORDING_STARTUP_TIMEOUT_MS = 5000;
 const BUFFER_SIZE = 0xffff;
@@ -140,7 +140,7 @@ export class NativeVideoChunksBroadcaster {
     }
     clearTimeout(timer);
 
-    if (!_.isEmpty(publishingErrors)) {
+    if (publishingErrors.length > 0) {
       throw new Error(publishingErrors.join('\n'));
     }
   }
@@ -151,14 +151,14 @@ export class NativeVideoChunksBroadcaster {
     }
 
     const attachments = await listAttachments();
-    if (_.isEmpty(attachments)) {
+    if (attachments.length === 0) {
       return;
     }
     const tasks: Promise<any>[] = attachments
       .map((attachmentPath) => [path.basename(attachmentPath), attachmentPath])
       .filter(([name]) => this._publishers.has(name))
       .map(([, attachmentPath]) => fs.rimraf(attachmentPath));
-    if (_.isEmpty(tasks)) {
+    if (tasks.length === 0) {
       return;
     }
     try {
@@ -256,7 +256,7 @@ export async function macosStopNativeScreenRecording(
     'POST',
     {},
   )) as ActiveVideoInfo | null;
-  if (!response || !_.isPlainObject(response)) {
+  if (!response || !isPlainObject(response)) {
     throw new Error(
       'There is no active screen recording, thus nothing to stop. Did you start it before?',
     );
@@ -280,7 +280,7 @@ export async function macosStopNativeScreenRecording(
     return '';
   }
 
-  const matchedVideoPath = _.first((await listAttachments()).filter((name) => name.endsWith(uuid)));
+  const matchedVideoPath = (await listAttachments()).find((name) => name.endsWith(uuid));
   if (!matchedVideoPath) {
     throw new Error(
       `The screen recording identified by ${uuid} cannot be retrieved. ` +

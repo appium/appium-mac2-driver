@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {util} from 'appium/support';
 import {errors} from 'appium/driver';
 import type {Mac2Driver} from '../driver';
@@ -578,7 +577,7 @@ export async function macosPressAndDragAndHold(
  * @param y - Optional Y coordinate
  */
 function requireElementIdOrXY(elementId?: string, x?: number, y?: number): void {
-  if (!_.isString(elementId) && !(_.isNumber(x) && _.isNumber(y))) {
+  if (typeof elementId !== 'string' && !(typeof x === 'number' && typeof y === 'number')) {
     throw new errors.InvalidArgumentError(`'elementId' or 'x' and 'y' is required.`);
   }
 }
@@ -602,8 +601,13 @@ function requireSourceDestWithElementsOrCoordinates(
   endY?: number,
 ): void {
   if (
-    !(_.isString(sourceElementId) && _.isString(destinationElementId)) &&
-    !(_.isNumber(startX) && _.isNumber(startY) && _.isNumber(endX) && _.isNumber(endY))
+    !(typeof sourceElementId === 'string' && typeof destinationElementId === 'string') &&
+    !(
+      typeof startX === 'number' &&
+      typeof startY === 'number' &&
+      typeof endX === 'number' &&
+      typeof endY === 'number'
+    )
   ) {
     throw new errors.InvalidArgumentError(
       `'sourceElementId' and 'destinationElementId' ` +
