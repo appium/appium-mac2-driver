@@ -10,7 +10,6 @@ import type {StringRecord} from '@appium/types';
  * @param remotePath The remote path where the file should be uploaded. If null, the file will be returned as a base64 string.
  * @param uploadOptions Additional options for the upload, such as authentication and headers.
  * @returns A promise that resolves to a base64 string if no remote path is provided, or an empty string if the file is uploaded.
-
  */
 export async function uploadRecordedMedia(
   this: Mac2Driver,
