@@ -1,7 +1,7 @@
 import path from 'node:path';
 import url from 'node:url';
 import axios from 'axios';
-import B from 'bluebird';
+import {setTimeout as delay} from 'node:timers/promises';
 import {JWProxy, errors} from 'appium/driver';
 import {fs, logger, util, timing} from 'appium/support';
 import {strongbox} from '@appium/strongbox';
@@ -162,7 +162,7 @@ class WDAMacProcess {
           timeout: 5000,
         });
         // Give the server some time to finish and stop listening
-        await B.delay(500);
+        await delay(500);
         await waitForCondition(async () => !(await isPortBusy()), {
           waitMs: 3000,
           intervalMs: 100,

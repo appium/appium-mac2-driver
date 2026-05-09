@@ -1,7 +1,6 @@
 import {waitForCondition} from 'asyncbox';
 import {util, fs, tempDir} from 'appium/support';
 import {SubProcess} from 'teen_process';
-import B from 'bluebird';
 import {uploadRecordedMedia} from './helpers';
 import type {Mac2Driver} from '../driver';
 import type {AppiumLogger, StringRecord} from '@appium/types';
@@ -188,7 +187,7 @@ export class ScreenRecorder {
       return await this.getVideoPath();
     }
 
-    return new B((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const timer = setTimeout(async () => {
         await this._enforceTermination();
         reject(
