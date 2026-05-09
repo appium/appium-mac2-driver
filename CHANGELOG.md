@@ -1,3 +1,9 @@
+## [3.4.0](https://github.com/appium/appium-mac2-driver/compare/v3.3.4...v3.4.0) (2026-05-09)
+
+### Features
+
+* Ditch bluebird ([#382](https://github.com/appium/appium-mac2-driver/issues/382)) ([da024bd](https://github.com/appium/appium-mac2-driver/commit/da024bd350a18b3cb27788a9d51a90aefc09d5f5))
+
 ## [3.3.4](https://github.com/appium/appium-mac2-driver/compare/v3.3.3...v3.3.4) (2026-05-06)
 
 ### Miscellaneous Chores
