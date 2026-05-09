@@ -1,4 +1,4 @@
-import {ExecuteMethodMap} from '@appium/types';
+import type {ExecuteMethodMap} from '@appium/types';
 
 export const executeMethodMap = {
   'macos: click': {

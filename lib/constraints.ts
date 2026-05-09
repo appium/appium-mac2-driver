@@ -1,4 +1,4 @@
-import {Constraints} from '@appium/types';
+import type {Constraints} from '@appium/types';
 
 const MAC2_CONSTRAINTS = {
   systemPort: {

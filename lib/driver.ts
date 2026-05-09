@@ -110,12 +110,12 @@ export class Mac2Driver
 
   macosSource = sourceCommands.macosSource;
 
-  _videoChunksBroadcaster: nativeScreenRecordingCommands.NativeVideoChunksBroadcaster;
-  _screenRecorder: recordScreenCommands.ScreenRecorder | null;
-  public proxyReqRes: (...args: any) => any;
+  _videoChunksBroadcaster!: nativeScreenRecordingCommands.NativeVideoChunksBroadcaster;
+  _screenRecorder: recordScreenCommands.ScreenRecorder | null = null;
+  public proxyReqRes!: (...args: any) => any;
 
-  private isProxyActive: boolean;
-  private _wda: WDAMacServer | null;
+  private isProxyActive: boolean = false;
+  private _wda: WDAMacServer | null = null;
 
   constructor(opts: InitialOpts = {} as InitialOpts) {
     super(opts);

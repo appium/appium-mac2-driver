@@ -1,11 +1,11 @@
-import B, {TimeoutError} from 'bluebird';
+import {setTimeout as delay} from 'node:timers/promises';
 import path from 'node:path';
 import {fs, util} from 'appium/support';
 import type {Mac2Driver} from '../driver';
 import {uploadRecordedMedia} from './helpers';
 import type {AppiumLogger, StringRecord} from '@appium/types';
 import type EventEmitter from 'node:events';
-import {waitForCondition} from 'asyncbox';
+import {TimeoutError, waitForCondition, withTimeout} from 'asyncbox';
 import {exec} from 'teen_process';
 import {BIDI_EVENT_NAME} from './bidi/constants';
 import {toNativeVideoChunkAddedEvent} from './bidi/models';
@@ -63,7 +63,7 @@ export class NativeVideoChunksBroadcaster {
     try {
       await this._wait(timeoutMs);
     } catch (e) {
-      this._log.warn(e.message);
+      this._log.warn(e instanceof Error ? e.message : String(e));
     }
 
     await this._cleanup();
@@ -126,7 +126,7 @@ export class NativeVideoChunksBroadcaster {
         return;
       }
 
-      await B.delay(MONITORING_INTERVAL_DURATION_MS);
+      await delay(MONITORING_INTERVAL_DURATION_MS);
     }
 
     this._log.warn(
@@ -148,7 +148,7 @@ export class NativeVideoChunksBroadcaster {
       try {
         await publisher;
       } catch (e) {
-        publishingErrors.push(e.message);
+        publishingErrors.push(e instanceof Error ? e.message : String(e));
       }
     }
     clearTimeout(timer);
@@ -180,7 +180,9 @@ export class NativeVideoChunksBroadcaster {
         `Successfully deleted ${util.pluralize('leftover video recording', tasks.length, true)}`,
       );
     } catch (e) {
-      this._log.warn(`Could not cleanup some leftover video recordings: ${e.message}`);
+      this._log.warn(
+        `Could not cleanup some leftover video recordings: ${e instanceof Error ? e.message : String(e)}`,
+      );
     }
   }
 }
@@ -277,7 +279,7 @@ export async function macosStopNativeScreenRecording(
 
   const {uuid} = response;
   try {
-    await B.resolve(this._videoChunksBroadcaster.waitFor(uuid)).timeout(5000);
+    await withTimeout(this._videoChunksBroadcaster.waitFor(uuid), 5000);
   } catch (e) {
     if (e instanceof TimeoutError) {
       this.log.debug(
@@ -285,7 +287,7 @@ export async function macosStopNativeScreenRecording(
           `by ${uuid} cannot complete within 5000ms timeout`,
       );
     } else {
-      this.log.debug(e.stack);
+      this.log.debug(e instanceof Error ? e.stack : String(e));
     }
   }
 
@@ -312,7 +314,7 @@ export async function macosStopNativeScreenRecording(
     fileFieldName,
     formFields,
   };
-  return await uploadRecordedMedia.bind(this)(matchedVideoPath, remotePath, options);
+  return await uploadRecordedMedia.bind(this)(matchedVideoPath, remotePath ?? null, options);
 }
 
 /**

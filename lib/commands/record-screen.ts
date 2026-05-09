@@ -1,7 +1,6 @@
 import {waitForCondition} from 'asyncbox';
 import {util, fs, tempDir} from 'appium/support';
 import {SubProcess} from 'teen_process';
-import B from 'bluebird';
 import {uploadRecordedMedia} from './helpers';
 import type {Mac2Driver} from '../driver';
 import type {AppiumLogger, StringRecord} from '@appium/types';
@@ -188,21 +187,35 @@ export class ScreenRecorder {
       return await this.getVideoPath();
     }
 
-    return new B((resolve, reject) => {
-      const timer = setTimeout(async () => {
-        await this._enforceTermination();
-        reject(
-          new Error(`Screen recording has failed to exit after ${PROCESS_SHUTDOWN_TIMEOUT}ms`),
-        );
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        void (async () => {
+          try {
+            await this._enforceTermination();
+            reject(
+              new Error(`Screen recording has failed to exit after ${PROCESS_SHUTDOWN_TIMEOUT}ms`),
+            );
+          } catch (err) {
+            reject(err);
+          }
+        })();
       }, PROCESS_SHUTDOWN_TIMEOUT);
 
-      this._process?.once('exit', async (code, signal) => {
+      this._process?.once('exit', (code, signal) => {
         clearTimeout(timer);
-        if (code === 0) {
-          resolve(await this.getVideoPath());
-        } else {
-          reject(new Error(`Screen recording exited with error code ${code}, signal ${signal}`));
-        }
+        void (async () => {
+          try {
+            if (code === 0) {
+              resolve(await this.getVideoPath());
+            } else {
+              reject(
+                new Error(`Screen recording exited with error code ${code}, signal ${signal}`),
+              );
+            }
+          } catch (err) {
+            reject(err);
+          }
+        })();
       });
 
       this._process?.proc?.stdin?.write('q');
@@ -384,7 +397,7 @@ export async function macosStopRecordingScreen(
     fileFieldName,
     formFields,
   };
-  return await uploadRecordedMedia.bind(this)(videoPath, remotePath, options);
+  return await uploadRecordedMedia.bind(this)(videoPath, remotePath ?? null, options);
 }
 
 /**
