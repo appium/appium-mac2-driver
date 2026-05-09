@@ -188,20 +188,32 @@ export class ScreenRecorder {
     }
 
     return new Promise((resolve, reject) => {
-      const timer = setTimeout(async () => {
-        await this._enforceTermination();
-        reject(
-          new Error(`Screen recording has failed to exit after ${PROCESS_SHUTDOWN_TIMEOUT}ms`),
-        );
+      const timer = setTimeout(() => {
+        void (async () => {
+          try {
+            await this._enforceTermination();
+            reject(
+              new Error(`Screen recording has failed to exit after ${PROCESS_SHUTDOWN_TIMEOUT}ms`),
+            );
+          } catch (err) {
+            reject(err);
+          }
+        })();
       }, PROCESS_SHUTDOWN_TIMEOUT);
 
-      this._process?.once('exit', async (code, signal) => {
+      this._process?.once('exit', (code, signal) => {
         clearTimeout(timer);
-        if (code === 0) {
-          resolve(await this.getVideoPath());
-        } else {
-          reject(new Error(`Screen recording exited with error code ${code}, signal ${signal}`));
-        }
+        void (async () => {
+          try {
+            if (code === 0) {
+              resolve(await this.getVideoPath());
+            } else {
+              reject(new Error(`Screen recording exited with error code ${code}, signal ${signal}`));
+            }
+          } catch (err) {
+            reject(err);
+          }
+        })();
       });
 
       this._process?.proc?.stdin?.write('q');
