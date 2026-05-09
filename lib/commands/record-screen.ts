@@ -383,7 +383,7 @@ export async function macosStopRecordingScreen(
     fileFieldName,
     formFields,
   };
-  return await uploadRecordedMedia.bind(this)(videoPath, remotePath, options);
+  return await uploadRecordedMedia.bind(this)(videoPath, remotePath ?? null, options);
 }
 
 /**

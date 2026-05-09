@@ -176,6 +176,7 @@ class WDAMacProcess {
           `The port #${this.port} at ${this.host} is busy. ` +
             `Consider setting 'systemPort' capability to another free port number and/or ` +
             `make sure previous driver sessions have been closed properly.`,
+          {cause: e},
         );
       }
       log.info(
@@ -379,7 +380,7 @@ export class WDAMacServer {
             : `Mac2Driver server is not listening within ${this._serverStartupTimeoutMs}ms timeout. ` +
               `Try to increase the value of 'serverStartupTimeout' capability, check the server logs ` +
               `and make sure the ${XCODEBUILD} host process could be started manually from a terminal`;
-          throw new Error(msg);
+          throw new Error(msg, {cause: e});
         }
         throw e;
       }
@@ -434,7 +435,7 @@ export class WDAMacServer {
       return true;
     } catch (err: any) {
       if (throwOnExit && this._proxy.didProcessExit) {
-        throw new Error(err.message);
+        throw new Error(err.message, {cause: err});
       }
       return false;
     }
@@ -465,6 +466,7 @@ export class WDAMacServer {
       throw new Error(
         `webDriverAgentMacUrl, '${caps.webDriverAgentMacUrl}', ` +
           `in the capabilities is invalid. ${e.message}`,
+        {cause: e},
       );
     }
 

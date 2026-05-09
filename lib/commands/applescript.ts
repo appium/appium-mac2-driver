@@ -74,7 +74,7 @@ export async function macosExecAppleScript(
       const {stdout} = await exec(OSASCRIPT, args, {cwd, timeout});
       return stdout;
     } catch (e: any) {
-      throw new Error(e.stderr || e.message);
+      throw new Error(e.stderr || e.message, {cause: e});
     }
   } finally {
     if (tmpRoot) {
