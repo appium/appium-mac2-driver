@@ -208,7 +208,9 @@ export class ScreenRecorder {
             if (code === 0) {
               resolve(await this.getVideoPath());
             } else {
-              reject(new Error(`Screen recording exited with error code ${code}, signal ${signal}`));
+              reject(
+                new Error(`Screen recording exited with error code ${code}, signal ${signal}`),
+              );
             }
           } catch (err) {
             reject(err);
