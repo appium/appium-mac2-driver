@@ -71,9 +71,18 @@ export class NativeVideoChunksBroadcaster {
     this._publishers = new Map();
   }
 
+  /**
+   * Background monitor for a native screen recording attachment.
+   *
+   * This is scheduled as a fire-and-forget task by {@link schedule} and the
+   * resulting promise may sit in `_publishers` for a long time before any
+   * consumer awaits it. To make sure a failure here can never surface as an
+   * unhandled promise rejection (which terminates the Appium server process
+   * on Node.js 24+), this method MUST never reject: every error path logs a
+   * warning and returns normally.
+   */
   private async _createPublisher(uuid: string): Promise<void> {
     let fullPath = '';
-    let bytesRead = 0n;
     try {
       await waitForCondition(
         async () => {
@@ -91,42 +100,67 @@ export class NativeVideoChunksBroadcaster {
         },
       );
     } catch {
-      throw new Error(
+      this._log.warn(
         `The video recording identified by ${uuid} did not ` +
           `start within ${RECORDING_STARTUP_TIMEOUT_MS}ms timeout`,
       );
+      return;
     }
 
+    let bytesRead = 0n;
     const startedMs = performance.now();
-    while (!this._terminated && performance.now() - startedMs < MAX_MONITORING_DURATION_MS) {
-      const isCompleted = !(await isFileUsed(fullPath, 'testman'));
+    try {
+      while (!this._terminated && performance.now() - startedMs < MAX_MONITORING_DURATION_MS) {
+        const isCompleted = !(await isFileUsed(fullPath, 'testman'));
 
-      const {size} = await fs.stat(fullPath, {bigint: true});
-      if (bytesRead < size) {
-        const handle = await fs.open(fullPath, 'r');
+        let size: bigint;
         try {
-          while (bytesRead < size) {
-            const bufferSize = Number(
-              size - bytesRead > BUFFER_SIZE ? BUFFER_SIZE : size - bytesRead,
+          ({size} = await fs.stat(fullPath, {bigint: true}));
+        } catch (e) {
+          // The recording file may have been removed by the OS once the
+          // host XCTest process owning the attachment has exited. In that
+          // case there is nothing more to read and we should stop monitoring.
+          if ((e as NodeJS.ErrnoException)?.code === 'ENOENT') {
+            this._log.debug(
+              `The native video recording file for ${uuid} is no longer available. ` +
+                `Assuming the recording has been terminated`,
             );
-            const buf = Buffer.alloc(bufferSize);
-            await fs.read(handle, buf as any, 0, bufferSize, bytesRead as any);
-            this._ee.emit(BIDI_EVENT_NAME, toNativeVideoChunkAddedEvent(uuid, buf));
-            bytesRead += BigInt(bufferSize);
+            return;
           }
-        } finally {
-          await fs.close(handle);
+          throw e;
         }
-      }
+        if (bytesRead < size) {
+          const handle = await fs.open(fullPath, 'r');
+          try {
+            while (bytesRead < size) {
+              const bufferSize = Number(
+                size - bytesRead > BUFFER_SIZE ? BUFFER_SIZE : size - bytesRead,
+              );
+              const buf = Buffer.alloc(bufferSize);
+              await fs.read(handle, buf as any, 0, bufferSize, bytesRead as any);
+              this._ee.emit(BIDI_EVENT_NAME, toNativeVideoChunkAddedEvent(uuid, buf));
+              bytesRead += BigInt(bufferSize);
+            }
+          } finally {
+            await fs.close(handle);
+          }
+        }
 
-      if (isCompleted) {
-        this._log.debug(
-          `The native video recording identified by ${uuid} has been detected as completed`,
-        );
-        return;
-      }
+        if (isCompleted) {
+          this._log.debug(
+            `The native video recording identified by ${uuid} has been detected as completed`,
+          );
+          return;
+        }
 
-      await delay(MONITORING_INTERVAL_DURATION_MS);
+        await delay(MONITORING_INTERVAL_DURATION_MS);
+      }
+    } catch (e) {
+      this._log.warn(
+        `Native video chunks publisher for ${uuid} stopped unexpectedly: ` +
+          (e instanceof Error ? e.message : String(e)),
+      );
+      return;
     }
 
     this._log.warn(
@@ -143,18 +177,12 @@ export class NativeVideoChunksBroadcaster {
     const timer = setTimeout(() => {
       this._terminated = true;
     }, timeoutMs);
-    const publishingErrors: string[] = [];
-    for (const publisher of this._publishers.values()) {
-      try {
-        await publisher;
-      } catch (e) {
-        publishingErrors.push(e instanceof Error ? e.message : String(e));
-      }
-    }
-    clearTimeout(timer);
-
-    if (publishingErrors.length > 0) {
-      throw new Error(publishingErrors.join('\n'));
+    try {
+      // Publishers are guaranteed by `_createPublisher` to never reject,
+      // so we can simply await all of them.
+      await Promise.all(this._publishers.values());
+    } finally {
+      clearTimeout(timer);
     }
   }
 
@@ -341,6 +369,10 @@ async function listAttachments(): Promise<string[]> {
 }
 
 async function isFileUsed(fpath: string, userProcessName: string): Promise<boolean> {
-  const {stdout} = await exec('lsof', [fpath]);
-  return stdout.includes(userProcessName);
+  try {
+    const {stdout} = await exec('lsof', [fpath]);
+    return stdout.includes(userProcessName);
+  } catch {
+    return false;
+  }
 }
