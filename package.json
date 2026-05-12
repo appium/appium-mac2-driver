@@ -49,9 +49,9 @@
     "@appium/strongbox": "^1.0.0-rc.1",
     "@colors/colors": "^1.6.0",
     "appium-xcode": "^6.0.0",
-    "asyncbox": "^6.0.1",
-    "axios": "^1.x",
-    "portscanner": "2.2.0",
+    "asyncbox": "^6.3.0",
+    "axios": "^1.16.0",
+    "portscanner": "^2.2.0",
     "teen_process": "^4.0.4"
   },
   "scripts": {
