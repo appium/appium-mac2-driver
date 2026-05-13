@@ -1,3 +1,9 @@
+## [3.4.2](https://github.com/appium/appium-mac2-driver/compare/v3.4.1...v3.4.2) (2026-05-13)
+
+### Bug Fixes
+
+* native video broadcast cleanup ([#384](https://github.com/appium/appium-mac2-driver/issues/384)) ([ea81c2f](https://github.com/appium/appium-mac2-driver/commit/ea81c2fd7b5177de2f8d7ae9f157c1ec73c55d3d))
+
 ## [3.4.1](https://github.com/appium/appium-mac2-driver/compare/v3.4.0...v3.4.1) (2026-05-13)
 
 ### Bug Fixes
