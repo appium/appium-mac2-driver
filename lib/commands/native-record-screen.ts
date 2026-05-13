@@ -60,7 +60,7 @@ export class NativeVideoChunksBroadcaster {
 
   schedule(uuid: string): void {
     if (!this._publishers.has(uuid)) {
-      this._publishers.set(uuid, this._createPublisher(uuid));
+      this._publishers.set(uuid, this._runPublisher(uuid));
     }
   }
 
@@ -93,9 +93,13 @@ export class NativeVideoChunksBroadcaster {
   }
 
   async shutdown(timeoutMs: number): Promise<void> {
+    // Snapshot keys before publishers remove themselves from `_publishers`
+    // in `_finishPublisher`, so we still know which attachment files to
+    // delete after `_wait` completes.
+    const uuidsAtShutdown = [...this._publishers.keys()];
     // Wake up every active publisher so they don't have to wait for their
     // next polling tick before flushing and exiting.
-    for (const uuid of this._publishers.keys()) {
+    for (const uuid of uuidsAtShutdown) {
       this.notifyStopped(uuid);
     }
     try {
@@ -104,7 +108,7 @@ export class NativeVideoChunksBroadcaster {
       this._log.warn(e instanceof Error ? e.message : String(e));
     }
 
-    await this._cleanup();
+    await this._cleanup(uuidsAtShutdown);
 
     this._publishers.clear();
     this._wakeups.clear();
@@ -114,9 +118,9 @@ export class NativeVideoChunksBroadcaster {
   /**
    * Background monitor for a native screen recording attachment.
    *
-   * This is scheduled as a fire-and-forget task by {@link schedule} and the
-   * resulting promise may sit in `_publishers` for a long time before any
-   * consumer awaits it. To make sure a failure here can never surface as an
+   * This is scheduled as a fire-and-forget task by {@link schedule}; the
+   * promise is removed from `_publishers` when the monitor exits (see
+   * {@link _finishPublisher}). To make sure a failure here can never surface as an
    * unhandled promise rejection (which terminates the Appium server process
    * on Node.js 24+), this method MUST never reject: every error path logs a
    * warning and returns normally.
@@ -222,8 +226,6 @@ export class NativeVideoChunksBroadcaster {
           (e instanceof Error ? e.message : String(e)),
       );
       return;
-    } finally {
-      this._terminationRequests.delete(uuid);
     }
 
     this._log.warn(
@@ -249,10 +251,11 @@ export class NativeVideoChunksBroadcaster {
     }
   }
 
-  private async _cleanup(): Promise<void> {
-    if (!this.hasPublishers) {
+  private async _cleanup(uuids: readonly string[]): Promise<void> {
+    if (uuids.length === 0) {
       return;
     }
+    const uuidSet = new Set(uuids);
 
     const attachments = await listAttachments();
     if (attachments.length === 0) {
@@ -260,7 +263,7 @@ export class NativeVideoChunksBroadcaster {
     }
     const tasks: Promise<any>[] = attachments
       .map((attachmentPath) => [path.basename(attachmentPath), attachmentPath])
-      .filter(([name]) => this._publishers.has(name))
+      .filter(([name]) => uuidSet.has(name))
       .map(([, attachmentPath]) => fs.rimraf(attachmentPath));
     if (tasks.length === 0) {
       return;
@@ -275,6 +278,28 @@ export class NativeVideoChunksBroadcaster {
         `Could not cleanup some leftover video recordings: ${e instanceof Error ? e.message : String(e)}`,
       );
     }
+  }
+
+  /**
+   * Runs {@link _createPublisher} and always clears `_publishers` /
+   * `_wakeups` / `_terminationRequests` for `uuid` when the monitor exits.
+   */
+  private async _runPublisher(uuid: string): Promise<void> {
+    try {
+      await this._createPublisher(uuid);
+    } finally {
+      this._finishPublisher(uuid);
+    }
+  }
+
+  /**
+   * Drops all bookkeeping for a finished publisher so {@link hasPublishers}
+   * reflects reality and `notifyStopped` state does not leak across sessions.
+   */
+  private _finishPublisher(uuid: string): void {
+    this._publishers.delete(uuid);
+    this._wakeups.delete(uuid);
+    this._terminationRequests.delete(uuid);
   }
 }
 
