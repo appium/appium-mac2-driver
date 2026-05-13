@@ -1,3 +1,9 @@
+## [3.4.1](https://github.com/appium/appium-mac2-driver/compare/v3.4.0...v3.4.1) (2026-05-13)
+
+### Bug Fixes
+
+* Unhandled error for native video recording ([#383](https://github.com/appium/appium-mac2-driver/issues/383)) ([22a8bff](https://github.com/appium/appium-mac2-driver/commit/22a8bff4efc731b81737fa6d5c36de63582db4f3))
+
 ## [3.4.0](https://github.com/appium/appium-mac2-driver/compare/v3.3.4...v3.4.0) (2026-05-09)
 
 ### Features
