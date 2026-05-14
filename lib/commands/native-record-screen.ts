@@ -10,6 +10,7 @@ import {exec} from 'teen_process';
 import {BIDI_EVENT_NAME} from './bidi/constants';
 import {toNativeVideoChunkAddedEvent} from './bidi/models';
 import {isPlainObject} from '../utils';
+import os from 'node:os';
 
 const RECORDING_STARTUP_TIMEOUT_MS = 5000;
 const BUFFER_SIZE = 0xffff;
@@ -130,13 +131,20 @@ export class NativeVideoChunksBroadcaster {
     try {
       await waitForCondition(
         async () => {
-          const paths = await listAttachments();
-          const result = paths.find((name) => name.endsWith(uuid));
-          if (result) {
-            fullPath = result;
-            return true;
+          const {hasAccess, paths} = await listAttachments();
+          if (!hasAccess) {
+            this._log.info(
+              `Cannot access native video recordings folder. ` +
+                `Make sure to grant Full Disk Access to the Appium server process.`,
+            );
+            throw new Error('Access denied');
           }
-          return false;
+          const result = paths.find((fp) => pathMatchesUuid(fp, uuid));
+          if (!result) {
+            return false;
+          }
+          fullPath = result;
+          return true;
         },
         {
           waitMs: RECORDING_STARTUP_TIMEOUT_MS,
@@ -257,11 +265,11 @@ export class NativeVideoChunksBroadcaster {
     }
     const uuidSet = new Set(uuids);
 
-    const attachments = await listAttachments();
-    if (attachments.length === 0) {
+    const {hasAccess, paths} = await listAttachments();
+    if (!hasAccess || paths.length === 0) {
       return;
     }
-    const tasks: Promise<any>[] = attachments
+    const tasks: Promise<void>[] = paths
       .map((attachmentPath) => [path.basename(attachmentPath), attachmentPath])
       .filter(([name]) => uuidSet.has(name))
       .map(([, attachmentPath]) => fs.rimraf(attachmentPath));
@@ -416,8 +424,8 @@ export async function macosStopNativeScreenRecording(
     return '';
   }
 
-  const matchedVideoPath = (await listAttachments()).find((name) => name.endsWith(uuid));
-  if (!matchedVideoPath) {
+  const {hasAccess, paths: attachments} = await listAttachments();
+  if (!hasAccess) {
     throw new Error(
       `The screen recording identified by ${uuid} cannot be retrieved. ` +
         `Make sure the Appium Server process or its parent process (e.g. Terminal) ` +
@@ -425,6 +433,13 @@ export async function macosStopNativeScreenRecording(
         `You may verify the presence of the recorded video manually by running the ` +
         `'find "$HOME/Library/Daemon Containers/" -type f -name "${uuid}"' command from Terminal ` +
         `if the latter has been granted the above access permission.`,
+    );
+  }
+  const matchedVideoPath = attachments.find((fullPath) => pathMatchesUuid(fullPath, uuid));
+  if (!matchedVideoPath) {
+    throw new Error(
+      `The screen recording identified by ${uuid} cannot be retrieved even ` +
+        `though the Appium Server process has Full Disk Access permission.`,
     );
   }
   const options = {
@@ -447,18 +462,24 @@ export async function macosListDisplays(this: Mac2Driver): Promise<StringRecord<
   return (await this.wda.proxy.command('/wda/displays/list', 'GET')) as StringRecord<DisplayInfo>;
 }
 
-async function listAttachments(): Promise<string[]> {
+async function listAttachments(): Promise<{hasAccess: boolean; paths: string[]}> {
   // The expected path looks like
   // $HOME/Library/Daemon Containers/EFDD24BF-F856-411F-8954-CD5F0D6E6F3E/Data/Attachments/CAE7E5E2-5AC9-4D33-A47B-C491D644DE06
-  const deamonContainersRoot = path.resolve(
-    process.env.HOME as string,
-    'Library',
-    'Daemon Containers',
-  );
-  return await fs.glob(`*/Data/Attachments/*`, {
-    cwd: deamonContainersRoot,
-    absolute: true,
-  });
+  const daemonContainersRoot = path.resolve(os.homedir(), 'Library', 'Daemon Containers');
+  try {
+    await fs.access(daemonContainersRoot);
+    const paths = await fs.glob(`*/Data/Attachments/*`, {
+      cwd: daemonContainersRoot,
+      absolute: true,
+    });
+    return {hasAccess: true, paths};
+  } catch {
+    return {hasAccess: false, paths: []};
+  }
+}
+
+function pathMatchesUuid(fullPath: string, uuid: string): boolean {
+  return path.basename(fullPath).toUpperCase() === uuid.toUpperCase();
 }
 
 async function isFileUsed(fpath: string, userProcessName: string): Promise<boolean> {
