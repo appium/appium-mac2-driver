@@ -153,7 +153,7 @@ export class NativeVideoChunksBroadcaster {
       );
     } catch {
       this._log.warn(
-        `The video recording identified by ${uuid} did not ` +
+        `The video recording BiDi broadcast identified by ${uuid} did not ` +
           `start within ${RECORDING_STARTUP_TIMEOUT_MS}ms timeout`,
       );
       return;
