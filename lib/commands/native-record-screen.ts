@@ -18,6 +18,12 @@ const MONITORING_INTERVAL_DURATION_MS = 1000;
 const MAX_MONITORING_DURATION_MS = 24 * 60 * 60 * 1000; // 1 day
 const STOP_WAIT_TIMEOUT_MS = 5000;
 
+/**
+ * XCTest daemon stores native screen recording attachments under `Data/Attachments` (legacy) or
+ * `Data/tmp/Attachments` (Xcode 26.5+). Brace `{,tmp/}` matches both in a single glob.
+ */
+const DAEMON_NATIVE_RECORDING_ATTACHMENT_GLOB = '*/Data/{,tmp/}Attachments/*';
+
 interface ActiveVideoInfo {
   fps: number;
   codec: number;
@@ -430,8 +436,9 @@ export async function macosStopNativeScreenRecording(
       `The screen recording identified by ${uuid} cannot be retrieved. ` +
         `Make sure the Appium Server process or its parent process (e.g. Terminal) ` +
         `has Full Disk Access permission enabled in 'System Preferences' -> 'Privacy & Security' tab. ` +
-        `You may verify the presence of the recorded video manually by running the ` +
-        `'find "$HOME/Library/Daemon Containers/" -type f -name "${uuid}"' command from Terminal ` +
+        `You may verify the presence of the recorded video manually (e.g. under ` +
+        `*/Data/Attachments/ or */Data/tmp/Attachments/ within Daemon Containers) by running ` +
+        `'find "$HOME/Library/Daemon Containers" -type f -name "${uuid}"' from Terminal ` +
         `if the latter has been granted the above access permission.`,
     );
   }
@@ -463,18 +470,22 @@ export async function macosListDisplays(this: Mac2Driver): Promise<StringRecord<
 }
 
 async function listAttachments(): Promise<{hasAccess: boolean; paths: string[]}> {
-  // The expected path looks like
-  // $HOME/Library/Daemon Containers/EFDD24BF-F856-411F-8954-CD5F0D6E6F3E/Data/Attachments/CAE7E5E2-5AC9-4D33-A47B-C491D644DE06
+  // e.g. .../Daemon Containers/<container-id>/Data/Attachments/<uuid>
+  // or .../Daemon Containers/<container-id>/Data/tmp/Attachments/<uuid> (Xcode 26.5+)
   const daemonContainersRoot = path.resolve(os.homedir(), 'Library', 'Daemon Containers');
   try {
     await fs.access(daemonContainersRoot);
-    const paths = await fs.glob(`*/Data/Attachments/*`, {
+  } catch {
+    return {hasAccess: false, paths: []};
+  }
+  try {
+    const paths = await fs.glob(DAEMON_NATIVE_RECORDING_ATTACHMENT_GLOB, {
       cwd: daemonContainersRoot,
       absolute: true,
     });
-    return {hasAccess: true, paths};
+    return {hasAccess: true, paths: [...new Set(paths)]};
   } catch {
-    return {hasAccess: false, paths: []};
+    return {hasAccess: true, paths: []};
   }
 }
 

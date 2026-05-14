@@ -70,17 +70,19 @@ export class OptionalAutomationModeCheck implements IDoctorCheck {
 export const optionalAutomationModeCheck = new OptionalAutomationModeCheck();
 
 export class OptionalFullDiskAccessDaemonContainersCheck implements IDoctorCheck {
+  log!: AppiumLogger;
   /**
-   * Upper-case UUID basename only (native recording attachment filenames). Expressed as a glob
-   * pattern because `fs.glob` does not accept arbitrary RegExps.
+   * Upper-case UUID basename only (native recording attachment filenames). Expressed as glob
+   * segments because `fs.glob` does not accept arbitrary RegExps. Brace `{,tmp/}` matches legacy
+   * `Data/Attachments` and Xcode 26.5+ `Data/tmp/Attachments` in one pass.
    */
-  private static readonly NATIVE_RECORDING_ATTACHMENT_GLOB = (() => {
+  private readonly NATIVE_RECORDING_ATTACHMENT_GLOB = (() => {
     const h = '[0-9A-F]';
     const seg = (n: number) => Array.from({length: n}, () => h).join('');
-    return `*/Data/Attachments/${seg(8)}-${seg(4)}-${seg(4)}-${seg(4)}-${seg(12)}`;
+    const uuid = `${seg(8)}-${seg(4)}-${seg(4)}-${seg(4)}-${seg(12)}`;
+    return `*/Data/{,tmp/}Attachments/${uuid}`;
   })();
-  log!: AppiumLogger;
-  private readonly ANY_ATTACHMENT_GLOB = '*/Data/Attachments/*';
+  private readonly ANY_ATTACHMENT_GLOB = '*/Data/{,tmp/}Attachments/*';
   private readonly DAEMON_CONTAINERS_ROOT = path.resolve(
     os.homedir(),
     'Library',
@@ -106,7 +108,7 @@ export class OptionalFullDiskAccessDaemonContainersCheck implements IDoctorCheck
     return doctor.okOptional(
       `This process can read "${this.DAEMON_CONTAINERS_ROOT}" ` +
         `and found ${util.pluralize('matching path', uuidPathsOrErr.length, true)} under ` +
-        `${this.DAEMON_CONTAINERS_ROOT}/*/Data/Attachments/*.`,
+        `*/Data/Attachments/ or */Data/tmp/Attachments/.`,
     );
   }
 
@@ -114,9 +116,11 @@ export class OptionalFullDiskAccessDaemonContainersCheck implements IDoctorCheck
     return (
       `Open ${'System Settings'.bold} → ${'Privacy & Security'.bold} → ${'Full Disk Access'.bold} ` +
       `and enable the Terminal, IDE, or launchd parent that starts Appium Server. ` +
-      `Native screen recordings are stored in ${this.DAEMON_CONTAINERS_ROOT}/*/Data/Attachments/<recording_uuid>. ` +
-      `This permission is required to retrieve screen recording videos captured natively by the XCTest daemon via ` +
-      `'macos: (start/stop)NativeScreenRecording' APIs.`
+      `Native screen recordings live under ` +
+      `~/Library/Daemon Containers/*/Data/Attachments/ or, since Xcode 26.5, ` +
+      `~/Library/Daemon Containers/*/Data/tmp/Attachments/. ` +
+      `This permission is required to retrieve videos from the XCTest daemon ` +
+      `(macos:startNativeScreenRecording / macos:stopNativeScreenRecording).`
     );
   }
 
@@ -133,7 +137,7 @@ export class OptionalFullDiskAccessDaemonContainersCheck implements IDoctorCheck
       return null;
     }
     return doctor.okOptional(
-      `Full Disk Access to ~/Library/Daemon Containers can only be checked on macOS`,
+      `Full Disk Access to ${this.DAEMON_CONTAINERS_ROOT} can only be checked on macOS`,
     );
   }
 
@@ -150,16 +154,14 @@ export class OptionalFullDiskAccessDaemonContainersCheck implements IDoctorCheck
 
   private async globAttachmentsOrError(): Promise<string[] | DoctorCheckResult> {
     try {
-      return await fs.glob(
-        OptionalFullDiskAccessDaemonContainersCheck.NATIVE_RECORDING_ATTACHMENT_GLOB,
-        {
-          cwd: this.DAEMON_CONTAINERS_ROOT,
-          absolute: true,
-        },
-      );
+      return await fs.glob(this.NATIVE_RECORDING_ATTACHMENT_GLOB, {
+        cwd: this.DAEMON_CONTAINERS_ROOT,
+        absolute: true,
+      });
     } catch (e) {
       return doctor.nokOptional(
-        `Cannot enumerate native recording attachments under "${this.DAEMON_CONTAINERS_ROOT}": ${(e as Error).message}`,
+        `Cannot enumerate native recording attachments under "${this.DAEMON_CONTAINERS_ROOT}": ` +
+          `${(e as Error).message}`,
       );
     }
   }
@@ -181,9 +183,9 @@ export class OptionalFullDiskAccessDaemonContainersCheck implements IDoctorCheck
       anyAttachmentPaths.length > 0
         ? `This process can read "${this.DAEMON_CONTAINERS_ROOT}" ` +
             `(found ${util.pluralize('path', anyAttachmentPaths.length, true)} under ` +
-            `*/Data/Attachments/*, none matched the upper-case UUID filename glob).`
+            `*/Data/Attachments/* or */Data/tmp/Attachments/*, none matched the upper-case UUID filename glob).`
         : `This process can read "${this.DAEMON_CONTAINERS_ROOT}" ` +
-            `(no files under */Data/Attachments/* yet).`,
+            `(no files under */Data/Attachments/* or */Data/tmp/Attachments/* yet).`,
     );
   }
 }
