@@ -23,7 +23,7 @@ On top of standard Appium requirements Mac2 driver also expects the following pr
 - macOS 11 or later
 - Xcode 13 or later should be installed
     - `xcode-select` should be pointing to `<full_path_to_xcode_app>/Contents/Developer` developer directory instead of `/Library/Developer/CommandLineTools` to run `xcodebuild` commands
-- Xcode Helper app should be enabled for Accessibility access. The app itself could be usually found at `/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/Xcode Helper.app`. In order to enable Accessibility access for it simply open the parent folder in Finder: `open /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/` and drag & drop the `Xcode Helper` app to `Security & Privacy -> Privacy -> Accessibility` list of your `System Preferences`. This action must only be done once.
+- Xcode Helper app should be enabled for Accessibility access. The app itself could be usually found at `/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/Xcode Helper.app`. In order to enable Accessibility access for it simply open the parent folder in Finder: `open /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/` and drag & drop the `Xcode Helper` app to `Security & Privacy -> Privacy -> Accessibility` list of your `System Settings`. This action must only be done once.
 - `testmanagerd` process requires UIAutomation authentication since macOS 12. `automationmodetool enable-automationmode-without-authentication` command may help to disable it. This may be particularly useful in CI environments. [Apple forum thread](https://developer.apple.com/forums/thread/693850).
 
 ### Doctor
@@ -524,7 +524,7 @@ to a script in such case.
 Note that by default AppleScript engine blocks commands/scripts execution if your script
 is trying to access some private entities, like cameras or the desktop screen
 and no permissions to do it are given to the parent (for example, Appium or Terminal)
-process in System Preferences -> Privacy list.
+process in System Settings -> Privacy list.
 See [AppleScript Commands Execution](#applescript-commands-execution) for more details.
 
 #### Arguments
@@ -543,7 +543,7 @@ The actual stdout of the provided script if its execution was successful (e.g. g
 
 ### macos: startRecordingScreen
 
-Record the display in background while the automated test is running. This method requires [FFMPEG](https://www.ffmpeg.org/download.html) to be installed and present in PATH. Also, the Appium process must be allowed to access screen recording in System Preferences->Security & Privacy->Screen Recording. The resulting video uses H264 codec and is ready to be played by media players built-in into web browsers.
+Record the display in background while the automated test is running. This method requires [FFMPEG](https://www.ffmpeg.org/download.html) to be installed and present in PATH. Also, the Appium process must be allowed to access screen recording in System Settings->Security & Privacy->Screen Recording. The resulting video uses H264 codec and is ready to be played by media players built-in into web browsers.
 
 #### Arguments
 
@@ -666,7 +666,7 @@ Xcode must be at version 15+.
 > [!IMPORTANT]
 > In order to retrieve the recorded video from the local file system the Appium Server process itself
 > or its parent process (e.g. Terminal) must have the "Full Disk Access" permission granted
-> in 'System Preferences'→'Privacy & Security' tab.
+> in 'System Settings'→'Privacy & Security' tab.
 
 > [!NOTE]
 > Be careful while recording lengthy videos. They could be pretty large, and may easily exceed

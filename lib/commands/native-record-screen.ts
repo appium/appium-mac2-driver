@@ -269,7 +269,7 @@ export class NativeVideoChunksBroadcaster {
     if (uuids.length === 0) {
       return;
     }
-    const uuidSet = new Set(uuids);
+    const uuidSet = new Set(uuids.map((uuid) => uuid.toUpperCase()));
 
     const {hasAccess, paths} = await listAttachments();
     if (!hasAccess || paths.length === 0) {
@@ -277,7 +277,7 @@ export class NativeVideoChunksBroadcaster {
     }
     const tasks: Promise<void>[] = paths
       .map((attachmentPath) => [path.basename(attachmentPath), attachmentPath])
-      .filter(([name]) => uuidSet.has(name))
+      .filter(([name]) => uuidSet.has(name.toUpperCase()))
       .map(([, attachmentPath]) => fs.rimraf(attachmentPath));
     if (tasks.length === 0) {
       return;
@@ -435,7 +435,7 @@ export async function macosStopNativeScreenRecording(
     throw new Error(
       `The screen recording identified by ${uuid} cannot be retrieved. ` +
         `Make sure the Appium Server process or its parent process (e.g. Terminal) ` +
-        `has Full Disk Access permission enabled in 'System Preferences' -> 'Privacy & Security' tab. ` +
+        `has Full Disk Access permission enabled in 'System Settings' -> 'Privacy & Security' tab. ` +
         `You may verify the presence of the recorded video manually (e.g. under ` +
         `*/Data/Attachments/ or */Data/tmp/Attachments/ within Daemon Containers) by running ` +
         `'find "$HOME/Library/Daemon Containers" -type f -name "${uuid}"' from Terminal ` +

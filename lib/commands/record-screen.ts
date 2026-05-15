@@ -245,7 +245,7 @@ export class ScreenRecorder {
  * Record the display in background while the automated test is running.
  * This method requires FFMPEG (https://www.ffmpeg.org/download.html) to be installed
  * and present in PATH. Also, the Appium process must be allowed to access screen recording
- * in System Preferences->Security & Privacy->Screen Recording.
+ * in System Settings->Security & Privacy->Screen Recording.
  * The resulting video uses H264 codec and is ready to be played by media players built-in into web browsers.
  *
  * @param deviceId - Screen device index to use for the recording.
