@@ -15,7 +15,7 @@ const APPLE_SCRIPT_FEATURE = 'apple_script';
  * Note that by default AppleScript engine blocks commands/scripts execution if your script
  * is trying to access some private entities, like cameras or the desktop screen
  * and no permissions to do it are given to the parent (for example, Appium or Terminal)
- * process in System Preferences -> Privacy list.
+ * process in System Settings -> Privacy list.
  *
  * @param script - A valid AppleScript to execute
  * @param language - Overrides the scripting language. Basically, sets

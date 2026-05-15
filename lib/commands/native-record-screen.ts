@@ -10,12 +10,19 @@ import {exec} from 'teen_process';
 import {BIDI_EVENT_NAME} from './bidi/constants';
 import {toNativeVideoChunkAddedEvent} from './bidi/models';
 import {isPlainObject} from '../utils';
+import os from 'node:os';
 
 const RECORDING_STARTUP_TIMEOUT_MS = 5000;
 const BUFFER_SIZE = 0xffff;
 const MONITORING_INTERVAL_DURATION_MS = 1000;
 const MAX_MONITORING_DURATION_MS = 24 * 60 * 60 * 1000; // 1 day
 const STOP_WAIT_TIMEOUT_MS = 5000;
+
+/**
+ * XCTest daemon stores native screen recording attachments under `Data/Attachments` (legacy) or
+ * `Data/tmp/Attachments` (Xcode 26.5+). Brace `{,tmp/}` matches both in a single glob.
+ */
+const DAEMON_NATIVE_RECORDING_ATTACHMENT_GLOB = '*/Data/{,tmp/}Attachments/*';
 
 interface ActiveVideoInfo {
   fps: number;
@@ -130,13 +137,20 @@ export class NativeVideoChunksBroadcaster {
     try {
       await waitForCondition(
         async () => {
-          const paths = await listAttachments();
-          const result = paths.find((name) => name.endsWith(uuid));
-          if (result) {
-            fullPath = result;
-            return true;
+          const {hasAccess, paths} = await listAttachments();
+          if (!hasAccess) {
+            this._log.info(
+              `Cannot access native video recordings folder. ` +
+                `Make sure to grant Full Disk Access to the Appium server process.`,
+            );
+            throw new Error('Access denied');
           }
-          return false;
+          const result = paths.find((fp) => pathMatchesUuid(fp, uuid));
+          if (!result) {
+            return false;
+          }
+          fullPath = result;
+          return true;
         },
         {
           waitMs: RECORDING_STARTUP_TIMEOUT_MS,
@@ -145,7 +159,7 @@ export class NativeVideoChunksBroadcaster {
       );
     } catch {
       this._log.warn(
-        `The video recording identified by ${uuid} did not ` +
+        `The video recording BiDi broadcast identified by ${uuid} did not ` +
           `start within ${RECORDING_STARTUP_TIMEOUT_MS}ms timeout`,
       );
       return;
@@ -255,15 +269,15 @@ export class NativeVideoChunksBroadcaster {
     if (uuids.length === 0) {
       return;
     }
-    const uuidSet = new Set(uuids);
+    const uuidSet = new Set(uuids.map((uuid) => uuid.toUpperCase()));
 
-    const attachments = await listAttachments();
-    if (attachments.length === 0) {
+    const {hasAccess, paths} = await listAttachments();
+    if (!hasAccess || paths.length === 0) {
       return;
     }
-    const tasks: Promise<any>[] = attachments
+    const tasks: Promise<void>[] = paths
       .map((attachmentPath) => [path.basename(attachmentPath), attachmentPath])
-      .filter(([name]) => uuidSet.has(name))
+      .filter(([name]) => uuidSet.has(name.toUpperCase()))
       .map(([, attachmentPath]) => fs.rimraf(attachmentPath));
     if (tasks.length === 0) {
       return;
@@ -416,15 +430,23 @@ export async function macosStopNativeScreenRecording(
     return '';
   }
 
-  const matchedVideoPath = (await listAttachments()).find((name) => name.endsWith(uuid));
-  if (!matchedVideoPath) {
+  const {hasAccess, paths: attachments} = await listAttachments();
+  if (!hasAccess) {
     throw new Error(
       `The screen recording identified by ${uuid} cannot be retrieved. ` +
         `Make sure the Appium Server process or its parent process (e.g. Terminal) ` +
-        `has Full Disk Access permission enabled in 'System Preferences' -> 'Privacy & Security' tab. ` +
-        `You may verify the presence of the recorded video manually by running the ` +
-        `'find "$HOME/Library/Daemon Containers/" -type f -name "${uuid}"' command from Terminal ` +
+        `has Full Disk Access permission enabled in 'System Settings' -> 'Privacy & Security' tab. ` +
+        `You may verify the presence of the recorded video manually (e.g. under ` +
+        `*/Data/Attachments/ or */Data/tmp/Attachments/ within Daemon Containers) by running ` +
+        `'find "$HOME/Library/Daemon Containers" -type f -name "${uuid}"' from Terminal ` +
         `if the latter has been granted the above access permission.`,
+    );
+  }
+  const matchedVideoPath = attachments.find((fullPath) => pathMatchesUuid(fullPath, uuid));
+  if (!matchedVideoPath) {
+    throw new Error(
+      `The screen recording identified by ${uuid} cannot be retrieved even ` +
+        `though the Appium Server process has Full Disk Access permission.`,
     );
   }
   const options = {
@@ -447,18 +469,28 @@ export async function macosListDisplays(this: Mac2Driver): Promise<StringRecord<
   return (await this.wda.proxy.command('/wda/displays/list', 'GET')) as StringRecord<DisplayInfo>;
 }
 
-async function listAttachments(): Promise<string[]> {
-  // The expected path looks like
-  // $HOME/Library/Daemon Containers/EFDD24BF-F856-411F-8954-CD5F0D6E6F3E/Data/Attachments/CAE7E5E2-5AC9-4D33-A47B-C491D644DE06
-  const deamonContainersRoot = path.resolve(
-    process.env.HOME as string,
-    'Library',
-    'Daemon Containers',
-  );
-  return await fs.glob(`*/Data/Attachments/*`, {
-    cwd: deamonContainersRoot,
-    absolute: true,
-  });
+async function listAttachments(): Promise<{hasAccess: boolean; paths: string[]}> {
+  // e.g. .../Daemon Containers/<container-id>/Data/Attachments/<uuid>
+  // or .../Daemon Containers/<container-id>/Data/tmp/Attachments/<uuid> (Xcode 26.5+)
+  const daemonContainersRoot = path.resolve(os.homedir(), 'Library', 'Daemon Containers');
+  try {
+    await fs.access(daemonContainersRoot);
+  } catch {
+    return {hasAccess: false, paths: []};
+  }
+  try {
+    const paths = await fs.glob(DAEMON_NATIVE_RECORDING_ATTACHMENT_GLOB, {
+      cwd: daemonContainersRoot,
+      absolute: true,
+    });
+    return {hasAccess: true, paths: [...new Set(paths)]};
+  } catch {
+    return {hasAccess: true, paths: []};
+  }
+}
+
+function pathMatchesUuid(fullPath: string, uuid: string): boolean {
+  return path.basename(fullPath).toUpperCase() === uuid.toUpperCase();
 }
 
 async function isFileUsed(fpath: string, userProcessName: string): Promise<boolean> {
