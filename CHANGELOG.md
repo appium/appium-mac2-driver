@@ -1,3 +1,9 @@
+## [3.5.0](https://github.com/appium/appium-mac2-driver/compare/v3.4.3...v3.5.0) (2026-05-15)
+
+### Features
+
+* Add doctor check to verify full disk access permissions ([#385](https://github.com/appium/appium-mac2-driver/issues/385)) ([e58943b](https://github.com/appium/appium-mac2-driver/commit/e58943b985056869bf9c8140f0a718c4dfe819f0))
+
 ## [3.4.3](https://github.com/appium/appium-mac2-driver/compare/v3.4.2...v3.4.3) (2026-05-15)
 
 ### Miscellaneous Chores
