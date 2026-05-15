@@ -1,3 +1,9 @@
+## [3.4.3](https://github.com/appium/appium-mac2-driver/compare/v3.4.2...v3.4.3) (2026-05-15)
+
+### Miscellaneous Chores
+
+* Avoid excessive logging on server exit ([#386](https://github.com/appium/appium-mac2-driver/issues/386)) ([5a0aaa0](https://github.com/appium/appium-mac2-driver/commit/5a0aaa087c4777418636f904dd8a45471034dd37))
+
 ## [3.4.2](https://github.com/appium/appium-mac2-driver/compare/v3.4.1...v3.4.2) (2026-05-13)
 
 ### Bug Fixes
