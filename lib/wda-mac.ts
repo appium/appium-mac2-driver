@@ -8,7 +8,6 @@ import {strongbox} from '@appium/strongbox';
 import {SubProcess, exec} from 'teen_process';
 import {waitForCondition} from 'asyncbox';
 import {checkPortStatus} from 'portscanner';
-import {execSync} from 'node:child_process';
 import type {HTTPMethod, HTTPBody, ProxyResponse, ProxyOptions} from '@appium/types';
 import {listChildrenProcessIds, getModuleRoot, clearArray, removeAllOccurrences} from './utils';
 
@@ -233,11 +232,7 @@ class WDAMacProcess {
     }
 
     const childrenPids = await this.listChildrenPids();
-    if (childrenPids.length > 0) {
-      try {
-        await exec('kill', childrenPids);
-      } catch {}
-    }
+    tryKillPids(childrenPids, 'SIGTERM');
     await this.proc?.stop('SIGTERM', 3000);
   }
 
@@ -247,11 +242,7 @@ class WDAMacProcess {
     }
 
     const childrenPids = await this.listChildrenPids();
-    if (childrenPids.length > 0) {
-      try {
-        await exec('kill', ['-9', ...childrenPids]);
-      } catch {}
-    }
+    tryKillPids(childrenPids, 'SIGKILL');
     try {
       await this.proc?.stop('SIGKILL');
     } catch {}
@@ -486,24 +477,38 @@ export class WDAMacServer {
 export const WDA_MAC_SERVER = new WDAMacServer();
 
 // Private functions
+function tryKillPid(pid: string | number, signal: NodeJS.Signals): void {
+  const n = typeof pid === 'number' ? pid : Number.parseInt(String(pid), 10);
+  if (!Number.isFinite(n) || n <= 0) {
+    return;
+  }
+  try {
+    process.kill(n, signal);
+  } catch {
+    // ESRCH: process already exited
+  }
+}
+
+function tryKillPids(pids: string[], signal: NodeJS.Signals): void {
+  for (const pid of pids) {
+    tryKillPid(pid, signal);
+  }
+}
+
 async function cleanupObsoleteProcesses(): Promise<void> {
   if (RUNNING_PROCESS_IDS.length > 0) {
     log.debug(
       `Cleaning up ${RUNNING_PROCESS_IDS.length} obsolete ` +
         util.pluralize('process', RUNNING_PROCESS_IDS.length, false),
     );
-    try {
-      await exec('kill', ['-9', ...RUNNING_PROCESS_IDS.map(String)]);
-    } catch {}
+    tryKillPids(RUNNING_PROCESS_IDS.map(String), 'SIGKILL');
     clearArray(RUNNING_PROCESS_IDS);
   }
 }
 
 process.once('exit', () => {
   if (RUNNING_PROCESS_IDS.length > 0) {
-    try {
-      execSync(`kill -9 ${RUNNING_PROCESS_IDS.map(String).join(' ')}`);
-    } catch {}
+    tryKillPids(RUNNING_PROCESS_IDS.map(String), 'SIGKILL');
     clearArray(RUNNING_PROCESS_IDS);
   }
 });
