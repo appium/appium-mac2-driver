@@ -1,4 +1,4 @@
-import type {Mac2Driver} from '../driver';
+import type {Mac2Driver} from '../driver.js';
 import type {StringRecord} from '@appium/types';
 
 const EXECUTE_SCRIPT_PREFIX = 'macos:';

@@ -1,4 +1,4 @@
-import type {Mac2Driver} from '../driver';
+import type {Mac2Driver} from '../driver.js';
 
 /**
  * Opens the given URL with the default or the given application.

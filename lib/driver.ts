@@ -11,24 +11,24 @@ import type {
   DriverOpts,
   W3CDriverCaps,
 } from '@appium/types';
-import {BaseDriver, DeviceSettings} from 'appium/driver';
-import {WDA_MAC_SERVER, type WDAMacServer} from './wda-mac';
-import MAC2_CONSTRAINTS, {type Mac2Constraints} from './constraints';
-import * as appManagemenetCommands from './commands/app-management';
-import * as appleScriptCommands from './commands/applescript';
-import * as executeCommands from './commands/execute';
-import * as auditCommands from './commands/audit';
-import * as findCommands from './commands/find';
-import * as gesturesCommands from './commands/gestures';
-import * as navigationCommands from './commands/navigation';
-import * as recordScreenCommands from './commands/record-screen';
-import * as screenshotCommands from './commands/screenshots';
-import * as sourceCommands from './commands/source';
-import * as clipboardCommands from './commands/clipboard';
-import * as nativeScreenRecordingCommands from './commands/native-record-screen';
-import log from './logger';
-import {newMethodMap} from './method-map';
-import {executeMethodMap} from './execute-method-map';
+import {BaseDriver, DeviceSettings} from 'appium/driver.js';
+import {WDA_MAC_SERVER, type WDAMacServer} from './wda-mac.js';
+import MAC2_CONSTRAINTS, {type Mac2Constraints} from './constraints.js';
+import * as appManagemenetCommands from './commands/app-management.js';
+import * as appleScriptCommands from './commands/applescript.js';
+import * as executeCommands from './commands/execute.js';
+import * as auditCommands from './commands/audit.js';
+import * as findCommands from './commands/find.js';
+import * as gesturesCommands from './commands/gestures.js';
+import * as navigationCommands from './commands/navigation.js';
+import * as recordScreenCommands from './commands/record-screen.js';
+import * as screenshotCommands from './commands/screenshots.js';
+import * as sourceCommands from './commands/source.js';
+import * as clipboardCommands from './commands/clipboard.js';
+import * as nativeScreenRecordingCommands from './commands/native-record-screen.js';
+import log from './logger.js';
+import {newMethodMap} from './method-map.js';
+import {executeMethodMap} from './execute-method-map.js';
 
 const NO_PROXY: RouteMatcher[] = [
   ['GET', new RegExp('^/session/[^/]+/appium')],

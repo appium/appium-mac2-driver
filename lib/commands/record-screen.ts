@@ -1,8 +1,8 @@
 import {waitForCondition} from 'asyncbox';
-import {util, fs, tempDir} from 'appium/support';
+import {util, fs, tempDir} from 'appium/support.js';
 import {SubProcess} from 'teen_process';
-import {uploadRecordedMedia} from './helpers';
-import type {Mac2Driver} from '../driver';
+import {uploadRecordedMedia} from './helpers.js';
+import type {Mac2Driver} from '../driver.js';
 import type {AppiumLogger, StringRecord} from '@appium/types';
 
 const RETRY_PAUSE = 300;

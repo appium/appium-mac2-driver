@@ -1,4 +1,4 @@
-import type {Mac2Driver} from '../driver';
+import type {Mac2Driver} from '../driver.js';
 
 export interface AccessibilityAuditItem {
   detailedDescription: string;

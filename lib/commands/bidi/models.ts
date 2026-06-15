@@ -1,5 +1,5 @@
-import type {NativeVideoChunkAddedEvent} from './types';
-import {NATIVE_VIDEO_CHUNK_ADDED_EVENT} from './constants';
+import type {NativeVideoChunkAddedEvent} from './types.js';
+import {NATIVE_VIDEO_CHUNK_ADDED_EVENT} from './constants.js';
 
 /**
  * Converts the given UUID and video chunk payload into a NativeVideoChunkAddedEvent object.

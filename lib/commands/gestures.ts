@@ -1,7 +1,7 @@
-import {util} from 'appium/support';
-import {errors} from 'appium/driver';
-import type {Mac2Driver} from '../driver';
-import type {KeyOptions} from '../types';
+import {util} from 'appium/support.js';
+import {errors} from 'appium/driver.js';
+import type {Mac2Driver} from '../driver.js';
+import type {KeyOptions} from '../types.js';
 
 /**
  * Set value to the given element.

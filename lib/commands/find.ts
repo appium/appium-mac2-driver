@@ -1,5 +1,5 @@
-import {util} from 'appium/support';
-import type {Mac2Driver} from '../driver';
+import {util} from 'appium/support.js';
+import type {Mac2Driver} from '../driver.js';
 
 /**
  * This is needed to make lookup by image working

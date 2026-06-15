@@ -1,11 +1,11 @@
+import {describe, it, beforeEach, afterEach} from 'node:test';
+import assert from 'node:assert/strict';
 import {remote} from 'webdriverio';
 import type {Browser} from 'webdriverio';
 import os from 'node:os';
 import path from 'node:path';
-import {fs} from 'appium/support';
-import {HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID} from '../utils';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
+import {fs} from 'appium/support.js';
+import {HOST, PORT, TEST_TIMEOUT, TEXT_EDIT_BUNDLE_ID} from '../utils.js';
 
 const TEST_FILE = path.resolve(os.tmpdir(), 'test.test');
 
@@ -17,21 +17,18 @@ const CAPS = {
   'appium:postrun': {command: `do shell script "rm ${TEST_FILE}"`},
 };
 
-use(chaiAsPromised);
+describe('Mac2Driver - caps', {timeout: TEST_TIMEOUT}, () => {
+  let driver: Browser | null = null;
 
-describe('Mac2Driver - caps', function () {
-  this.timeout(MOCHA_TIMEOUT);
-
-  let driver: Browser | null;
-
-  beforeEach(async function () {
+  beforeEach(async () => {
     driver = await remote({
       hostname: HOST,
       port: PORT,
       capabilities: CAPS,
     });
   });
-  afterEach(async function () {
+
+  afterEach(async () => {
     if (driver) {
       try {
         await driver.deleteSession();
@@ -41,13 +38,13 @@ describe('Mac2Driver - caps', function () {
     }
   });
 
-  it('should execute scripts from capabilities', async function () {
-    await expect(fs.exists(TEST_FILE)).eventually.be.true;
+  it('should execute scripts from capabilities', async () => {
+    assert.equal(await fs.exists(TEST_FILE), true);
     try {
       await driver!.deleteSession();
     } finally {
       driver = null;
     }
-    await expect(fs.exists(TEST_FILE)).eventually.be.false;
+    assert.equal(await fs.exists(TEST_FILE), false);
   });
 });

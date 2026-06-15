@@ -1,15 +1,15 @@
 import path from 'node:path';
-import {fs, util} from 'appium/support';
-import type {Mac2Driver} from '../driver';
-import {uploadRecordedMedia} from './helpers';
+import {fs, util} from 'appium/support.js';
+import type {Mac2Driver} from '../driver.js';
+import {uploadRecordedMedia} from './helpers.js';
 import type {AppiumLogger, StringRecord} from '@appium/types';
 import type EventEmitter from 'node:events';
 import type {CancellablePromise} from 'asyncbox';
 import {TimeoutError, sleep, waitForCondition, withTimeout} from 'asyncbox';
 import {exec} from 'teen_process';
-import {BIDI_EVENT_NAME} from './bidi/constants';
-import {toNativeVideoChunkAddedEvent} from './bidi/models';
-import {isPlainObject} from '../utils';
+import {BIDI_EVENT_NAME} from './bidi/constants.js';
+import {toNativeVideoChunkAddedEvent} from './bidi/models.js';
+import {isPlainObject} from '../utils.js';
 import os from 'node:os';
 
 const RECORDING_STARTUP_TIMEOUT_MS = 5000;

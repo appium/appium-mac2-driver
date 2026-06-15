@@ -2,14 +2,14 @@ import path from 'node:path';
 import url from 'node:url';
 import axios from 'axios';
 import {setTimeout as delay} from 'node:timers/promises';
-import {JWProxy, errors} from 'appium/driver';
-import {fs, logger, util, timing} from 'appium/support';
+import {JWProxy, errors} from 'appium/driver.js';
+import {fs, logger, util, timing} from 'appium/support.js';
 import {strongbox} from '@appium/strongbox';
 import {SubProcess, exec} from 'teen_process';
 import {waitForCondition} from 'asyncbox';
 import {checkPortStatus} from 'portscanner';
 import type {HTTPMethod, HTTPBody, ProxyResponse, ProxyOptions} from '@appium/types';
-import {listChildrenProcessIds, getModuleRoot, clearArray, removeAllOccurrences} from './utils';
+import {listChildrenProcessIds, getModuleRoot, clearArray, removeAllOccurrences} from './utils.js';
 
 const log = logger.getLogger('WebDriverAgentMac');
 
