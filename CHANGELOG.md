@@ -1,3 +1,13 @@
+## [4.0.0](https://github.com/appium/appium-mac2-driver/compare/v3.5.0...v4.0.0) (2026-06-15)
+
+### ⚠ BREAKING CHANGES
+
+* The package is now ESM-only. require('appium-mac2-driver') and other CommonJS require() usage will no longer work. Consumers must use ESM import.
+
+### Features
+
+* Migrate package to ESM ([#388](https://github.com/appium/appium-mac2-driver/issues/388)) ([e226446](https://github.com/appium/appium-mac2-driver/commit/e2264460f89cfbe5b454de7ac05aeba155d67b40))
+
 ## [3.5.0](https://github.com/appium/appium-mac2-driver/compare/v3.4.3...v3.5.0) (2026-05-15)
 
 ### Features
