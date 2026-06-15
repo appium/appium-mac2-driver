@@ -77,7 +77,7 @@ describe('Mac2Driver - native screen recording', {timeout: TEST_TIMEOUT}, () => 
       const info = (await driver!.executeScript('macos: startNativeScreenRecording', [
         {fps: 24},
       ])) as {uuid: string; fps: number; startedAt: number};
-      assert.equal(typeof info, 'object');
+      assert.ok(info !== null && typeof info === 'object');
       assert.equal(typeof info.uuid, 'string');
       assert.ok(info.uuid.length > 0);
       assert.equal(info.fps, 24);

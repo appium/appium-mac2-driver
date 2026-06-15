@@ -51,8 +51,8 @@ describe('Mac2Driver - find elements', {timeout: TEST_TIMEOUT}, () => {
   });
 
   it('should find by multiple by class name', async () => {
-    const els = await driver!.findElement('class name', 'XCUIElementTypeRulerMarker');
-    assert.ok((els as unknown as any[]).length > 1);
+    const els = await driver!.findElements('class name', 'XCUIElementTypeRulerMarker');
+    assert.ok(els.length > 1);
   });
 
   it('should find by predicate', async () => {
@@ -64,7 +64,6 @@ describe('Mac2Driver - find elements', {timeout: TEST_TIMEOUT}, () => {
   it('should find by class chain', async () => {
     const els = await driver!.findElements('-ios class chain', '**/XCUIElementTypePopUpButton');
     assert.ok(els.length > 0);
-    assert.equal(await driver!.getElementAttribute(String(els[0]), 'elementType'), '14');
     assert.equal(await driver!.getElementAttribute(String(els[0]), 'elementType'), '14');
   });
 
@@ -91,7 +90,6 @@ describe('Mac2Driver - find elements', {timeout: TEST_TIMEOUT}, () => {
     );
     assert.ok(els.length > 1);
     assert.equal(await driver!.getElementAttribute(String(els[0]), 'elementType'), '14');
-    assert.equal(await driver!.getElementAttribute(String(els[0]), 'elementType'), '14');
   });
 
   it('should find subelements', async () => {
@@ -99,7 +97,6 @@ describe('Mac2Driver - find elements', {timeout: TEST_TIMEOUT}, () => {
     assert.ok(el);
     const subEls = await driver!.findElementsFromElement(String(el), '-ios class chain', '*');
     assert.ok(subEls.length > 1);
-    assert.equal(await driver!.getElementAttribute(String(subEls), 'elementType'), '72');
-    assert.equal(await driver!.getElementAttribute(String(subEls), 'elementType'), '72');
+    assert.equal(await driver!.getElementAttribute(String(subEls[0]), 'elementType'), '72');
   });
 });
