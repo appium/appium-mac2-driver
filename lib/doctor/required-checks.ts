@@ -1,4 +1,4 @@
-import {doctor} from 'appium/support';
+import {doctor} from 'appium/support.js';
 import {exec} from 'teen_process';
 import {getPath as getXcodePath} from 'appium-xcode';
 import type {IDoctorCheck, AppiumLogger, DoctorCheckResult} from '@appium/types';

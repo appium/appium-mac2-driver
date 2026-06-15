@@ -1,5 +1,5 @@
-import {util, fs, net} from 'appium/support';
-import type {Mac2Driver} from '../driver';
+import {util, fs, net} from 'appium/support.js';
+import type {Mac2Driver} from '../driver.js';
 import type {StringRecord} from '@appium/types';
 
 /**

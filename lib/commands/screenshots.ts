@@ -1,5 +1,5 @@
-import type {Mac2Driver} from '../driver';
-import type {ScreenshotsInfo} from '../types';
+import type {Mac2Driver} from '../driver.js';
+import type {ScreenshotsInfo} from '../types.js';
 
 /**
  * Retrieves screenshots of each display available to macOS

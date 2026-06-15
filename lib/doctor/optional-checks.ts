@@ -1,7 +1,7 @@
 import path from 'node:path';
 import os from 'node:os';
-import {resolveExecutablePath} from './utils';
-import {doctor, fs, util} from 'appium/support';
+import {resolveExecutablePath} from './utils.js';
+import {doctor, fs, util} from 'appium/support.js';
 import {exec} from 'teen_process';
 import type {IDoctorCheck, AppiumLogger, DoctorCheckResult} from '@appium/types';
 import '@colors/colors';

@@ -1,11 +1,11 @@
+import {describe, it, beforeEach, afterEach} from 'node:test';
+import assert from 'node:assert/strict';
 import {remote} from 'webdriverio';
 import type {Browser} from 'webdriverio';
 import type {EventEmitter} from 'node:events';
 import {setTimeout as delay} from 'node:timers/promises';
 import {waitForCondition} from 'asyncbox';
-import {HOST, PORT, MOCHA_TIMEOUT, TEXT_EDIT_BUNDLE_ID} from '../utils';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
+import {HOST, PORT, TEST_TIMEOUT, TEXT_EDIT_BUNDLE_ID} from '../utils.js';
 
 // `webSocketUrl: true` requests a W3C BiDi session, which makes Appium
 // return a `webSocketUrl` in the new-session response and makes
@@ -37,14 +37,10 @@ interface ChunkEventParams {
   payload: string;
 }
 
-use(chaiAsPromised);
+describe('Mac2Driver - native screen recording', {timeout: TEST_TIMEOUT}, () => {
+  let driver: Browser | null = null;
 
-describe('Mac2Driver - native screen recording', function () {
-  this.timeout(MOCHA_TIMEOUT);
-
-  let driver: Browser | null;
-
-  beforeEach(async function () {
+  beforeEach(async () => {
     driver = await remote({
       hostname: HOST,
       port: PORT,
@@ -52,7 +48,7 @@ describe('Mac2Driver - native screen recording', function () {
     });
   });
 
-  afterEach(async function () {
+  afterEach(async () => {
     if (driver) {
       try {
         await driver.deleteSession();
@@ -62,7 +58,7 @@ describe('Mac2Driver - native screen recording', function () {
     }
   });
 
-  it('should record a short clip and stream identical chunks over BiDi', async function () {
+  it('should record a short clip and stream identical chunks over BiDi', async () => {
     // webdriverio's `Browser` overrides `on/once` to only accept W3C
     // BiDi event names, but the underlying object is a plain
     // EventEmitter that receives every BiDi event the server pushes —
@@ -81,9 +77,10 @@ describe('Mac2Driver - native screen recording', function () {
       const info = (await driver!.executeScript('macos: startNativeScreenRecording', [
         {fps: 24},
       ])) as {uuid: string; fps: number; startedAt: number};
-      expect(info).to.be.an('object');
-      expect(info.uuid).to.be.a('string').and.not.empty;
-      expect(info.fps).to.equal(24);
+      assert.ok(info !== null && typeof info === 'object');
+      assert.equal(typeof info.uuid, 'string');
+      assert.ok(info.uuid.length > 0);
+      assert.equal(info.fps, 24);
 
       onChunk = (params: ChunkEventParams) => {
         if (params.uuid !== info.uuid) {
@@ -101,13 +98,13 @@ describe('Mac2Driver - native screen recording', function () {
         'macos: stopNativeScreenRecording',
         [],
       )) as string;
-      expect(payload).to.be.a('string');
-      expect(payload.length).to.be.at.least(MIN_BASE64_PAYLOAD_SIZE);
+      assert.equal(typeof payload, 'string');
+      assert.ok(payload.length >= MIN_BASE64_PAYLOAD_SIZE);
 
       // Decoded payload should be a valid mp4 (starts with an `ftyp` box).
       const stopBuffer = Buffer.from(payload, 'base64');
-      expect(stopBuffer.length).to.be.at.least(8);
-      expect(stopBuffer.subarray(4, 8).toString('ascii')).to.equal('ftyp');
+      assert.ok(stopBuffer.length >= 8);
+      assert.equal(stopBuffer.subarray(4, 8).toString('ascii'), 'ftyp');
 
       // The publisher is contractually guaranteed by `notifyStopped` to
       // have emitted every byte of the recording before
@@ -118,17 +115,19 @@ describe('Mac2Driver - native screen recording', function () {
         intervalMs: 25,
       });
 
-      expect(ownChunks.length, 'no BiDi chunks were received').to.be.at.least(1);
+      assert.ok(ownChunks.length >= 1, 'no BiDi chunks were received');
 
       const reassembled = Buffer.concat(ownChunks);
-      expect(
+      assert.equal(
         reassembled.length,
+        stopBuffer.length,
         'BiDi-reassembled video has a different size than the stop payload',
-      ).to.equal(stopBuffer.length);
-      expect(
+      );
+      assert.equal(
         reassembled.equals(stopBuffer),
+        true,
         'BiDi-reassembled video does not match the stop payload byte-for-byte',
-      ).to.be.true;
+      );
     } finally {
       if (onChunk) {
         bidiEvents.off(CHUNK_EVENT, onChunk);
