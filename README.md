@@ -276,7 +276,7 @@ keyModifierFlags | number | no | if set then the given key modifiers will be app
 - [clickForDuration:thenDragToElement:withVelocity:thenHoldForDuration: (XCUIElement)](https://developer.apple.com/documentation/xctest/xcuielement/3553192-clickforduration?language=objc)
 - [clickForDuration:thenDragToCoordinate:withVelocity:thenHoldForDuration: (XCUICoordinate)](https://developer.apple.com/documentation/xctest/xcuicoordinate/3553191-clickforduration?language=objc)
 
-### mobile: swipe
+### macos: swipe
 
 This extension performs a swipe gesture on the particular screen element or by given coordinates.
 The API is only available on macOS since Xcode SDK 13.
