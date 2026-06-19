@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/appium/appium-mac2-driver/compare/v4.0.0...v4.0.1) (2026-06-19)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/node from 25.9.4 to 26.0.0 ([#391](https://github.com/appium/appium-mac2-driver/issues/391)) ([0cc24fd](https://github.com/appium/appium-mac2-driver/commit/0cc24fde67b7a2cddf206660d47afd7d761d038c))
+* **deps:** bump actions/checkout from 6 to 7 ([#392](https://github.com/appium/appium-mac2-driver/issues/392)) ([ba749dc](https://github.com/appium/appium-mac2-driver/commit/ba749dc5e01811e33babacd7f840e873212e0165))
+
 ## [4.0.0](https://github.com/appium/appium-mac2-driver/compare/v3.5.0...v4.0.0) (2026-06-15)
 
 ### ⚠ BREAKING CHANGES
