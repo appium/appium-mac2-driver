@@ -1,3 +1,9 @@
+## [4.0.3](https://github.com/appium/appium-mac2-driver/compare/v4.0.2...v4.0.3) (2026-07-01)
+
+### Miscellaneous Chores
+
+* downgrade conventional-changelog-conventionalcommits to v9 ([#394](https://github.com/appium/appium-mac2-driver/issues/394)) ([b110f43](https://github.com/appium/appium-mac2-driver/commit/b110f438b920acfd40a25f9f72c3610408ea6647))
+
 ## [4.0.2](https://github.com/appium/appium-mac2-driver/compare/v4.0.1...v4.0.2) (2026-06-29)
 
 ## [4.0.1](https://github.com/appium/appium-mac2-driver/compare/v4.0.0...v4.0.1) (2026-06-19)
