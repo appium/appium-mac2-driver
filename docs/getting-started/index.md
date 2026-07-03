@@ -59,7 +59,7 @@ The server log output should include a line like the following:
 ## Device Preparation
 
 * Xcode must be configured to use its bundled Command Line Tools, in Xcode -> _Settings_ -> _Locations_ -> _Command Line Tools_
-* The Xcode Helper app (bundled with Xcode) must be granted Accessibility permissions:
+* The Xcode Helper app (bundled with Xcode) [must be granted Accessibility permissions](https://apple.stackexchange.com/questions/334008/xcode-helper-does-not-have-the-accessibility-permissions-needed-to-run-tests):
     * Open Finder in the directory containing the Xcode Helper app:
     
         ```
