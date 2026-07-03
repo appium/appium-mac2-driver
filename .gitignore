@@ -3,3 +3,4 @@ build
 *.xcuserstate
 package-lock.json
 .DS_Store
+site
