@@ -12,7 +12,8 @@ title: Welcome
 </style>
 
 <div style="text-align: center">
-  <img src="assets/images/appium-plus-mac2.png" style="max-width: 500px;" />
+  <img src="assets/images/appium-plus-mac2-light.png#only-light" style="max-width: 500px;" />
+  <img src="assets/images/appium-plus-mac2-dark.png#only-dark" style="max-width: 500px;" />
 </div>
 
 Welcome to the Appium Mac2 Driver documentation! The Mac2 driver is a black-box test automation

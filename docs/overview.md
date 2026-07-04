@@ -6,6 +6,7 @@ title: Overview
 ---
 
 The Mac2 driver is an Appium driver intended for black-box automated testing of macOS applications.
+It is the successor to the deprecated [Appium Mac driver](https://github.com/appium/appium-mac-driver).
 
 ## Target Platforms
 
