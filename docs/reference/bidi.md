@@ -1,27 +1,34 @@
 ---
-title: BiDi Events
+title: BiDi Commands and Events
 ---
 
 The Mac2 driver has partial support of the [WebDriver BiDi Protocol](https://w3c.github.io/webdriver-bidi/).
-Only the events and commands mentioned below are supported. All other entities described in the
-specification throw not implemented errors.
+It inherits [the BiDi commands and events supported by the Appium base driver](https://appium.io/docs/en/latest/reference/api/bidi/),
+and additionally defines the events and commands listed below.
 
-For other BiDi events recognized by the Appium server, see
-[their Appium docs reference page](https://appium.io/docs/en/latest/reference/api/bidi/).
+## Events
 
 ### appium:mac2.nativeVideoRecordingChunkAdded
 
-Emitted when a new native video recording chunk is available for consumption.
+Indicates that a new native video recording chunk is available for consumption.
 
-This event is automatically and continuously emitted as soon as the `macos: startNativeScreenRecording`
-execute method is invoked. Event emission stops as soon as the `macos: stopNativeScreenRecording`
-execute method is called, or the test session is stopped.
+This event is continuously emitted as soon as the `macos: startNativeScreenRecording` execute
+method is invoked. Event emission stops as soon as the `macos: stopNativeScreenRecording` execute
+method is called, or the test session is stopped.
 
-#### Response
+#### Event Type (CDDL)
 
-An object with the following properties:
+```cddl
+appium:mac2.nativeVideoRecordingChunkAdded = {
+  method: "appium:mac2.nativeVideoRecordingChunkAdded",
+  params: {
+    uuid: text,
+    payload: text,
+  },
+}
+```
 
-| Parameter | Description | Type |
-| -- | -- | |
-| `uuid` | The UUID of the video being broadcast | string |
-| `payload` | Base64-encoded chunk of the corresponding video file | string |
+| Parameter | Description |
+| -- | -- |
+| `uuid` | The UUID of the video being broadcast |
+| `payload` | Base64-encoded chunk of the corresponding video file |

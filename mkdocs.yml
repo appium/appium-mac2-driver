@@ -39,8 +39,8 @@ nav:
       - Session Configuration:
           - reference/capabilities.md
           - reference/settings.md
-          - reference/bidi.md
           - reference/endpoints.md
+          - reference/bidi.md
           - reference/execute-methods.md
       - Element Management:
           - reference/locator-strategies.md
