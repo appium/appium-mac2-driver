@@ -50,6 +50,7 @@ nav:
           - guides/app-under-test.md
           - guides/parallel-tests.md
       - Driver Actions:
+          - guides/key-modifier-flags.md
           - guides/w3c-action-recipes.md
           - guides/applescript.md
   - Troubleshooting: troubleshooting/index.md

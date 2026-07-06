@@ -22,7 +22,7 @@ execute method.
 
 |Name|Description|Type|
 |--|--|--|
-|`options`|Map of screen recording options. Refer to the corresponding execute method for more details.|`Record<string, any>`|
+|`options?`|Map of screen recording options. Refer to the corresponding execute method for more details.|`Record<string, any>`|
 
 #### Response
 
@@ -41,7 +41,7 @@ execute method.
 
 |Name|Description|Type|
 |--|--|--|
-|`options`|Map of screen recording options. Refer to the corresponding execute method for more details.|`Record<string, any>`|
+|`options?`|Map of screen recording options. Refer to the corresponding execute method for more details.|`Record<string, any>`|
 
 #### Response
 
