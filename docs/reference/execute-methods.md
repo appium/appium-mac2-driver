@@ -362,3 +362,118 @@ method.
 #### Response
 
 `null`
+
+### macos: source
+
+Retrieves a string representation of the current app source. Based on XCTest's
+[`debugDescription`](https://developer.apple.com/documentation/xcuiautomation/xcuielement/debugdescription)
+method.
+
+#### Arguments
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `format?`| `string` | Format in which the app source should be retrieved. Supported values are `xml` (XML format, default) and `description` (the `debugDescription` output format) |
+
+#### Response
+
+`string` - the application source
+
+### macos: launchApp
+
+Launches the application with the given bundle identifier/path, or activates the application if it
+is already running. An exception is thrown if the app cannot be found. Based on XCTest's
+[`launch`](https://developer.apple.com/documentation/xcuiautomation/xcuiapplication/launch())
+and [`activate`](https://developer.apple.com/documentation/xcuiautomation/xcuiapplication/activate())
+methods.
+
+This method influences the state of the [Application Under Test](../guides/app-under-test.md).
+
+#### Arguments
+
+| <div style="width:7em">Name</div> | <div style="width:11em">Type</div> | Description |
+| --- | --- | --- |
+| `bundleId?`| `string` | Bundle identifier of the app to be launched/activated. Required if `path` is not set. |
+| `path?`| `string` | Full path to the application bundle. Required if `bundleId` is not set. |
+| `arguments?`| `Array<string>` | Command-line arguments passed to the app. Ignored if the app is already running. Similar to the [`appium:arguments`](./capabilities.md#arguments) capability. |
+| `environment?`| `Record<string, any>` | Environment variables used when launching the app. Ignored if the app is already running. Similar to the [`appium:environment`](./capabilities.md#environment) capability. |
+
+#### Response
+
+`null`
+
+### macos: activateApp
+
+Activates the application with the given bundle identifier/path. An exception is thrown if the app
+cannot be found, or the app is not running. Based on XCTest's
+[`activate`](https://developer.apple.com/documentation/xcuiautomation/xcuiapplication/activate())
+method.
+
+This method influences the state of the [Application Under Test](../guides/app-under-test.md).
+
+#### Arguments
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `bundleId?`| `string` | Bundle identifier of the app to be activated. Required if `path` is not set. |
+| `path?`| `string` | Full path to the application bundle. Required if `bundleId` is not set. |
+
+#### Response
+
+`null`
+
+### macos: terminateApp
+
+Terminates the application with the given bundle identifier/path. An exception is thrown if the app
+cannot be found. Based on XCTest's
+[`terminate`](https://developer.apple.com/documentation/xcuiautomation/xcuiapplication/terminate())
+method.
+
+This method influences the state of the [Application Under Test](../guides/app-under-test.md).
+
+#### Arguments
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `bundleId?`| `string` | Bundle identifier of the app to be terminated. Required if `path` is not set. |
+| `path?`| `string` | Full path to the application bundle. Required if `bundleId` is not set. |
+
+#### Response
+
+`null`
+
+### macos: queryAppState
+
+Queries the state of the application with the given bundle identifier/path. An exception is thrown
+if the app cannot be found.
+
+#### Arguments
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `bundleId?`| `string` | Bundle identifier of the app to be queried. Required if `path` is not set. |
+| `path?`| `string` | Full path to the application bundle. Required if `bundleId` is not set. |
+
+#### Response
+
+`number` - an integer value representing the application state. See the [XCUITest documentation on XCUIApplicationState](https://developer.apple.com/documentation/xcuiautomation/xcuiapplication/state-swift.enum)
+for more details.
+
+### macos: appleScript
+
+Executes the provided AppleScript command or script. The [`apple_script` insecure feature](./insecure-features.md)
+must be enabled. Refer to the [AppleScript guide](../guides/applescript.md) for more details.
+
+#### Arguments
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `command?`| `string` | AppleScript command to execute. Required if `script` is not set. If `script` is also set, only `command` is used. |
+| `script?`| `string` | AppleScript script to execute. Required if `command` is not set. Ignored if `command` is also set. |
+| `language?`| `string` | Overrides the scripting language (AppleScript by default). This translates to the `-l` argument of the `osascript` tool.  |
+| `timeout?`| `number` | Number of seconds to wait until a long-running blocking command is finished. An error is thrown if the command is still running after this timeout expires. |
+| `cwd?`| `string` | Path to an existing directory used as the working directory for the script execution. |
+
+#### Response
+
+`any` - the stdout of the provided script/command, if successful
