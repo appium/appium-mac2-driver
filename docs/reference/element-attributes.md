@@ -72,7 +72,7 @@ value.
 > Example: `true`
 
 Corresponds to the element's XCTest [`hasFocus`](https://developer.apple.com/documentation/xcuiautomation/xcuielementattributes/hasfocus)
-value.
+value. Available since driver version 1.3.0.
 
 ## hittable
 

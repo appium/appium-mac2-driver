@@ -13,7 +13,8 @@ For more information about the `appium driver run` command, refer to [the Appium
 
 ### `open-wda`
 
-Opens the WebDriverAgent (WDA) project of the installed Mac2 driver in Xcode.
+Opens the WebDriverAgent (WDA) project of the installed Mac2 driver in Xcode. Available since driver
+version 1.19.0.
 
 #### Usage
 

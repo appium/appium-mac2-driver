@@ -394,7 +394,7 @@ This method influences the state of the [Application Under Test](../guides/app-u
 | <div style="width:7em">Name</div> | <div style="width:11em">Type</div> | Description |
 | --- | --- | --- |
 | `bundleId?`| `string` | Bundle identifier of the app to be launched/activated. Required if `path` is not set. |
-| `path?`| `string` | Full path to the application bundle. Required if `bundleId` is not set. |
+| `path?`| `string` | Full path to the application bundle. Required if `bundleId` is not set. Available since driver version 1.10.0. |
 | `arguments?`| `Array<string>` | Command-line arguments passed to the app. Ignored if the app is already running. Similar to the [`appium:arguments`](./capabilities.md#arguments) capability. |
 | `environment?`| `Record<string, any>` | Environment variables used when launching the app. Ignored if the app is already running. Similar to the [`appium:environment`](./capabilities.md#environment) capability. |
 
@@ -416,7 +416,7 @@ This method influences the state of the [Application Under Test](../guides/app-u
 | Name | Type | Description |
 | --- | --- | --- |
 | `bundleId?`| `string` | Bundle identifier of the app to be activated. Required if `path` is not set. |
-| `path?`| `string` | Full path to the application bundle. Required if `bundleId` is not set. |
+| `path?`| `string` | Full path to the application bundle. Required if `bundleId` is not set. Available since driver version 1.10.0. |
 
 #### Response
 
@@ -436,7 +436,7 @@ This method influences the state of the [Application Under Test](../guides/app-u
 | Name | Type | Description |
 | --- | --- | --- |
 | `bundleId?`| `string` | Bundle identifier of the app to be terminated. Required if `path` is not set. |
-| `path?`| `string` | Full path to the application bundle. Required if `bundleId` is not set. |
+| `path?`| `string` | Full path to the application bundle. Required if `bundleId` is not set. Available since driver version 1.10.0. |
 
 #### Response
 
@@ -452,7 +452,7 @@ if the app cannot be found.
 | Name | Type | Description |
 | --- | --- | --- |
 | `bundleId?`| `string` | Bundle identifier of the app to be queried. Required if `path` is not set. |
-| `path?`| `string` | Full path to the application bundle. Required if `bundleId` is not set. |
+| `path?`| `string` | Full path to the application bundle. Required if `bundleId` is not set. Available since driver version 1.10.0. |
 
 #### Response
 
@@ -530,7 +530,7 @@ or no active screen recording process is found.
 
 ### macos: screenshots
 
-Retrieves a screenshot of one or more available displays.
+Retrieves a screenshot of one or more available displays. Available since driver version 1.1.0.
 
 #### Arguments
 
@@ -552,7 +552,7 @@ Retrieves a screenshot of one or more available displays.
 
 Opens the specified URL within the default or specified application.
 
-This feature requires Xcode 14.3 or later.
+This feature requires Xcode 14.3 or later. Available since driver version 1.15.0.
 
 #### Arguments
 
@@ -572,7 +572,7 @@ is running. Does nothing if a screen recording is already running. The recording
 using the [`macos: stopNativeScreenRecording`](#macos-stopnativescreenrecording) method, or by
 stopping the session itself. In both cases, the raw video file is deleted.
 
-This feature requires Xcode 15 or later.
+This feature requires Xcode 15 or later. Available since driver version 2.1.0.
 
 !!! tip
 
@@ -604,7 +604,7 @@ This feature requires Xcode 15 or later.
 
 Fetches the information of the currently running native video recording.
 
-This feature requires Xcode 15 or later.
+This feature requires Xcode 15 or later. Available since driver version 2.1.0.
 
 #### Response
 
@@ -617,7 +617,8 @@ either returning its payload or uploading it to a remote location. An exception 
 active XCTest screen recording process is found.
 
 This feature requires Xcode 15 or later, and the Appium process must be granted filesystem
-permissions in macOS System Settings -> _Privacy & Security_ -> _Full Disk Access_.
+permissions in macOS System Settings -> _Privacy & Security_ -> _Full Disk Access_. Available
+since driver version 2.1.0.
 
 #### Arguments
 
@@ -630,7 +631,7 @@ permissions in macOS System Settings -> _Privacy & Security_ -> _Full Disk Acces
 | `headers?`| `Record<string, any>` | Additional headers to use for the HTTP(S) multipart upload |
 | `fileFieldName?`| `string` | Name of the form field for storing the file content blob for HTTP(S) uploads. Set to `file` by default. |
 | `formFields?`| `Record<string, any>` or `Array<[string, any]>` | Additional form fields to use for the HTTP(S) multipart upload |
-| `ignorePayload?`| `boolean` | Whether to skip retrieval of the raw video from the filesystem, instead returning an empty string. Useful if you prefer to fetch video chunks via the [`appium:mac2.nativeVideoRecordingChunkAdded` BiDi event](./bidi.md). Set to `false` by default. |
+| `ignorePayload?`| `boolean` | Whether to skip retrieval of the raw video from the filesystem, instead returning an empty string. Useful if you prefer to fetch video chunks via the [`appium:mac2.nativeVideoRecordingChunkAdded` BiDi event](./bidi.md). Set to `false` by default. Available since driver version 2.2.0. |
 
 #### Response
 
@@ -639,7 +640,7 @@ or no active screen recording process is found.
 
 ### macos: listDisplays
 
-Retrieves information about the available displays.
+Retrieves information about the available displays. Available since driver version 2.1.0.
 
 #### Response
 
@@ -654,6 +655,8 @@ value is an object with the following structure:
 ### macos: setClipboard
 
 Sets the macOS clipboard content. The existing clipboard content (if present) will be cleared.
+
+Available since driver version 3.1.0.
 
 #### Arguments
 
@@ -670,6 +673,8 @@ Sets the macOS clipboard content. The existing clipboard content (if present) wi
 
 Retrieves the macOS clipboard content as a base64-encoded string.
 
+Available since driver version 3.1.0.
+
 #### Arguments
 
 | <div style="width:7em">Name</div> | Type | Description |
@@ -685,7 +690,7 @@ data for the specified `contentType`.
 
 Performs an accessibility audit for the application under test.
 
-This feature requires Xcode 15 or later.
+This feature requires Xcode 15 or later. Available since driver version 3.3.0.
 
 #### Arguments
 

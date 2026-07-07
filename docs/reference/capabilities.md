@@ -109,8 +109,8 @@ application is damaged.
 This capability can be useful when running tests on devices with multiple builds of the same
 application, using the same bundle identifier.
 
-On Mac2 driver versions 1.12.0 and earlier, this capability is ignored if `appium:bundleId` is not
-specified.
+Available since driver version 1.8.0. On driver versions 1.12.0 and earlier, this capability is
+ignored if `appium:bundleId` is not set.
 
 ### appLocale
 
@@ -130,6 +130,8 @@ All of the above properties can also be provided using the `appium:arguments` ca
 arguments like `-AppleLanguages`, `-AppleLocale`, `-AppleMetricUnits` and `-AppleMeasurementUnits`,
 respectively.
 
+Available since driver version 1.11.0.
+
 ### appTimeZone
 
 | Name | Type | Default |
@@ -145,6 +147,8 @@ This capability only applies if the application is not running or is relaunched 
 The app timezone can also be set using [the `TZ` environment variable](https://developer.apple.com/forums/thread/86951?answerId=263395022#263395022)
 via the `appium:environment` capability.
 
+Available since driver version 1.14.0.
+
 ### initialDeeplinkUrl
 
 | Name | Type | Default |
@@ -154,6 +158,8 @@ via the `appium:environment` capability.
 A deeplink URL used to run the application under test, or, if `appium:bundleId` is omitted, the
 default application assigned to handle the specified deeplink protocol. Xcode 14.3 or later is
 required. An error is thrown if the URL is invalid or cannot be associeted with any app.
+
+Available since driver version 1.16.0.
 
 ## WebDriverAgent
 

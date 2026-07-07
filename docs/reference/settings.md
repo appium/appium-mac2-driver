@@ -33,6 +33,7 @@ mechanism, which is slower, but retrieves the full payload. The value can then b
 APIs like [Get Element Attribute](https://www.w3.org/TR/webdriver1/#get-element-attribute) or
 [Get Element Text](https://www.w3.org/TR/webdriver1/#dfn-get-element-text).
 
+ Available since driver version 3.2.0.
 
 ## useDefaultUiInterruptionsHandling
 

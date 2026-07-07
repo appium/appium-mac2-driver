@@ -13,6 +13,15 @@ There are three primary requirements to use the Mac2 driver:
 * Appium
 * Xcode (version 13 or later)
 
+!!! note
+
+    If you already have the driver installed, since version 1.9.0 you can also verify most of its
+    requirements with the built-in Appium Doctor support:
+
+    ```
+    appium driver doctor mac2
+    ```
+
 ### Appium Server
 
 Make sure to install a version of Appium that supports your target driver version. The requirements
