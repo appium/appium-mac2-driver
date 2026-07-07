@@ -47,11 +47,11 @@ nav:
           - reference/element-attributes.md
   - Guides:
       - Session Configuration:
-          - guides/app-under-test.md
+          - guides/applescript.md
           - guides/parallel-tests.md
       - Driver Actions:
+          - guides/app-under-test.md
           - guides/key-modifier-flags.md
           - guides/w3c-action-recipes.md
-          - guides/applescript.md
   - Troubleshooting: troubleshooting/index.md
   - contributing.md

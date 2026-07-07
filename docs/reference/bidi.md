@@ -21,13 +21,13 @@ Available since driver version 2.2.0.
 #### Event Type (CDDL)
 
 ```cddl
-appium:mac2.nativeVideoRecordingChunkAdded = {
+appium:mac2.nativeVideoRecordingChunkAdded = (
   method: "appium:mac2.nativeVideoRecordingChunkAdded",
   params: {
     uuid: text,
     payload: text,
   },
-}
+)
 ```
 
 | Parameter | Description |
