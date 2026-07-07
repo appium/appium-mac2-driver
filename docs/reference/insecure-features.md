@@ -20,4 +20,4 @@ For other insecure feature names recognized by the Appium server, see
 
 |<div style="width:7em">Feature Name</div>|Description|
 |------------|-----------|
-|`apple_script`|Allows execution of arbitrary AppleScript commands and scripts, using the `macos: appleScript` execute method, and the `appium:prerun` and `appium:postrun` capabilities|
+|`apple_script`|Allows execution of arbitrary AppleScript commands and scripts. Refer to [the AppleScript guide](../guides/applescript.md) for more details.|

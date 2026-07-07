@@ -2,7 +2,7 @@
 title: Element Attributes
 ---
 
-The Mac2 driver supports various element attributes.
+The Mac2 driver has a limited set of supported element attributes.
 
 ## elementType
 

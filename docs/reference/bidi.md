@@ -12,8 +12,8 @@ and additionally defines the events and commands listed below.
 
 Indicates that a new native video recording chunk is available for consumption.
 
-This event is continuously emitted as soon as the `macos: startNativeScreenRecording` execute
-method is invoked. Event emission stops as soon as the `macos: stopNativeScreenRecording` execute
+This event is continuously emitted as soon as the [`macos: startNativeScreenRecording`](./execute-methods.md#macos-startnativescreenrecording) execute
+method is invoked. Event emission stops as soon as the [`macos: stopNativeScreenRecording`](./execute-methods.md#macos-stopnativescreenrecording) execute
 method is called, or the test session is stopped.
 
 #### Event Type (CDDL)

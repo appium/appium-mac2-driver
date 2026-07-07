@@ -15,12 +15,12 @@ driver-specific functionality is available using [Execute Methods](./execute-met
 POST /session/:sessionId/appium/start_recording_screen
 ```
 
-Starts a screen recording. A wrapper for the [`macos: startRecordingScreen`](./execute-methods.md)
+Starts a screen recording. A wrapper for the [`macos: startRecordingScreen`](./execute-methods.md#macos-startrecordingscreen)
 execute method.
 
 #### Parameters
 
-|Name|Description|Type|
+|Name|Description|<div style="width:11em">Type</div>|
 |--|--|--|
 |`options?`|Map of screen recording options. Refer to the corresponding execute method for more details.|`Record<string, any>`|
 
@@ -34,12 +34,12 @@ execute method.
 POST /session/:sessionId/appium/stop_recording_screen
 ```
 
-Stops a running screen recording. A wrapper for the [`macos: stopRecordingScreen`](./execute-methods.md)
+Stops a running screen recording. A wrapper for the [`macos: stopRecordingScreen`](./execute-methods.md#macos-stoprecordingscreen)
 execute method.
 
 #### Parameters
 
-|Name|Description|Type|
+|Name|Description|<div style="width:11em">Type</div>|
 |--|--|--|
 |`options?`|Map of screen recording options. Refer to the corresponding execute method for more details.|`Record<string, any>`|
 
