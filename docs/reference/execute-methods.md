@@ -2,7 +2,7 @@
 title: Execute Methods
 ---
 
-The Mac2 driver provides many [custom execute methods](https://appium.io/docs/en/latest/guides/execute-methods/)
+The Mac2 driver provides various [custom execute methods](https://appium.io/docs/en/latest/guides/execute-methods/)
 based on the standard Execute Script endpoint. Use the following examples in order to invoke them
 from your client code:
 
@@ -477,3 +477,231 @@ must be enabled. Refer to the [AppleScript guide](../guides/applescript.md) for 
 #### Response
 
 `any` - the stdout of the provided script/command, if successful
+
+### macos: startRecordingScreen
+
+Starts a recording of the device display in the background using `ffmpeg`, while the automated test
+is running. The video is recorded using the `libx264` codec in the `yuv420p` pixel format. The
+recording can be stopped either using the [`macos: stopRecordingScreen`](#macos-stoprecordingscreen)
+method, or by stopping the session itself. In both cases, the raw video file is deleted.
+
+This method requires `ffmpeg` to be installed and present in PATH. Additionally, the Appium process
+must be granted recording permissions in macOS System Settings -> _Privacy & Security_ ->
+_Screen & System Audio Recording_.
+
+#### Arguments
+
+| <div style="width:8em">Name</div> | Type | Description |
+| --- | --- | --- |
+| `deviceId`| `number` | Identifier of the screen device to record. Available identifiers can be retrieved using the command `ffmpeg -f avfoundation -list_devices true -i`.|
+| `videoFilter?`| `string` | Video filters to apply. Equivalent to the `-vf` argument for `ffmpeg`. Refer to [ffmpeg's Filtering Guide](https://trac.ffmpeg.org/wiki/FilteringGuide) for more details. |
+| `fps?`| `number` | Framerate used to record the video. Set to `15` by default. |
+| `preset?`| `string` | Encoding preset to use. Faster presets will result in a larger filesize - refer to [ffmpeg's H264 Presets Guide](https://trac.ffmpeg.org/wiki/Encode/H.264#Preset) for more details. Set to `veryfast` by default. |
+| `captureCursor?`| `boolean` | Whether to capture the cursor during the recording. Set to `false` by default. |
+| `captureClicks?`| `boolean` | Whether to capture clicks during the recording. Set to `false` by default. |
+| `timeLimit?`| `number` | Time in seconds for the maximum recording length. Set to `600` (10 minutes) by default. |
+| `forceRestart?`| `boolean` | If a screen recording process is already running, whether to terminate it and start a new one (`true`), or do nothing (`false`). Set to `true` by default. |
+
+#### Response
+
+`null`
+
+### macos: stopRecordingScreen
+
+Stops the active `ffmpeg` screen recording process started by [`macos: startRecordingScreen`](#macos-startrecordingscreen),
+either returning its payload or uploading it to a remote location.
+
+#### Arguments
+
+| <div style="width:8em">Name</div> | <div style="width:8em">Type</div> | Description |
+| --- | --- | --- |
+| `remotePath?`| `string` | Path to a remote location where the resulting video file should be uploaded. Supported path protocols are HTTP(S) and FTP (deprecated). An exception is thrown if the file is too big to fit in the process memory. |
+| `user?`| `string` | Username used for authentication to `remotePath` |
+| `pass?`| `string` | Password used for authentication to `remotePath` |
+| `method?`| `string` | Name of the HTTP(S) multipart upload method. Set to `PUT` by default. |
+| `headers?`| `Record<string, any>` | Additional headers to use for the HTTP(S) multipart upload |
+| `fileFieldName?`| `string` | Name of the form field for storing the file content blob for HTTP(S) uploads. Set to `file` by default. |
+| `formFields?`| `Record<string, any>` or `Array<[string, any]>` | Additional form fields to use for the HTTP(S) multipart upload |
+
+#### Response
+
+`string` - base64-encoded string of the video file, or an empty string if `remotePath` is provided
+or no active screen recording process is found.
+
+### macos: screenshots
+
+Retrieves a screenshot of one or more available displays.
+
+#### Arguments
+
+| <div style="width:6em">Name</div> | Type | Description |
+| --- | --- | --- |
+| `displayId?`| `number` | Identifier of a specific display to take a screenshot for. By default, all available displays are used. Available displays can be found using the [`macos: listDisplays`](#macos-listdisplays) method, or the `system_profiler -json SPDisplaysDataType` terminal command. |
+
+#### Response
+
+`Array<Record<string, any>>` - a list of objects, where each object has the following structure:
+
+| Key | Value Type | Description |
+| --- | --- | --- |
+| `id`| `number` | Display identifier |
+| `isMain`| `boolean` | Whether this display is the main one |
+| `payload`| `string` | The base64-encoded display screenshot data |
+
+### macos: deepLink
+
+Opens the specified URL within the default or specified application.
+
+This feature only works on Xcode 14.3 or later.
+
+#### Arguments
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `url`| `string` | URL to be opened |
+| `bundleId?`| `string` | Bundle identifier of the application to use for opening the `url`. If not set, the default application for the URL scheme is used. |
+
+#### Response
+
+`null`
+
+### macos: startNativeScreenRecording
+
+Starts a recording of the device display in the background using XCTest, while the automated test
+is running. Does nothing if a screen recording is already running. The recording can be stopped
+using the [`macos: stopNativeScreenRecording`](#macos-stopnativescreenrecording) method, or by
+stopping the session itself. In both cases, the raw video file is deleted.
+
+This feature only works on Xcode 15 or later.
+
+!!! tip
+
+    This API also triggers broadcasting of the [`appium:mac2.nativeVideoRecordingChunkAdded` BiDi event](./bidi.md).
+    Make sure to subscribe to these events _before_ calling this execute method, to ensure that
+    all video chunks are properly consumed on the client side.
+
+#### Arguments
+
+| <div style="width:6em">Name</div> | Type | Description |
+| --- | --- | --- |
+| `fps?`| `number` | Framerate used to record the video. Set to `24` by default. |
+| `codec?`| `number` | The video codec to use for recording. Supported values are `0` (H264) and `1` (HEVC). Set to `0` by default. |
+| `displayId?`| `number` | Identifier of a specific display to record. By default, the main display is used. Available displays can be found using the [`macos: listDisplays`](#macos-listdisplays) method, or the `system_profiler -json SPDisplaysDataType` terminal command. |
+
+#### Response
+
+`Record<string, any>` - an object with the following structure:
+
+| Key | Value Type | Description |
+| --- | --- | --- |
+| `fps`| `number` | Video framerate |
+| `codec`| `number` | Video coded |
+| `displayId`| `number` | Display identifier |
+| `uuid`| `string` | Unique video identifier used by XCTest to store the video, located at `~/Library/Daemon Containers/<testmanager_id>/Data/Attachments/<uuid>.mp4`. |
+| `startedAt`| `number` | Unix timestamp of the recording start time |
+
+### macos: getNativeScreenRecordingInfo
+
+Fetches the information of the currently running native video recording.
+
+This feature only works on Xcode 15 or later.
+
+#### Response
+
+`Record<string, any> | null` - either the same object returned by [`macos: startNativeScreenRecording`](#macos-startnativescreenrecording), or `null` if no native video recording is active.
+
+### macos: stopNativeScreenRecording
+
+Stops the active XCTest screen recording process started by [`macos: startNativeScreenRecording`](#macos-startnativescreenrecording),
+either returning its payload or uploading it to a remote location. An exception is thrown if no
+active XCTest screen recording process is found.
+
+This feature only works on Xcode 15 or later, and the Appium process must be granted filesystem
+permissions in macOS System Settings -> _Privacy & Security_ -> _Full Disk Access_.
+
+#### Arguments
+
+| <div style="width:8em">Name</div> | <div style="width:9em">Type</div> | Description |
+| --- | --- | --- |
+| `remotePath?`| `string` | Path to a remote location where the resulting video file should be uploaded. Supported path protocols are HTTP(S) and FTP (deprecated). An exception is thrown if the file is too big to fit in the process memory. |
+| `user?`| `string` | Username used for authentication to `remotePath` |
+| `pass?`| `string` | Password used for authentication to `remotePath` |
+| `method?`| `string` | Name of the HTTP(S) multipart upload method. Set to `PUT` by default. |
+| `headers?`| `Record<string, any>` | Additional headers to use for the HTTP(S) multipart upload |
+| `fileFieldName?`| `string` | Name of the form field for storing the file content blob for HTTP(S) uploads. Set to `file` by default. |
+| `formFields?`| `Record<string, any>` or `Array<[string, any]>` | Additional form fields to use for the HTTP(S) multipart upload |
+| `ignorePayload?`| `boolean` | Whether to skip retrieval of the raw video from the filesystem, instead returning an empty string. Useful if you prefer to fetch video chunks via the [`appium:mac2.nativeVideoRecordingChunkAdded` BiDi event](./bidi.md). Set to `false` by default. |
+
+#### Response
+
+`string` - base64-encoded string of the video file, or an empty string if `remotePath` is provided
+or no active screen recording process is found.
+
+### macos: listDisplays
+
+Retrieves information about the available displays.
+
+#### Response
+
+`Record<string, Record<string, any>>` - an object where each key is a display identifier, and the
+value is an object with the following structure:
+
+| Key | Value Type | Description |
+| --- | --- | --- |
+| `id`| `number` | Display identifier |
+| `isMain`| `boolean` | Whether this display is the main one |
+
+### macos: setClipboard
+
+Sets the macOS clipboard content. The existing clipboard content (if present) will be cleared.
+
+#### Arguments
+
+| <div style="width:7em">Name</div> | Type | Description |
+| --- | --- | --- |
+| `content`| `string` | The base64-encoded data to set the clipboard value to. |
+| `contentType?`| `string` | The type of `content`. Supported values are `plaintext` (default), `image`, and `url`. If set to `image`, `content` must decode to a valid PNG or TIFF image payload. If set to `url`, `content` must decode to a valid URL. |
+
+#### Response
+
+`null`
+
+### macos: getClipboard
+
+Retrieves the macOS clipboard content as a base64-encoded string.
+
+#### Arguments
+
+| <div style="width:7em">Name</div> | Type | Description |
+| --- | --- | --- |
+| `contentType?`| `string` | The type in which to parse the clipboard content. Supported values are `plaintext` (default), `image`, and `url`. |
+
+#### Response
+
+`string` - the base64-encoded clipboard contents, or an empty string if the clipboard contains no
+data for the specified `contentType`.
+
+### macos: performAccessibilityAudit
+
+Performs an accessibility audit for the application under test.
+
+This feature only works on Xcode 15 or later.
+
+#### Arguments
+
+| <div style="width:7em">Name</div> | <div style="width:8em">Type</div> | Description |
+| --- | --- | --- |
+| `auditTypes?`| `Array<string>` | List of audit type names to use. Supported values are defined in [XCUIAccessibilityAuditType](https://developer.apple.com/documentation/xcuiautomation/xcuiaccessibilityaudittype). Set to `['XCUIAccessibilityAuditTypeAll']` by default. |
+
+#### Response
+
+`Array<Record<string, any>>` - an array of audit issue objects, where each object has the following
+structure:
+
+| Key | Value Type | Description |
+| --- | --- | --- |
+| `detailedDescription`| `string` | Human-readable issue details |
+| `compactDescription`| `string` | Short issue summary |
+| `auditType`| `string` | The resolved audit type name |
+| `element`| `string` | String representation of the affected element |
+| `elementDescription`| `string` | Debug description of the affected element |
