@@ -552,7 +552,7 @@ Retrieves a screenshot of one or more available displays.
 
 Opens the specified URL within the default or specified application.
 
-This feature only works on Xcode 14.3 or later.
+This feature requires Xcode 14.3 or later.
 
 #### Arguments
 
@@ -572,7 +572,7 @@ is running. Does nothing if a screen recording is already running. The recording
 using the [`macos: stopNativeScreenRecording`](#macos-stopnativescreenrecording) method, or by
 stopping the session itself. In both cases, the raw video file is deleted.
 
-This feature only works on Xcode 15 or later.
+This feature requires Xcode 15 or later.
 
 !!! tip
 
@@ -604,7 +604,7 @@ This feature only works on Xcode 15 or later.
 
 Fetches the information of the currently running native video recording.
 
-This feature only works on Xcode 15 or later.
+This feature requires Xcode 15 or later.
 
 #### Response
 
@@ -616,7 +616,7 @@ Stops the active XCTest screen recording process started by [`macos: startNative
 either returning its payload or uploading it to a remote location. An exception is thrown if no
 active XCTest screen recording process is found.
 
-This feature only works on Xcode 15 or later, and the Appium process must be granted filesystem
+This feature requires Xcode 15 or later, and the Appium process must be granted filesystem
 permissions in macOS System Settings -> _Privacy & Security_ -> _Full Disk Access_.
 
 #### Arguments
@@ -685,7 +685,7 @@ data for the specified `contentType`.
 
 Performs an accessibility audit for the application under test.
 
-This feature only works on Xcode 15 or later.
+This feature requires Xcode 15 or later.
 
 #### Arguments
 

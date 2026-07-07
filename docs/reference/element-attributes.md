@@ -4,6 +4,9 @@ title: Element Attributes
 
 The Mac2 driver has a limited set of supported element attributes.
 
+Refer to the [XCUIElementAttributes protocol documentation](https://developer.apple.com/documentation/xcuiautomation/xcuielementattributes)
+for more details on each attribute.
+
 ## elementType
 
 > Example: `2`
@@ -36,9 +39,12 @@ value. Can be `null`.
 
 > Example: `1.5`
 
-This is a complex attribute whose calculation algorithm depends on the actual element type. For
-example, for text fields this could be their text contents, for sliders this could be the float
-position value, while for switches this could be either 1 or 0.
+Corresponds to the element's XCTest [`value`](https://developer.apple.com/documentation/xcuiautomation/xcuielementattributes/value)
+value.
+
+The value of this attribute depend on the actual element type. For example, for text fields this
+could be their text contents, for sliders this could be the float position value, while for
+switches this could be either 1 or 0.
 
 ## placeholderValue
 
