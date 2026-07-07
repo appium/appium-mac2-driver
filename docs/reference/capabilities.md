@@ -84,7 +84,7 @@ capability only applies if the application is not running or is relaunched on se
 | -- | -- | -- |
 | `appium:skipAppKill` | `boolean` | `false` |
 
-Whether to skip the termination of the application under test when the testing session quits. This
+Whether to skip the termination of the application under test when the session is deleted. This
 capability only applies if the `appium:bundleId` capability is provided.
 
 ### noReset
