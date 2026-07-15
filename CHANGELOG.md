@@ -1,3 +1,9 @@
+## [4.0.4](https://github.com/appium/appium-mac2-driver/compare/v4.0.3...v4.0.4) (2026-07-15)
+
+### Miscellaneous Chores
+
+* **deps:** bump actions/setup-node from 6 to 7 ([#402](https://github.com/appium/appium-mac2-driver/issues/402)) ([d040f78](https://github.com/appium/appium-mac2-driver/commit/d040f7883663c1b64911bcd019236fb338f4a4e8))
+
 ## [4.0.3](https://github.com/appium/appium-mac2-driver/compare/v4.0.2...v4.0.3) (2026-07-01)
 
 ### Miscellaneous Chores
