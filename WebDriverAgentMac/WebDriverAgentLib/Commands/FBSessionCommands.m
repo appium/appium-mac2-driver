@@ -238,6 +238,7 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
       AM_BOUND_ELEMENTS_BY_INDEX_SETTING: @(FBSession.activeSession.boundElementsByIndex),
       AM_USE_DEFAULT_UI_INTERRUPTIONS_HANDLING_SETTING: @(!application.am_doesNotHandleUIInterruptions),
       AM_FETCH_FULL_TEXT: @(FBConfiguration.sharedConfiguration.fetchFullText),
+      AM_USE_DOM_ID_AS_ACCESSIBILITY_ID: @(FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId),
     }
   );
 }
@@ -255,6 +256,9 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
   }
   if (nil != [settings objectForKey:AM_FETCH_FULL_TEXT]) {
     FBConfiguration.sharedConfiguration.fetchFullText = [settings objectForKey:AM_FETCH_FULL_TEXT];
+  }
+  if (nil != [settings objectForKey:AM_USE_DOM_ID_AS_ACCESSIBILITY_ID]) {
+    FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId = [[settings objectForKey:AM_USE_DOM_ID_AS_ACCESSIBILITY_ID] boolValue];
   }
 
   return [self handleGetSettings:request];
