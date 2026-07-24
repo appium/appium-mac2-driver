@@ -14,10 +14,28 @@
 #import "FBConfiguration.h"
 #import "FBElementUtils.h"
 #import "FBExceptions.h"
+#import "AMSnapshotUtils.h"
+#import "FBConfiguration.h"
 #import "FBLogger.h"
 #import "FBElementTypeTransformer.h"
 #import "NSString+FBXMLSafeString.h"
 #import "XCUIElementQuery+AMHelpers.h"
+
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
+#import <libxml/tree.h>
+#import <libxml/parser.h>
+#import <libxml/xpath.h>
+#import <libxml/xpathInternals.h>
+#import <libxml/encoding.h>
+#import <libxml/xmlwriter.h>
+
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 
 
 @interface FBElementAttribute : NSObject
@@ -27,7 +45,7 @@
 + (nonnull NSString *)name;
 + (nullable NSString *)valueForElement:(id<XCUIElementSnapshot>)element;
 
-+ (void)recordWithNode:(NSXMLElement *)node forElement:(id<XCUIElementSnapshot>)element;
++ (int)recordWithWriter:(xmlTextWriterPtr)writer forElement:(id<XCUIElementSnapshot>)element;
 
 + (NSArray<Class> *)supportedAttributes;
 
@@ -89,34 +107,11 @@
 
 @property (nonatomic, nonnull, readonly) NSString* indexValue;
 
-+ (void)recordWithNode:(NSXMLElement *)node forValue:(NSString *)value;
++ (int)recordWithWriter:(xmlTextWriterPtr)writer forValue:(NSString *)value;
 
 @end
 
-@interface NSString (FBXPathFixes)
-
-/**
- https://discuss.appium.io/t/cannot-find-element-with-mac2/44959
- */
-- (NSString *)fb_toFixedXPathQuery;
-
-@end
-
-@implementation NSString (FBXPathFixes)
-
-- (NSString *)fb_toFixedXPathQuery
-{
-  NSString *replacePattern = @"^([(]*)(/)";
-  NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:replacePattern
-                                                                         options:NSRegularExpressionCaseInsensitive
-                                                                           error:nil];
-  return [regex stringByReplacingMatchesInString:self
-                                         options:0
-                                           range:NSMakeRange(0, [self length])
-                                    withTemplate:@"$1.$2"];
-}
-
-@end
+const static char *_UTF8Encoding = "UTF-8";
 
 static NSString *const kXMLIndexPathKey = @"private_indexPath";
 
@@ -138,8 +133,25 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
     [FBLogger logFmt:@"The snapshot of %@ cannot be taken. Original error: %@", root.description, error.description];
     return nil;
   }
-
-  return [[self xmlRepresentationWithSnapshot:snapshot] XMLStringWithOptions:NSXMLNodePrettyPrint];
+  
+  xmlDocPtr doc;
+  xmlTextWriterPtr writer = xmlNewTextWriterDoc(&doc, 0);
+  int rc = [self xmlRepresentationWithRootElement:snapshot
+                                           writer:writer
+                                            query:nil];
+  if (rc < 0) {
+    xmlFreeTextWriter(writer);
+    xmlFreeDoc(doc);
+    return nil;
+  }
+  int buffersize;
+  xmlChar *xmlbuff;
+  xmlDocDumpFormatMemory(doc, &xmlbuff, &buffersize, 1);
+  xmlFreeTextWriter(writer);
+  xmlFreeDoc(doc);
+  NSString *result = [NSString stringWithCString:(const char *)xmlbuff encoding:NSUTF8StringEncoding];
+  xmlFree(xmlbuff);
+  return result;
 }
 
 + (NSArray<XCUIElement *> *)matchesWithRootElement:(XCUIElement *)root
@@ -155,45 +167,64 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
                                  userInfo:@{}];
   }
 
-  NSXMLElement *rootElement = [self makeXmlWithRootSnapshot:snapshot
-                                                  indexPath:[AMSnapshotUtils hashWithSnapshot:snapshot]];
-  NSArray<__kindof NSXMLNode *> *matches = [rootElement nodesForXPath:[xpathQuery fb_toFixedXPathQuery]
-                                                                error:&error];
-  if (nil == matches) {
-    @throw [NSException exceptionWithName:FBInvalidXPathException
-                                   reason:error.description
-                                 userInfo:@{}];
+  xmlDocPtr doc;
+  xmlTextWriterPtr writer = xmlNewTextWriterDoc(&doc, 0);
+  if (NULL == writer) {
+    [FBLogger logFmt:@"Failed to invoke libxml2>xmlNewTextWriterDoc for XPath query \"%@\"", xpathQuery];
+    return [self throwException:FBXPathQueryEvaluationException forQuery:xpathQuery];
+  }
+  int rc = [self xmlRepresentationWithRootElement:snapshot
+                                           writer:writer
+                                            query:xpathQuery];
+  if (rc < 0) {
+    xmlFreeTextWriter(writer);
+    xmlFreeDoc(doc);
+    return [self throwException:FBXPathQueryEvaluationException forQuery:xpathQuery];
   }
 
-  NSArray *matchingElements = [self collectMatchingElementsWithNodes:matches
-                                                         rootElement:root
-                                                        rootSnapshot:snapshot
-                                               includeOnlyFirstMatch:firstMatch];
+  xmlXPathObjectPtr queryResult = [self evaluate:xpathQuery document:doc];
+  if (NULL == queryResult) {
+    xmlFreeTextWriter(writer);
+    xmlFreeDoc(doc);
+    return [self throwException:FBInvalidXPathException forQuery:xpathQuery];
+  }
+
+  NSArray *matchingElements = [self collectMatchingElementsWithNodeSet:queryResult->nodesetval
+                                                           rootElement:root
+                                                          rootSnapshot:snapshot
+                                                 includeOnlyFirstMatch:firstMatch];
+  xmlXPathFreeObject(queryResult);
+  xmlFreeTextWriter(writer);
+  xmlFreeDoc(doc);
   if (nil == matchingElements) {
     return [self throwException:FBXPathQueryEvaluationException forQuery:xpathQuery];
   }
   return matchingElements;
 }
 
-+ (NSArray *)collectMatchingElementsWithNodes:(NSArray<__kindof NSXMLNode *> *)nodes
-                                  rootElement:(XCUIElement *)rootElement
-                                 rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot
-                        includeOnlyFirstMatch:(BOOL)firstMatch
++ (NSArray *)collectMatchingElementsWithNodeSet:(xmlNodeSetPtr)nodeSet
+                                    rootElement:(XCUIElement *)rootElement
+                                   rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot
+                          includeOnlyFirstMatch:(BOOL)firstMatch
 {
-  if (0 == nodes.count) {
+  if (xmlXPathNodeSetIsEmpty(nodeSet)) {
     return @[];
   }
 
+  const xmlChar *indexPathKeyName = (xmlChar *)[kXMLIndexPathKey UTF8String];
   NSMutableArray<NSString *> *hashes = [NSMutableArray array];
-  for (NSXMLNode *node in nodes) {
-    if (![node isKindOfClass:NSXMLElement.class]) {
-      continue;
+  for (NSInteger i = 0; i < nodeSet->nodeNr; i++) {
+    xmlNodePtr currentNode = nodeSet->nodeTab[i];
+    xmlChar *attrValue = xmlGetProp(currentNode, indexPathKeyName);
+    if (NULL == attrValue) {
+      [FBLogger log:@"Failed to invoke libxml2>xmlGetProp"];
+      return nil;
     }
-    NSString *attrValue = [[(NSXMLElement *)node attributeForName:kXMLIndexPathKey] stringValue];
-    if (nil == attrValue) {
-      continue;
-    }
-    [hashes addObject:attrValue];
+
+    NSString *hash = [NSString stringWithCString:(const char *)attrValue
+                                        encoding:NSUTF8StringEncoding];
+    [hashes addObject:hash];
+    xmlFree(attrValue);
   }
   NSMutableArray<XCUIElement *> *matchingElements = [NSMutableArray array];
   NSString *selfHash = [AMSnapshotUtils hashWithSnapshot:rootSnapshot];
@@ -212,13 +243,49 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
     : matchingElements.copy;
 }
 
-+ (NSXMLDocument *)xmlRepresentationWithSnapshot:(id<XCUIElementSnapshot>)root
++ (int)xmlRepresentationWithRootElement:(id<XCUIElementSnapshot>)root
+                                 writer:(xmlTextWriterPtr)writer
+                                  query:(nullable NSString*)query
 {
-  NSXMLElement *rootElement = [self makeXmlWithRootSnapshot:root indexPath:nil];
-  NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithRootElement:rootElement];
-  [xmlDoc setVersion:@"1.0"];
-  [xmlDoc setCharacterEncoding:@"UTF-8"];
-  return xmlDoc;
+  int rc = xmlTextWriterStartDocument(writer, NULL, _UTF8Encoding, NULL);
+  if (rc < 0) {
+    [FBLogger logFmt:@"Failed to invoke libxml2>xmlTextWriterStartDocument. Error code: %d", rc];
+    return rc;
+  }
+
+  NSString *index = [AMSnapshotUtils hashWithSnapshot:root];
+  rc = [self writeXmlWithRootElement:root
+                           indexPath:(query != nil ? index : nil)
+                              writer:writer];
+  if (rc < 0) {
+    [FBLogger log:@"Failed to generate XML presentation of a screen element"];
+    return rc;
+  }
+  rc = xmlTextWriterEndDocument(writer);
+  if (rc < 0) {
+    [FBLogger logFmt:@"Failed to invoke libxml2>xmlXPathNewContext. Error code: %d", rc];
+    return rc;
+  }
+  return 0;
+}
+
++ (xmlXPathObjectPtr)evaluate:(NSString *)xpathQuery document:(xmlDocPtr)doc
+{
+  xmlXPathContextPtr xpathCtx = xmlXPathNewContext(doc);
+  if (NULL == xpathCtx) {
+    [FBLogger logFmt:@"Failed to invoke libxml2>xmlXPathNewContext for XPath query \"%@\"", xpathQuery];
+    return NULL;
+  }
+  xpathCtx->node = doc->children;
+
+  xmlXPathObjectPtr xpathObj = xmlXPathEvalExpression((xmlChar *)[xpathQuery UTF8String], xpathCtx);
+  if (NULL == xpathObj) {
+    xmlXPathFreeContext(xpathCtx);
+    [FBLogger logFmt:@"Failed to invoke libxml2>xmlXPathEvalExpression for XPath query \"%@\"", xpathQuery];
+    return NULL;
+  }
+  xmlXPathFreeContext(xpathCtx);
+  return xpathObj;
 }
 
 + (nullable NSString *)safeXmlStringWithString:(nullable NSString *)str
@@ -226,39 +293,64 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
   return [str fb_xmlSafeStringWithReplacement:@""];
 }
 
-+ (void)recordElementAttributes:(NSXMLElement *)node
-                    forSnapshot:(id<XCUIElementSnapshot>)snapshot
-                      indexPath:(nullable NSString *)indexPath
++ (int)recordElementAttributes:(xmlTextWriterPtr)writer
+                    forElement:(id<XCUIElementSnapshot>)element
+                     indexPath:(nullable NSString *)indexPath
 {
   for (Class attributeCls in FBElementAttribute.supportedAttributes) {
-    [attributeCls recordWithNode:node forElement:snapshot];
+    int rc = [attributeCls recordWithWriter:writer forElement:element];
+    if (rc < 0) {
+      return rc;
+    }
   }
 
   if (nil != indexPath) {
     // index path is the special case
-    [FBInternalIndexAttribute recordWithNode:node forValue:indexPath];
+    return [FBInternalIndexAttribute recordWithWriter:writer forValue:indexPath];
   }
+  return 0;
 }
 
-+ (NSXMLElement *)makeXmlWithRootSnapshot:(id<XCUIElementSnapshot>)root
-                                indexPath:(nullable NSString *)indexPath
++ (int)writeXmlWithRootElement:(id<XCUIElementSnapshot>)root
+                     indexPath:(nullable NSString *)indexPath
+                        writer:(xmlTextWriterPtr)writer
 {
-  NSString *type = [FBElementTypeTransformer stringWithElementType:root.elementType];
-  NSXMLElement *rootElement = [NSXMLElement elementWithName:type];
-  [self recordElementAttributes:rootElement
-                    forSnapshot:root
-                      indexPath:indexPath];
-
+  id<XCUIElementSnapshot> currentSnapshot = root;
   NSArray<id<XCUIElementSnapshot>> *children = root.children;
-  for (id<XCUIElementSnapshot> childSnapshot in children) {
+
+  NSString *type = [FBElementTypeTransformer stringWithElementType:currentSnapshot.elementType];
+  int rc = xmlTextWriterStartElement(writer, (xmlChar *)[type UTF8String]);
+  if (rc < 0) {
+    [FBLogger logFmt:@"Failed to invoke libxml2>xmlTextWriterStartElement for the tag value '%@'. Error code: %d", type, rc];
+    return rc;
+  }
+
+  rc = [self recordElementAttributes:writer
+                          forElement:currentSnapshot
+                           indexPath:indexPath];
+  if (rc < 0) {
+    return rc;
+  }
+
+  for (NSUInteger i = 0; i < [children count]; i++) {
+    id<XCUIElementSnapshot> childSnapshot = [children objectAtIndex:i];
     NSString *newIndexPath = (indexPath != nil)
       ? [AMSnapshotUtils hashWithSnapshot:childSnapshot]
       : nil;
-    NSXMLElement *childElement = [self makeXmlWithRootSnapshot:childSnapshot
-                                                     indexPath:newIndexPath];
-    [rootElement addChild:childElement];
+    rc = [self writeXmlWithRootElement:childSnapshot
+                             indexPath:newIndexPath
+                                writer:writer];
+    if (rc < 0) {
+      return rc;
+    }
   }
-  return rootElement;
+
+  rc = xmlTextWriterEndElement(writer);
+  if (rc < 0) {
+    [FBLogger logFmt:@"Failed to invoke libxml2>xmlTextWriterEndElement. Error code: %d", rc];
+    return rc;
+  }
+  return 0;
 }
 
 @end
@@ -279,27 +371,30 @@ static NSString *const FBAbstractMethodInvocationException = @"AbstractMethodInv
 
 + (NSString *)name
 {
-  NSString *errMsg = [NSString stringWithFormat:@"The abstract method +(NSString *)name is expected to be overridden by %@", NSStringFromClass(self.class)];
+  NSString *errMsg = [NSString stringWithFormat:@"The abstract method +(NSString *)name is expected to be overriden by %@", NSStringFromClass(self.class)];
   @throw [NSException exceptionWithName:FBAbstractMethodInvocationException reason:errMsg userInfo:nil];
 }
 
 + (NSString *)valueForElement:(id<XCUIElementSnapshot>)element
 {
-  NSString *errMsg = [NSString stringWithFormat:@"The abstract method -(NSString *)value is expected to be overridden by %@", NSStringFromClass(self.class)];
+  NSString *errMsg = [NSString stringWithFormat:@"The abstract method -(NSString *)value is expected to be overriden by %@", NSStringFromClass(self.class)];
   @throw [NSException exceptionWithName:FBAbstractMethodInvocationException reason:errMsg userInfo:nil];
 }
 
-+ (void)recordWithNode:(NSXMLElement *)node forElement:(id<XCUIElementSnapshot>)element
++ (int)recordWithWriter:(xmlTextWriterPtr)writer forElement:(id<XCUIElementSnapshot>)element
 {
   NSString *value = [self valueForElement:element];
   if (nil == value) {
     // Skip the attribute if the value equals to nil
-    return;
+    return 0;
   }
-
-  NSString *attrName = [FBXPath safeXmlStringWithString:self.name];
-  NSString *attrValue = [FBXPath safeXmlStringWithString:value];
-  [node addAttribute:[NSXMLNode attributeWithName:attrName stringValue:attrValue]];
+  int rc = xmlTextWriterWriteAttribute(writer,
+                                       (xmlChar *)[[FBXPath safeXmlStringWithString:self.name] UTF8String],
+                                       (xmlChar *)[[FBXPath safeXmlStringWithString:value] UTF8String]);
+  if (rc < 0) {
+    [FBLogger logFmt:@"Failed to invoke libxml2>xmlTextWriterWriteAttribute(%@='%@'). Error code: %d", self.name, value, rc];
+  }
+  return rc;
 }
 
 + (NSArray<Class> *)supportedAttributes
@@ -366,7 +461,18 @@ static NSString *const FBAbstractMethodInvocationException = @"AbstractMethodInv
 
 + (NSString *)valueForElement:(id<XCUIElementSnapshot>)element
 {
-  return element.identifier;
+  NSString *identifier = element.identifier;
+  // Empty-only fallback so the page-source XML (Appium Inspector, xpath) shows
+  // WebKit web nodes' DOM `id` via AXDOMIdentifier, consistent with find and the
+  // element `identifier` attribute. Note: this resolves per element during source
+  // generation; see the perf note in XCUIElement+FBFind.m. Opt-in via the setting.
+  if (identifier.length == 0 && FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId) {
+    NSString *domIdentifier = [AMSnapshotUtils domIdentifierWithSnapshot:element];
+    if (domIdentifier.length > 0) {
+      return domIdentifier;
+    }
+  }
+  return identifier;
 }
 
 @end
@@ -486,23 +592,26 @@ static NSString *const FBAbstractMethodInvocationException = @"AbstractMethodInv
 
 @end
 
-@implementation FBInternalIndexAttribute: FBElementAttribute
+@implementation FBInternalIndexAttribute
 
 + (NSString *)name
 {
   return kXMLIndexPathKey;
 }
 
-+ (void)recordWithNode:(NSXMLElement *)node forValue:(NSString *)value
++ (int)recordWithWriter:(xmlTextWriterPtr)writer forValue:(NSString *)value
 {
   if (nil == value) {
     // Skip the attribute if the value equals to nil
-    return;
+    return 0;
   }
-
-  NSString *attrName = [FBXPath safeXmlStringWithString:self.name];
-  NSString *attrValue = [FBXPath safeXmlStringWithString:value];
-  [node addAttribute:[NSXMLNode attributeWithName:attrName stringValue:attrValue]];
+  int rc = xmlTextWriterWriteAttribute(writer,
+                                       (xmlChar *)[[FBXPath safeXmlStringWithString:[self name]] UTF8String],
+                                       (xmlChar *)[[FBXPath safeXmlStringWithString:value] UTF8String]);
+  if (rc < 0) {
+    [FBLogger logFmt:@"Failed to invoke libxml2>xmlTextWriterWriteAttribute(%@='%@'). Error code: %d", [self name], value, rc];
+  }
+  return rc;
 }
 
 @end

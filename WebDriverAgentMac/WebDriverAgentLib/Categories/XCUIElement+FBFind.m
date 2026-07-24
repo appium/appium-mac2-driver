@@ -9,6 +9,8 @@
 
 #import "XCUIElement+FBFind.h"
 
+#import "AMSnapshotUtils.h"
+#import "FBConfiguration.h"
 #import "FBElementTypeTransformer.h"
 #import "FBElementUtils.h"
 #import "FBXPath.h"
@@ -95,6 +97,36 @@
   XCUIElementQuery *query = [[self descendantsMatchingType:XCUIElementTypeAny] matchingIdentifier:accessibilityId];
   [result addObjectsFromArray:[self.class fb_extractMatchingElementsFromQuery:query
                                                   shouldReturnAfterFirstMatch:shouldReturnAfterFirstMatch]];
+  if (result.count > 0
+      || !FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId
+      || ![AMSnapshotUtils isAccessibilityTrusted]) {
+    return result.copy;
+  }
+
+  // Fallback for WebKit (WKWebView) web content: XCUIElement.identifier maps to
+  // the standard AXIdentifier, which WebKit leaves empty for web nodes. The DOM
+  // `id` is exposed via the non-standard AXDOMIdentifier attribute instead, so
+  // match against that. Runs only when the `useDomIdAsAccessibilityId` setting is
+  // enabled, the native match set is empty (native identifiers always win), and the
+  // process is Accessibility-trusted — so native element locating is never altered.
+  //
+  // Performance: this materializes all descendants and reads AXDOMIdentifier per
+  // element via a cross-process AX call. It runs only on the native-miss path and
+  // short-circuits on the first match when requested; hence it is opt-in via the
+  // setting (off by default).
+  NSArray<XCUIElement *> *webDescendants = [[self descendantsMatchingType:XCUIElementTypeAny]
+    allElementsBoundByAccessibilityElement];
+  for (XCUIElement *descendant in webDescendants) {
+    @autoreleasepool {
+      NSString *domIdentifier = [AMSnapshotUtils domIdentifierWithSnapshot:[descendant snapshotWithError:nil]];
+      if (nil != domIdentifier && [domIdentifier isEqualToString:accessibilityId]) {
+        [result addObject:descendant];
+        if (shouldReturnAfterFirstMatch) {
+          return result.copy;
+        }
+      }
+    }
+  }
   return result.copy;
 }
 

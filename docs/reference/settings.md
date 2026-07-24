@@ -35,6 +35,32 @@ APIs like [Get Element Attribute](https://www.w3.org/TR/webdriver1/#get-element-
 
  Available since driver version 3.2.0.
 
+## useDomIdAsAccessibilityId
+
+| Type | Default |
+| -- | -- |
+| `boolean` | `false` |
+
+Whether to expose a `WKWebView` web element's DOM `id` as its `accessibility id`, so
+web content is locatable by `accessibility id` the same way as on other platforms.
+
+Web content rendered by WebKit does not populate the standard accessibility
+identifier (`AXIdentifier`) that the `accessibility id` locator reads; instead it
+exposes the element's HTML `id` through the non-standard `AXDOMIdentifier` attribute.
+When this setting is enabled, the driver reads `AXDOMIdentifier` and uses it as a
+fallback for `accessibility id` lookups, the `identifier` attribute, and page source —
+but only for elements whose native identifier is empty, so native element locating is
+never affected.
+
+Notes:
+
+- The host process running the WebDriverAgent runner must be granted Accessibility
+  permission (System Settings → Privacy & Security → Accessibility); otherwise the
+  underlying accessibility reads are disabled and the driver transparently falls back
+  to the default behaviour.
+- The lookup materializes and inspects web descendants, so it is off by default and
+  should be enabled only for suites that locate web content by DOM `id`.
+
 ## useDefaultUiInterruptionsHandling
 
 | Type | Default |

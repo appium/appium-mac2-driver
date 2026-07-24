@@ -17,12 +17,12 @@
 #import "XCUIElement+AMAttributes.h"
 
 #import "AMGeometryUtils.h"
+#import "AMSnapshotUtils.h"
 #import "FBConfiguration.h"
 #import "FBElementTypeTransformer.h"
 #import "FBElementUtils.h"
 #import "FBExceptions.h"
 #import "FBMacros.h"
-#import "XCUIElementQuery+AMHelpers.h"
 
 @implementation XCUIElement (AMAttributes)
 
@@ -50,7 +50,18 @@
   } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, value)]) {
     return [FBElementUtils stringValueWithValue:self.value];
   } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, identifier)]) {
-    return self.identifier;
+    NSString *identifier = self.identifier;
+    // Empty-only fallback: WebKit web nodes leave the standard AXIdentifier empty
+    // but expose their DOM `id` via AXDOMIdentifier. Surface it so web elements
+    // report a stable accessibility id (matching the Windows convention) without
+    // ever overriding a real native identifier. Opt-in via the setting.
+    if (identifier.length == 0 && FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId) {
+      NSString *domIdentifier = [AMSnapshotUtils domIdentifierWithSnapshot:[self snapshotWithError:nil]];
+      if (domIdentifier.length > 0) {
+        return domIdentifier;
+      }
+    }
+    return identifier;
   }
   // This should not happen
   NSString *description = [NSString stringWithFormat:@"The attribute '%@' is unknown", wdAttributeName];
@@ -66,20 +77,23 @@
 
 - (NSString *)am_text
 {
-  if (!FBConfiguration.sharedConfiguration.fetchFullText) {
-    return [self am_textWithSource:self];
+  NSString *value = [FBElementUtils stringValueWithValue:self.value];
+  if (nil != value && value.length > 0) {
+    return value;
   }
-
-  NSError *error;
-  XCUIElementQuery *query = [self valueForKey:@"query"];
-  id<XCUIElementAttributes> snapshot = [query am_uniqueSnapshotWithError:&error];
-  if (nil != snapshot) {
-    return [self am_textWithSource:snapshot];
+  NSString *label = self.label;
+  if (nil != label && label.length > 0) {
+    return label;
   }
-
-  NSString *reason = [NSString stringWithFormat:@"Cannot extract the full text of '%@' element. Original error: %@",
-    self.description, error.description];
-  @throw [NSException exceptionWithName:FBInvalidElementStateException reason:reason userInfo:@{}];
+  NSString *placeholderValue = self.placeholderValue;
+  if (nil != placeholderValue && placeholderValue.length > 0) {
+    return placeholderValue;
+  }
+  NSString *title = self.title;
+  if (nil != title && title.length > 0) {
+    return title;
+  }
+  return @"";
 }
 
 - (NSString *)am_type
@@ -91,22 +105,6 @@
 {
   NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hasKeyboardFocus == YES"];
   return [predicate evaluateWithObject:self];
-}
-
-- (NSString *)am_textWithSource:(id<XCUIElementAttributes>)source
-{
-  NSArray<NSString *> *candidates = @[
-    [FBElementUtils stringValueWithValue:source.value],
-    source.label,
-    source.placeholderValue,
-    source.title
-  ];
-  for (NSString *text in candidates) {
-    if (nil != text && text.length > 0) {
-      return text;
-    }
-  }
-  return @"";
 }
 
 @end
