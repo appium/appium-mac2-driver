@@ -76,7 +76,6 @@
     "publish:docs": "appium-docs build --deploy --push -b docs-site -m 'docs: build docs for appium-mac2-driver@%s' --alias latest --use-prefixed-major-deploy-version",
     "install-docs-deps": "appium-docs init --no-mkdocs",
     "prepare": "npm run build",
-    "pretest": "npm run build",
     "test": "node --test --test-timeout=60000 \"build/test/unit/**/*.test.js\"",
     "e2e-test": "npm run build && node --test --test-concurrency=1 --test-timeout=600000 \"build/test/functional/**/*.test.js\""
   },
