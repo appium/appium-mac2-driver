@@ -43,15 +43,7 @@ export const executeMethodMap = {
     command: 'macosClickAndDrag',
     params: {
       required: ['duration'],
-      optional: [
-        'sourceElementId',
-        'destinationElementId',
-        'startX',
-        'startY',
-        'endX',
-        'endY',
-        'keyModifierFlags',
-      ],
+      optional: ['sourceElementId', 'destinationElementId', 'startX', 'startY', 'endX', 'endY', 'keyModifierFlags'],
     },
   },
   'macos: clickAndDragAndHold': {
@@ -100,15 +92,7 @@ export const executeMethodMap = {
     command: 'macosPressAndDrag',
     params: {
       required: ['duration'],
-      optional: [
-        'sourceElementId',
-        'destinationElementId',
-        'startX',
-        'startY',
-        'endX',
-        'endY',
-        'keyModifierFlags',
-      ],
+      optional: ['sourceElementId', 'destinationElementId', 'startX', 'startY', 'endX', 'endY', 'keyModifierFlags'],
     },
   },
   'macos: pressAndDragAndHold': {
@@ -180,15 +164,7 @@ export const executeMethodMap = {
     command: 'macosStartRecordingScreen',
     params: {
       required: ['deviceId'],
-      optional: [
-        'timeLimit',
-        'videoFilter',
-        'fps',
-        'preset',
-        'captureCursor',
-        'captureClicks',
-        'forceRestart',
-      ],
+      optional: ['timeLimit', 'videoFilter', 'fps', 'preset', 'captureCursor', 'captureClicks', 'forceRestart'],
     },
   },
   'macos: stopRecordingScreen': {
@@ -209,16 +185,7 @@ export const executeMethodMap = {
   'macos: stopNativeScreenRecording': {
     command: 'macosStopNativeScreenRecording',
     params: {
-      optional: [
-        'remotePath',
-        'user',
-        'pass',
-        'method',
-        'headers',
-        'fileFieldName',
-        'formFields',
-        'ignorePayload',
-      ],
+      optional: ['remotePath', 'user', 'pass', 'method', 'headers', 'fileFieldName', 'formFields', 'ignorePayload'],
     },
   },
   'macos: listDisplays': {

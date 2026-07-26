@@ -1,6 +1,7 @@
-import {exec} from 'teen_process';
-import {node} from 'appium/support.js';
 import {fileURLToPath} from 'node:url';
+
+import {node} from 'appium/support.js';
+import {exec} from 'teen_process';
 
 const MODULE_NAME = 'appium-mac2-driver';
 const currentFilename = fileURLToPath(import.meta.url);

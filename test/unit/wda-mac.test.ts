@@ -1,5 +1,6 @@
-import {describe, it} from 'node:test';
 import assert from 'node:assert/strict';
+import {describe, it} from 'node:test';
+
 import {WDA_MAC_SERVER} from '../../lib/wda-mac.js';
 
 describe('WDAMacServer', () => {

@@ -12,23 +12,24 @@ import type {
   W3CDriverCaps,
 } from '@appium/types';
 import {BaseDriver, DeviceSettings} from 'appium/driver.js';
-import {WDA_MAC_SERVER, type WDAMacServer} from './wda-mac.js';
-import MAC2_CONSTRAINTS, {type Mac2Constraints} from './constraints.js';
+
 import * as appManagemenetCommands from './commands/app-management.js';
 import * as appleScriptCommands from './commands/applescript.js';
-import * as executeCommands from './commands/execute.js';
 import * as auditCommands from './commands/audit.js';
+import * as clipboardCommands from './commands/clipboard.js';
+import * as executeCommands from './commands/execute.js';
 import * as findCommands from './commands/find.js';
 import * as gesturesCommands from './commands/gestures.js';
+import * as nativeScreenRecordingCommands from './commands/native-record-screen.js';
 import * as navigationCommands from './commands/navigation.js';
 import * as recordScreenCommands from './commands/record-screen.js';
 import * as screenshotCommands from './commands/screenshots.js';
 import * as sourceCommands from './commands/source.js';
-import * as clipboardCommands from './commands/clipboard.js';
-import * as nativeScreenRecordingCommands from './commands/native-record-screen.js';
+import MAC2_CONSTRAINTS, {type Mac2Constraints} from './constraints.js';
+import {executeMethodMap} from './execute-method-map.js';
 import log from './logger.js';
 import {newMethodMap} from './method-map.js';
-import {executeMethodMap} from './execute-method-map.js';
+import {WDA_MAC_SERVER, type WDAMacServer} from './wda-mac.js';
 
 const NO_PROXY: RouteMatcher[] = [
   ['GET', new RegExp('^/session/[^/]+/appium')],
@@ -101,8 +102,7 @@ export class Mac2Driver
   macosStopRecordingScreen = recordScreenCommands.macosStopRecordingScreen;
 
   macosStartNativeScreenRecording = nativeScreenRecordingCommands.macosStartNativeScreenRecording;
-  macosGetNativeScreenRecordingInfo =
-    nativeScreenRecordingCommands.macosGetNativeScreenRecordingInfo;
+  macosGetNativeScreenRecordingInfo = nativeScreenRecordingCommands.macosGetNativeScreenRecordingInfo;
   macosStopNativeScreenRecording = nativeScreenRecordingCommands.macosStopNativeScreenRecording;
   macosListDisplays = nativeScreenRecordingCommands.macosListDisplays;
 
@@ -200,14 +200,14 @@ export class Mac2Driver
     const [sessionId, caps] = await super.createSession(w3cCaps1, w3cCaps2, w3cCaps3, driverData);
     this._wda = WDA_MAC_SERVER;
     this.caps = caps as Mac2DriverCaps;
+    // oxlint-disable-next-line no-self-assign -- narrows this.opts' type for the rest of the method
     this.opts = this.opts as Mac2DriverOpts;
     try {
       const prerun = caps.prerun as PrerunCapability | undefined;
       if (prerun) {
         if (typeof prerun.command !== 'string' && typeof prerun.script !== 'string') {
           throw new Error(
-            `'prerun' capability value must either contain ` +
-              `'script' or 'command' entry of string type`,
+            `'prerun' capability value must either contain ` + `'script' or 'command' entry of string type`,
           );
         }
         log.info('Executing prerun AppleScript');
@@ -245,18 +245,11 @@ export class Mac2Driver
     const postrun = this.opts.postrun as PostrunCapability | undefined;
     if (postrun) {
       if (typeof postrun.command !== 'string' && typeof postrun.script !== 'string') {
-        log.error(
-          `'postrun' capability value must either contain ` +
-            `'script' or 'command' entry of string type`,
-        );
+        log.error(`'postrun' capability value must either contain ` + `'script' or 'command' entry of string type`);
       } else {
         log.info('Executing postrun AppleScript');
         try {
-          const output = await this.macosExecAppleScript(
-            postrun.script,
-            undefined,
-            postrun.command,
-          );
+          const output = await this.macosExecAppleScript(postrun.script, undefined, postrun.command);
           if (output.trim()) {
             log.info(`Postrun script output: ${output}`);
           }

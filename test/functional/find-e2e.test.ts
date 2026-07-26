@@ -1,7 +1,9 @@
-import {describe, it, beforeEach, afterEach} from 'node:test';
 import assert from 'node:assert/strict';
+import {describe, it, beforeEach, afterEach} from 'node:test';
+
 import {remote} from 'webdriverio';
 import type {Browser} from 'webdriverio';
+
 import {HOST, PORT, TEST_TIMEOUT, TEXT_EDIT_BUNDLE_ID} from '../utils.js';
 
 const CAPS = {
@@ -39,10 +41,7 @@ describe('Mac2Driver - find elements', {timeout: TEST_TIMEOUT}, () => {
   it('should find multiple by accessibility id', async () => {
     const els = await driver!.findElements('accessibility id', 'duplicateDocument:');
     assert.equal(els.length, 1);
-    assert.equal(
-      await driver!.getElementAttribute(String(els[0]), 'identifier'),
-      'duplicateDocument:',
-    );
+    assert.equal(await driver!.getElementAttribute(String(els[0]), 'identifier'), 'duplicateDocument:');
   });
 
   it('should find by class name', async () => {
@@ -84,10 +83,7 @@ describe('Mac2Driver - find elements', {timeout: TEST_TIMEOUT}, () => {
   });
 
   it('should find multiple by xpath', async () => {
-    const els = await driver!.findElements(
-      'xpath',
-      '//XCUIElementTypePopUpButton[@enabled="true"]',
-    );
+    const els = await driver!.findElements('xpath', '//XCUIElementTypePopUpButton[@enabled="true"]');
     assert.ok(els.length > 1);
     assert.equal(await driver!.getElementAttribute(String(els[0]), 'elementType'), '14');
   });

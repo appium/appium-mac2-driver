@@ -1,9 +1,10 @@
-import {waitForCondition} from 'asyncbox';
-import {util, fs, tempDir} from 'appium/support.js';
-import {SubProcess} from 'teen_process';
-import {uploadRecordedMedia} from './helpers.js';
-import type {Mac2Driver} from '../driver.js';
 import type {AppiumLogger, StringRecord} from '@appium/types';
+import {util, fs, tempDir} from 'appium/support.js';
+import {waitForCondition} from 'asyncbox';
+import {SubProcess} from 'teen_process';
+
+import type {Mac2Driver} from '../driver.js';
+import {uploadRecordedMedia} from './helpers.js';
 
 const RETRY_PAUSE = 300;
 const RETRY_TIMEOUT = 5000;
@@ -14,16 +15,7 @@ const FFMPEG_BINARY = 'ffmpeg';
 const DEFAULT_FPS = 15;
 const DEFAULT_PRESET = 'veryfast';
 
-type Preset =
-  | 'ultrafast'
-  | 'superfast'
-  | 'veryfast'
-  | 'faster'
-  | 'fast'
-  | 'medium'
-  | 'slow'
-  | 'slower'
-  | 'veryslow';
+type Preset = 'ultrafast' | 'superfast' | 'veryfast' | 'faster' | 'fast' | 'medium' | 'slow' | 'slower' | 'veryslow';
 
 interface ScreenRecorderOptions {
   fps?: number;
@@ -192,9 +184,7 @@ export class ScreenRecorder {
         void (async () => {
           try {
             await this._enforceTermination();
-            reject(
-              new Error(`Screen recording has failed to exit after ${PROCESS_SHUTDOWN_TIMEOUT}ms`),
-            );
+            reject(new Error(`Screen recording has failed to exit after ${PROCESS_SHUTDOWN_TIMEOUT}ms`));
           } catch (err) {
             reject(err);
           }
@@ -208,9 +198,7 @@ export class ScreenRecorder {
             if (code === 0) {
               resolve(await this.getVideoPath());
             } else {
-              reject(
-                new Error(`Screen recording exited with error code ${code}, signal ${signal}`),
-              );
+              reject(new Error(`Screen recording exited with error code ${code}, signal ${signal}`));
             }
           } catch (err) {
             reject(err);
@@ -329,10 +317,7 @@ export async function macosStartRecordingScreen(
  *
  * @see macosStartRecordingScreen
  */
-export async function startRecordingScreen(
-  this: Mac2Driver,
-  options: StartRecordingScreenOptions = {},
-): Promise<void> {
+export async function startRecordingScreen(this: Mac2Driver, options: StartRecordingScreenOptions = {}): Promise<void> {
   return await this.macosStartRecordingScreen(
     options.deviceId,
     options.timeLimit,
@@ -405,10 +390,7 @@ export async function macosStopRecordingScreen(
  *
  * @see macosStopRecordingScreen
  */
-export async function stopRecordingScreen(
-  this: Mac2Driver,
-  options: StopRecordingScreenOptions = {},
-): Promise<string> {
+export async function stopRecordingScreen(this: Mac2Driver, options: StopRecordingScreenOptions = {}): Promise<string> {
   return await this.macosStopRecordingScreen(
     options.remotePath,
     options.user,
@@ -427,8 +409,6 @@ async function requireFfmpegPath(log: AppiumLogger): Promise<string> {
   try {
     return await fs.which(FFMPEG_BINARY);
   } catch {
-    throw log.errorWithException(
-      `${FFMPEG_BINARY} has not been found in PATH. ` + `Please make sure it is installed`,
-    );
+    throw log.errorWithException(`${FFMPEG_BINARY} has not been found in PATH. ` + `Please make sure it is installed`);
   }
 }

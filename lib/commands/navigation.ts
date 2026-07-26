@@ -9,10 +9,6 @@ import type {Mac2Driver} from '../driver.js';
  *                 the given url with. If not provided then the default application
  *                 for the given url scheme is going to be used.
  */
-export async function macosDeepLink(
-  this: Mac2Driver,
-  url: string,
-  bundleId?: string,
-): Promise<unknown> {
+export async function macosDeepLink(this: Mac2Driver, url: string, bundleId?: string): Promise<unknown> {
   return await this.wda.proxy.command('/url', 'POST', {url, bundleId});
 }

@@ -9,9 +9,6 @@ import type {ScreenshotsInfo} from '../types.js';
  *                 If no matches were found then an error is thrown.
  * @returns Screenshots information for the requested display(s)
  */
-export async function macosScreenshots(
-  this: Mac2Driver,
-  displayId?: number,
-): Promise<ScreenshotsInfo> {
+export async function macosScreenshots(this: Mac2Driver, displayId?: number): Promise<ScreenshotsInfo> {
   return (await this.wda.proxy.command('/wda/screenshots', 'POST', {displayId})) as ScreenshotsInfo;
 }

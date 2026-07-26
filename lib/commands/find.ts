@@ -1,4 +1,5 @@
 import {util} from 'appium/support.js';
+
 import type {Mac2Driver} from '../driver.js';
 
 /**

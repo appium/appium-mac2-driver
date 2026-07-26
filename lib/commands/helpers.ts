@@ -1,6 +1,7 @@
-import {util, fs, net} from 'appium/support.js';
-import type {Mac2Driver} from '../driver.js';
 import type {StringRecord} from '@appium/types';
+import {util, fs, net} from 'appium/support.js';
+
+import type {Mac2Driver} from '../driver.js';
 
 /**
  * Uploads the given local file to the specified remote path or returns
@@ -19,9 +20,7 @@ export async function uploadRecordedMedia(
 ): Promise<string> {
   if (remotePath == null || remotePath.length === 0) {
     const {size} = await fs.stat(localFile);
-    this.log.debug(
-      `The size of the resulting screen recording is ${util.toReadableSizeString(size)}`,
-    );
+    this.log.debug(`The size of the resulting screen recording is ${util.toReadableSizeString(size)}`);
     return (await util.toInMemoryBase64(localFile)).toString();
   }
 

@@ -1,5 +1,6 @@
-import {util} from 'appium/support.js';
 import {errors} from 'appium/driver.js';
+import {util} from 'appium/support.js';
+
 import type {Mac2Driver} from '../driver.js';
 import type {KeyOptions} from '../types.js';
 
@@ -257,18 +258,9 @@ export async function macosClickAndDrag(
   endY?: number,
   keyModifierFlags?: number,
 ): Promise<unknown> {
-  requireSourceDestWithElementsOrCoordinates(
-    sourceElementId,
-    destinationElementId,
-    startX,
-    startY,
-    endX,
-    endY,
-  );
+  requireSourceDestWithElementsOrCoordinates(sourceElementId, destinationElementId, startX, startY, endX, endY);
   const url =
-    sourceElementId && destinationElementId
-      ? `/wda/element/${sourceElementId}/clickAndDrag`
-      : '/wda/clickAndDrag';
+    sourceElementId && destinationElementId ? `/wda/element/${sourceElementId}/clickAndDrag` : '/wda/clickAndDrag';
   const dest = destinationElementId && util.wrapElement(destinationElementId);
   return await this.wda.proxy.command(url, 'POST', {
     startX,
@@ -318,14 +310,7 @@ export async function macosClickAndDragAndHold(
   velocity?: number,
   keyModifierFlags?: number,
 ): Promise<unknown> {
-  requireSourceDestWithElementsOrCoordinates(
-    sourceElementId,
-    destinationElementId,
-    startX,
-    startY,
-    endX,
-    endY,
-  );
+  requireSourceDestWithElementsOrCoordinates(sourceElementId, destinationElementId, startX, startY, endX, endY);
   const url =
     sourceElementId && destinationElementId
       ? `/wda/element/${sourceElementId}/clickAndDragAndHold`
@@ -356,11 +341,7 @@ export async function macosClickAndDragAndHold(
  *                 If unset then keys are sent to the current application
  *                 under test.
  */
-export async function macosKeys(
-  this: Mac2Driver,
-  keys: (KeyOptions | string)[],
-  elementId?: string,
-): Promise<unknown> {
+export async function macosKeys(this: Mac2Driver, keys: (KeyOptions | string)[], elementId?: string): Promise<unknown> {
   const url = elementId ? `/wda/element/${elementId}/keys` : '/wda/keys';
   return await this.wda.proxy.command(url, 'POST', {keys});
 }
@@ -492,9 +473,7 @@ export async function macosPressAndDrag(
   //   startX, startY, endX, endY,
   // );
   const url =
-    sourceElementId && destinationElementId
-      ? `/wda/element/${sourceElementId}/pressAndDrag`
-      : '/wda/pressAndDrag';
+    sourceElementId && destinationElementId ? `/wda/element/${sourceElementId}/pressAndDrag` : '/wda/pressAndDrag';
   const dest = destinationElementId && util.wrapElement(destinationElementId);
   return await this.wda.proxy.command(url, 'POST', {
     startX,
@@ -544,14 +523,7 @@ export async function macosPressAndDragAndHold(
   velocity?: number,
   keyModifierFlags?: number,
 ): Promise<unknown> {
-  requireSourceDestWithElementsOrCoordinates(
-    sourceElementId,
-    destinationElementId,
-    startX,
-    startY,
-    endX,
-    endY,
-  );
+  requireSourceDestWithElementsOrCoordinates(sourceElementId, destinationElementId, startX, startY, endX, endY);
   const url =
     sourceElementId && destinationElementId
       ? `/wda/element/${sourceElementId}/pressAndDragAndHold`
@@ -602,16 +574,10 @@ function requireSourceDestWithElementsOrCoordinates(
 ): void {
   if (
     !(typeof sourceElementId === 'string' && typeof destinationElementId === 'string') &&
-    !(
-      typeof startX === 'number' &&
-      typeof startY === 'number' &&
-      typeof endX === 'number' &&
-      typeof endY === 'number'
-    )
+    !(typeof startX === 'number' && typeof startY === 'number' && typeof endX === 'number' && typeof endY === 'number')
   ) {
     throw new errors.InvalidArgumentError(
-      `'sourceElementId' and 'destinationElementId' ` +
-        `or 'startX', 'startY', 'endX' and 'endY' are required.`,
+      `'sourceElementId' and 'destinationElementId' ` + `or 'startX', 'startY', 'endX' and 'endY' are required.`,
     );
   }
 }

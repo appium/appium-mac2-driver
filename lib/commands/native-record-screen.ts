@@ -1,16 +1,18 @@
-import path from 'node:path';
-import {fs, util} from 'appium/support.js';
-import type {Mac2Driver} from '../driver.js';
-import {uploadRecordedMedia} from './helpers.js';
-import type {AppiumLogger, StringRecord} from '@appium/types';
 import type EventEmitter from 'node:events';
+import os from 'node:os';
+import path from 'node:path';
+
+import type {AppiumLogger, StringRecord} from '@appium/types';
+import {fs, util} from 'appium/support.js';
 import type {CancellablePromise} from 'asyncbox';
 import {TimeoutError, sleep, waitForCondition, withTimeout} from 'asyncbox';
 import {exec} from 'teen_process';
+
+import type {Mac2Driver} from '../driver.js';
+import {isPlainObject} from '../utils.js';
 import {BIDI_EVENT_NAME} from './bidi/constants.js';
 import {toNativeVideoChunkAddedEvent} from './bidi/models.js';
-import {isPlainObject} from '../utils.js';
-import os from 'node:os';
+import {uploadRecordedMedia} from './helpers.js';
 
 const RECORDING_STARTUP_TIMEOUT_MS = 5000;
 const BUFFER_SIZE = 0xffff;
@@ -196,9 +198,7 @@ export class NativeVideoChunksBroadcaster {
           const handle = await fs.open(fullPath, 'r');
           try {
             while (bytesRead < size) {
-              const bufferSize = Number(
-                size - bytesRead > BUFFER_SIZE ? BUFFER_SIZE : size - bytesRead,
-              );
+              const bufferSize = Number(size - bytesRead > BUFFER_SIZE ? BUFFER_SIZE : size - bytesRead);
               const buf = Buffer.alloc(bufferSize);
               await fs.read(handle, buf as any, 0, bufferSize, bytesRead as any);
               this._ee.emit(BIDI_EVENT_NAME, toNativeVideoChunkAddedEvent(uuid, buf));
@@ -210,9 +210,7 @@ export class NativeVideoChunksBroadcaster {
         }
 
         if (isCompleted) {
-          this._log.debug(
-            `The native video recording identified by ${uuid} has been detected as completed`,
-          );
+          this._log.debug(`The native video recording identified by ${uuid} has been detected as completed`);
           return;
         }
 
@@ -243,8 +241,7 @@ export class NativeVideoChunksBroadcaster {
     }
 
     this._log.warn(
-      `Stopped monitoring of the native video recording identified by ${uuid} ` +
-        `because of the timeout`,
+      `Stopped monitoring of the native video recording identified by ${uuid} ` + `because of the timeout`,
     );
   }
 
@@ -284,13 +281,9 @@ export class NativeVideoChunksBroadcaster {
     }
     try {
       await Promise.all(tasks);
-      this._log.debug(
-        `Successfully deleted ${util.pluralize('leftover video recording', tasks.length, true)}`,
-      );
+      this._log.debug(`Successfully deleted ${util.pluralize('leftover video recording', tasks.length, true)}`);
     } catch (e) {
-      this._log.warn(
-        `Could not cleanup some leftover video recordings: ${e instanceof Error ? e.message : String(e)}`,
-      );
+      this._log.warn(`Could not cleanup some leftover video recordings: ${e instanceof Error ? e.message : String(e)}`);
     }
   }
 
@@ -352,9 +345,7 @@ export async function macosStartNativeScreenRecording(
  * @returns The information about the asynchronously running video recording or
  * null if no native video recording has been started.
  */
-export async function macosGetNativeScreenRecordingInfo(
-  this: Mac2Driver,
-): Promise<ActiveVideoInfo | null> {
+export async function macosGetNativeScreenRecordingInfo(this: Mac2Driver): Promise<ActiveVideoInfo | null> {
   return (await this.wda.proxy.command('/wda/video', 'GET')) as ActiveVideoInfo | null;
 }
 
@@ -402,9 +393,7 @@ export async function macosStopNativeScreenRecording(
     {},
   )) as ActiveVideoInfo | null;
   if (!response || !isPlainObject(response)) {
-    throw new Error(
-      'There is no active screen recording, thus nothing to stop. Did you start it before?',
-    );
+    throw new Error('There is no active screen recording, thus nothing to stop. Did you start it before?');
   }
 
   const {uuid} = response;

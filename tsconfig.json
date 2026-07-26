@@ -10,8 +10,5 @@
     "checkJs": true,
     "strict": true
   },
-  "include": [
-    "lib",
-    "test"
-  ]
+  "include": ["lib", "test"]
 }

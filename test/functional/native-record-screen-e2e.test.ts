@@ -1,10 +1,12 @@
-import {describe, it, beforeEach, afterEach} from 'node:test';
 import assert from 'node:assert/strict';
+import type {EventEmitter} from 'node:events';
+import {describe, it, beforeEach, afterEach} from 'node:test';
+import {setTimeout as delay} from 'node:timers/promises';
+
+import {waitForCondition} from 'asyncbox';
 import {remote} from 'webdriverio';
 import type {Browser} from 'webdriverio';
-import type {EventEmitter} from 'node:events';
-import {setTimeout as delay} from 'node:timers/promises';
-import {waitForCondition} from 'asyncbox';
+
 import {HOST, PORT, TEST_TIMEOUT, TEXT_EDIT_BUNDLE_ID} from '../utils.js';
 
 // `webSocketUrl: true` requests a W3C BiDi session, which makes Appium
@@ -74,9 +76,11 @@ describe('Mac2Driver - native screen recording', {timeout: TEST_TIMEOUT}, () => 
     try {
       await driver!.sessionSubscribe({events: [CHUNK_EVENT]});
 
-      const info = (await driver!.executeScript('macos: startNativeScreenRecording', [
-        {fps: 24},
-      ])) as {uuid: string; fps: number; startedAt: number};
+      const info = (await driver!.executeScript('macos: startNativeScreenRecording', [{fps: 24}])) as {
+        uuid: string;
+        fps: number;
+        startedAt: number;
+      };
       assert.ok(info !== null && typeof info === 'object');
       assert.equal(typeof info.uuid, 'string');
       assert.ok(info.uuid.length > 0);
@@ -94,10 +98,7 @@ describe('Mac2Driver - native screen recording', {timeout: TEST_TIMEOUT}, () => 
 
       await delay(RECORDING_DURATION_MS);
 
-      const payload = (await driver!.executeScript(
-        'macos: stopNativeScreenRecording',
-        [],
-      )) as string;
+      const payload = (await driver!.executeScript('macos: stopNativeScreenRecording', [])) as string;
       assert.equal(typeof payload, 'string');
       assert.ok(payload.length >= MIN_BASE64_PAYLOAD_SIZE);
 

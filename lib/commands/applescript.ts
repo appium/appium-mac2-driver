@@ -1,6 +1,8 @@
+import path from 'node:path';
+
 import {fs, tempDir, util} from 'appium/support.js';
 import {exec} from 'teen_process';
-import path from 'node:path';
+
 import type {Mac2Driver} from '../driver.js';
 
 const OSASCRIPT = 'osascript';

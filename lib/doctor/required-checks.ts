@@ -1,7 +1,7 @@
+import type {IDoctorCheck, AppiumLogger, DoctorCheckResult} from '@appium/types';
+import {getPath as getXcodePath} from 'appium-xcode';
 import {doctor} from 'appium/support.js';
 import {exec} from 'teen_process';
-import {getPath as getXcodePath} from 'appium-xcode';
-import type {IDoctorCheck, AppiumLogger, DoctorCheckResult} from '@appium/types';
 import '@colors/colors';
 
 export class XcodeCheck implements IDoctorCheck {
@@ -44,9 +44,7 @@ export class XcodebuildCheck implements IDoctorCheck {
       ({stdout, stderr} = await exec('xcodebuild', ['-version']));
       xcodeVerMatch = XcodebuildCheck.XCODE_VER_PATTERN.exec(stdout);
     } catch (err) {
-      return doctor.nok(
-        `Cannot run 'xcodebuild': ${(err as any).stderr || (err as Error).message}`,
-      );
+      return doctor.nok(`Cannot run 'xcodebuild': ${(err as any).stderr || (err as Error).message}`);
     }
     if (!xcodeVerMatch) {
       return doctor.nok(`Cannot determine Xcode version. stdout: ${stdout}; stderr: ${stderr}`);

@@ -1,10 +1,12 @@
-import {describe, it, beforeEach, afterEach} from 'node:test';
 import assert from 'node:assert/strict';
-import {remote} from 'webdriverio';
-import type {Browser} from 'webdriverio';
 import os from 'node:os';
 import path from 'node:path';
+import {describe, it, beforeEach, afterEach} from 'node:test';
+
 import {fs} from 'appium/support.js';
+import {remote} from 'webdriverio';
+import type {Browser} from 'webdriverio';
+
 import {HOST, PORT, TEST_TIMEOUT, TEXT_EDIT_BUNDLE_ID} from '../utils.js';
 
 const TEST_FILE = path.resolve(os.tmpdir(), 'test.test');

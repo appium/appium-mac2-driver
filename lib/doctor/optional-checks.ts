@@ -1,9 +1,11 @@
-import path from 'node:path';
 import os from 'node:os';
-import {resolveExecutablePath} from './utils.js';
+import path from 'node:path';
+
+import type {IDoctorCheck, AppiumLogger, DoctorCheckResult} from '@appium/types';
 import {doctor, fs, util} from 'appium/support.js';
 import {exec} from 'teen_process';
-import type {IDoctorCheck, AppiumLogger, DoctorCheckResult} from '@appium/types';
+
+import {resolveExecutablePath} from './utils.js';
 import '@colors/colors';
 
 export class OptionalFfmpegCheck implements IDoctorCheck {
@@ -45,9 +47,7 @@ export class OptionalAutomationModeCheck implements IDoctorCheck {
     try {
       ({stdout} = await exec('automationmodetool'));
     } catch (err) {
-      return doctor.nokOptional(
-        `Cannot run 'automationmodetool': ${(err as any).stderr || (err as Error).message}`,
-      );
+      return doctor.nokOptional(`Cannot run 'automationmodetool': ${(err as any).stderr || (err as Error).message}`);
     }
     if (stdout.includes('DOES NOT REQUIRE')) {
       return doctor.okOptional(`Automation Mode does not require user authentication`);
@@ -83,11 +83,7 @@ export class OptionalFullDiskAccessDaemonContainersCheck implements IDoctorCheck
     return `*/Data/{,tmp/}Attachments/${uuid}`;
   })();
   private readonly ANY_ATTACHMENT_GLOB = '*/Data/{,tmp/}Attachments/*';
-  private readonly DAEMON_CONTAINERS_ROOT = path.resolve(
-    os.homedir(),
-    'Library',
-    'Daemon Containers',
-  );
+  private readonly DAEMON_CONTAINERS_ROOT = path.resolve(os.homedir(), 'Library', 'Daemon Containers');
 
   async diagnose(): Promise<DoctorCheckResult> {
     const nonDarwin = this.checkIfNotDarwin();
@@ -136,9 +132,7 @@ export class OptionalFullDiskAccessDaemonContainersCheck implements IDoctorCheck
     if (process.platform === 'darwin') {
       return null;
     }
-    return doctor.okOptional(
-      `Full Disk Access to ${this.DAEMON_CONTAINERS_ROOT} can only be checked on macOS`,
-    );
+    return doctor.okOptional(`Full Disk Access to ${this.DAEMON_CONTAINERS_ROOT} can only be checked on macOS`);
   }
 
   private async tryAccessDaemonContainers(): Promise<DoctorCheckResult | null> {
@@ -146,9 +140,7 @@ export class OptionalFullDiskAccessDaemonContainersCheck implements IDoctorCheck
       await fs.access(this.DAEMON_CONTAINERS_ROOT);
       return null;
     } catch (e) {
-      return doctor.nokOptional(
-        `Cannot access "${this.DAEMON_CONTAINERS_ROOT}": ${(e as Error).message}`,
-      );
+      return doctor.nokOptional(`Cannot access "${this.DAEMON_CONTAINERS_ROOT}": ${(e as Error).message}`);
     }
   }
 
@@ -189,5 +181,4 @@ export class OptionalFullDiskAccessDaemonContainersCheck implements IDoctorCheck
     );
   }
 }
-export const optionalFullDiskAccessDaemonContainersCheck =
-  new OptionalFullDiskAccessDaemonContainersCheck();
+export const optionalFullDiskAccessDaemonContainersCheck = new OptionalFullDiskAccessDaemonContainersCheck();

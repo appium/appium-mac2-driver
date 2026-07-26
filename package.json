@@ -1,29 +1,92 @@
 {
   "name": "appium-mac2-driver",
+  "version": "4.0.4",
   "description": "XCTest-based Appium driver for macOS apps automation",
   "keywords": [
+    "XCTest",
     "appium",
-    "mac",
-    "XCTest"
+    "mac"
   ],
-  "version": "4.0.4",
-  "author": "Appium Contributors",
+  "bugs": {
+    "url": "https://github.com/appium/appium-mac2-driver/issues"
+  },
   "license": "Apache-2.0",
+  "author": "Appium Contributors",
   "repository": {
     "type": "git",
     "url": "https://github.com/appium/appium-mac2-driver.git"
   },
-  "bugs": {
-    "url": "https://github.com/appium/appium-mac2-driver/issues"
+  "bin": {},
+  "files": [
+    "lib",
+    "build/lib",
+    "scripts",
+    "WebDriverAgentMac/Scripts",
+    "WebDriverAgentMac/Cartfile",
+    "WebDriverAgentMac/Cartfile.resolved",
+    "WebDriverAgentMac/WebDriverAgentLib",
+    "WebDriverAgentMac/WebDriverAgentMac.xcodeproj",
+    "WebDriverAgentMac/WebDriverAgentRunner",
+    "WebDriverAgentMac/IntegrationTests",
+    "WebDriverAgentMac/WebDriverAgent",
+    "!.DS_Store",
+    "CHANGELOG.md",
+    "LICENSE",
+    "npm-shrinkwrap.json"
+  ],
+  "type": "module",
+  "main": "./build/lib/index.js",
+  "types": "./build/lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/lib/index.d.ts",
+      "import": "./build/lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "npm run build -- --clean",
+    "rebuild": "npm run clean; npm run build",
+    "dev": "npm run build -- --watch",
+    "lint": "oxlint -c oxlint.config.mjs .",
+    "lint:fix": "oxlint -c oxlint.config.mjs --fix .",
+    "format": "oxfmt -c oxfmt.config.mjs .",
+    "format:check": "oxfmt -c oxfmt.config.mjs --check .",
+    "build:docs": "appium-docs build",
+    "dev:docs": "appium-docs build --serve",
+    "publish:docs": "appium-docs build --deploy --push -b docs-site -m 'docs: build docs for appium-mac2-driver@%s' --alias latest --use-prefixed-major-deploy-version",
+    "install-docs-deps": "appium-docs init --no-mkdocs",
+    "prepare": "npm run build",
+    "test": "node --enable-source-maps --test --test-timeout=60000 \"build/test/unit/**/*.test.js\"",
+    "e2e-test": "npm run build && node --enable-source-maps --test --test-concurrency=1 --test-timeout=600000 \"build/test/functional/**/*.test.js\""
+  },
+  "dependencies": {
+    "@appium/strongbox": "^1.0.0-rc.1",
+    "@colors/colors": "^1.6.0",
+    "appium-xcode": "^6.0.0",
+    "asyncbox": "^6.3.0",
+    "axios": "^1.16.0",
+    "portscanner": "^2.2.0",
+    "teen_process": "^4.0.4"
+  },
+  "devDependencies": {
+    "@appium/docutils": "^2.5.0",
+    "@appium/oxc-config": "^1.1.0",
+    "@appium/semantic-release-config": "^1.1.0",
+    "@appium/tsconfig": "^1.2.0",
+    "@appium/types": "^1.0.0-rc.1",
+    "@types/node": "^26.0.0",
+    "@types/portscanner": "^2.1.1",
+    "typescript": "^6.0.2",
+    "webdriverio": "^9.0.0"
+  },
+  "peerDependencies": {
+    "appium": "^3.0.0-rc.2"
   },
   "engines": {
     "node": "^20.19.0 || ^22.12.0 || >=24.0.0",
     "npm": ">=10"
-  },
-  "prettier": {
-    "bracketSpacing": false,
-    "printWidth": 100,
-    "singleQuote": true
   },
   "appium": {
     "driverName": "mac2",
@@ -41,77 +104,5 @@
         "./build/lib/doctor/optional-checks.js"
       ]
     }
-  },
-  "type": "module",
-  "main": "./build/lib/index.js",
-  "types": "./build/lib/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./build/lib/index.d.ts",
-      "import": "./build/lib/index.js"
-    },
-    "./package.json": "./package.json"
-  },
-  "bin": {},
-  "dependencies": {
-    "@appium/strongbox": "^1.0.0-rc.1",
-    "@colors/colors": "^1.6.0",
-    "appium-xcode": "^6.0.0",
-    "asyncbox": "^6.3.0",
-    "axios": "^1.16.0",
-    "portscanner": "^2.2.0",
-    "teen_process": "^4.0.4"
-  },
-  "scripts": {
-    "build": "tsc -b",
-    "clean": "npm run build -- --clean",
-    "rebuild": "npm run clean; npm run build",
-    "dev": "npm run build -- --watch",
-    "lint": "eslint .",
-    "lint:fix": "npm run lint -- --fix",
-    "format": "prettier -w ./lib ./test",
-    "format:check": "prettier --check ./lib ./test",
-    "build:docs": "appium-docs build",
-    "dev:docs": "appium-docs build --serve",
-    "publish:docs": "appium-docs build --deploy --push -b docs-site -m 'docs: build docs for appium-mac2-driver@%s' --alias latest --use-prefixed-major-deploy-version",
-    "install-docs-deps": "appium-docs init --no-mkdocs",
-    "prepare": "npm run build",
-    "test": "node --test --test-timeout=60000 \"build/test/unit/**/*.test.js\"",
-    "e2e-test": "npm run build && node --test --test-concurrency=1 --test-timeout=600000 \"build/test/functional/**/*.test.js\""
-  },
-  "peerDependencies": {
-    "appium": "^3.0.0-rc.2"
-  },
-  "devDependencies": {
-    "@appium/docutils": "^2.5.0",
-    "@appium/eslint-config-appium-ts": "^3.0.0",
-    "@appium/tsconfig": "^1.0.0-rc.1",
-    "@appium/types": "^1.0.0-rc.1",
-    "@semantic-release/changelog": "^6.0.1",
-    "@semantic-release/git": "^10.0.1",
-    "@types/node": "^26.0.0",
-    "@types/portscanner": "^2.1.1",
-    "conventional-changelog-conventionalcommits": "^9.3.1",
-    "prettier": "^3.0.3",
-    "semantic-release": "^25.0.2",
-    "typescript": "^6.0.2",
-    "webdriverio": "^9.0.0"
-  },
-  "files": [
-    "lib",
-    "build/lib",
-    "scripts",
-    "WebDriverAgentMac/Scripts",
-    "WebDriverAgentMac/Cartfile",
-    "WebDriverAgentMac/Cartfile.resolved",
-    "WebDriverAgentMac/WebDriverAgentLib",
-    "WebDriverAgentMac/WebDriverAgentMac.xcodeproj",
-    "WebDriverAgentMac/WebDriverAgentRunner",
-    "WebDriverAgentMac/IntegrationTests",
-    "WebDriverAgentMac/WebDriverAgent",
-    "!.DS_Store",
-    "CHANGELOG.md",
-    "LICENSE",
-    "npm-shrinkwrap.json"
-  ]
+  }
 }

@@ -1,5 +1,6 @@
-import type {Mac2Driver} from '../driver.js';
 import type {StringRecord} from '@appium/types';
+
+import type {Mac2Driver} from '../driver.js';
 
 const EXECUTE_SCRIPT_PREFIX = 'macos:';
 
@@ -8,11 +9,7 @@ const EXECUTE_SCRIPT_PREFIX = 'macos:';
  * @param script - The script to execute
  * @param args - Arguments to pass to the script
  */
-export async function execute(
-  this: Mac2Driver,
-  script: string,
-  args?: readonly any[] | StringRecord,
-): Promise<any> {
+export async function execute(this: Mac2Driver, script: string, args?: readonly any[] | StringRecord): Promise<any> {
   this.log.info(`Executing extension command '${script}'`);
   const formattedScript = String(script)
     .trim()

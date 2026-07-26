@@ -1,7 +1,8 @@
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {exec} from 'teen_process';
+
 import {logger} from 'appium/support.js';
+import {exec} from 'teen_process';
 const XCODEPROJ_NAME = 'WebDriverAgentMac.xcodeproj';
 
 const log = logger.getLogger('WDA');

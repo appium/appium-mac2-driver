@@ -1,7 +1,9 @@
-import {describe, it, beforeEach, afterEach} from 'node:test';
 import assert from 'node:assert/strict';
+import {describe, it, beforeEach, afterEach} from 'node:test';
+
 import {remote} from 'webdriverio';
 import type {Browser} from 'webdriverio';
+
 import {HOST, PORT, TEST_TIMEOUT, TEXT_EDIT_BUNDLE_ID} from '../utils.js';
 
 const CAPS = {
@@ -39,10 +41,7 @@ describe('Mac2Driver - elements interaction', {timeout: TEST_TIMEOUT}, () => {
   });
 
   it('should click a button by absolute coordinate', async () => {
-    const [el] = await driver!.findElements(
-      '-ios predicate string',
-      'elementType == 12 AND label == "bold"',
-    );
+    const [el] = await driver!.findElements('-ios predicate string', 'elementType == 12 AND label == "bold"');
     assert.ok(el);
     const {x, y, width, height} = (await driver!.getElementAttribute(String(el), 'frame')) as any;
     await driver!.executeScript('macos: click', [
@@ -51,10 +50,7 @@ describe('Mac2Driver - elements interaction', {timeout: TEST_TIMEOUT}, () => {
         y: y + height / 2,
       },
     ]);
-    const els = await driver!.findElements(
-      '-ios predicate string',
-      'value == "Bold" AND label == "type face"',
-    );
+    const els = await driver!.findElements('-ios predicate string', 'value == "Bold" AND label == "type face"');
     assert.equal(els.length, 1);
   });
 

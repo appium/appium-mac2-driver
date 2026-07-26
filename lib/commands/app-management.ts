@@ -1,5 +1,6 @@
-import type {Mac2Driver} from '../driver.js';
 import type {StringRecord} from '@appium/types';
+
+import type {Mac2Driver} from '../driver.js';
 
 /**
  * Start an app with given bundle identifier or activates it
@@ -39,11 +40,7 @@ export async function macosLaunchApp(
  * @param path - Full path to the app bundle. Either this property
  *                 or `bundleId` must be provided
  */
-export async function macosActivateApp(
-  this: Mac2Driver,
-  bundleId?: string,
-  path?: string,
-): Promise<unknown> {
+export async function macosActivateApp(this: Mac2Driver, bundleId?: string, path?: string): Promise<unknown> {
   return await this.wda.proxy.command('/wda/apps/activate', 'POST', {bundleId, path});
 }
 
@@ -58,11 +55,7 @@ export async function macosActivateApp(
  * @returns `true` if the app was running and has been successfully terminated.
  * `false` if the app was not running before.
  */
-export async function macosTerminateApp(
-  this: Mac2Driver,
-  bundleId?: string,
-  path?: string,
-): Promise<boolean> {
+export async function macosTerminateApp(this: Mac2Driver, bundleId?: string, path?: string): Promise<boolean> {
   return (await this.wda.proxy.command('/wda/apps/terminate', 'POST', {bundleId, path})) as boolean;
 }
 
@@ -78,10 +71,6 @@ export async function macosTerminateApp(
  * https://developer.apple.com/documentation/xctest/xcuiapplicationstate?language=objc
  * for more details
  */
-export async function macosQueryAppState(
-  this: Mac2Driver,
-  bundleId?: string,
-  path?: string,
-): Promise<number> {
+export async function macosQueryAppState(this: Mac2Driver, bundleId?: string, path?: string): Promise<number> {
   return (await this.wda.proxy.command('/wda/apps/state', 'POST', {bundleId, path})) as number;
 }

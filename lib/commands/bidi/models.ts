@@ -1,5 +1,5 @@
-import type {NativeVideoChunkAddedEvent} from './types.js';
 import {NATIVE_VIDEO_CHUNK_ADDED_EVENT} from './constants.js';
+import type {NativeVideoChunkAddedEvent} from './types.js';
 
 /**
  * Converts the given UUID and video chunk payload into a NativeVideoChunkAddedEvent object.
@@ -7,10 +7,7 @@ import {NATIVE_VIDEO_CHUNK_ADDED_EVENT} from './constants.js';
  * @param payload The video chunk data as a Buffer.
  * @returns A NativeVideoChunkAddedEvent object containing the UUID and encoded video chunk.
  */
-export function toNativeVideoChunkAddedEvent(
-  uuid: string,
-  payload: Buffer,
-): NativeVideoChunkAddedEvent {
+export function toNativeVideoChunkAddedEvent(uuid: string, payload: Buffer): NativeVideoChunkAddedEvent {
   return {
     method: NATIVE_VIDEO_CHUNK_ADDED_EVENT,
     params: {

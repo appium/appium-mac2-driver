@@ -1,14 +1,16 @@
 import path from 'node:path';
-import url from 'node:url';
-import axios from 'axios';
 import {setTimeout as delay} from 'node:timers/promises';
+import url from 'node:url';
+
+import {strongbox} from '@appium/strongbox';
+import type {HTTPMethod, HTTPBody, ProxyResponse, ProxyOptions} from '@appium/types';
 import {JWProxy, errors} from 'appium/driver.js';
 import {fs, logger, util, timing} from 'appium/support.js';
-import {strongbox} from '@appium/strongbox';
-import {SubProcess, exec} from 'teen_process';
 import {waitForCondition} from 'asyncbox';
+import axios from 'axios';
 import {checkPortStatus} from 'portscanner';
-import type {HTTPMethod, HTTPBody, ProxyResponse, ProxyOptions} from '@appium/types';
+import {SubProcess, exec} from 'teen_process';
+
 import {listChildrenProcessIds, getModuleRoot, clearArray, removeAllOccurrences} from './utils.js';
 
 const log = logger.getLogger('WebDriverAgentMac');
@@ -51,9 +53,10 @@ class WDAMacProcess {
   }
 
   async cleanupProjectIfFresh(): Promise<void> {
-    const packageInfo = JSON.parse(
-      await fs.readFile(path.join(getModuleRoot(), 'package.json'), 'utf8'),
-    ) as {name: string; version: string};
+    const packageInfo = JSON.parse(await fs.readFile(path.join(getModuleRoot(), 'package.json'), 'utf8')) as {
+      name: string;
+      version: string;
+    };
     const box = strongbox(packageInfo.name);
     let boxItem = box.getItem(RECENT_MODULE_VERSION_ITEM_NAME);
     if (!boxItem) {
@@ -69,9 +72,7 @@ class WDAMacProcess {
           return;
         }
       } else {
-        log.info(
-          'There is no need to perform the project cleanup. A fresh install has been detected',
-        );
+        log.info('There is no need to perform the project cleanup. A fresh install has been detected');
         try {
           await box.createItemWithValue(RECENT_MODULE_VERSION_ITEM_NAME, packageInfo.version);
         } catch (e: any) {
@@ -86,9 +87,7 @@ class WDAMacProcess {
       recentModuleVersion = util.coerceVersion(recentModuleVersion, true);
     } catch (e: any) {
       log.warn(`The persisted module version string has been damaged: ${e.message}`);
-      log.info(
-        `Updating it to '${packageInfo.version}' assuming the project cleanup is not needed`,
-      );
+      log.info(`Updating it to '${packageInfo.version}' assuming the project cleanup is not needed`);
       await boxItem.write(packageInfo.version);
       return;
     }
@@ -137,8 +136,7 @@ class WDAMacProcess {
       xcodebuild = await fs.which(XCODEBUILD);
     } catch {
       throw new Error(
-        `${XCODEBUILD} binary cannot be found in PATH. ` +
-          `Please make sure that Xcode is installed on your system`,
+        `${XCODEBUILD} binary cannot be found in PATH. ` + `Please make sure that Xcode is installed on your system`,
       );
     }
     log.debug(`Using ${XCODEBUILD} binary at '${xcodebuild}'`);
@@ -147,8 +145,7 @@ class WDAMacProcess {
 
     log.debug(`Using ${this.host} as server host`);
     log.debug(`Using port ${this.port}`);
-    const isPortBusy = async (): Promise<boolean> =>
-      (await checkPortStatus(this.port, this.host)) === 'open';
+    const isPortBusy = async (): Promise<boolean> => (await checkPortStatus(this.port, this.host)) === 'open';
     if (await isPortBusy()) {
       log.warn(
         `The port #${this.port} at ${this.host} is busy. ` +
@@ -256,16 +253,10 @@ class WDAMacProcess {
     ) {
       return false;
     }
-    if (
-      (systemPort && this.port !== systemPort) ||
-      (!systemPort && this.port !== DEFAULT_SYSTEM_PORT)
-    ) {
+    if ((systemPort && this.port !== systemPort) || (!systemPort && this.port !== DEFAULT_SYSTEM_PORT)) {
       return false;
     }
-    if (
-      (systemHost && this.host !== systemHost) ||
-      (!systemHost && this.host !== DEFAULT_SYSTEM_HOST)
-    ) {
+    if ((systemHost && this.host !== systemHost) || (!systemHost && this.host !== DEFAULT_SYSTEM_HOST)) {
       return false;
     }
     if (
@@ -385,9 +376,7 @@ export class WDAMacServer {
             removeAllOccurrences(RUNNING_PROCESS_IDS, pid);
           });
         }
-        log.info(
-          `The host process is ready within ${timer.getDuration().asMilliSeconds.toFixed(0)}ms`,
-        );
+        log.info(`The host process is ready within ${timer.getDuration().asMilliSeconds.toFixed(0)}ms`);
       }
     } else {
       log.info('The host process has already been listening. Proceeding with session creation');
@@ -455,8 +444,7 @@ export class WDAMacServer {
       parsedUrl = new url.URL(caps.webDriverAgentMacUrl);
     } catch (e: any) {
       throw new Error(
-        `webDriverAgentMacUrl, '${caps.webDriverAgentMacUrl}', ` +
-          `in the capabilities is invalid. ${e.message}`,
+        `webDriverAgentMacUrl, '${caps.webDriverAgentMacUrl}', ` + `in the capabilities is invalid. ${e.message}`,
         {cause: e},
       );
     }
