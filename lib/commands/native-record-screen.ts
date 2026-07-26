@@ -240,9 +240,7 @@ export class NativeVideoChunksBroadcaster {
       return;
     }
 
-    this._log.warn(
-      `Stopped monitoring of the native video recording identified by ${uuid} ` + `because of the timeout`,
-    );
+    this._log.warn(`Stopped monitoring of the native video recording identified by ${uuid} because of the timeout`);
   }
 
   private async _wait(timeoutMs: number): Promise<void> {

@@ -136,7 +136,7 @@ class WDAMacProcess {
       xcodebuild = await fs.which(XCODEBUILD);
     } catch {
       throw new Error(
-        `${XCODEBUILD} binary cannot be found in PATH. ` + `Please make sure that Xcode is installed on your system`,
+        `${XCODEBUILD} binary cannot be found in PATH. Please make sure that Xcode is installed on your system`,
       );
     }
     log.debug(`Using ${XCODEBUILD} binary at '${xcodebuild}'`);
@@ -444,7 +444,7 @@ export class WDAMacServer {
       parsedUrl = new url.URL(caps.webDriverAgentMacUrl);
     } catch (e: any) {
       throw new Error(
-        `webDriverAgentMacUrl, '${caps.webDriverAgentMacUrl}', ` + `in the capabilities is invalid. ${e.message}`,
+        `webDriverAgentMacUrl, '${caps.webDriverAgentMacUrl}', in the capabilities is invalid. ${e.message}`,
         {cause: e},
       );
     }

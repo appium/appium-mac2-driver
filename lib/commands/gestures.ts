@@ -577,7 +577,7 @@ function requireSourceDestWithElementsOrCoordinates(
     !(typeof startX === 'number' && typeof startY === 'number' && typeof endX === 'number' && typeof endY === 'number')
   ) {
     throw new errors.InvalidArgumentError(
-      `'sourceElementId' and 'destinationElementId' ` + `or 'startX', 'startY', 'endX' and 'endY' are required.`,
+      `'sourceElementId' and 'destinationElementId' or 'startX', 'startY', 'endX' and 'endY' are required.`,
     );
   }
 }

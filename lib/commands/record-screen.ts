@@ -409,6 +409,6 @@ async function requireFfmpegPath(log: AppiumLogger): Promise<string> {
   try {
     return await fs.which(FFMPEG_BINARY);
   } catch {
-    throw log.errorWithException(`${FFMPEG_BINARY} has not been found in PATH. ` + `Please make sure it is installed`);
+    throw log.errorWithException(`${FFMPEG_BINARY} has not been found in PATH. Please make sure it is installed`);
   }
 }

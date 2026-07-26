@@ -206,9 +206,7 @@ export class Mac2Driver
       const prerun = caps.prerun as PrerunCapability | undefined;
       if (prerun) {
         if (typeof prerun.command !== 'string' && typeof prerun.script !== 'string') {
-          throw new Error(
-            `'prerun' capability value must either contain ` + `'script' or 'command' entry of string type`,
-          );
+          throw new Error(`'prerun' capability value must either contain 'script' or 'command' entry of string type`);
         }
         log.info('Executing prerun AppleScript');
         const output = await this.macosExecAppleScript(prerun.script, undefined, prerun.command);
@@ -245,7 +243,7 @@ export class Mac2Driver
     const postrun = this.opts.postrun as PostrunCapability | undefined;
     if (postrun) {
       if (typeof postrun.command !== 'string' && typeof postrun.script !== 'string') {
-        log.error(`'postrun' capability value must either contain ` + `'script' or 'command' entry of string type`);
+        log.error(`'postrun' capability value must either contain 'script' or 'command' entry of string type`);
       } else {
         log.info('Executing postrun AppleScript');
         try {
