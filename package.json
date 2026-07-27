@@ -78,7 +78,6 @@
     "@appium/types": "^1.0.0-rc.1",
     "@types/node": "^26.0.0",
     "@types/portscanner": "^2.1.1",
-    "typescript": "^6.0.2",
     "webdriverio": "^9.0.0"
   },
   "peerDependencies": {
