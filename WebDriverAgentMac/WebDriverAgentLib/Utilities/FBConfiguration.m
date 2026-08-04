@@ -12,6 +12,7 @@
 static NSUInteger const DefaultStartingPort = 10100;
 static NSUInteger const DefaultPortRange = 100;
 static BOOL FBFetchFullText = NO;
+static BOOL FBUseDomIdAsAccessibilityId = NO;
 
 @implementation FBConfiguration
 
@@ -84,6 +85,16 @@ static FBConfiguration *instance;
 - (void)setFetchFullText:(BOOL)fetchFullText
 {
   FBFetchFullText = fetchFullText;
+}
+
+- (BOOL)useDomIdAsAccessibilityId
+{
+  return FBUseDomIdAsAccessibilityId;
+}
+
+- (void)setUseDomIdAsAccessibilityId:(BOOL)useDomIdAsAccessibilityId
+{
+  FBUseDomIdAsAccessibilityId = useDomIdAsAccessibilityId;
 }
 
 - (NSRange)bindingPortRange

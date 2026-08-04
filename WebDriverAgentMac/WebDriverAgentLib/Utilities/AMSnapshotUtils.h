@@ -30,6 +30,28 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (NSString *)hashWithSnapshot:(id)snapshot;
 
+/**
+ Whether the current process is trusted for the public Accessibility API.
+ When NO, DOM identifier resolution is impossible, because attribute reads
+ fail with kAXErrorAPIDisabled, and callers must fall back to the default
+ behaviour.
+
+ @return YES if the process may use the Accessibility API
+ */
++ (BOOL)isAccessibilityTrusted;
+
+/**
+ Retrieves the DOM identifier of a WebKit (WKWebView) web element, by
+ reconstituting the underlying accessibility element from the snapshot's remote
+ token and reading its non-standard AXDOMIdentifier attribute. WebKit publishes
+ an element's HTML `id` there, while leaving the standard AXIdentifier empty.
+
+ @param snapshot snapshot instance to resolve the DOM identifier for
+ @return The DOM identifier, or nil for native elements, for elements without
+ an `id`, and whenever the process is not Accessibility-trusted
+ */
++ (nullable NSString *)domIdentifierWithSnapshot:(id)snapshot;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -33,6 +33,9 @@ NS_ASSUME_NONNULL_BEGIN
 /*! Whether to use custom snapshotting mechanism to fetch full element's text payload instead of the first 512 chars  */
 @property BOOL fetchFullText;
 
+/*! Whether to expose a WKWebView web element's DOM id as its accessibility id */
+@property BOOL useDomIdAsAccessibilityId;
+
 /**
  The range of ports that the HTTP Server should attempt to bind on launch
  */

@@ -366,7 +366,19 @@ static NSString *const FBAbstractMethodInvocationException = @"AbstractMethodInv
 
 + (NSString *)valueForElement:(id<XCUIElementSnapshot>)element
 {
-  return element.identifier;
+  NSString *identifier = element.identifier;
+  // Expose WebKit web nodes' DOM `id`, consistent with the find path and the
+  // element `identifier` attribute, so web content is visible when inspecting
+  // the page source. Empty-only, so native identifiers are never overridden.
+  if (0 == identifier.length
+      && FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId
+      && [AMSnapshotUtils isAccessibilityTrusted]) {
+    NSString *domIdentifier = [AMSnapshotUtils domIdentifierWithSnapshot:element];
+    if (domIdentifier.length > 0) {
+      return domIdentifier;
+    }
+  }
+  return identifier;
 }
 
 @end

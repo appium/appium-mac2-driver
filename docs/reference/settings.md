@@ -47,3 +47,31 @@ Whether to use the standard XCTest UI interruption handler, as opposed to disabl
 Turning this off may be useful for scenarios that interact with the interrupting element itself,
 instead of having its view be implicitly closed. Refer to [this WWDC presentation](https://developer.apple.com/videos/play/wwdc2020/10220/)
 to learn more about handling UI interruptions.
+
+## useDomIdAsAccessibilityId
+
+| Type | Default |
+| -- | -- |
+| `boolean` | `false` |
+
+Whether to expose a `WKWebView` web element's DOM `id` as its accessibility identifier, so that
+web content can be located by `accessibility id` the same way as on other platforms.
+
+Web content rendered by WebKit does not populate the standard accessibility identifier
+(`AXIdentifier`) that the `accessibility id` locator matches. Instead it publishes the element's
+HTML `id` through the non-standard `AXDOMIdentifier` attribute. With this setting enabled the
+driver reads `AXDOMIdentifier` and uses it as a fallback for `accessibility id` lookups, for the
+`identifier` attribute and for the page source. The fallback only applies to elements whose native
+identifier is empty, so locating native elements is never affected.
+
+Notes:
+
+- The process running the WebDriverAgent runner must be granted Accessibility permission
+  (System Settings → Privacy & Security → Accessibility). Without it the underlying attribute
+  reads fail with `kAXErrorAPIDisabled` and the driver transparently keeps the default behaviour.
+- Enabling this makes `accessibility id` lookups that find no native match inspect the
+  application's web nodes, which costs an extra snapshot walk. That is why it is off by default.
+- WebKit builds a web view's accessibility subtree lazily, so the very first lookup after a page
+  appears may need a retry, or a page source request, before the web content is present.
+
+ Available since driver version 4.1.0.

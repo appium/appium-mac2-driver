@@ -28,4 +28,7 @@ extern NSString* const AM_USE_DEFAULT_UI_INTERRUPTIONS_HANDLING_SETTING;
 /*! Whether to use custom snapshotting mechanism to fetch full element's text payload instead of the first 512 chars  */
 extern NSString* const AM_FETCH_FULL_TEXT;
 
+/*! Whether to expose a WKWebView web element's DOM id as its accessibility id */
+extern NSString* const AM_USE_DOM_ID_AS_ACCESSIBILITY_ID;
+
 NS_ASSUME_NONNULL_END
