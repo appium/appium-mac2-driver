@@ -52,19 +52,10 @@
     return [FBElementUtils stringValueWithValue:self.value];
   } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, identifier)]) {
     NSString *identifier = self.identifier;
-    // WebKit web nodes leave the standard AXIdentifier empty and publish their
-    // DOM `id` through AXDOMIdentifier. Report it, so elements found by DOM id
-    // also read back a stable identifier. Empty-only, so a native identifier is
-    // never overridden.
-    if (0 == identifier.length
-        && FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId
-        && [AMSnapshotUtils isAccessibilityTrusted]) {
-      NSString *domIdentifier = [AMSnapshotUtils domIdentifierWithSnapshot:[self snapshotWithError:nil]];
-      if (domIdentifier.length > 0) {
-        return domIdentifier;
-      }
+    if (identifier.length > 0 || !FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId) {
+      return identifier;
     }
-    return identifier;
+    return [AMSnapshotUtils wdIdentifierWithSnapshot:[self snapshotWithError:nil]] ?: identifier;
   }
   // This should not happen
   NSString *description = [NSString stringWithFormat:@"The attribute '%@' is unknown", wdAttributeName];

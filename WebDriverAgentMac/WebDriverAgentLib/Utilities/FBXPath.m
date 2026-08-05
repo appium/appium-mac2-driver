@@ -195,21 +195,10 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
     }
     [hashes addObject:attrValue];
   }
-  NSMutableArray<XCUIElement *> *matchingElements = [NSMutableArray array];
-  NSString *selfHash = [AMSnapshotUtils hashWithSnapshot:rootSnapshot];
-  if ([hashes containsObject:selfHash]) {
-    [matchingElements addObject:rootElement];
-    if (firstMatch) {
-      return matchingElements.copy;
-    }
-  }
-  NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id snapshot, NSDictionary *bindings) {
-    return [hashes containsObject:[AMSnapshotUtils hashWithSnapshot:snapshot]];
-  }];
-  [matchingElements addObjectsFromArray:[[rootElement descendantsMatchingType:XCUIElementTypeAny] matchingPredicate:predicate].am_allMatches];
-  return firstMatch && matchingElements.count > 0
-    ? @[matchingElements.firstObject]
-    : matchingElements.copy;
+  return [AMSnapshotUtils elementsWithHashes:hashes.copy
+                                 rootElement:rootElement
+                                rootSnapshot:rootSnapshot
+                       includeOnlyFirstMatch:firstMatch];
 }
 
 + (NSXMLDocument *)xmlRepresentationWithSnapshot:(id<XCUIElementSnapshot>)root
@@ -366,19 +355,7 @@ static NSString *const FBAbstractMethodInvocationException = @"AbstractMethodInv
 
 + (NSString *)valueForElement:(id<XCUIElementSnapshot>)element
 {
-  NSString *identifier = element.identifier;
-  // Expose WebKit web nodes' DOM `id`, consistent with the find path and the
-  // element `identifier` attribute, so web content is visible when inspecting
-  // the page source. Empty-only, so native identifiers are never overridden.
-  if (0 == identifier.length
-      && FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId
-      && [AMSnapshotUtils isAccessibilityTrusted]) {
-    NSString *domIdentifier = [AMSnapshotUtils domIdentifierWithSnapshot:element];
-    if (domIdentifier.length > 0) {
-      return domIdentifier;
-    }
-  }
-  return identifier;
+  return [AMSnapshotUtils wdIdentifierWithSnapshot:element];
 }
 
 @end

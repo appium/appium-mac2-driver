@@ -17,6 +17,7 @@
 #import <XCTest/XCTest.h>
 
 #import "AMIntegrationTestCase.h"
+#import "FBConfiguration.h"
 #import "FBTestMacros.h"
 #import "XCUIElement+AMAttributes.h"
 #import "XCUIElement+AMEditable.h"
@@ -74,6 +75,19 @@
   XCTAssertFalse(hasFocus);
   NSInteger type = [[button am_wdAttributeValueWithName:@"elementType"] integerValue];
   XCTAssertEqual(type, XCUIElementTypeButton);
+}
+
+- (void)testIdentifierAttributeWhileDomIdFallbackIsEnabled
+{
+  XCUIElement *closeButton = [self.testedApplication.buttons matchingIdentifier:@"_XCUI:CloseWindow"].firstMatch;
+  FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId = YES;
+  @try {
+    // A native identifier must never be replaced by a DOM one
+    NSString *identifier = [closeButton am_wdAttributeValueWithName:@"identifier"];
+    XCTAssertEqualObjects(identifier, @"_XCUI:CloseWindow");
+  } @finally {
+    FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId = NO;
+  }
 }
 
 - (void)testDisabledAttribute

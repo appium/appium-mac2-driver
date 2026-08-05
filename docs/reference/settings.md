@@ -66,12 +66,7 @@ identifier is empty, so locating native elements is never affected.
 
 Notes:
 
-- The process running the WebDriverAgent runner must be granted Accessibility permission
-  (System Settings → Privacy & Security → Accessibility). Without it the underlying attribute
-  reads fail with `kAXErrorAPIDisabled` and the driver transparently keeps the default behaviour.
 - Enabling this makes `accessibility id` lookups that find no native match inspect the
   application's web nodes, which costs an extra snapshot walk. That is why it is off by default.
 - WebKit builds a web view's accessibility subtree lazily, so the very first lookup after a page
   appears may need a retry, or a page source request, before the web content is present.
-
- Available since driver version 4.1.0.

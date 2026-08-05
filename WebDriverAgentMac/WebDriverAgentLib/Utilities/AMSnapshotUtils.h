@@ -31,26 +31,42 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)hashWithSnapshot:(id)snapshot;
 
 /**
- Whether the current process is trusted for the public Accessibility API.
- When NO, DOM identifier resolution is impossible, because attribute reads
- fail with kAXErrorAPIDisabled, and callers must fall back to the default
- behaviour.
+ Retrieves the identifier WebDriver clients should observe for the given snapshot.
+ This is the standard accessibility identifier, except for WebKit (WKWebView) web
+ nodes, which leave it empty and publish their HTML `id` through the non-standard
+ AXDOMIdentifier attribute instead. That one is only consulted while the
+ `useDomIdAsAccessibilityId` setting is enabled, so a native identifier is never
+ overridden.
+
+ @param snapshot snapshot instance to retrieve the identifier for
+ @return The identifier value or nil
+ */
++ (nullable NSString *)wdIdentifierWithSnapshot:(nullable id<XCUIElementSnapshot>)snapshot;
+
+/**
+ Whether this process may use the public Accessibility API, which DOM identifier
+ resolution depends on. XCUITest does NOT depend on it, so an untrusted runner keeps
+ automating native content normally while every AXDOMIdentifier read fails with
+ kAXErrorAPIDisabled. Callers use this to skip work that cannot succeed. The value is
+ cached, since TCC trust is fixed at process start.
 
  @return YES if the process may use the Accessibility API
  */
 + (BOOL)isAccessibilityTrusted;
 
 /**
- Retrieves the DOM identifier of a WebKit (WKWebView) web element, by
- reconstituting the underlying accessibility element from the snapshot's remote
- token and reading its non-standard AXDOMIdentifier attribute. WebKit publishes
- an element's HTML `id` there, while leaving the standard AXIdentifier empty.
+ Resolves snapshot hashes back to live elements below the given root element.
 
- @param snapshot snapshot instance to resolve the DOM identifier for
- @return The DOM identifier, or nil for native elements, for elements without
- an `id`, and whenever the process is not Accessibility-trusted
+ @param hashes snapshot hashes to resolve, as returned by hashWithSnapshot:
+ @param rootElement the element the hashes were collected from
+ @param rootSnapshot the snapshot of rootElement
+ @param firstMatch whether to only return the first matching element
+ @return The matching elements. Could be empty
  */
-+ (nullable NSString *)domIdentifierWithSnapshot:(id)snapshot;
++ (NSArray<XCUIElement *> *)elementsWithHashes:(NSArray<NSString *> *)hashes
+                                   rootElement:(XCUIElement *)rootElement
+                                  rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot
+                         includeOnlyFirstMatch:(BOOL)firstMatch;
 
 @end
 

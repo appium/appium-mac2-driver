@@ -17,6 +17,7 @@
 #import <XCTest/XCTest.h>
 
 #import "AMIntegrationTestCase.h"
+#import "FBConfiguration.h"
 #import "XCUIElement+FBFind.h"
 #import "XCUIElement+FBClassChain.h"
 
@@ -41,6 +42,25 @@
                                                                  shouldReturnAfterFirstMatch:NO];
   XCTAssertEqual(matches.count, 1);
   XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
+}
+
+- (void)testSingleDescendantWithIdentifierWhileDomIdFallbackIsEnabled
+{
+  FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId = YES;
+  @try {
+    // The application under test hosts no web content, so the fallback must find
+    // nothing extra and native identifiers must keep resolving as usual
+    NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingIdentifier:@"_XCUI:CloseWindow"
+                                                                   shouldReturnAfterFirstMatch:NO];
+    XCTAssertEqual(matches.count, 1);
+    XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
+
+    NSArray<XCUIElement *> *noMatches = [self.testedApplication fb_descendantsMatchingIdentifier:@"there_is_no_such_dom_id"
+                                                                     shouldReturnAfterFirstMatch:NO];
+    XCTAssertEqual(noMatches.count, 0);
+  } @finally {
+    FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId = NO;
+  }
 }
 
 - (void)testSingleDescendantWithClassName
