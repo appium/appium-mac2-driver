@@ -4,7 +4,7 @@ import url from 'node:url';
 
 import {strongbox} from '@appium/strongbox';
 import type {HTTPMethod, HTTPBody, ProxyResponse, ProxyOptions} from '@appium/types';
-import {JWProxy, errors} from 'appium/driver.js';
+import {WebDriverProxy, errors} from 'appium/driver.js';
 import {fs, logger, util, timing} from 'appium/support.js';
 import {waitForCondition} from 'asyncbox';
 import axios from 'axios';
@@ -270,7 +270,7 @@ class WDAMacProcess {
   }
 }
 
-export class WDAMacProxy extends JWProxy {
+export class WDAMacProxy extends WebDriverProxy {
   public didProcessExit: boolean = false;
 
   override async proxyCommand(
