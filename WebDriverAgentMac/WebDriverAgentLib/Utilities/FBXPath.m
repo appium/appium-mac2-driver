@@ -184,7 +184,7 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
     return @[];
   }
 
-  NSMutableArray<NSString *> *hashes = [NSMutableArray array];
+  NSMutableSet<NSString *> *hashes = [NSMutableSet set];
   for (NSXMLNode *node in nodes) {
     if (![node isKindOfClass:NSXMLElement.class]) {
       continue;

@@ -44,17 +44,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable NSString *)wdIdentifierWithSnapshot:(nullable id<XCUIElementSnapshot>)snapshot;
 
 /**
- Whether this process may use the public Accessibility API, which DOM identifier
- resolution depends on. XCUITest does NOT depend on it, so an untrusted runner keeps
- automating native content normally while every AXDOMIdentifier read fails with
- kAXErrorAPIDisabled. Callers use this to skip work that cannot succeed. The value is
- cached, since TCC trust is fixed at process start.
-
- @return YES if the process may use the Accessibility API
- */
-+ (BOOL)isAccessibilityTrusted;
-
-/**
  Resolves snapshot hashes back to live elements below the given root element.
 
  @param hashes snapshot hashes to resolve, as returned by hashWithSnapshot:
@@ -63,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param firstMatch whether to only return the first matching element
  @return The matching elements. Could be empty
  */
-+ (NSArray<XCUIElement *> *)elementsWithHashes:(NSArray<NSString *> *)hashes
++ (NSArray<XCUIElement *> *)elementsWithHashes:(NSSet<NSString *> *)hashes
                                    rootElement:(XCUIElement *)rootElement
                                   rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot
                          includeOnlyFirstMatch:(BOOL)firstMatch;

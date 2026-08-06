@@ -20,24 +20,30 @@
 
 /**
  Collects the hashes of snapshot tree nodes whose identifier equals the given value.
+
+ @return YES if the caller should stop descending, which happens as soon as a match is
+ found while only the first one is wanted
  */
-static void AMCollectIdentifierMatches(id<XCUIElementSnapshot> snapshot,
+static BOOL AMCollectIdentifierMatches(id<XCUIElementSnapshot> snapshot,
                                        NSString *accessibilityId,
                                        BOOL firstMatchOnly,
-                                       NSMutableArray<NSString *> *matchedHashes)
+                                       NSMutableSet<NSString *> *matchedHashes)
 {
-  if (nil == snapshot || (firstMatchOnly && matchedHashes.count > 0)) {
-    return;
+  if (nil == snapshot) {
+    return NO;
   }
   if ([[AMSnapshotUtils wdIdentifierWithSnapshot:snapshot] isEqualToString:accessibilityId]) {
     [matchedHashes addObject:[AMSnapshotUtils hashWithSnapshot:snapshot]];
     if (firstMatchOnly) {
-      return;
+      return YES;
     }
   }
   for (id<XCUIElementSnapshot> child in snapshot.children) {
-    AMCollectIdentifierMatches(child, accessibilityId, firstMatchOnly, matchedHashes);
+    if (AMCollectIdentifierMatches(child, accessibilityId, firstMatchOnly, matchedHashes)) {
+      return YES;
+    }
   }
+  return NO;
 }
 
 @interface XCUIElement (FBFindPrivate)
@@ -128,8 +134,7 @@ static void AMCollectIdentifierMatches(id<XCUIElementSnapshot> snapshot,
   [result addObjectsFromArray:[self.class fb_extractMatchingElementsFromQuery:query
                                                   shouldReturnAfterFirstMatch:shouldReturnAfterFirstMatch]];
   if (result.count > 0
-      || !FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId
-      || !AMSnapshotUtils.isAccessibilityTrusted) {
+      || !FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId) {
     return result.copy;
   }
   // WebKit leaves the standard accessibility identifier of web nodes empty, so the
@@ -148,7 +153,7 @@ static void AMCollectIdentifierMatches(id<XCUIElementSnapshot> snapshot,
   if (nil == rootSnapshot) {
     return @[];
   }
-  NSMutableArray<NSString *> *matchedHashes = [NSMutableArray array];
+  NSMutableSet<NSString *> *matchedHashes = [NSMutableSet set];
   AMCollectIdentifierMatches(rootSnapshot, accessibilityId, shouldReturnAfterFirstMatch, matchedHashes);
   return [AMSnapshotUtils elementsWithHashes:matchedHashes.copy
                                  rootElement:self

@@ -51,17 +51,23 @@
   } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, value)]) {
     return [FBElementUtils stringValueWithValue:self.value];
   } else if ([wdAttributeName isEqualToString:FBStringify(XCUIElement, identifier)]) {
-    NSString *identifier = self.identifier;
-    if (identifier.length > 0 || !FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId) {
-      return identifier;
-    }
-    return [AMSnapshotUtils wdIdentifierWithSnapshot:[self snapshotWithError:nil]] ?: identifier;
+    return self.am_wdIdentifier;
   }
   // This should not happen
   NSString *description = [NSString stringWithFormat:@"The attribute '%@' is unknown", wdAttributeName];
   @throw [NSException exceptionWithName:FBElementAttributeUnknownException
                                  reason:description
                                userInfo:@{}];
+}
+
+- (NSString *)am_wdIdentifier
+{
+  NSString *identifier = self.identifier;
+  // Snapshotting is not free, so only pay for it when the fallback can apply.
+  if (identifier.length > 0 || !FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId) {
+    return identifier;
+  }
+  return [AMSnapshotUtils wdIdentifierWithSnapshot:[self snapshotWithError:nil]] ?: identifier;
 }
 
 - (NSDictionary<NSString *, NSNumber *> *)am_rect

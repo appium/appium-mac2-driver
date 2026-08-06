@@ -47,10 +47,10 @@ static AMCreateWithRemoteTokenFn AMRemoteTokenFn(void)
 
 /**
  Whether this process may use the public Accessibility API. XCUITest itself does not
- need it, so an untrusted runner automates natively just fine while every
- AXDOMIdentifier read fails with kAXErrorAPIDisabled — checking up front keeps that
- case from walking whole element trees for nothing. TCC trust is fixed at process
- start, so the answer cannot change under us and is worth caching.
+ need it, so an untrusted runner keeps automating native content normally while every
+ AXDOMIdentifier read fails with kAXErrorAPIDisabled. Guarding the read turns a failing
+ syscall per element into a cached boolean. TCC trust is fixed at process start, so the
+ answer cannot change under us.
  */
 static BOOL AMIsAccessibilityTrusted(void)
 {
@@ -90,19 +90,13 @@ static BOOL AMIsAccessibilityTrusted(void)
 {
   NSString *identifier = snapshot.identifier;
   if (identifier.length > 0
-      || !FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId
-      || !AMIsAccessibilityTrusted()) {
+      || !FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId) {
     return identifier;
   }
   return [self domIdentifierWithSnapshot:snapshot] ?: identifier;
 }
 
-+ (BOOL)isAccessibilityTrusted
-{
-  return AMIsAccessibilityTrusted();
-}
-
-+ (NSArray<XCUIElement *> *)elementsWithHashes:(NSArray<NSString *> *)hashes
++ (NSArray<XCUIElement *> *)elementsWithHashes:(NSSet<NSString *> *)hashes
                                    rootElement:(XCUIElement *)rootElement
                                   rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot
                          includeOnlyFirstMatch:(BOOL)firstMatch
@@ -130,7 +124,7 @@ static BOOL AMIsAccessibilityTrusted(void)
 
 + (nullable NSString *)domIdentifierWithSnapshot:(nullable id)snapshot
 {
-  if (nil == snapshot) {
+  if (nil == snapshot || !AMIsAccessibilityTrusted()) {
     return nil;
   }
   AMCreateWithRemoteTokenFn createRef = AMRemoteTokenFn();

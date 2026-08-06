@@ -50,6 +50,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BOOL)am_hasKeyboardInputFocus;
 
+/**
+ The element's identifier as WebDriver reports it: the standard accessibility
+ identifier, falling back to the WebKit DOM identifier for web nodes, which leave the
+ standard one empty. The fallback only applies while useDomIdAsAccessibilityId is
+ enabled, and only takes a snapshot when it is actually needed.
+
+ @return The identifier. Could be an empty string
+ */
+- (NSString *)am_wdIdentifier;
+
 @end
 
 NS_ASSUME_NONNULL_END
