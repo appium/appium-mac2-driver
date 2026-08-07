@@ -37,10 +37,8 @@ static AMCreateWithRemoteTokenFn AMRemoteTokenFn(void)
   static AMCreateWithRemoteTokenFn fn = NULL;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
-    fn = (AMCreateWithRemoteTokenFn)dlsym(RTLD_DEFAULT, "_AXUIElementCreateWithRemoteToken");
-    if (NULL == fn) {
-      fn = (AMCreateWithRemoteTokenFn)dlsym(RTLD_DEFAULT, "AXUIElementCreateWithRemoteToken");
-    }
+    fn = (AMCreateWithRemoteTokenFn)(dlsym(RTLD_DEFAULT, "_AXUIElementCreateWithRemoteToken")
+                                     ?: dlsym(RTLD_DEFAULT, "AXUIElementCreateWithRemoteToken"));
   });
   return fn;
 }
