@@ -44,6 +44,18 @@ jobs:
       with:
         xcode-version: "${{ matrix.xcode_version }}"
 
+    - name: Check SIP status
+      id: sip
+      run: |
+        status="$(csrutil status)"
+        echo "$status"
+        if echo "$status" | grep -qi "enabled"; then
+          echo "sip_disabled=false" >> "$GITHUB_OUTPUT"
+          echo "::warning::System Integrity Protection appears enabled on ${{ matrix.os }}; skipping Accessibility TCC seeding and the IntegrationTests run on this runner."
+        else
+          echo "sip_disabled=true" >> "$GITHUB_OUTPUT"
+        fi
+
     - run: |
         appium_ver=$(node -p "require('./package.json').peerDependencies?.appium")
         npm install
@@ -55,3 +67,47 @@ jobs:
         appium driver doctor mac2
         popd
       name: Install and run doctor checks
+
+    - name: Grant Accessibility to Xcode Helper
+      if: steps.sip.outputs.sip_disabled == 'true'
+      run: |
+        helper="$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/Xcode Helper.app"
+        if [[ -d "$helper" ]]; then
+          ./scripts/ci/grant-accessibility.sh "$helper/Contents/MacOS/Xcode Helper"
+        else
+          echo "::warning::Xcode Helper.app not found at $helper"
+        fi
+
+    - name: Enable automation mode without authentication
+      if: steps.sip.outputs.sip_disabled == 'true'
+      run: sudo automationmodetool enable-automationmode-without-authentication || true
+
+    - name: Build IntegrationTests for testing
+      if: steps.sip.outputs.sip_disabled == 'true'
+      working-directory: WebDriverAgentMac
+      run: |
+        xcodebuild build-for-testing \
+          -project WebDriverAgentMac.xcodeproj \
+          -scheme IntegrationTests \
+          COMPILER_INDEX_STORE_ENABLE=NO
+
+    - name: Grant Accessibility to IntegrationTests-Runner.app
+      if: steps.sip.outputs.sip_disabled == 'true'
+      working-directory: WebDriverAgentMac
+      run: |
+        built_products_dir=$(xcodebuild -project WebDriverAgentMac.xcodeproj -scheme IntegrationTests -showBuildSettings -json | jq -r '.[0].buildSettings.BUILT_PRODUCTS_DIR')
+        runner_app=$(find "$built_products_dir" -maxdepth 1 -name '*-Runner.app' | head -1)
+        if [[ -z "$runner_app" ]]; then
+          echo "::error::Could not locate an IntegrationTests *-Runner.app under $built_products_dir"
+          exit 1
+        fi
+        runner_exe=$(find "$runner_app/Contents/MacOS" -maxdepth 1 -type f | head -1)
+        ../scripts/ci/grant-accessibility.sh "$runner_exe"
+
+    - name: Run IntegrationTests
+      if: steps.sip.outputs.sip_disabled == 'true'
+      working-directory: WebDriverAgentMac
+      run: |
+        xcodebuild test-without-building \
+          -project WebDriverAgentMac.xcodeproj \
+          -scheme IntegrationTests
