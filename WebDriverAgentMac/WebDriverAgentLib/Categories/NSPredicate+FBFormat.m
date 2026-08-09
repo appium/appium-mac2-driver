@@ -73,7 +73,8 @@
   NSComparisonPredicateOptions options = cp.options;
   return [NSPredicate predicateWithBlock:^BOOL(id snapshot, NSDictionary *bindings) {
     id amValue = [XCUIElement am_valueForPredicateAttributeName:amAttributeName target:snapshot] ?: @"";
-    id otherValue = [otherExpression expressionValueWithObject:snapshot context:nil];
+    NSMutableDictionary *context = bindings ? [bindings mutableCopy] : [NSMutableDictionary dictionary];
+    id otherValue = [otherExpression expressionValueWithObject:snapshot context:context];
     NSExpression *amExpression = [NSExpression expressionForConstantValue:amValue];
     NSExpression *otherConstantExpression = [NSExpression expressionForConstantValue:otherValue];
     NSComparisonPredicate *rewritten = amAttributeOnLeft

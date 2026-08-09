@@ -94,7 +94,12 @@ NSString *const AM_HAS_KEYBOARD_INPUT_FOCUS_ATTRIBUTE_NAME = @"amHasKeyboardInpu
     if (identifier.length > 0 || !FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId) {
       return identifier;
     }
-    return [AMSnapshotUtils domIdentifierWithSnapshot:target] ?: identifier;
+    // domIdentifierWithSnapshot: relies on snapshot-only key paths (_accessibilityElement._token),
+    // which a live XCUIElement does not have, so it must be snapshotted first.
+    id snapshotTarget = [target isKindOfClass:XCUIElement.class]
+      ? [(XCUIElement *)target snapshotWithError:nil]
+      : target;
+    return [AMSnapshotUtils domIdentifierWithSnapshot:snapshotTarget] ?: identifier;
   }
   if ([name isEqualToString:AM_RECT_ATTRIBUTE_NAME]) {
     return AMCGRectToDict([[target valueForKey:@"frame"] rectValue]);

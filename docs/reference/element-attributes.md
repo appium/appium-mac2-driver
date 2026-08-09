@@ -21,62 +21,7 @@ integer-encoded value.
 Corresponds to the element's XCTest [`identifier`](https://developer.apple.com/documentation/xcuiautomation/xcuielementattributes/identifier)
 value. Can be `null`.
 
-## amIdentifier
-
-> Example: `identifier`
-
-Non-standard, Mac2-driver-specific alias for [`identifier`](#identifier), with the exact same
-value and the exact same [`useDomIdAsAccessibilityId`](./settings.md#usedomidasaccessibilityid)-gated
-DOM id fallback behavior. Its only difference from `identifier` is that, unlike `identifier`,
-it can also be used in [predicate string](./locator-strategies.md#predicate-string) and
-[class chain](./locator-strategies.md#class-chain) locators (at any position in a class chain) to
-reliably match against, including web elements by their DOM id when the setting above is enabled,
-e.g. `amIdentifier == 'my-dom-id'`.
-
-## amRect
-
-> Example: `{"x": 0,"y": 0,"width": 100,"height": 100}`
-
-Non-standard, Mac2-driver-specific alias for [`frame`](#frame), with the exact same value. `frame`
-is a structured rectangle value that predicate/class chain expressions cannot compare against the
-driver's `{x, y, width, height}` dictionary shape shown above. `amRect` resolves to that same
-dictionary shape, so it can be used in
-[predicate string](./locator-strategies.md#predicate-string) and
-[class chain](./locator-strategies.md#class-chain) locators instead.
-
-## amText
-
-> Example: `my text`
-
-Non-standard, Mac2-driver-specific attribute with no native XCTest equivalent: the first non-empty
-value out of the element's `value`, `label`, `placeholderValue` and `title`, in that order, or an
-empty string if all of them are empty. Because there is no such attribute on the XCTest side, it
-can only be read through this alias, including from
-[predicate string](./locator-strategies.md#predicate-string) and
-[class chain](./locator-strategies.md#class-chain) locators.
-
-## amType
-
-> Example: `XCUIElementTypeButton`
-
-Non-standard, Mac2-driver-specific alias for [`elementType`](#elementtype), except as its string
-name (e.g. `XCUIElementTypeButton`) instead of the integer code. Unlike `elementType`, it can be
-compared against type name strings directly in
-[predicate string](./locator-strategies.md#predicate-string) and
-[class chain](./locator-strategies.md#class-chain) locators.
-
-## amHasKeyboardInputFocus
-
-> Example: `true`
-
-Non-standard, Mac2-driver-specific alias for [`focused`](#focused), with the exact same value.
-XCTest does not expose any focus-related property through its public element attributes protocol
-on macOS, so `focused` cannot be referenced directly from predicate/class chain expressions at
-all. `amHasKeyboardInputFocus` makes that value available to
-[predicate string](./locator-strategies.md#predicate-string) and
-[class chain](./locator-strategies.md#class-chain) locators.
-
-## label
+## label
 
 > Examples: `my label`
 
@@ -142,3 +87,58 @@ value.
 
 Corresponds to the element's XCTest [`frame`](https://developer.apple.com/documentation/xcuiautomation/xcuielementattributes/frame)
 value.
+
+## amIdentifier
+
+> Example: `my-dom-id`
+
+Non-standard, Mac2-driver-specific alias for [`identifier`](#identifier), with the exact same
+value and the exact same [`useDomIdAsAccessibilityId`](./settings.md#usedomidasaccessibilityid)-gated
+DOM id fallback behavior. Its only difference from `identifier` is that, unlike `identifier`,
+it can also be used in [predicate string](./locator-strategies.md#predicate-string) and
+[class chain](./locator-strategies.md#class-chain) locators (at any position in a class chain) to
+reliably match against, including web elements by their DOM id when the setting above is enabled,
+e.g. `amIdentifier == 'my-dom-id'`.
+
+## amRect
+
+> Example: `{"x": 0,"y": 0,"width": 100,"height": 100}`
+
+Non-standard, Mac2-driver-specific alias for [`frame`](#frame), with the exact same value. `frame`
+is a structured rectangle value that predicate/class chain expressions cannot compare against the
+driver's `{x, y, width, height}` dictionary shape shown above. `amRect` resolves to that same
+dictionary shape, so it can be used in
+[predicate string](./locator-strategies.md#predicate-string) and
+[class chain](./locator-strategies.md#class-chain) locators instead.
+
+## amText
+
+> Example: `my text`
+
+Non-standard, Mac2-driver-specific attribute with no native XCTest equivalent: the first non-empty
+value out of the element's `value`, `label`, `placeholderValue` and `title`, in that order, or an
+empty string if all of them are empty. Because there is no such attribute on the XCTest side, it
+can only be read through this alias, including from
+[predicate string](./locator-strategies.md#predicate-string) and
+[class chain](./locator-strategies.md#class-chain) locators.
+
+## amType
+
+> Example: `XCUIElementTypeButton`
+
+Non-standard, Mac2-driver-specific alias for [`elementType`](#elementtype), except as its string
+name (e.g. `XCUIElementTypeButton`) instead of the integer code. Unlike `elementType`, it can be
+compared against type name strings directly in
+[predicate string](./locator-strategies.md#predicate-string) and
+[class chain](./locator-strategies.md#class-chain) locators.
+
+## amHasKeyboardInputFocus
+
+> Example: `true`
+
+Non-standard, Mac2-driver-specific alias for [`focused`](#focused), with the exact same value.
+XCTest does not expose any focus-related property through its public element attributes protocol
+on macOS, so `focused` cannot be referenced directly from predicate/class chain expressions at
+all. `amHasKeyboardInputFocus` makes that value available to
+[predicate string](./locator-strategies.md#predicate-string) and
+[class chain](./locator-strategies.md#class-chain) locators.
