@@ -36,7 +36,9 @@
 
 /**
  Whether the given expression is a key path referencing one of the am_* predicate
- attributes (AM_IDENTIFIER_ATTRIBUTE_NAME and friends, see XCUIElement+AMAttributes).
+ attributes (AM_IDENTIFIER_ATTRIBUTE_NAME and friends, see XCUIElement+AMAttributes),
+ either directly (`amRect`) or through a nested key path into its resolved value
+ (`amRect.x`).
 
  @return The referenced am_* attribute name, or nil if it isn't one
  */
@@ -46,7 +48,9 @@
     return nil;
   }
   NSString *keyPath = expression.keyPath;
-  return [[XCUIElement am_predicateAttributeNames] containsObject:keyPath] ? keyPath : nil;
+  NSUInteger dotPos = [keyPath rangeOfString:@"."].location;
+  NSString *attributeName = NSNotFound == dotPos ? keyPath : [keyPath substringToIndex:dotPos];
+  return [[XCUIElement am_predicateAttributeNames] containsObject:attributeName] ? attributeName : nil;
 }
 
 /**
@@ -56,7 +60,9 @@
  predicates are evaluated per-node by matchingPredicate:/containingPredicate: (this is
  how the accessibility id DOM fallback already resolves elements), unlike plain
  comparison predicates whose key path resolution WebKit content does not reliably
- observe.
+ observe. A nested key path into the attribute's resolved value (e.g. `amRect.x`) is
+ resolved with a plain valueForKeyPath: lookup after the attribute value itself is
+ resolved.
 
  @param cp the original comparison predicate, known to reference an am_* attribute
  @param amAttributeName the am_* attribute name referenced
@@ -67,12 +73,20 @@
                                        amAttributeName:(NSString *)amAttributeName
                                       amAttributeOnLeft:(BOOL)amAttributeOnLeft
 {
+  NSExpression *amAttributeExpression = amAttributeOnLeft ? cp.leftExpression : cp.rightExpression;
   NSExpression *otherExpression = amAttributeOnLeft ? cp.rightExpression : cp.leftExpression;
+  NSString *amKeyPath = amAttributeExpression.keyPath;
+  NSUInteger dotPos = [amKeyPath rangeOfString:@"."].location;
+  NSString *amValueKeyPathSuffix = NSNotFound == dotPos ? nil : [amKeyPath substringFromIndex:(dotPos + 1)];
   NSComparisonPredicateModifier modifier = cp.comparisonPredicateModifier;
   NSPredicateOperatorType operatorType = cp.predicateOperatorType;
   NSComparisonPredicateOptions options = cp.options;
   return [NSPredicate predicateWithBlock:^BOOL(id snapshot, NSDictionary *bindings) {
-    id amValue = [XCUIElement am_valueForPredicateAttributeName:amAttributeName target:snapshot] ?: @"";
+    id amValue = [XCUIElement am_valueForPredicateAttributeName:amAttributeName target:snapshot];
+    if (amValueKeyPathSuffix.length > 0) {
+      amValue = [amValue valueForKeyPath:amValueKeyPathSuffix];
+    }
+    amValue = amValue ?: @"";
     NSMutableDictionary *context = bindings ? [bindings mutableCopy] : [NSMutableDictionary dictionary];
     id otherValue = [otherExpression expressionValueWithObject:snapshot context:context];
     NSExpression *amExpression = [NSExpression expressionForConstantValue:amValue];

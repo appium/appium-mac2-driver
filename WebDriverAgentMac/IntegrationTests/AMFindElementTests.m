@@ -18,6 +18,7 @@
 
 #import "AMIntegrationTestCase.h"
 #import "FBConfiguration.h"
+#import "XCUIElement+AMAttributes.h"
 #import "XCUIElement+FBFind.h"
 #import "XCUIElement+FBClassChain.h"
 
@@ -230,6 +231,31 @@ static NSTimeInterval const AMWebContentTimeout = 10.0;
   NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingPredicate:predicate
                                                                 shouldReturnAfterFirstMatch:NO];
   XCTAssertEqual(matches.count, 0);
+}
+
+- (void)testSingleDescendantWithPredicateMatchingNestedAmRectKeyPath
+{
+  // A nested key path into an am_* attribute's resolved value (amRect is a
+  // {x, y, width, height} dictionary) must resolve through the same block-predicate
+  // rewrite as a bare am_* reference, not fall through to native key path resolution.
+  NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingIdentifier:@"_XCUI:CloseWindow"
+                                                                 shouldReturnAfterFirstMatch:YES];
+  XCTAssertEqual(matches.count, 1);
+  NSNumber *x = matches.firstObject.am_rect[@"x"];
+  XCTAssertNotNil(x);
+
+  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"identifier == %@ AND amRect.x == %@",
+                            @"_XCUI:CloseWindow", x];
+  NSArray<XCUIElement *> *nestedMatches = [self.testedApplication fb_descendantsMatchingPredicate:predicate
+                                                                        shouldReturnAfterFirstMatch:NO];
+  XCTAssertEqual(nestedMatches.count, 1);
+  XCTAssertEqualObjects(nestedMatches.firstObject.identifier, @"_XCUI:CloseWindow");
+
+  NSPredicate *nonMatchingPredicate = [NSPredicate predicateWithFormat:@"identifier == %@ AND amRect.x == %@",
+                                       @"_XCUI:CloseWindow", @(x.doubleValue + 1000)];
+  NSArray<XCUIElement *> *noMatches = [self.testedApplication fb_descendantsMatchingPredicate:nonMatchingPredicate
+                                                                    shouldReturnAfterFirstMatch:NO];
+  XCTAssertEqual(noMatches.count, 0);
 }
 
 - (void)testSingleDescendantWithClassChainMatchingAmIdentifierOnLastSegmentWhileDomIdFallbackIsEnabled
