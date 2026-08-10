@@ -91,13 +91,14 @@ jobs:
           -project WebDriverAgentMac.xcodeproj \
           -scheme IntegrationTests \
           -destination 'platform=macOS' \
+          -derivedDataPath DerivedData \
           COMPILER_INDEX_STORE_ENABLE=NO
 
     - name: Grant Accessibility to IntegrationTests-Runner.app
       if: steps.sip.outputs.sip_disabled == 'true'
       working-directory: WebDriverAgentMac
       run: |
-        built_products_dir=$(xcodebuild -project WebDriverAgentMac.xcodeproj -scheme IntegrationTests -destination 'platform=macOS' -showBuildSettings -json | jq -r '.[0].buildSettings.BUILT_PRODUCTS_DIR')
+        built_products_dir=$(find DerivedData/Build/Products -maxdepth 1 -type d -name 'Debug*' | head -1)
         runner_app=$(find "$built_products_dir" -maxdepth 1 -name '*-Runner.app' | head -1)
         if [[ -z "$runner_app" ]]; then
           echo "::error::Could not locate an IntegrationTests *-Runner.app under $built_products_dir"
@@ -113,4 +114,5 @@ jobs:
         xcodebuild test-without-building \
           -project WebDriverAgentMac.xcodeproj \
           -scheme IntegrationTests \
-          -destination 'platform=macOS'
+          -destination 'platform=macOS' \
+          -derivedDataPath DerivedData
