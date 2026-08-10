@@ -21,6 +21,7 @@
     "lib",
     "build/lib",
     "scripts",
+    "!scripts/ci",
     "WebDriverAgentMac/Scripts",
     "WebDriverAgentMac/Cartfile",
     "WebDriverAgentMac/Cartfile.resolved",
