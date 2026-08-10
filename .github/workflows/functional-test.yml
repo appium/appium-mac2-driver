@@ -71,7 +71,8 @@ jobs:
     - name: Grant Accessibility to Xcode Helper
       if: steps.sip.outputs.sip_disabled == 'true'
       run: |
-        helper="$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/Xcode Helper.app"
+        developer_dir="$(xcode-select -p)"
+        helper="$developer_dir/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/Xcode Helper.app"
         if [[ -d "$helper" ]]; then
           ./scripts/ci/grant-accessibility.sh "$helper/Contents/MacOS/Xcode Helper"
         else
@@ -89,13 +90,14 @@ jobs:
         xcodebuild build-for-testing \
           -project WebDriverAgentMac.xcodeproj \
           -scheme IntegrationTests \
+          -destination 'platform=macOS' \
           COMPILER_INDEX_STORE_ENABLE=NO
 
     - name: Grant Accessibility to IntegrationTests-Runner.app
       if: steps.sip.outputs.sip_disabled == 'true'
       working-directory: WebDriverAgentMac
       run: |
-        built_products_dir=$(xcodebuild -project WebDriverAgentMac.xcodeproj -scheme IntegrationTests -showBuildSettings -json | jq -r '.[0].buildSettings.BUILT_PRODUCTS_DIR')
+        built_products_dir=$(xcodebuild -project WebDriverAgentMac.xcodeproj -scheme IntegrationTests -destination 'platform=macOS' -showBuildSettings -json | jq -r '.[0].buildSettings.BUILT_PRODUCTS_DIR')
         runner_app=$(find "$built_products_dir" -maxdepth 1 -name '*-Runner.app' | head -1)
         if [[ -z "$runner_app" ]]; then
           echo "::error::Could not locate an IntegrationTests *-Runner.app under $built_products_dir"
@@ -110,4 +112,5 @@ jobs:
       run: |
         xcodebuild test-without-building \
           -project WebDriverAgentMac.xcodeproj \
-          -scheme IntegrationTests
+          -scheme IntegrationTests \
+          -destination 'platform=macOS'
