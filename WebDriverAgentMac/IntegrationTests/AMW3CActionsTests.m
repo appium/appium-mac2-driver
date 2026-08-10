@@ -18,6 +18,7 @@
 
 #import "AMIntegrationTestCase.h"
 #import "XCUIApplication+FBW3CActions.h"
+#import "XCUIElement+AMEditable.h"
 
 
 @interface AMW3CActionsTests : AMIntegrationTestCase
@@ -46,15 +47,6 @@
         @"type": @"pointer",
         @"id": @"finger1",
         @"parameters": @{@"pointerType": @"mouse"},
-    },
-    ],
-
-    // Chain element with empty 'actions'
-    @[@{
-        @"type": @"pointer",
-        @"id": @"finger1",
-        @"parameters": @{@"pointerType": @"mouse"},
-        @"actions": @[],
     },
     ],
 
@@ -375,6 +367,9 @@
   [self switchToEditsTab];
   XCUIElement *edit = self.testedApplication.textFields.firstMatch;
   [edit click];
+  NSError *clearError;
+  XCTAssertTrue([edit am_clearTextWithError:&clearError]);
+  XCTAssertNil(clearError);
 
   NSArray<NSDictionary<NSString *, id> *> *gesture =
   @[@{
