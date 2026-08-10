@@ -335,6 +335,9 @@
   [self switchToEditsTab];
   XCUIElement *edit = self.testedApplication.textFields.firstMatch;
   [edit click];
+  NSError *clearError;
+  XCTAssertTrue([edit am_clearTextWithError:&clearError]);
+  XCTAssertNil(clearError);
 
   NSArray<NSDictionary<NSString *, id> *> *gesture =
   @[@{
