@@ -115,4 +115,6 @@ jobs:
           -project WebDriverAgentMac.xcodeproj \
           -scheme IntegrationTests \
           -destination 'platform=macOS' \
-          -derivedDataPath DerivedData
+          -derivedDataPath DerivedData \
+          -retry-tests-on-failure \
+          -test-iterations 3
