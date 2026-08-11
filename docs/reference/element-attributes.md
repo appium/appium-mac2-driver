@@ -100,6 +100,8 @@ it can also be used in [predicate string](./locator-strategies.md#predicate-stri
 reliably match against, including web elements by their DOM id when the setting above is enabled,
 e.g. `amIdentifier == 'my-dom-id'`.
 
+Available since driver version 4.2.0.
+
 ## amRect
 
 > Example: `{"x": 0,"y": 0,"width": 100,"height": 100}`
@@ -110,6 +112,8 @@ driver's `{x, y, width, height}` dictionary shape shown above. `amRect` resolves
 dictionary shape, so it can be used in
 [predicate string](./locator-strategies.md#predicate-string) and
 [class chain](./locator-strategies.md#class-chain) locators instead.
+
+Available since driver version 4.2.0.
 
 ## amText
 
@@ -122,6 +126,8 @@ can only be read through this alias, including from
 [predicate string](./locator-strategies.md#predicate-string) and
 [class chain](./locator-strategies.md#class-chain) locators.
 
+Available since driver version 4.2.0.
+
 ## amType
 
 > Example: `XCUIElementTypeButton`
@@ -131,6 +137,8 @@ name (e.g. `XCUIElementTypeButton`) instead of the integer code. Unlike `element
 compared against type name strings directly in
 [predicate string](./locator-strategies.md#predicate-string) and
 [class chain](./locator-strategies.md#class-chain) locators.
+
+Available since driver version 4.2.0.
 
 ## amHasKeyboardInputFocus
 
@@ -142,3 +150,5 @@ on macOS, so `focused` cannot be referenced directly from predicate/class chain 
 all. `amHasKeyboardInputFocus` makes that value available to
 [predicate string](./locator-strategies.md#predicate-string) and
 [class chain](./locator-strategies.md#class-chain) locators.
+
+Available since driver version 4.2.0.
