@@ -19,6 +19,7 @@
 #import "AMTCPSocket.h"
 #import "FBHTTPStatusCodes.h"
 #import "FBLogger.h"
+#import "FBResponsePayload.h"
 
 // Mirrors the safety net the previous CocoaHTTPServer-based stack provided: reject request
 // bodies above this size instead of buffering them fully in memory.
@@ -337,17 +338,9 @@ static NSData * _Nonnull AMUTF8Data(NSString *string)
 
   [FBLogger logFmt:@"Received request for %@ which we do not handle", path];
   RouteResponse *notFound = [RouteResponse new];
-  notFound.statusCode = kHTTPStatusCodeNotFound;
-  [notFound setHeader:@"Content-Type" value:@"application/json;charset=UTF-8"];
-  NSDictionary *errorBody = @{
-    @"value": @{
-      @"error": @"unknown command",
-      @"message": [NSString stringWithFormat:@"The requested resource could not be found, or a request was received using an HTTP method that is not supported by the mapped resource: %@ %@", method, path],
-      @"traceback": @"",
-    },
-  };
-  NSData *jsonData = [NSJSONSerialization dataWithJSONObject:errorBody options:(NSJSONWritingOptions)0 error:nil];
-  [notFound respondWithData:jsonData ?: [NSData data]];
+  id<FBResponsePayload> payload = FBResponseWithStatus([FBCommandStatus unknownCommandErrorWithMessage:nil
+                                                                                              traceback:nil]);
+  [payload dispatchWithResponse:notFound];
   [self writeResponse:notFound toClient:client];
 }
 
