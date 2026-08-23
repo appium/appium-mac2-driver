@@ -179,7 +179,11 @@ static NSString *const FBServerURLEndMarker = @"<-ServerURLHere";
       [FBSession.activeSession kill];
     } @finally {
       [response respondWithString:@"Shutting down"];
-      [self.delegate webServerDidRequestShutdown:self];
+      // Deferred so the "Shutting down" response is written to the client before
+      // webServerDidRequestShutdown: tears down the server's socket out from under it.
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [self.delegate webServerDidRequestShutdown:self];
+      });
     }
   }];
 
