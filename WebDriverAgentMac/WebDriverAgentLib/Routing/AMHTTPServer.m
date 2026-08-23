@@ -296,8 +296,9 @@ static NSData * _Nonnull AMUTF8Data(NSString *string)
         // De-chunking isn't implemented - fail loudly instead of silently misreading the body as
         // empty and desyncing the rest of the connection's request stream.
         RouteResponse *notImplemented = [RouteResponse new];
-        notImplemented.statusCode = kHTTPStatusCodeNotImplemented;
-        [notImplemented respondWithString:@"Chunked Transfer-Encoding is not supported"];
+        id<FBResponsePayload> notImplementedPayload = FBResponseWithStatus([FBCommandStatus unknownCommandErrorWithMessage:@"Chunked Transfer-Encoding is not supported"
+                                                                                                                  traceback:nil]);
+        [notImplementedPayload dispatchWithResponse:notImplemented];
         [self failClient:client withResponse:notImplemented];
         return;
       }
@@ -307,8 +308,9 @@ static NSData * _Nonnull AMUTF8Data(NSString *string)
         // Closes the connection after responding, since the rest of the oversized body is still
         // incoming.
         RouteResponse *tooLarge = [RouteResponse new];
-        tooLarge.statusCode = kHTTPStatusCodeRequestEntityTooLarge;
-        [tooLarge respondWithString:@"Request Entity Too Large"];
+        id<FBResponsePayload> tooLargePayload = FBResponseWithStatus([FBCommandStatus unknownCommandErrorWithMessage:@"Request Entity Too Large"
+                                                                                                            traceback:nil]);
+        [tooLargePayload dispatchWithResponse:tooLarge];
         [self failClient:client withResponse:tooLarge];
         return;
       }
