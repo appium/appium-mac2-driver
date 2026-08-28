@@ -72,7 +72,7 @@
     "teen_process": "^4.0.4"
   },
   "devDependencies": {
-    "@appium/docutils": "^2.5.0",
+    "@appium/docutils": "^3.0.0",
     "@appium/oxc-config": "^1.1.0",
     "@appium/semantic-release-config": "^1.1.0",
     "@appium/tsconfig": "^1.2.0",
