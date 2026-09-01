@@ -65,11 +65,11 @@
   "dependencies": {
     "@appium/strongbox": "^2.0.0",
     "@colors/colors": "^1.6.0",
-    "appium-xcode": "^7.1.0",
+    "appium-xcode": "^7.1.1",
     "asyncbox": "^6.4.3",
-    "axios": "^1.16.0",
+    "axios": "^1.18.0",
     "portscanner": "^2.2.0",
-    "teen_process": "^4.0.4"
+    "teen_process": "^4.2.0"
   },
   "devDependencies": {
     "@appium/docutils": "^3.0.0",
