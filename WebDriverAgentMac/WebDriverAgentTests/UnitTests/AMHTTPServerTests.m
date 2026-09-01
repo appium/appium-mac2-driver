@@ -203,6 +203,42 @@ static atomic_int gEchoedBodyLength;
   XCTAssertEqual(atomic_load(&gEchoedBodyLength), 5);
 }
 
+- (void)testRequestIsDispatchedWhenBodyArrivesInASeparateSegment
+{
+  // Regression test: the header block and body used to arrive in separate receive callbacks
+  // (e.g. a slow client, or a body that just misses the header's TCP segment). The pipelining
+  // loop in -processBufferForClient: must stop and wait for the rest of the body instead of
+  // re-checking the same unchanged buffer forever, which would spin the connection's serial
+  // queue and stall every other connection queued behind it.
+  int fd = socket(AF_INET, SOCK_STREAM, 0);
+  XCTAssertGreaterThanOrEqual(fd, 0);
+  int noSigpipe = 1;
+  setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &noSigpipe, sizeof(noSigpipe));
+  struct timeval tv = { .tv_sec = 5, .tv_usec = 0 };
+  setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
+  struct sockaddr_in addr = { .sin_family = AF_INET, .sin_port = htons(self.port) };
+  addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+  XCTAssertEqual(0, connect(fd, (struct sockaddr *)&addr, sizeof(addr)));
+
+  NSData *headerData = [@"POST /probe HTTP/1.1\r\nContent-Length: 5\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding];
+  NSData *bodyData = [@"hello" dataUsingEncoding:NSUTF8StringEncoding];
+  XCTAssertEqual((ssize_t)headerData.length, send(fd, headerData.bytes, headerData.length, 0));
+  // Long enough that the server's receive callback for the header block has already returned
+  // (waiting for the body) well before the body arrives in its own, later callback.
+  [NSThread sleepForTimeInterval:0.3];
+  XCTAssertEqual((ssize_t)bodyData.length, send(fd, bodyData.bytes, bodyData.length, 0));
+
+  char chunk[256];
+  ssize_t n = recv(fd, chunk, sizeof(chunk), 0);
+  NSString *response = n > 0 ? [[NSString alloc] initWithBytes:chunk length:(NSUInteger)n encoding:NSUTF8StringEncoding] : @"";
+  close(fd);
+
+  XCTAssertTrue([response containsString:@"200"], @"%@", response);
+  XCTAssertTrue([response containsString:@"probe-ok"], @"%@", response);
+  XCTAssertEqual(atomic_load(&gProbeHits), 1);
+  XCTAssertEqual(atomic_load(&gEchoedBodyLength), 5);
+}
+
 #pragma mark - HTTP/1.1 framing hardening
 
 - (void)testNonNumericContentLengthIsRejected
@@ -372,24 +408,25 @@ static atomic_int gEchoedBodyLength;
   [self.server stop:NO];
 
   // -stop: cancels connections asynchronously on its own queue, so poll for the teardown to land
-  // instead of a single blocking recv - a RST surfaces as an error, not a 0-byte read, so either
-  // outcome counts as "the connection is no longer usable".
+  // instead of a single blocking recv - a RST surfaces as a recv error, not a 0-byte read, so
+  // either outcome counts as "the connection is no longer usable". A recv timeout (EAGAIN) only
+  // means no bytes arrived yet - it says nothing about the connection being closed, so it must
+  // keep polling rather than being treated as (or masking a missing) termination.
   struct timeval shortTv = { .tv_sec = 0, .tv_usec = 200000 };
   setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &shortTv, sizeof(shortTv));
   NSDate *deadline = [NSDate dateWithTimeIntervalSinceNow:5.0];
   char buf[16];
-  ssize_t n = -1;
-  while (deadline.timeIntervalSinceNow > 0) {
-    n = recv(fd, buf, sizeof(buf), 0);
-    if (n <= 0 && errno != EAGAIN && errno != EWOULDBLOCK) {
-      break;
-    }
+  BOOL didObserveTermination = NO;
+  while (!didObserveTermination && deadline.timeIntervalSinceNow > 0) {
+    ssize_t n = recv(fd, buf, sizeof(buf), 0);
     if (n == 0) {
-      break;
+      didObserveTermination = YES;
+    } else if (n < 0 && errno != EAGAIN && errno != EWOULDBLOCK) {
+      didObserveTermination = YES;
     }
   }
   close(fd);
-  XCTAssertLessThanOrEqual(n, 0, @"the connection must be torn down once the server stops");
+  XCTAssertTrue(didObserveTermination, @"the connection must observe an EOF or a reset once the server stops");
 }
 
 - (void)testNoNewConnectionsAcceptedAfterStop

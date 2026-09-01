@@ -295,7 +295,12 @@ static NSData * _Nonnull AMUTF8Data(NSString *string)
       }
     }
 
-    [self dispatchBufferedRequestWithHeader:pending fromBuffer:buffer forClient:client];
+    if (![self dispatchBufferedRequestWithHeader:pending fromBuffer:buffer forClient:client]) {
+      // The body hasn't fully arrived yet - stop instead of re-checking the same unchanged
+      // buffer, which would spin forever on this connection's queue and starve every other
+      // connection's receive callbacks behind it.
+      return;
+    }
   }
 }
 
@@ -449,8 +454,9 @@ static NSData * _Nonnull AMUTF8Data(NSString *string)
 }
 
 // Consumes the already-parsed request from the head of the buffer and dispatches it, once its
-// whole body has arrived. Returns with the cached header left in place while it hasn't.
-- (void)dispatchBufferedRequestWithHeader:(AMPendingHTTPRequestHeader *)pending
+// whole body has arrived. Leaves the cached header in place and returns NO while it hasn't, so
+// the caller's pipelining loop knows to stop rather than re-checking the same unchanged buffer.
+- (BOOL)dispatchBufferedRequestWithHeader:(AMPendingHTTPRequestHeader *)pending
                                fromBuffer:(NSMutableData *)buffer
                                 forClient:(nw_connection_t)client
 {
@@ -458,7 +464,7 @@ static NSData * _Nonnull AMUTF8Data(NSString *string)
   if (buffer.length < totalRequestLength) {
     // Wait for the rest of the body to arrive - the parsed header stays cached, so this
     // doesn't re-scan/re-parse the header block on every subsequently arriving chunk.
-    return;
+    return NO;
   }
 
   NSData *body = pending.contentLength > 0 ? [buffer subdataWithRange:NSMakeRange(pending.bodyStart, pending.contentLength)] : [NSData data];
@@ -469,6 +475,7 @@ static NSData * _Nonnull AMUTF8Data(NSString *string)
   }
 
   [self dispatchMethod:pending.method pathAndQuery:pending.pathAndQuery body:body client:client];
+  return YES;
 }
 
 // Removes the client's buffered state and responds with a closing error response. Removing the
