@@ -192,7 +192,6 @@
 		71E109232D55EBD0008A800D /* AMScreenUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E109202D55EBD0008A800D /* AMScreenUtils.h */; };
 		7C7DDBDEEA5313473955510E /* RouteResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 99A3E0766E623F457DF47C5D /* RouteResponse.m */; };
 		9658B1E3C9D26CA3A0404106 /* AMHTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = A82A3B74608C4054AD527A2F /* AMHTTPServer.m */; };
-		A41512E27326B982798EF28D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49CEF327B6944452437BCBE5 /* Cocoa.framework */; };
 		AA013B2B4F9CF195D153D94C /* RouteResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = A5BB9951BC45450114B976DD /* RouteResponse.h */; };
 		B97F87AC2D986C39BAEF30F3 /* RouteRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = ED274030E15F4C90E5CD11EE /* RouteRequest.h */; };
 		C4C81277CD6B2937B649C04A /* AMTCPSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 56885A73AAD5DB0A05C9882D /* AMTCPSocket.m */; };
@@ -256,7 +255,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		49CEF327B6944452437BCBE5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		56444252148A6377AB34CC3B /* RouteRequest.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RouteRequest.m; sourceTree = "<group>"; };
 		56885A73AAD5DB0A05C9882D /* AMTCPSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = AMTCPSocket.m; sourceTree = "<group>"; };
 		6AFF6D8DC9CE6831D94DFA00 /* AMHTTPServerTests.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = AMHTTPServerTests.m; sourceTree = "<group>"; };
@@ -498,7 +496,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A41512E27326B982798EF28D /* Cocoa.framework in Frameworks */,
 				6997C4841DC0CE773A10731D /* WebDriverAgentLib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -820,7 +817,6 @@
 		93D73A724C72B50CCADD9BD6 /* OS X */ = {
 			isa = PBXGroup;
 			children = (
-				49CEF327B6944452437BCBE5 /* Cocoa.framework */,
 			);
 			name = "OS X";
 			sourceTree = "<group>";
