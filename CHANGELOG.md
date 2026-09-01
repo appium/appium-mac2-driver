@@ -1,3 +1,9 @@
+## [4.3.3](https://github.com/appium/appium-mac2-driver/compare/v4.3.2...v4.3.3) (2026-09-01)
+
+### Miscellaneous Chores
+
+* bump support-related dependencies ([#419](https://github.com/appium/appium-mac2-driver/issues/419)) ([60d1605](https://github.com/appium/appium-mac2-driver/commit/60d160545e5e6aadf484ea1784794dd42aaf407d))
+
 ## [4.3.2](https://github.com/appium/appium-mac2-driver/compare/v4.3.1...v4.3.2) (2026-08-31)
 
 ### Miscellaneous Chores
