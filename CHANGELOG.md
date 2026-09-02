@@ -1,3 +1,9 @@
+## [4.3.4](https://github.com/appium/appium-mac2-driver/compare/v4.3.3...v4.3.4) (2026-09-02)
+
+### Bug Fixes
+
+* harden AMHTTPServer's HTTP/1.1 request framing  ([#418](https://github.com/appium/appium-mac2-driver/issues/418)) ([0d487d6](https://github.com/appium/appium-mac2-driver/commit/0d487d66a7834edb077a90119da312743b7ac640))
+
 ## [4.3.3](https://github.com/appium/appium-mac2-driver/compare/v4.3.2...v4.3.3) (2026-09-01)
 
 ### Miscellaneous Chores
