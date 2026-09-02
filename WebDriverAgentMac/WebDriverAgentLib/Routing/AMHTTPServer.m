@@ -25,6 +25,33 @@
 // bodies above this size instead of buffering them fully in memory.
 static const NSUInteger kMaxHTTPRequestBodySize = 64 * 1024 * 1024;
 
+// Caps a request's header block, so a connection that never completes one cannot grow its buffer
+// without limit. Matches node's default --max-http-header-size.
+static const NSUInteger kMaxHTTPRequestHeaderSize = 16 * 1024;
+
+// ASCII decimal digits only. -integerValue must not be used here: it maps garbage silently
+// ("bogus" -> 0, "12abc" -> 12), desyncing the framing of every later request on the connection.
+static BOOL AMParseContentLength(NSString *value, NSUInteger *outLength)
+{
+  if (value.length < 1) {
+    return NO;
+  }
+  NSUInteger result = 0;
+  for (NSUInteger i = 0; i < value.length; i++) {
+    unichar c = [value characterAtIndex:i];
+    if (c < '0' || c > '9') {
+      return NO;
+    }
+    NSUInteger digit = (NSUInteger)(c - '0');
+    if (result > (NSUIntegerMax - digit) / 10) {
+      return NO;
+    }
+    result = result * 10 + digit;
+  }
+  *outLength = result;
+  return YES;
+}
+
 static NSData *AMCRLFCRLFData(void)
 {
   static NSData *data;
@@ -258,89 +285,197 @@ static NSData * _Nonnull AMUTF8Data(NSString *string)
     }
 
     if (nil == pending) {
-      NSRange headerEndRange = [buffer rangeOfData:AMCRLFCRLFData() options:(NSDataSearchOptions)0 range:NSMakeRange(0, buffer.length)];
-      if (NSNotFound == headerEndRange.location) {
-        // Wait for the rest of the header block to arrive.
+      pending = [self parsedRequestHeaderFromBuffer:buffer forClient:client];
+      if (nil == pending) {
+        // Either the header block is still incomplete, or it was rejected and answered already.
         return;
       }
-
-      NSData *headerData = [buffer subdataWithRange:NSMakeRange(0, headerEndRange.location)];
-      NSString *headerString = [[NSString alloc] initWithData:headerData encoding:NSUTF8StringEncoding];
-      NSArray<NSString *> *lines = [headerString componentsSeparatedByString:@"\r\n"];
-      if (lines.count < 1) {
-        [self respondBadRequestToClient:client];
-        return;
-      }
-
-      NSArray<NSString *> *requestLineParts = [lines.firstObject componentsSeparatedByString:@" "];
-      if (requestLineParts.count < 2) {
-        [self respondBadRequestToClient:client];
-        return;
-      }
-
-      NSMutableDictionary<NSString *, NSString *> *requestHeaders = [NSMutableDictionary dictionary];
-      for (NSUInteger i = 1; i < lines.count; i++) {
-        NSString *line = lines[i];
-        NSRange colonRange = [line rangeOfString:@":"];
-        if (NSNotFound == colonRange.location) {
-          continue;
-        }
-        NSString *name = [line substringToIndex:colonRange.location];
-        NSString *value = [[line substringFromIndex:colonRange.location + 1]
-                            stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceCharacterSet];
-        requestHeaders[name.lowercaseString] = value;
-      }
-
-      NSString *transferEncoding = requestHeaders[@"transfer-encoding"].lowercaseString;
-      if (nil != transferEncoding && NSNotFound != [transferEncoding rangeOfString:@"chunked"].location) {
-        // De-chunking isn't implemented - fail loudly instead of silently misreading the body as
-        // empty and desyncing the rest of the connection's request stream.
-        RouteResponse *notImplemented = [RouteResponse new];
-        id<FBResponsePayload> notImplementedPayload = FBResponseWithStatus([FBCommandStatus unknownCommandErrorWithMessage:@"Chunked Transfer-Encoding is not supported"
-                                                                                                                  traceback:nil]);
-        [notImplementedPayload dispatchWithResponse:notImplemented];
-        [self failClient:client withResponse:notImplemented];
-        return;
-      }
-
-      NSUInteger contentLength = (NSUInteger)requestHeaders[@"content-length"].integerValue;
-      if (contentLength > kMaxHTTPRequestBodySize) {
-        // Closes the connection after responding, since the rest of the oversized body is still
-        // incoming.
-        RouteResponse *tooLarge = [RouteResponse new];
-        id<FBResponsePayload> tooLargePayload = FBResponseWithStatus([FBCommandStatus unknownCommandErrorWithMessage:@"Request Entity Too Large"
-                                                                                                            traceback:nil]);
-        [tooLargePayload dispatchWithResponse:tooLarge];
-        [self failClient:client withResponse:tooLarge];
-        return;
-      }
-
-      pending = [AMPendingHTTPRequestHeader new];
-      pending.method = requestLineParts[0].uppercaseString;
-      pending.pathAndQuery = requestLineParts[1];
-      pending.bodyStart = headerEndRange.location + headerEndRange.length;
-      pending.contentLength = contentLength;
       @synchronized (self.connectionBuffers) {
         [self.pendingRequestHeaders setObject:pending forKey:client];
       }
     }
 
-    NSUInteger totalRequestLength = pending.bodyStart + pending.contentLength;
-    if (buffer.length < totalRequestLength) {
-      // Wait for the rest of the body to arrive - the parsed header stays cached above, so this
-      // doesn't re-scan/re-parse the header block on every subsequently arriving chunk.
+    if (![self dispatchBufferedRequestWithHeader:pending fromBuffer:buffer forClient:client]) {
+      // The body hasn't fully arrived yet - stop instead of re-checking the same unchanged
+      // buffer, which would spin forever on this connection's queue and starve every other
+      // connection's receive callbacks behind it.
       return;
     }
-
-    NSData *body = pending.contentLength > 0 ? [buffer subdataWithRange:NSMakeRange(pending.bodyStart, pending.contentLength)] : [NSData data];
-
-    @synchronized (self.connectionBuffers) {
-      [buffer replaceBytesInRange:NSMakeRange(0, totalRequestLength) withBytes:NULL length:0];
-      [self.pendingRequestHeaders removeObjectForKey:client];
-    }
-
-    [self dispatchMethod:pending.method pathAndQuery:pending.pathAndQuery body:body client:client];
   }
+}
+
+// Locates the CRLFCRLF that ends the buffered header block and bounds the block's size. Returns
+// NO when nothing can be parsed yet - either because more bytes are needed or because the block
+// was rejected, in which case the 400 has already been written.
+- (BOOL)findHeaderBlockEnd:(out NSRange *)outHeaderEndRange
+                  inBuffer:(NSMutableData *)buffer
+                 forClient:(nw_connection_t)client
+{
+  NSRange headerEndRange = [buffer rangeOfData:AMCRLFCRLFData() options:(NSDataSearchOptions)0 range:NSMakeRange(0, buffer.length)];
+  if (NSNotFound == headerEndRange.location) {
+    if (buffer.length > kMaxHTTPRequestHeaderSize) {
+      // Past any legitimate header block and still unterminated - stop buffering.
+      [self respondBadRequestToClient:client];
+    }
+    // Otherwise wait for the rest of the header block to arrive.
+    return NO;
+  }
+  if (headerEndRange.location > kMaxHTTPRequestHeaderSize) {
+    // The check above only fires while the terminator is missing; one large receive can deliver
+    // an oversized block with it, so bound the completed block too before parsing it.
+    [self respondBadRequestToClient:client];
+    return NO;
+  }
+  *outHeaderEndRange = headerEndRange;
+  return YES;
+}
+
+// Turns the header lines that follow the request line into a lowercase-keyed dictionary.
+// Returns nil for the malformed and ambiguous shapes, having written the 400 already.
+- (nullable NSDictionary<NSString *, NSString *> *)parsedHeaderFieldsFromLines:(NSArray<NSString *> *)lines
+                                                                    forClient:(nw_connection_t)client
+{
+  NSMutableDictionary<NSString *, NSString *> *requestHeaders = [NSMutableDictionary dictionary];
+  for (NSUInteger i = 1; i < lines.count; i++) {
+    NSString *line = lines[i];
+    if (0 == line.length) {
+      continue;
+    }
+    NSRange colonRange = [line rangeOfString:@":"];
+    if (NSNotFound == colonRange.location) {
+      // Malformed. Skipping it would drop what it meant to say: "Content-Length 5" would
+      // dispatch with an empty body, leaving its bytes to be parsed as another request.
+      [self respondBadRequestToClient:client];
+      return nil;
+    }
+    NSString *name = [line substringToIndex:colonRange.location];
+    // RFC 7230 (3.2.4): whitespace before the colon MUST be rejected. Storing "content-length "
+    // as its own key would drop the real header and desync the framing.
+    if (0 == name.length
+        || NSNotFound != [name rangeOfCharacterFromSet:NSCharacterSet.whitespaceAndNewlineCharacterSet].location) {
+      [self respondBadRequestToClient:client];
+      return nil;
+    }
+    NSString *value = [[line substringFromIndex:colonRange.location + 1]
+                        stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceCharacterSet];
+    NSString *normalizedName = name.lowercaseString;
+    // RFC 7230 (3.3.3): repeated framing fields are unrecoverable. Last-wins would let an empty
+    // "Transfer-Encoding:" mask an earlier "chunked", and the last Content-Length drive parsing.
+    if (([normalizedName isEqualToString:@"content-length"] || [normalizedName isEqualToString:@"transfer-encoding"])
+        && nil != requestHeaders[normalizedName]) {
+      [self respondBadRequestToClient:client];
+      return nil;
+    }
+    requestHeaders[normalizedName] = value;
+  }
+  return requestHeaders;
+}
+
+// Rejects framing this server cannot honour and resolves the declared body length from the
+// remaining framing headers. Returns NO having written the closing error response already.
+- (BOOL)resolveBodyLength:(out NSUInteger *)outBodyLength
+         fromHeaderFields:(NSDictionary<NSString *, NSString *> *)requestHeaders
+                forClient:(nw_connection_t)client
+{
+  NSString *transferEncoding = requestHeaders[@"transfer-encoding"];
+  if (nil != transferEncoding) {
+    // No transfer decoder is implemented at all, so any encoding (chunked or otherwise -
+    // including a value only introduced by a duplicate header overwriting "chunked" above) is
+    // rejected rather than risking the body being misread as empty and desyncing the rest of
+    // the connection's request stream.
+    RouteResponse *notImplemented = [RouteResponse new];
+    id<FBResponsePayload> notImplementedPayload = FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:@"Transfer-Encoding is not supported"
+                                                                                                                traceback:nil]);
+    [notImplementedPayload dispatchWithResponse:notImplemented];
+    [self failClient:client withResponse:notImplemented];
+    return NO;
+  }
+
+  NSString *contentLengthValue = requestHeaders[@"content-length"];
+  NSUInteger contentLength = 0;
+  if (nil != contentLengthValue && !AMParseContentLength(contentLengthValue, &contentLength)) {
+    // The body's extent is unknowable, so the connection cannot be resynced - reject and close.
+    [self respondBadRequestToClient:client];
+    return NO;
+  }
+  if (contentLength > kMaxHTTPRequestBodySize) {
+    // Closes the connection after responding, since the rest of the oversized body is still
+    // incoming.
+    RouteResponse *tooLarge = [RouteResponse new];
+    id<FBResponsePayload> tooLargePayload = FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:@"Request Entity Too Large"
+                                                                                                        traceback:nil]);
+    [tooLargePayload dispatchWithResponse:tooLarge];
+    [self failClient:client withResponse:tooLarge];
+    return NO;
+  }
+  *outBodyLength = contentLength;
+  return YES;
+}
+
+// Parses the request line and headers of the request at the head of the buffer. Returns nil
+// while the header block is still incomplete, and for a rejected one, which is answered here.
+- (nullable AMPendingHTTPRequestHeader *)parsedRequestHeaderFromBuffer:(NSMutableData *)buffer
+                                                             forClient:(nw_connection_t)client
+{
+  NSRange headerEndRange;
+  if (![self findHeaderBlockEnd:&headerEndRange inBuffer:buffer forClient:client]) {
+    return nil;
+  }
+
+  NSData *headerData = [buffer subdataWithRange:NSMakeRange(0, headerEndRange.location)];
+  NSString *headerString = [[NSString alloc] initWithData:headerData encoding:NSUTF8StringEncoding];
+  NSArray<NSString *> *lines = [headerString componentsSeparatedByString:@"\r\n"];
+  if (lines.count < 1) {
+    [self respondBadRequestToClient:client];
+    return nil;
+  }
+
+  NSArray<NSString *> *requestLineParts = [lines.firstObject componentsSeparatedByString:@" "];
+  if (requestLineParts.count < 2) {
+    [self respondBadRequestToClient:client];
+    return nil;
+  }
+
+  NSDictionary<NSString *, NSString *> *requestHeaders = [self parsedHeaderFieldsFromLines:lines forClient:client];
+  if (nil == requestHeaders) {
+    return nil;
+  }
+  NSUInteger contentLength = 0;
+  if (![self resolveBodyLength:&contentLength fromHeaderFields:requestHeaders forClient:client]) {
+    return nil;
+  }
+
+  AMPendingHTTPRequestHeader *pending = [AMPendingHTTPRequestHeader new];
+  pending.method = requestLineParts[0].uppercaseString;
+  pending.pathAndQuery = requestLineParts[1];
+  pending.bodyStart = headerEndRange.location + headerEndRange.length;
+  pending.contentLength = contentLength;
+  return pending;
+}
+
+// Consumes the already-parsed request from the head of the buffer and dispatches it, once its
+// whole body has arrived. Leaves the cached header in place and returns NO while it hasn't, so
+// the caller's pipelining loop knows to stop rather than re-checking the same unchanged buffer.
+- (BOOL)dispatchBufferedRequestWithHeader:(AMPendingHTTPRequestHeader *)pending
+                               fromBuffer:(NSMutableData *)buffer
+                                forClient:(nw_connection_t)client
+{
+  NSUInteger totalRequestLength = pending.bodyStart + pending.contentLength;
+  if (buffer.length < totalRequestLength) {
+    // Wait for the rest of the body to arrive - the parsed header stays cached, so this
+    // doesn't re-scan/re-parse the header block on every subsequently arriving chunk.
+    return NO;
+  }
+
+  NSData *body = pending.contentLength > 0 ? [buffer subdataWithRange:NSMakeRange(pending.bodyStart, pending.contentLength)] : [NSData data];
+
+  @synchronized (self.connectionBuffers) {
+    [buffer replaceBytesInRange:NSMakeRange(0, totalRequestLength) withBytes:NULL length:0];
+    [self.pendingRequestHeaders removeObjectForKey:client];
+  }
+
+  [self dispatchMethod:pending.method pathAndQuery:pending.pathAndQuery body:body client:client];
+  return YES;
 }
 
 // Removes the client's buffered state and responds with a closing error response. Removing the
@@ -359,7 +494,7 @@ static NSData * _Nonnull AMUTF8Data(NSString *string)
 - (void)respondBadRequestToClient:(nw_connection_t)client
 {
   RouteResponse *badRequest = [RouteResponse new];
-  id<FBResponsePayload> payload = FBResponseWithStatus([FBCommandStatus unknownCommandErrorWithMessage:@"The request could not be parsed as valid HTTP"
+  id<FBResponsePayload> payload = FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:@"The request could not be parsed as valid HTTP"
                                                                                               traceback:nil]);
   [payload dispatchWithResponse:badRequest];
   [self failClient:client withResponse:badRequest];

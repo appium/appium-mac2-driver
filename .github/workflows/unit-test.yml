@@ -84,3 +84,9 @@ jobs:
         xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme WebDriverAgent analyze
         popd
       name: Analyze WebDriverAgent
+    - run: |
+        pushd "$(pwd)"
+        cd WebDriverAgentMac
+        xcodebuild -project "WebDriverAgentMac.xcodeproj" -scheme UnitTests -destination 'platform=macOS' test
+        popd
+      name: Run WebDriverAgentLib unit tests
