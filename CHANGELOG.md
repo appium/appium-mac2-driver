@@ -1,3 +1,9 @@
+## [4.3.5](https://github.com/appium/appium-mac2-driver/compare/v4.3.4...v4.3.5) (2026-09-10)
+
+### Miscellaneous Chores
+
+* **ci:** publish via bundled dependencies instead of npm-shrinkwrap ([#420](https://github.com/appium/appium-mac2-driver/issues/420)) ([a2ac9d6](https://github.com/appium/appium-mac2-driver/commit/a2ac9d68a3fc4d5f5b8db5f254c29fe941685376))
+
 ## [4.3.4](https://github.com/appium/appium-mac2-driver/compare/v4.3.3...v4.3.4) (2026-09-02)
 
 ### Bug Fixes
