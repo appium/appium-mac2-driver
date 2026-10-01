@@ -93,8 +93,12 @@
   child.label = nil;
   child.enabled = NO;
   root.children = @[child, [self snapshot]];
-  NSXMLDocument *expected = [FBXPath xmlRepresentationWithSnapshot:root];
+  // Compare against the serialized legacy output, including XML parsing's
+  // normalization of literal whitespace inside attribute values.
+  NSString *legacyXml = [[FBXPath xmlRepresentationWithSnapshot:root] XMLStringWithOptions:NSXMLNodePrettyPrint];
   NSError *error = nil;
+  NSXMLDocument *expected = [[NSXMLDocument alloc] initWithXMLString:legacyXml options:0 error:&error];
+  XCTAssertNil(error);
   NSString *xml = [FBXPath xmlStringWithSnapshot:root];
   NSXMLDocument *actual = [[NSXMLDocument alloc] initWithXMLString:xml options:0 error:&error];
   XCTAssertNil(error);
@@ -102,7 +106,20 @@
   [self assertNode:actual.rootElement equalsNode:expected.rootElement];
   XCTAssertFalse([xml containsString:@"private_indexPath"]);
   XCTAssertEqualObjects([actual.rootElement attributeForName:@"label"].stringValue,
-                        @"Quotes \" & < > café 😀\n\t\r");
+                        @"Quotes \" & < > café 😀   ");
+}
+
+- (void)testStreamingSourceWithLeafRoot
+{
+  AMSourceSnapshot *root = [self snapshot];
+  NSError *error = nil;
+  NSXMLDocument *document = [[NSXMLDocument alloc] initWithXMLString:[FBXPath xmlStringWithSnapshot:root]
+                                                          options:0 error:&error];
+  XCTAssertNil(error);
+  XCTAssertEqualObjects(document.rootElement.name, @"XCUIElementTypeButton");
+  XCTAssertEqual(document.rootElement.childCount, 0);
+  XCTAssertEqualObjects([document.rootElement attributeForName:@"title"].stringValue, @"");
+  XCTAssertNil([document.rootElement attributeForName:@"placeholderValue"]);
 }
 
 - (void)testGeometryIsReadOncePerElement

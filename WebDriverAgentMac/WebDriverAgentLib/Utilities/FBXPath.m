@@ -9,8 +9,6 @@
 
 #import "FBXPath.h"
 
-#import <libxml/xmlwriter.h>
-
 #import "AMGeometryUtils.h"
 #import "AMSnapshotUtils.h"
 #import "FBConfiguration.h"
@@ -144,83 +142,43 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
   return [self xmlStringWithSnapshot:snapshot];
 }
 
-// Page source needs only bytes, whereas XPath evaluation still needs a document tree.
+// Serialize one native XML node at a time without retaining a document tree.
 + (nullable NSString *)xmlStringWithSnapshot:(id<XCUIElementSnapshot>)snapshot
 {
-  xmlBufferPtr buffer = NULL;
-  xmlTextWriterPtr writer = NULL;
-  @try {
-    buffer = xmlBufferCreate();
-    if (NULL == buffer) {
-      return nil;
-    }
-    writer = xmlNewTextWriterMemory(buffer, 0);
-    if (NULL == writer) {
-      return nil;
-    }
-    int rc = xmlTextWriterSetIndent(writer, 1);
-    if (rc >= 0) {
-      rc = xmlTextWriterSetIndentString(writer, BAD_CAST "  ");
-    }
-    if (rc >= 0) {
-      rc = xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
-    }
-    if (rc >= 0) {
-      rc = [self writeXmlWithSnapshot:snapshot writer:writer];
-    }
-    if (rc >= 0) {
-      rc = xmlTextWriterEndDocument(writer);
-    }
-    if (rc < 0) {
-      [FBLogger logFmt:@"Failed to serialize page source with libxml2. Error code: %d", rc];
-      return nil;
-    }
-    return [[NSString alloc] initWithBytes:xmlBufferContent(buffer)
-                                  length:(NSUInteger)xmlBufferLength(buffer)
-                                encoding:NSUTF8StringEncoding];
-  } @finally {
-    if (NULL != writer) {
-      xmlFreeTextWriter(writer);
-    }
-    if (NULL != buffer) {
-      xmlBufferFree(buffer);
-    }
-  }
+  NSMutableString *result = [NSMutableString stringWithString:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"];
+  [self appendXmlWithSnapshot:snapshot toString:result indentation:@""];
+  return result.copy;
 }
 
-+ (int)writeXmlWithSnapshot:(id<XCUIElementSnapshot>)snapshot writer:(xmlTextWriterPtr)writer
++ (void)appendXmlWithSnapshot:(id<XCUIElementSnapshot>)snapshot
+                     toString:(NSMutableString *)result
+                  indentation:(NSString *)indentation
 {
   NSString *type = [FBElementTypeTransformer stringWithElementType:snapshot.elementType];
-  int rc = xmlTextWriterStartElement(writer, (const xmlChar *)type.UTF8String);
-  if (rc < 0) {
-    return rc;
-  }
-  NSDictionary *rect = nil;
-  for (Class attributeCls in FBElementAttribute.supportedAttributes) {
-    NSString *value;
-    if ([attributeCls isSubclassOfClass:FBDimensionAttribute.class]) {
-      rect = rect ?: AMCGRectToDict(snapshot.frame);
-      value = [rect[[attributeCls name]] description];
+  NSArray<id<XCUIElementSnapshot>> *children = snapshot.children;
+  @autoreleasepool {
+    NSXMLElement *node = [NSXMLElement elementWithName:type];
+    [self recordElementAttributes:node forSnapshot:snapshot indexPath:nil];
+    // Native serialization handles escaping and keeps Foundation's existing
+    // attribute whitespace behavior. Compact empty nodes always end in "/>".
+    NSString *xml = [node XMLStringWithOptions:NSXMLNodeCompactEmptyElement];
+    [result appendString:indentation];
+    if (children.count == 0) {
+      [result appendString:xml];
     } else {
-      value = [attributeCls valueForElement:snapshot];
+      [result appendString:[xml substringToIndex:xml.length - 2]];
+      [result appendString:@">"];
     }
-    if (nil == value) {
-      continue;
-    }
-    NSString *safeValue = [self safeXmlStringWithString:value];
-    rc = xmlTextWriterWriteAttribute(writer, (const xmlChar *)[[attributeCls name] UTF8String],
-                                    (const xmlChar *)safeValue.UTF8String);
-    if (rc < 0) {
-      return rc;
-    }
+    [result appendString:@"\n"];
   }
-  for (id<XCUIElementSnapshot> child in snapshot.children) {
-    rc = [self writeXmlWithSnapshot:child writer:writer];
-    if (rc < 0) {
-      return rc;
-    }
+  if (children.count == 0) {
+    return;
   }
-  return xmlTextWriterEndElement(writer);
+  NSString *childIndentation = [indentation stringByAppendingString:@"  "];
+  for (id<XCUIElementSnapshot> child in children) {
+    [self appendXmlWithSnapshot:child toString:result indentation:childIndentation];
+  }
+  [result appendFormat:@"%@</%@>\n", indentation, type];
 }
 
 + (NSArray<XCUIElement *> *)matchesWithRootElement:(XCUIElement *)root
