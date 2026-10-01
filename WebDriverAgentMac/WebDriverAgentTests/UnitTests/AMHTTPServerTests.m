@@ -82,6 +82,14 @@ static atomic_int gEchoedBodyLength;
 // Returns everything received (nil on connect failure); *didClose reports whether EOF was seen.
 - (NSString *)responseForRawPayload:(NSData *)payload timeout:(NSTimeInterval)timeout didClose:(BOOL *)didClose
 {
+  return [self responseForRawPayload:payload timeout:timeout didClose:didClose halfClose:NO];
+}
+
+- (NSString *)responseForRawPayload:(NSData *)payload
+                           timeout:(NSTimeInterval)timeout
+                          didClose:(BOOL *)didClose
+                         halfClose:(BOOL)halfClose
+{
   *didClose = NO;
   int fd = socket(AF_INET, SOCK_STREAM, 0);
   if (fd < 0) {
@@ -109,6 +117,9 @@ static atomic_int gEchoedBodyLength;
     }
     bytes += sent;
     remaining -= (size_t)sent;
+  }
+  if (halfClose) {
+    shutdown(fd, SHUT_WR);
   }
   NSMutableData *received = [NSMutableData data];
   char chunk[4096];
@@ -201,6 +212,21 @@ static atomic_int gEchoedBodyLength;
   XCTAssertTrue([response containsString:@"probe-ok"], @"%@", response);
   XCTAssertEqual(atomic_load(&gProbeHits), 1);
   XCTAssertEqual(atomic_load(&gEchoedBodyLength), 5);
+}
+
+- (void)testRequestIsServedAfterClientHalfCloses
+{
+  // Route execution can finish after EOF, even though receive parsing is synchronous.
+  [self.server setRouteQueue:dispatch_queue_create("halfCloseRouteQueue", DISPATCH_QUEUE_SERIAL)];
+  [self.server get:@"/delayed" withBlock:^(RouteRequest *request, RouteResponse *response) {
+    [NSThread sleepForTimeInterval:0.1];
+    [response respondWithString:@"after-eof"];
+  }];
+  BOOL didClose;
+  NSData *payload = [@"GET /delayed HTTP/1.1\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding];
+  NSString *response = [self responseForRawPayload:payload timeout:5.0 didClose:&didClose halfClose:YES];
+  XCTAssertTrue([response containsString:@"200"], @"%@", response);
+  XCTAssertTrue([response containsString:@"after-eof"], @"%@", response);
 }
 
 - (void)testRequestIsDispatchedWhenBodyArrivesInASeparateSegment

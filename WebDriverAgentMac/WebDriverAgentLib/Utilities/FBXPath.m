@@ -9,6 +9,8 @@
 
 #import "FBXPath.h"
 
+#import <libxml/xmlwriter.h>
+
 #import "AMGeometryUtils.h"
 #import "AMSnapshotUtils.h"
 #import "FBConfiguration.h"
@@ -139,7 +141,86 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
     return nil;
   }
 
-  return [[self xmlRepresentationWithSnapshot:snapshot] XMLStringWithOptions:NSXMLNodePrettyPrint];
+  return [self xmlStringWithSnapshot:snapshot];
+}
+
+// Page source needs only bytes, whereas XPath evaluation still needs a document tree.
++ (nullable NSString *)xmlStringWithSnapshot:(id<XCUIElementSnapshot>)snapshot
+{
+  xmlBufferPtr buffer = NULL;
+  xmlTextWriterPtr writer = NULL;
+  @try {
+    buffer = xmlBufferCreate();
+    if (NULL == buffer) {
+      return nil;
+    }
+    writer = xmlNewTextWriterMemory(buffer, 0);
+    if (NULL == writer) {
+      return nil;
+    }
+    int rc = xmlTextWriterSetIndent(writer, 1);
+    if (rc >= 0) {
+      rc = xmlTextWriterSetIndentString(writer, BAD_CAST "  ");
+    }
+    if (rc >= 0) {
+      rc = xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
+    }
+    if (rc >= 0) {
+      rc = [self writeXmlWithSnapshot:snapshot writer:writer];
+    }
+    if (rc >= 0) {
+      rc = xmlTextWriterEndDocument(writer);
+    }
+    if (rc < 0) {
+      [FBLogger logFmt:@"Failed to serialize page source with libxml2. Error code: %d", rc];
+      return nil;
+    }
+    return [[NSString alloc] initWithBytes:xmlBufferContent(buffer)
+                                  length:(NSUInteger)xmlBufferLength(buffer)
+                                encoding:NSUTF8StringEncoding];
+  } @finally {
+    if (NULL != writer) {
+      xmlFreeTextWriter(writer);
+    }
+    if (NULL != buffer) {
+      xmlBufferFree(buffer);
+    }
+  }
+}
+
++ (int)writeXmlWithSnapshot:(id<XCUIElementSnapshot>)snapshot writer:(xmlTextWriterPtr)writer
+{
+  NSString *type = [FBElementTypeTransformer stringWithElementType:snapshot.elementType];
+  int rc = xmlTextWriterStartElement(writer, (const xmlChar *)type.UTF8String);
+  if (rc < 0) {
+    return rc;
+  }
+  NSDictionary *rect = nil;
+  for (Class attributeCls in FBElementAttribute.supportedAttributes) {
+    NSString *value;
+    if ([attributeCls isSubclassOfClass:FBDimensionAttribute.class]) {
+      rect = rect ?: AMCGRectToDict(snapshot.frame);
+      value = [rect[[attributeCls name]] description];
+    } else {
+      value = [attributeCls valueForElement:snapshot];
+    }
+    if (nil == value) {
+      continue;
+    }
+    NSString *safeValue = [self safeXmlStringWithString:value];
+    rc = xmlTextWriterWriteAttribute(writer, (const xmlChar *)[[attributeCls name] UTF8String],
+                                    (const xmlChar *)safeValue.UTF8String);
+    if (rc < 0) {
+      return rc;
+    }
+  }
+  for (id<XCUIElementSnapshot> child in snapshot.children) {
+    rc = [self writeXmlWithSnapshot:child writer:writer];
+    if (rc < 0) {
+      return rc;
+    }
+  }
+  return xmlTextWriterEndElement(writer);
 }
 
 + (NSArray<XCUIElement *> *)matchesWithRootElement:(XCUIElement *)root
@@ -219,8 +300,15 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
                     forSnapshot:(id<XCUIElementSnapshot>)snapshot
                       indexPath:(nullable NSString *)indexPath
 {
+  NSDictionary *rect = nil;
   for (Class attributeCls in FBElementAttribute.supportedAttributes) {
-    [attributeCls recordWithNode:node forElement:snapshot];
+    if ([attributeCls isSubclassOfClass:FBDimensionAttribute.class]) {
+      rect = rect ?: AMCGRectToDict(snapshot.frame);
+      [node addAttribute:[NSXMLNode attributeWithName:[attributeCls name]
+                                        stringValue:[rect[[attributeCls name]] description]]];
+    } else {
+      [attributeCls recordWithNode:node forElement:snapshot];
+    }
   }
 
   if (nil != indexPath) {
