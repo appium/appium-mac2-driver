@@ -333,14 +333,13 @@ export class WDAMacServer {
       if (caps.reqBasePath) {
         proxyOpts.reqBasePath = opts.reqBasePath;
       }
-      this._proxy = new WDAMacProxy(proxyOpts);
-      this._proxy.didProcessExit = false;
+      const proxy = new WDAMacProxy(proxyOpts);
+      this._proxy = proxy;
 
       if (this._process?.proc) {
         this._process.proc.on('exit', () => {
-          if (this._proxy) {
-            this._proxy.didProcessExit = true;
-          }
+          // An older process may exit after another launch has replaced the proxy.
+          proxy.didProcessExit = true;
         });
       }
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B182601DDE174B5AB2AD7701 /* AMXPathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B182601DDE174B5AB2AD7702 /* AMXPathTests.m */; };
 		06865ADF2DB5D6F7819CE2A8 /* AMTCPSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 702867B5FC5F035D1CC8E596 /* AMTCPSocket.h */; };
 		1E964A1C6D82FF8B9E17C024 /* AMHTTPServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AFF6D8DC9CE6831D94DFA00 /* AMHTTPServerTests.m */; };
 		2A45B1885FA76B1DE65D4E09 /* AMHTTPServer.h in Headers */ = {isa = PBXBuildFile; fileRef = B1768D9362DADEAF91410A76 /* AMHTTPServer.h */; };
@@ -255,6 +256,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B182601DDE174B5AB2AD7702 /* AMXPathTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMXPathTests.m; sourceTree = "<group>"; };
 		56444252148A6377AB34CC3B /* RouteRequest.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RouteRequest.m; sourceTree = "<group>"; };
 		56885A73AAD5DB0A05C9882D /* AMTCPSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = AMTCPSocket.m; sourceTree = "<group>"; };
 		6AFF6D8DC9CE6831D94DFA00 /* AMHTTPServerTests.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = AMHTTPServerTests.m; sourceTree = "<group>"; };
@@ -834,6 +836,7 @@
 			isa = PBXGroup;
 			children = (
 				6AFF6D8DC9CE6831D94DFA00 /* AMHTTPServerTests.m */,
+				B182601DDE174B5AB2AD7702 /* AMXPathTests.m */,
 				A14FCEABDDD9E126A7774B1F /* Info.plist */,
 			);
 			name = UnitTests;
@@ -1123,6 +1126,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E964A1C6D82FF8B9E17C024 /* AMHTTPServerTests.m in Sources */,
+				B182601DDE174B5AB2AD7701 /* AMXPathTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

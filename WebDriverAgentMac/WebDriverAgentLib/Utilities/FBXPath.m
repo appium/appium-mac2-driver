@@ -139,7 +139,46 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
     return nil;
   }
 
-  return [[self xmlRepresentationWithSnapshot:snapshot] XMLStringWithOptions:NSXMLNodePrettyPrint];
+  return [self xmlStringWithSnapshot:snapshot];
+}
+
+// Serialize one native XML node at a time without retaining a document tree.
++ (nullable NSString *)xmlStringWithSnapshot:(id<XCUIElementSnapshot>)snapshot
+{
+  NSMutableString *result = [NSMutableString stringWithString:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"];
+  [self appendXmlWithSnapshot:snapshot toString:result indentation:@""];
+  return result.copy;
+}
+
++ (void)appendXmlWithSnapshot:(id<XCUIElementSnapshot>)snapshot
+                     toString:(NSMutableString *)result
+                  indentation:(NSString *)indentation
+{
+  NSString *type = [FBElementTypeTransformer stringWithElementType:snapshot.elementType];
+  NSArray<id<XCUIElementSnapshot>> *children = snapshot.children;
+  @autoreleasepool {
+    NSXMLElement *node = [NSXMLElement elementWithName:type];
+    [self recordElementAttributes:node forSnapshot:snapshot indexPath:nil];
+    // Native serialization handles escaping and keeps Foundation's existing
+    // attribute whitespace behavior. Compact empty nodes always end in "/>".
+    NSString *xml = [node XMLStringWithOptions:NSXMLNodeCompactEmptyElement];
+    [result appendString:indentation];
+    if (children.count == 0) {
+      [result appendString:xml];
+    } else {
+      [result appendString:[xml substringToIndex:xml.length - 2]];
+      [result appendString:@">"];
+    }
+    [result appendString:@"\n"];
+  }
+  if (children.count == 0) {
+    return;
+  }
+  NSString *childIndentation = [indentation stringByAppendingString:@"  "];
+  for (id<XCUIElementSnapshot> child in children) {
+    [self appendXmlWithSnapshot:child toString:result indentation:childIndentation];
+  }
+  [result appendFormat:@"%@</%@>\n", indentation, type];
 }
 
 + (NSArray<XCUIElement *> *)matchesWithRootElement:(XCUIElement *)root
@@ -219,8 +258,15 @@ static NSString *const kXMLIndexPathKey = @"private_indexPath";
                     forSnapshot:(id<XCUIElementSnapshot>)snapshot
                       indexPath:(nullable NSString *)indexPath
 {
+  NSDictionary *rect = nil;
   for (Class attributeCls in FBElementAttribute.supportedAttributes) {
-    [attributeCls recordWithNode:node forElement:snapshot];
+    if ([attributeCls isSubclassOfClass:FBDimensionAttribute.class]) {
+      rect = rect ?: AMCGRectToDict(snapshot.frame);
+      [node addAttribute:[NSXMLNode attributeWithName:[attributeCls name]
+                                        stringValue:[rect[[attributeCls name]] description]]];
+    } else {
+      [attributeCls recordWithNode:node forElement:snapshot];
+    }
   }
 
   if (nil != indexPath) {
