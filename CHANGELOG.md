@@ -1,3 +1,9 @@
+## [4.3.6](https://github.com/appium/appium-mac2-driver/compare/v4.3.5...v4.3.6) (2026-10-02)
+
+### Bug Fixes
+
+* Isolated process-exit state, page-source xml, Reused geometry during XML serialization ([#423](https://github.com/appium/appium-mac2-driver/issues/423)) ([b4dc1f8](https://github.com/appium/appium-mac2-driver/commit/b4dc1f8aa403e18b3b6c1807403144fd19552492))
+
 ## [4.3.5](https://github.com/appium/appium-mac2-driver/compare/v4.3.4...v4.3.5) (2026-09-10)
 
 ### Miscellaneous Chores

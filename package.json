@@ -1,6 +1,6 @@
 {
   "name": "appium-mac2-driver",
-  "version": "4.3.5",
+  "version": "4.3.6",
   "description": "XCTest-based Appium driver for macOS apps automation",
   "keywords": [
     "XCTest",
