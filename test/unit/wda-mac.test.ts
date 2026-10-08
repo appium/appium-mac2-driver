@@ -96,7 +96,9 @@ describe('WDAMacServer session cleanup', () => {
     let count = 0;
     t.mock.method(WDAMacProxy.prototype, 'command', async function (this: WDAMacProxy, url: string, method: string) {
       if (url === '/session' && method === 'POST') {
+        // the base proxy stores the new id, and the W3C response value carries it too
         this.sessionId = `WDA-${++count}`;
+        return {sessionId: this.sessionId, capabilities: {}};
       } else if (method === 'DELETE') {
         deleted.push(url);
       }
@@ -104,6 +106,45 @@ describe('WDAMacServer session cleanup', () => {
     });
     return deleted;
   }
+
+  it('keeps the id of its own session when session starts overlap (remote server)', async (t) => {
+    const deleted: string[] = [];
+    const pending: Array<(id: string) => void> = [];
+    t.mock.method(WDAMacProxy.prototype, 'command', async function (this: WDAMacProxy, url: string, method: string) {
+      if (url === '/session' && method === 'POST') {
+        const id = await new Promise<string>((resolve) => pending.push(resolve));
+        this.sessionId = id;
+        return {sessionId: id, capabilities: {}};
+      }
+      if (method === 'DELETE') {
+        deleted.push(url);
+      }
+      return {};
+    });
+    const waitForPending = async (n: number) => {
+      while (pending.length < n) {
+        await new Promise((resolve) => setImmediate(resolve));
+      }
+    };
+    const server = new WDAMacServer();
+    const caps = {webDriverAgentMacUrl: 'http://127.0.0.1:10101'};
+    const startFirst = server.startSession(caps);
+    await waitForPending(1);
+    const startSecond = server.startSession(caps);
+    await waitForPending(2);
+    // the second creation response arrives before the first one
+    pending[1]('WDA-2');
+    const second = await startSecond;
+    pending[0]('WDA-1');
+    const first = await startFirst;
+    assert.equal(first, 'WDA-1');
+    assert.equal(second, 'WDA-2');
+
+    await server.stopSession(first);
+    assert.deepEqual(deleted, []);
+    await server.stopSession(second);
+    assert.deepEqual(deleted, ['/session/WDA-2']);
+  });
 
   it('does not delete a newer session when an older one stops (remote server)', async (t) => {
     const deleted = mockWda(t);

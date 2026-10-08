@@ -387,13 +387,16 @@ export class WDAMacServer {
       log.info('The host process has already been listening. Proceeding with session creation');
     }
 
-    await this._proxy.command('/session', 'POST', {
+    // Another startSession() can replace or reuse this._proxy while this request waits for its
+    // response, so the id comes from this request's own response and not from the shared proxy.
+    const response = (await this._proxy.command('/session', 'POST', {
       capabilities: {
         firstMatch: [{}],
         alwaysMatch: caps,
       },
-    });
-    return this._proxy.sessionId ?? null;
+    })) as {sessionId?: unknown} | null | undefined;
+    const sessionId = response?.sessionId;
+    return typeof sessionId === 'string' && sessionId ? sessionId : null;
   }
 
   /**
