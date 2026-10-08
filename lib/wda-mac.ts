@@ -301,7 +301,13 @@ export class WDAMacServer {
     return this._proxy;
   }
 
-  async startSession(caps: StartSessionCapabilities, opts: SessionOptions = {}): Promise<void> {
+  /**
+   * Starts a new WebDriverAgentMac session.
+   *
+   * @returns The id of the created WebDriverAgentMac session, or null if the server did not report one.
+   * Pass it to {@link stopSession} so that only this session gets deleted.
+   */
+  async startSession(caps: StartSessionCapabilities, opts: SessionOptions = {}): Promise<string | null> {
     this._serverStartupTimeoutMs = caps.serverStartupTimeout ?? this._serverStartupTimeoutMs;
 
     this._isProxyingToRemoteServer = !!caps.webDriverAgentMacUrl;
@@ -387,11 +393,27 @@ export class WDAMacServer {
         alwaysMatch: caps,
       },
     });
+    return this._proxy.sessionId ?? null;
   }
 
-  async stopSession(): Promise<void> {
+  /**
+   * Deletes the WebDriverAgentMac session.
+   *
+   * @param sessionId - The id returned by {@link startSession}. WebDriverAgentMac keeps a single
+   * active session, so a newer session replaces this one. If the active session is not this one,
+   * it belongs to another Appium session and is left alone.
+   */
+  async stopSession(sessionId?: string | null): Promise<void> {
     if (!this._isProxyingToRemoteServer && !this._process?.isRunning) {
       log.info(`Mac2Driver session cannot be stopped, because the server is not running`);
+      return;
+    }
+
+    if (sessionId && this._proxy?.sessionId && this._proxy.sessionId !== sessionId) {
+      log.info(
+        `Not deleting the Mac2Driver session '${this._proxy.sessionId}', because it belongs to another session. ` +
+          `The session '${sessionId}' has already been replaced by it`,
+      );
       return;
     }
 

@@ -88,3 +88,63 @@ describe('WDAMacServer launch isolation', () => {
     assert.equal(server.proxy.didProcessExit, false);
   });
 });
+
+describe('WDAMacServer session cleanup', () => {
+  // WebDriverAgentMac keeps a single active session: a new session replaces the previous one
+  function mockWda(t: any): string[] {
+    const deleted: string[] = [];
+    let count = 0;
+    t.mock.method(WDAMacProxy.prototype, 'command', async function (this: WDAMacProxy, url: string, method: string) {
+      if (url === '/session' && method === 'POST') {
+        this.sessionId = `WDA-${++count}`;
+      } else if (method === 'DELETE') {
+        deleted.push(url);
+      }
+      return {};
+    });
+    return deleted;
+  }
+
+  it('does not delete a newer session when an older one stops (remote server)', async (t) => {
+    const deleted = mockWda(t);
+    const server = new WDAMacServer();
+    const caps = {webDriverAgentMacUrl: 'http://127.0.0.1:10101'};
+    const first = await server.startSession(caps);
+    const second = await server.startSession(caps);
+    assert.equal(first, 'WDA-1');
+    assert.equal(second, 'WDA-2');
+
+    await server.stopSession(first);
+    assert.deepEqual(deleted, []);
+    await server.stopSession(second);
+    assert.deepEqual(deleted, ['/session/WDA-2']);
+  });
+
+  it('does not delete a newer session when an older one stops (shared host process)', async (t) => {
+    const deleted = mockWda(t);
+    const server = new WDAMacServer();
+    (server as any)._process = {
+      proc: new EventEmitter(),
+      // the host process is already running, so both sessions share one proxy
+      init: async () => false,
+      isRunning: true,
+      pid: null,
+      listChildrenPids: async () => [],
+    };
+    const first = await server.startSession({});
+    const second = await server.startSession({});
+
+    await server.stopSession(first);
+    assert.deepEqual(deleted, []);
+    await server.stopSession(second);
+    assert.deepEqual(deleted, ['/session/WDA-2']);
+  });
+
+  it('deletes the active session when no session id is given', async (t) => {
+    const deleted = mockWda(t);
+    const server = new WDAMacServer();
+    await server.startSession({webDriverAgentMacUrl: 'http://127.0.0.1:10101'});
+    await server.stopSession();
+    assert.deepEqual(deleted, ['/session/WDA-1']);
+  });
+});

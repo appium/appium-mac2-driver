@@ -116,6 +116,7 @@ export class Mac2Driver
 
   private isProxyActive: boolean = false;
   private _wda: WDAMacServer | null = null;
+  private _wdaSessionId: string | null = null;
 
   constructor(opts: InitialOpts = {} as InitialOpts) {
     super(opts);
@@ -214,7 +215,7 @@ export class Mac2Driver
           log.info(`Prerun script output: ${output}`);
         }
       }
-      await this._wda.startSession(caps, {
+      this._wdaSessionId = await this._wda.startSession(caps, {
         reqBasePath: this.basePath,
       });
     } catch (e: any) {
@@ -236,8 +237,10 @@ export class Mac2Driver
       }
       await this._videoChunksBroadcaster.shutdown(5000);
     }
-    if (this._wda) {
-      await this.wda.stopSession();
+    // Only delete the WebDriverAgentMac session this driver created. Another Appium session
+    // may own the active one (e.g. when this session failed to start or was replaced).
+    if (this._wda && this._wdaSessionId) {
+      await this.wda.stopSession(this._wdaSessionId);
     }
 
     const postrun = this.opts.postrun as PostrunCapability | undefined;
@@ -264,6 +267,7 @@ export class Mac2Driver
 
   private resetState(): void {
     this._wda = null;
+    this._wdaSessionId = null;
     this.isProxyActive = false;
     this._videoChunksBroadcaster = new nativeScreenRecordingCommands.NativeVideoChunksBroadcaster(
       this.eventEmitter,
