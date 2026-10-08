@@ -44,7 +44,9 @@ describe('WDAMacServer', () => {
 
 describe('WDAMacServer launch isolation', () => {
   it('keeps a late exit from an earlier launch off the new proxy', async (t) => {
-    t.mock.method(WDAMacProxy.prototype, 'command', async () => ({}));
+    t.mock.method(WDAMacProxy.prototype, 'command', async (_url: string, method: string) =>
+      method === 'POST' ? {sessionId: 'WDA-1', capabilities: {}} : {},
+    );
     const server = new WDAMacServer();
     const oldProcess = new EventEmitter();
     const processStub = {
@@ -58,6 +60,7 @@ describe('WDAMacServer launch isolation', () => {
     const oldProxy = server.proxy;
     oldProcess.emit('exit', 1);
     assert.equal(oldProxy.didProcessExit, true);
+    await server.stopSession();
 
     const newProcess = new EventEmitter();
     processStub.proc = newProcess;
@@ -70,7 +73,9 @@ describe('WDAMacServer launch isolation', () => {
   });
 
   it('keeps a local process exit off a replacement remote proxy', async (t) => {
-    t.mock.method(WDAMacProxy.prototype, 'command', async () => ({}));
+    t.mock.method(WDAMacProxy.prototype, 'command', async (_url: string, method: string) =>
+      method === 'POST' ? {sessionId: 'WDA-1', capabilities: {}} : {},
+    );
     const server = new WDAMacServer();
     const proc = new EventEmitter();
     (server as any)._process = {
@@ -82,6 +87,7 @@ describe('WDAMacServer launch isolation', () => {
     };
     await server.startSession({});
     const localProxy = server.proxy;
+    await server.stopSession();
     await server.startSession({webDriverAgentMacUrl: 'http://localhost:10101'});
     proc.emit('exit', 1);
     assert.equal(localProxy.didProcessExit, true);
@@ -107,78 +113,108 @@ describe('WDAMacServer session cleanup', () => {
     return deleted;
   }
 
-  it('keeps the id of its own session when session starts overlap (remote server)', async (t) => {
+  it('rejects an overlapping creation before it can replace the pending session', async (t) => {
+    let finish: ((value: unknown) => void) | undefined;
+    let creations = 0;
     const deleted: string[] = [];
-    const pending: Array<(id: string) => void> = [];
     t.mock.method(WDAMacProxy.prototype, 'command', async function (this: WDAMacProxy, url: string, method: string) {
       if (url === '/session' && method === 'POST') {
-        const id = await new Promise<string>((resolve) => pending.push(resolve));
-        this.sessionId = id;
-        return {sessionId: id, capabilities: {}};
+        creations++;
+        await new Promise((resolve) => {
+          finish = resolve;
+        });
+        this.sessionId = 'WDA-1';
+        return {sessionId: 'WDA-1', capabilities: {}};
       }
       if (method === 'DELETE') {
         deleted.push(url);
       }
       return {};
     });
-    const waitForPending = async (n: number) => {
-      while (pending.length < n) {
-        await new Promise((resolve) => setImmediate(resolve));
-      }
-    };
     const server = new WDAMacServer();
     const caps = {webDriverAgentMacUrl: 'http://127.0.0.1:10101'};
-    const startFirst = server.startSession(caps);
-    await waitForPending(1);
-    const startSecond = server.startSession(caps);
-    await waitForPending(2);
-    // the second creation response arrives before the first one
-    pending[1]('WDA-2');
-    const second = await startSecond;
-    pending[0]('WDA-1');
-    const first = await startFirst;
-    assert.equal(first, 'WDA-1');
-    assert.equal(second, 'WDA-2');
-
-    await server.stopSession(first);
-    assert.deepEqual(deleted, []);
-    await server.stopSession(second);
-    assert.deepEqual(deleted, ['/session/WDA-2']);
+    const first = server.startSession(caps);
+    while (!finish) {
+      await new Promise((resolve) => setImmediate(resolve));
+    }
+    await assert.rejects(server.startSession(caps), /Only one WebDriverAgentMac session/);
+    assert.equal(creations, 1);
+    finish(undefined);
+    assert.equal(await first, 'WDA-1');
+    await server.stopSession('WDA-1');
+    assert.deepEqual(deleted, ['/session/WDA-1']);
   });
 
-  it('does not delete a newer session when an older one stops (remote server)', async (t) => {
+  it('rejects a second active remote session and allows a new one after cleanup', async (t) => {
     const deleted = mockWda(t);
     const server = new WDAMacServer();
     const caps = {webDriverAgentMacUrl: 'http://127.0.0.1:10101'};
     const first = await server.startSession(caps);
-    const second = await server.startSession(caps);
-    assert.equal(first, 'WDA-1');
-    assert.equal(second, 'WDA-2');
-
-    await server.stopSession(first);
+    await assert.rejects(server.startSession(caps), /Only one WebDriverAgentMac session/);
+    await server.stopSession('not-the-owner');
     assert.deepEqual(deleted, []);
-    await server.stopSession(second);
-    assert.deepEqual(deleted, ['/session/WDA-2']);
+    await assert.rejects(server.startSession(caps), /Only one WebDriverAgentMac session/);
+    await server.stopSession(first);
+    assert.equal(await server.startSession(caps), 'WDA-2');
   });
 
-  it('does not delete a newer session when an older one stops (shared host process)', async (t) => {
-    const deleted = mockWda(t);
+  it('rejects a second active local session before reinitializing the host process', async (t) => {
+    mockWda(t);
     const server = new WDAMacServer();
+    let initializations = 0;
     (server as any)._process = {
       proc: new EventEmitter(),
-      // the host process is already running, so both sessions share one proxy
-      init: async () => false,
+      init: async () => {
+        initializations++;
+        return false;
+      },
       isRunning: true,
       pid: null,
       listChildrenPids: async () => [],
     };
-    const first = await server.startSession({});
-    const second = await server.startSession({});
+    await server.startSession({});
+    await assert.rejects(server.startSession({}), /Only one WebDriverAgentMac session/);
+    assert.equal(initializations, 1);
+  });
 
-    await server.stopSession(first);
-    assert.deepEqual(deleted, []);
-    await server.stopSession(second);
-    assert.deepEqual(deleted, ['/session/WDA-2']);
+  it('allows creation to retry after a failed start', async (t) => {
+    let attempts = 0;
+    t.mock.method(WDAMacProxy.prototype, 'command', async function (this: WDAMacProxy, _url: string, method: string) {
+      if (method === 'POST') {
+        if (++attempts === 1) {
+          throw new Error('failed creation');
+        }
+        this.sessionId = 'WDA-1';
+        return {sessionId: 'WDA-1', capabilities: {}};
+      }
+      return {};
+    });
+    const server = new WDAMacServer();
+    const caps = {webDriverAgentMacUrl: 'http://127.0.0.1:10101'};
+    await assert.rejects(server.startSession(caps), /failed creation/);
+    assert.equal(await server.startSession(caps), 'WDA-1');
+  });
+
+  it('does not admit another session when deletion fails', async (t) => {
+    let failDelete = true;
+    t.mock.method(WDAMacProxy.prototype, 'command', async function (this: WDAMacProxy, _url: string, method: string) {
+      if (method === 'POST') {
+        this.sessionId = 'WDA-1';
+        return {sessionId: 'WDA-1', capabilities: {}};
+      }
+      if (method === 'DELETE' && failDelete) {
+        throw new Error('failed deletion');
+      }
+      return {};
+    });
+    const server = new WDAMacServer();
+    const caps = {webDriverAgentMacUrl: 'http://127.0.0.1:10101'};
+    await server.startSession(caps);
+    await server.stopSession('WDA-1');
+    await assert.rejects(server.startSession(caps), /Only one WebDriverAgentMac session/);
+    failDelete = false;
+    await server.stopSession('WDA-1');
+    assert.equal(await server.startSession(caps), 'WDA-1');
   });
 
   it('deletes the active session when no session id is given', async (t) => {

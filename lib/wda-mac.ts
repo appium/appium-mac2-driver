@@ -293,6 +293,7 @@ export class WDAMacServer {
   private _process: WDAMacProcess | null = null;
   private _serverStartupTimeoutMs: number = STARTUP_TIMEOUT_MS;
   private _isProxyingToRemoteServer: boolean = false;
+  private _hasSession: boolean = false;
 
   get proxy(): WDAMacProxy {
     if (!this._proxy) {
@@ -304,10 +305,25 @@ export class WDAMacServer {
   /**
    * Starts a new WebDriverAgentMac session.
    *
-   * @returns The id of the created WebDriverAgentMac session, or null if the server did not report one.
+   * @returns The id of the created WebDriverAgentMac session.
    * Pass it to {@link stopSession} so that only this session gets deleted.
    */
-  async startSession(caps: StartSessionCapabilities, opts: SessionOptions = {}): Promise<string | null> {
+  async startSession(caps: StartSessionCapabilities, opts: SessionOptions = {}): Promise<string> {
+    // Claim the single session before any asynchronous startup work. A rejected
+    // Appium session must not replace the proxy or stop the current session.
+    if (this._hasSession) {
+      throw new errors.SessionNotCreatedError('Only one WebDriverAgentMac session can be active at a time');
+    }
+    this._hasSession = true;
+    try {
+      return await this.createSession(caps, opts);
+    } catch (err) {
+      this._hasSession = false;
+      throw err;
+    }
+  }
+
+  private async createSession(caps: StartSessionCapabilities, opts: SessionOptions): Promise<string> {
     this._serverStartupTimeoutMs = caps.serverStartupTimeout ?? this._serverStartupTimeoutMs;
 
     this._isProxyingToRemoteServer = !!caps.webDriverAgentMacUrl;
@@ -387,8 +403,7 @@ export class WDAMacServer {
       log.info('The host process has already been listening. Proceeding with session creation');
     }
 
-    // Another startSession() can replace or reuse this._proxy while this request waits for its
-    // response, so the id comes from this request's own response and not from the shared proxy.
+    // Keep the id returned by this creation request for the owning Appium session's cleanup.
     const response = (await this._proxy.command('/session', 'POST', {
       capabilities: {
         firstMatch: [{}],
@@ -396,18 +411,21 @@ export class WDAMacServer {
       },
     })) as {sessionId?: unknown} | null | undefined;
     const sessionId = response?.sessionId;
-    return typeof sessionId === 'string' && sessionId ? sessionId : null;
+    if (typeof sessionId !== 'string' || !sessionId) {
+      throw new errors.SessionNotCreatedError('WebDriverAgentMac did not return a session id');
+    }
+    return sessionId;
   }
 
   /**
    * Deletes the WebDriverAgentMac session.
    *
-   * @param sessionId - The id returned by {@link startSession}. WebDriverAgentMac keeps a single
-   * active session, so a newer session replaces this one. If the active session is not this one,
-   * it belongs to another Appium session and is left alone.
+   * @param sessionId - The id returned by {@link startSession}. Only the owning Appium session
+   * may delete the active WebDriverAgentMac session. A failed creation has no id to delete.
    */
   async stopSession(sessionId?: string | null): Promise<void> {
     if (!this._isProxyingToRemoteServer && !this._process?.isRunning) {
+      this._hasSession = false;
       log.info(`Mac2Driver session cannot be stopped, because the server is not running`);
       return;
     }
@@ -423,6 +441,8 @@ export class WDAMacServer {
     if (this._proxy?.sessionId) {
       try {
         await this._proxy.command(`/session/${this._proxy.sessionId}`, 'DELETE');
+        this._proxy.sessionId = null;
+        this._hasSession = false;
       } catch (e: any) {
         log.info(`Mac2Driver session cannot be deleted. Original error: ${e.message}`);
       }
