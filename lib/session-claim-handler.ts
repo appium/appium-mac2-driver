@@ -71,10 +71,13 @@ export class SessionClaimHandler {
   /** Tracks a session teardown, so that a new session does not start before it is complete. */
   async trackTeardown(teardown: () => Promise<void>): Promise<void> {
     const promise = teardown();
-    const tracked = promise.then(
-      () => {},
-      () => {},
-    );
+    const tracked = (async () => {
+      try {
+        await promise;
+      } catch {
+        // the failure is reported to the caller of trackTeardown()
+      }
+    })();
     this.pendingTeardowns.add(tracked);
     try {
       await promise;
@@ -97,7 +100,13 @@ export class SessionClaimHandler {
     driver.log.debug(`Waiting for ${util.pluralize('session', this.pendingTeardowns.size, true)} to finish quitting`);
     const timer = new AbortController();
     const timedOut = Symbol('timedOut');
-    const timeout = delay(SessionClaimHandler.RELEASE_WAIT_MS, timedOut, {signal: timer.signal}).catch(() => {});
+    const timeout = (async () => {
+      try {
+        return await delay(SessionClaimHandler.RELEASE_WAIT_MS, timedOut, {signal: timer.signal});
+      } catch {
+        return undefined; // aborted
+      }
+    })();
     try {
       if ((await Promise.race([Promise.all(this.pendingTeardowns), timeout])) === timedOut) {
         driver.log.warn(
