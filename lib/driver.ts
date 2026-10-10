@@ -241,6 +241,11 @@ export class Mac2Driver
 
   override async deleteSession(): Promise<void> {
     sessionClaimHandler.unregisterActiveSession(this);
+    // A new session waits for the teardown to complete before it starts
+    await sessionClaimHandler.trackTeardown(async () => await this.teardownSession());
+  }
+
+  private async teardownSession(): Promise<void> {
     await this._screenRecorder?.stop(true);
     if (this._videoChunksBroadcaster.hasPublishers) {
       if (this._wda?.isSessionActive(this._wdaSessionId)) {

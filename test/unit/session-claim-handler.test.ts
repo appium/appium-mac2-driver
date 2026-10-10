@@ -101,4 +101,39 @@ describe('SessionClaimHandler', () => {
     assert.equal(first.sessionId, null);
     assert.equal(second.sessionId, 'second');
   });
+
+  it('waits for a session that is still quitting', async () => {
+    setSharedIpcForTesting(new AppiumIpc());
+    const events: string[] = [];
+    const oldDriver = makeDriver('old');
+    await sessionClaimHandler.registerActiveSession(oldDriver);
+    // the old session has already left the claim channel, but its teardown is still running
+    sessionClaimHandler.unregisterActiveSession(oldDriver);
+    const teardown = sessionClaimHandler.trackTeardown(async () => {
+      await new Promise((r) => setTimeout(r, 100));
+      events.push('old-quit');
+    });
+
+    const newDriver = makeDriver('new');
+    await sessionClaimHandler.registerActiveSession(newDriver);
+    await sessionClaimHandler.claimHost(newDriver);
+    events.push('claimed');
+    await teardown;
+
+    assert.deepEqual(events, ['old-quit', 'claimed']);
+  });
+
+  it('does not wait for a teardown that has finished with an error', async () => {
+    setSharedIpcForTesting(new AppiumIpc());
+    await assert.rejects(
+      sessionClaimHandler.trackTeardown(async () => {
+        throw new Error('boom');
+      }),
+      /boom/,
+    );
+    const driver = makeDriver('new');
+    await sessionClaimHandler.registerActiveSession(driver);
+    await sessionClaimHandler.claimHost(driver);
+    assert.equal(driver.sessionId, 'new');
+  });
 });

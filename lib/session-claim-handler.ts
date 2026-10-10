@@ -27,6 +27,7 @@ export class SessionClaimHandler {
   private static readonly RELEASE_WAIT_MS = 15000;
 
   private readonly startupLock = new AsyncLock();
+  private readonly pendingTeardowns = new Set<Promise<void>>();
   private readonly subscriptionsBySessionId = new Map<string, IIpcSubscription<SessionIpcMessage>>();
 
   constructor(private readonly getIpc: IpcProvider) {}
@@ -67,8 +68,49 @@ export class SessionClaimHandler {
     this.subscriptionsBySessionId.delete(sessionId);
   }
 
+  /** Tracks a session teardown, so that a new session does not start before it is complete. */
+  async trackTeardown(teardown: () => Promise<void>): Promise<void> {
+    const promise = teardown();
+    const tracked = promise.then(
+      () => {},
+      () => {},
+    );
+    this.pendingTeardowns.add(tracked);
+    try {
+      await promise;
+    } finally {
+      this.pendingTeardowns.delete(tracked);
+    }
+  }
+
   /** Make any other active session quit and wait until it has released the host. */
   async claimHost(driver: Mac2Driver): Promise<void> {
+    await this.requestRelease(driver);
+    await this.waitForPendingTeardowns(driver);
+  }
+
+  private async waitForPendingTeardowns(driver: Mac2Driver): Promise<void> {
+    if (this.pendingTeardowns.size === 0) {
+      return;
+    }
+
+    driver.log.debug(`Waiting for ${util.pluralize('session', this.pendingTeardowns.size, true)} to finish quitting`);
+    const timer = new AbortController();
+    const timedOut = Symbol('timedOut');
+    const timeout = delay(SessionClaimHandler.RELEASE_WAIT_MS, timedOut, {signal: timer.signal}).catch(() => {});
+    try {
+      if ((await Promise.race([Promise.all(this.pendingTeardowns), timeout])) === timedOut) {
+        driver.log.warn(
+          `Timed out after ${SessionClaimHandler.RELEASE_WAIT_MS}ms waiting for the previous session ` +
+            `to finish quitting. Proceeding with session startup.`,
+        );
+      }
+    } finally {
+      timer.abort();
+    }
+  }
+
+  private async requestRelease(driver: Mac2Driver): Promise<void> {
     const ipc = await this.getIpc();
     if (!ipc) {
       driver.log.debug('Driver-instance IPC is unavailable. Skipping the session claim.');
@@ -139,6 +181,7 @@ export class SessionClaimHandler {
 
   /** @internal Exposed for unit tests. */
   resetForTesting(): void {
+    this.pendingTeardowns.clear();
     for (const subscription of this.subscriptionsBySessionId.values()) {
       subscription.unsubscribe();
     }

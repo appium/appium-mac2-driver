@@ -421,10 +421,14 @@ export class WDAMacServer {
       return;
     }
 
-    if (this._proxy) {
+    const proxy = this._proxy;
+    if (proxy) {
       try {
-        await this._proxy.command(`/session/${sessionId}`, 'DELETE');
-        this._proxy.sessionId = null;
+        await proxy.command(`/session/${sessionId}`, 'DELETE');
+        // A newer session might have been created while the DELETE was pending
+        if (proxy.sessionId === sessionId) {
+          proxy.sessionId = null;
+        }
       } catch (e: any) {
         log.info(`Mac2Driver session cannot be deleted. Original error: ${e.message}`);
       }

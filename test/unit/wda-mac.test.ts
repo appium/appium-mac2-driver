@@ -95,6 +95,36 @@ describe('WDAMacServer single session', () => {
     assert.equal(server.isSessionActive(second), false);
   });
 
+  it('a pending DELETE of a replaced session does not clear the newer session', async (t) => {
+    let resolveDelete!: () => void;
+    const deleteDone = new Promise<void>((resolve) => {
+      resolveDelete = resolve;
+    });
+    const ids = ['s1', 's2'];
+    t.mock.method(WDAMacProxy.prototype, 'command', async function (this: WDAMacProxy, url: string, method: string) {
+      if (url === '/session' && method === 'POST') {
+        this.sessionId = ids.shift() as string;
+      } else if (method === 'DELETE') {
+        await deleteDone;
+      }
+      return {};
+    });
+    const server = makeServer();
+    // the already running server is reused, so both sessions share the same proxy
+    let isFirstInit = true;
+    (server as any)._process.init = async () => {
+      const result = isFirstInit;
+      isFirstInit = false;
+      return result;
+    };
+    const first = await server.startSession({});
+    const stopping = server.stopSession(first);
+    const second = await server.startSession({});
+    resolveDelete();
+    await stopping;
+    assert.equal(server.isSessionActive(second), true);
+  });
+
   it('a failed creation leaves no active session', async (t) => {
     mockSessionCreation(t, ['s1', new Error('boom')]);
     const server = makeServer();
