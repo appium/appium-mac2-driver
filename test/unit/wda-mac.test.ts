@@ -151,11 +151,17 @@ describe('WDAMacServer session cleanup', () => {
     const caps = {webDriverAgentMacUrl: 'http://127.0.0.1:10101'};
     const first = await server.startSession(caps);
     await assert.rejects(server.startSession(caps), /Only one WebDriverAgentMac session/);
+    await server.stopSession(first);
+    assert.deepEqual(deleted, ['/session/WDA-1']);
+    assert.equal(await server.startSession(caps), 'WDA-2');
+  });
+
+  it('does not delete the active session for a stop with another session id', async (t) => {
+    const deleted = mockWda(t);
+    const server = new WDAMacServer();
+    await server.startSession({webDriverAgentMacUrl: 'http://127.0.0.1:10101'});
     await server.stopSession('not-the-owner');
     assert.deepEqual(deleted, []);
-    await assert.rejects(server.startSession(caps), /Only one WebDriverAgentMac session/);
-    await server.stopSession(first);
-    assert.equal(await server.startSession(caps), 'WDA-2');
   });
 
   it('rejects a second active local session before reinitializing the host process', async (t) => {
@@ -195,7 +201,7 @@ describe('WDAMacServer session cleanup', () => {
     assert.equal(await server.startSession(caps), 'WDA-1');
   });
 
-  it('does not admit another session when deletion fails', async (t) => {
+  it('releases the session slot as soon as a stop is requested, even when deletion fails', async (t) => {
     let failDelete = true;
     t.mock.method(WDAMacProxy.prototype, 'command', async function (this: WDAMacProxy, _url: string, method: string) {
       if (method === 'POST') {
@@ -211,10 +217,8 @@ describe('WDAMacServer session cleanup', () => {
     const caps = {webDriverAgentMacUrl: 'http://127.0.0.1:10101'};
     await server.startSession(caps);
     await server.stopSession('WDA-1');
-    await assert.rejects(server.startSession(caps), /Only one WebDriverAgentMac session/);
-    failDelete = false;
-    await server.stopSession('WDA-1');
     assert.equal(await server.startSession(caps), 'WDA-1');
+    failDelete = false;
   });
 
   it('deletes the active session when no session id is given', async (t) => {

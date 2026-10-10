@@ -424,8 +424,9 @@ export class WDAMacServer {
    * may delete the active WebDriverAgentMac session. A failed creation has no id to delete.
    */
   async stopSession(sessionId?: string | null): Promise<void> {
+    // Release the single session slot as soon as a stop is requested, whatever the outcome below
+    this._hasSession = false;
     if (!this._isProxyingToRemoteServer && !this._process?.isRunning) {
-      this._hasSession = false;
       log.info(`Mac2Driver session cannot be stopped, because the server is not running`);
       return;
     }
@@ -442,7 +443,6 @@ export class WDAMacServer {
       try {
         await this._proxy.command(`/session/${this._proxy.sessionId}`, 'DELETE');
         this._proxy.sessionId = null;
-        this._hasSession = false;
       } catch (e: any) {
         log.info(`Mac2Driver session cannot be deleted. Original error: ${e.message}`);
       }
