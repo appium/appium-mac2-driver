@@ -118,6 +118,7 @@ export class Mac2Driver
   private isProxyActive: boolean = false;
   private _wda: WDAMacServer | null = null;
   private _wdaSessionId: string | null = null;
+  private _hasClaimedHost: boolean = false;
 
   constructor(opts: InitialOpts = {} as InitialOpts) {
     super(opts);
@@ -214,6 +215,7 @@ export class Mac2Driver
       try {
         await sessionClaimHandler.registerActiveSession(this);
         await sessionClaimHandler.claimHost(this);
+        this._hasClaimedHost = true;
         const prerun = caps.prerun as PrerunCapability | undefined;
         if (prerun) {
           if (typeof prerun.command !== 'string' && typeof prerun.script !== 'string') {
@@ -259,7 +261,8 @@ export class Mac2Driver
       await this._wda.stopSession(this._wdaSessionId);
     }
 
-    const postrun = this.opts.postrun as PostrunCapability | undefined;
+    // Skip postrun if the host was never acquired, as the previous session might still be using it
+    const postrun = this._hasClaimedHost ? (this.opts.postrun as PostrunCapability | undefined) : undefined;
     if (postrun) {
       if (typeof postrun.command !== 'string' && typeof postrun.script !== 'string') {
         log.error(`'postrun' capability value must either contain 'script' or 'command' entry of string type`);
@@ -284,6 +287,7 @@ export class Mac2Driver
   private resetState(): void {
     this._wda = null;
     this._wdaSessionId = null;
+    this._hasClaimedHost = false;
     this.isProxyActive = false;
     this._videoChunksBroadcaster = new nativeScreenRecordingCommands.NativeVideoChunksBroadcaster(
       this.eventEmitter,
