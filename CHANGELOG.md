@@ -1,3 +1,9 @@
+## [4.4.0](https://github.com/appium/appium-mac2-driver/compare/v4.3.6...v4.4.0) (2026-10-11)
+
+### Features
+
+* enforce a single session, a new session replaces the previous one ([#426](https://github.com/appium/appium-mac2-driver/issues/426)) ([fb10372](https://github.com/appium/appium-mac2-driver/commit/fb10372c16d861fb7ff9463b345ba6fcb3f67387))
+
 ## [4.3.6](https://github.com/appium/appium-mac2-driver/compare/v4.3.5...v4.3.6) (2026-10-02)
 
 ### Bug Fixes
