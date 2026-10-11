@@ -301,7 +301,8 @@ export class WDAMacServer {
     return this._proxy;
   }
 
-  async startSession(caps: StartSessionCapabilities, opts: SessionOptions = {}): Promise<void> {
+  /** Starts a WDA session, replacing the previous one. Returns the new WDA session id. */
+  async startSession(caps: StartSessionCapabilities, opts: SessionOptions = {}): Promise<string> {
     this._serverStartupTimeoutMs = caps.serverStartupTimeout ?? this._serverStartupTimeoutMs;
 
     this._isProxyingToRemoteServer = !!caps.webDriverAgentMacUrl;
@@ -381,23 +382,53 @@ export class WDAMacServer {
       log.info('The host process has already been listening. Proceeding with session creation');
     }
 
-    await this._proxy.command('/session', 'POST', {
-      capabilities: {
-        firstMatch: [{}],
-        alwaysMatch: caps,
-      },
-    });
+    // WDA drops the previous session as soon as it gets this request,
+    // so a failure must not leave the proxy pointing at the replaced one
+    try {
+      await this._proxy.command('/session', 'POST', {
+        capabilities: {
+          firstMatch: [{}],
+          alwaysMatch: caps,
+        },
+      });
+    } catch (e) {
+      this._proxy.sessionId = null;
+      throw e;
+    }
+    const sessionId = this._proxy.sessionId;
+    if (!sessionId) {
+      throw new errors.SessionNotCreatedError('WebDriverAgentMac did not return a session id');
+    }
+    return sessionId;
   }
 
-  async stopSession(): Promise<void> {
+  /** Whether the WDA session has not been replaced by a newer one. */
+  isSessionActive(sessionId: string | null | undefined): boolean {
+    return !!sessionId && this._proxy?.sessionId === sessionId;
+  }
+
+  /** Stops the WDA session. A replaced one is skipped, so the newer one is never affected. */
+  async stopSession(sessionId: string | null | undefined): Promise<void> {
     if (!this._isProxyingToRemoteServer && !this._process?.isRunning) {
       log.info(`Mac2Driver session cannot be stopped, because the server is not running`);
       return;
     }
 
-    if (this._proxy?.sessionId) {
+    if (!this.isSessionActive(sessionId)) {
+      if (sessionId) {
+        log.info(`Mac2Driver session '${sessionId}' is not active anymore. Nothing to stop`);
+      }
+      return;
+    }
+
+    const proxy = this._proxy;
+    if (proxy) {
       try {
-        await this._proxy.command(`/session/${this._proxy.sessionId}`, 'DELETE');
+        await proxy.command(`/session/${sessionId}`, 'DELETE');
+        // A newer session might have been created while the DELETE was pending
+        if (proxy.sessionId === sessionId) {
+          proxy.sessionId = null;
+        }
       } catch (e: any) {
         log.info(`Mac2Driver session cannot be deleted. Original error: ${e.message}`);
       }

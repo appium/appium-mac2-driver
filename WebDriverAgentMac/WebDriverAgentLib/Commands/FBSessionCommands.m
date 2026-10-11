@@ -99,9 +99,15 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
   NSString *appPath = requirements[AM_APP_PATH_CAPABILITY];
   NSString *deepLink = requirements[AM_INITIAL_DEEPLINK_URL_CAPABILITY];
   BOOL noReset = [requirements[AM_NO_RESET_CAPABILITY] boolValue];
-  FBSession *session;
+
+  // XCTest is single-threaded, so there can only be one session. A new one always
+  // takes over, and the previous one must be gone before any app gets touched.
+  [FBSession.activeSession kill];
+
+  XCUIApplication *app = nil;
+  BOOL didLaunchApp = NO;
   if (nil == bundleID && nil == appPath && nil == deepLink) {
-    session = [FBSession initWithApplication:nil];
+    // no app to manage
   } else if (nil != deepLink) {
     NSURL *url = [NSURL URLWithString:deepLink];
     NSError *error;
@@ -113,13 +119,12 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
                                                                 traceback:nil]);
     }
     if (nil != bundleID) {
-      session = [FBSession initWithApplication:[[XCUIApplication alloc] initWithBundleIdentifier:bundleID]];
+      app = [[XCUIApplication alloc] initWithBundleIdentifier:bundleID];
     }
   } else {
-    XCUIApplication *app = nil != appPath 
+    app = nil != appPath
       ? [[XCUIApplication alloc] initWithURL:[NSURL fileURLWithPath:appPath]]
       : [[XCUIApplication alloc] initWithBundleIdentifier:bundleID];
-    session = [FBSession initWithApplication:app];
     if (noReset && app.state > XCUIApplicationStateNotRunning) {
       [app activate];
     } else {
@@ -140,6 +145,7 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
       }
       app.launchEnvironment = [launchEnv copy];
       [app launch];
+      didLaunchApp = YES;
       if (app.state <= XCUIApplicationStateNotRunning) {
         NSString *message = [NSString stringWithFormat:@"Failed to launch '%@' application", appPath ?: bundleID];
         return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:message
@@ -149,6 +155,10 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
     if (nil != bundleID && nil != appPath) {
       NSString *realBundleID = app.am_bundleID;
       if (![realBundleID isEqualToString:bundleID]) {
+        // no session owns the app, so don't leave it behind
+        if (didLaunchApp) {
+          [app terminate];
+        }
         NSString *message = [NSString stringWithFormat:@"The bundle identifier %@ of the '%@' does not match to the one provided in capabilities: %@", 
                              realBundleID, appPath, bundleID];
         return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:message
@@ -156,6 +166,8 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
       }
     }
   }
+  // The session is only registered once startup has fully succeeded
+  FBSession *session = [FBSession initWithApplication:app];
   if (nil != requirements[AM_SKIP_APP_KILL_CAPABILITY]) {
     session.skipAppTermination = [requirements[AM_SKIP_APP_KILL_CAPABILITY] boolValue];
   } else if (nil == bundleID) {

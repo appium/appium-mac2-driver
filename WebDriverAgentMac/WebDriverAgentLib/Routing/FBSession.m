@@ -72,6 +72,11 @@ static FBSession *_activeSession = nil;
     [self.testedApplication terminate];
   }
   self.testedApplication = nil;
+  [self.elementCache reset];
+  // The recording belongs to the active session, so a stale one must not touch it
+  if (_activeSession != self) {
+    return;
+  }
   FBScreenRecordingContainer *screenRecordingContainer = FBScreenRecordingContainer.sharedInstance;
   NSUUID *videoRecordingId = screenRecordingContainer.screenRecordingPromise.identifier;
   if (nil != videoRecordingId) {
@@ -83,7 +88,6 @@ static FBSession *_activeSession = nil;
   if (nil != screenRecordingContainer.screenRecordingPromise) {
     [screenRecordingContainer reset];
   }
-  [self.elementCache reset];
   _activeSession = nil;
 }
 

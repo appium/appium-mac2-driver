@@ -43,6 +43,20 @@ static NSString *const SETTINGS_BUNDLE_ID = @"com.apple.systempreferences";
   [super tearDown];
 }
 
+- (void)testNewSessionOverridesThePreviousOne
+{
+  NSString *oldId = self.session.identifier;
+  FBSession *newSession = [FBSession initWithApplication:nil];
+  XCTAssertNotEqualObjects(oldId, newSession.identifier);
+  XCTAssertEqual(FBSession.activeSession, newSession);
+  XCTAssertNil([FBSession sessionWithIdentifier:oldId]);
+  // Killing the stale session must not drop the active one
+  [self.session kill];
+  XCTAssertEqual(FBSession.activeSession, newSession);
+  [newSession kill];
+  XCTAssertNil(FBSession.activeSession);
+}
+
 - (void)testSettingsAppCanBeOpenedInScopeOfTheCurrentSession
 {
   [self.session launchApplicationWithBundleId:SETTINGS_BUNDLE_ID
