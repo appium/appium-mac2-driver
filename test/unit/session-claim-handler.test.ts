@@ -5,6 +5,7 @@ import {AppiumIpc} from 'appium/driver.js';
 
 import {
   resetSharedIpcForTesting,
+  SessionClaimHandler,
   sessionClaimHandler,
   setSharedIpcForTesting,
 } from '../../lib/session-claim-handler.js';
@@ -135,5 +136,22 @@ describe('SessionClaimHandler', () => {
     await sessionClaimHandler.registerActiveSession(driver);
     await sessionClaimHandler.claimHost(driver);
     assert.equal(driver.sessionId, 'new');
+  });
+
+  it('fails the startup if the previous session does not finish quitting in time', async () => {
+    const handler = new SessionClaimHandler(async () => undefined, 50);
+    // a teardown that never completes, e.g. a hanging postrun script
+    void handler.trackTeardown(() => new Promise<void>(() => {}));
+
+    await assert.rejects(handler.claimHost(makeDriver('new')), /did not finish quitting within 50ms/);
+  });
+
+  it('fails the startup if the previous session does not release the host in time', async () => {
+    const ipc = new AppiumIpc();
+    const handler = new SessionClaimHandler(async () => ipc, 100);
+    const oldDriver = makeDriver('old', () => new Promise<void>(() => {}));
+    await handler.registerActiveSession(oldDriver);
+
+    await assert.rejects(handler.claimHost(makeDriver('new')), /\[old\] did not quit within 100ms/);
   });
 });

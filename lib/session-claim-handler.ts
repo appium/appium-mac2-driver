@@ -24,13 +24,16 @@ export class SessionClaimHandler {
   private static readonly STARTUP_LOCK_KEY = 'mac2:sessionStartup';
 
   private static readonly CONTENTION_PROBE_MS = 10;
-  private static readonly RELEASE_WAIT_MS = 15000;
+  private static readonly DEFAULT_RELEASE_WAIT_MS = 15000;
 
   private readonly startupLock = new AsyncLock();
   private readonly pendingTeardowns = new Set<Promise<void>>();
   private readonly subscriptionsBySessionId = new Map<string, IIpcSubscription<SessionIpcMessage>>();
 
-  constructor(private readonly getIpc: IpcProvider) {}
+  constructor(
+    private readonly getIpc: IpcProvider,
+    private readonly releaseWaitMs: number = SessionClaimHandler.DEFAULT_RELEASE_WAIT_MS,
+  ) {}
 
   /** Serializes session startups so the newest wins. Enter before registering the session. */
   async runExclusive<T>(fn: () => Promise<T>): Promise<T> {
@@ -102,16 +105,16 @@ export class SessionClaimHandler {
     const timedOut = Symbol('timedOut');
     const timeout = (async () => {
       try {
-        return await delay(SessionClaimHandler.RELEASE_WAIT_MS, timedOut, {signal: timer.signal});
+        return await delay(this.releaseWaitMs, timedOut, {signal: timer.signal});
       } catch {
         return undefined; // aborted
       }
     })();
     try {
       if ((await Promise.race([Promise.all(this.pendingTeardowns), timeout])) === timedOut) {
-        driver.log.warn(
-          `Timed out after ${SessionClaimHandler.RELEASE_WAIT_MS}ms waiting for the previous session ` +
-            `to finish quitting. Proceeding with session startup.`,
+        // Starting now could let the old teardown (e.g. postrun) interfere with this session
+        throw new errors.SessionNotCreatedError(
+          `The previous session did not finish quitting within ${this.releaseWaitMs}ms`,
         );
       }
     } finally {
@@ -169,7 +172,7 @@ export class SessionClaimHandler {
 
       try {
         await waitForCondition(() => [...contendingSessionIds].every((id) => releasedSessionIds.has(id)), {
-          waitMs: SessionClaimHandler.RELEASE_WAIT_MS,
+          waitMs: this.releaseWaitMs,
           intervalMs: 50,
         });
         driver.log.debug(
@@ -177,10 +180,10 @@ export class SessionClaimHandler {
         );
       } catch {
         const pendingSessionIds = [...contendingSessionIds].filter((id) => !releasedSessionIds.has(id));
-        driver.log.warn(
-          `Timed out after ${SessionClaimHandler.RELEASE_WAIT_MS}ms waiting for ` +
-            `${util.pluralize('session', pendingSessionIds.length, true)} ` +
-            `[${pendingSessionIds.join(', ')}] to quit. Proceeding with session startup.`,
+        // Starting now could let the old session interfere with this one
+        throw new errors.SessionNotCreatedError(
+          `${util.pluralize('session', pendingSessionIds.length, true)} [${pendingSessionIds.join(', ')}] ` +
+            `did not quit within ${this.releaseWaitMs}ms`,
         );
       }
     } finally {
