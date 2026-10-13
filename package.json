@@ -80,7 +80,7 @@
     "@types/async-lock": "^1.4.2",
     "@types/node": "^26.0.0",
     "@types/portscanner": "^2.1.1",
-    "webdriverio": "^9.0.0"
+    "webdriverio": "^10.0.2"
   },
   "peerDependencies": {
     "appium": "^3.0.0-rc.2"
