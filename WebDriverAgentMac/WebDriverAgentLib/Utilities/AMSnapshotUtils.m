@@ -114,43 +114,44 @@ static BOOL AMIsAccessibilityTrusted(void)
     : matchingElements.copy;
 }
 
-+ (nullable NSString *)domIdentifierWithSnapshot:(nullable id)snapshot
++ (nullable AXUIElementRef)createAXElementWithSnapshot:(nullable id)snapshot
 {
   if (nil == snapshot || !AMIsAccessibilityTrusted()) {
-    return nil;
+    return NULL;
   }
   AMCreateWithRemoteTokenFn createRef = AMRemoteTokenFn();
   if (NULL == createRef) {
-    return nil;
+    return NULL;
   }
-
   @try {
     NSData *token = [[snapshot valueForKey:@"_accessibilityElement"] valueForKey:@"_token"];
-    if (![token isKindOfClass:NSData.class]) {
-      return nil;
-    }
-    AXUIElementRef ref = createRef((__bridge CFDataRef)token);
-    if (NULL == ref) {
-      return nil;
-    }
-    CFTypeRef value = NULL;
-    AXError err = AXUIElementCopyAttributeValue(ref,
-                                                (__bridge CFStringRef)AM_DOM_IDENTIFIER_ATTRIBUTE,
-                                                &value);
-    CFRelease(ref);
-    if (kAXErrorSuccess != err || NULL == value) {
-      return nil;
-    }
-    NSString *result = [(__bridge id)value isKindOfClass:NSString.class]
-      ? [(__bridge NSString *)value copy]
-      : nil;
-    CFRelease(value);
-    return result.length > 0 ? result : nil;
+    return [token isKindOfClass:NSData.class] ? createRef((__bridge CFDataRef)token) : NULL;
   } @catch (NSException *e) {
     // Only the private _accessibilityElement._token key path may throw here
-    [FBLogger logFmt:@"Cannot retrieve the DOM identifier of a snapshot. Original error: %@", e.reason];
+    [FBLogger logFmt:@"Cannot create an AX element from a snapshot. Original error: %@", e.reason];
+    return NULL;
+  }
+}
+
++ (nullable NSString *)domIdentifierWithSnapshot:(nullable id)snapshot
+{
+  AXUIElementRef ref = [self createAXElementWithSnapshot:snapshot];
+  if (NULL == ref) {
     return nil;
   }
+  CFTypeRef value = NULL;
+  AXError err = AXUIElementCopyAttributeValue(ref,
+                                              (__bridge CFStringRef)AM_DOM_IDENTIFIER_ATTRIBUTE,
+                                              &value);
+  CFRelease(ref);
+  if (kAXErrorSuccess != err || NULL == value) {
+    return nil;
+  }
+  NSString *result = [(__bridge id)value isKindOfClass:NSString.class]
+    ? [(__bridge NSString *)value copy]
+    : nil;
+  CFRelease(value);
+  return result.length > 0 ? result : nil;
 }
 
 @end

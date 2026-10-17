@@ -9,6 +9,7 @@
 
 #import "FBDebugCommands.h"
 
+#import "AMGeometryUtils.h"
 #import "AMScreenUtils.h"
 #import "FBRouteRequest.h"
 #import "FBSession.h"
@@ -65,6 +66,7 @@ static NSString *const SOURCE_FORMAT_DESCRIPTION = @"description";
     result[[NSString stringWithFormat:@"%lld", screenInfo.identifier]] = @{
       @"id": @(screenInfo.identifier),
       @"isMain": @(screenInfo.isMain),
+      @"rect": AMCGRectToDict(screenInfo.bounds),
     };
   }
   return FBResponseWithObject(result.copy);

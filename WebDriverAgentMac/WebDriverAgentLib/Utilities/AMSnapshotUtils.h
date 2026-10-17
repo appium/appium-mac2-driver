@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import <ApplicationServices/ApplicationServices.h>
 #import <XCTest/XCTest.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -78,6 +79,14 @@ NS_ASSUME_NONNULL_BEGIN
  @return The DOM identifier or nil
  */
 + (nullable NSString *)domIdentifierWithSnapshot:(nullable id)snapshot;
+
+/**
+ Creates an AX element for the given snapshot. The caller owns the result and must CFRelease it.
+
+ @param snapshot snapshot instance to create the AX element for
+ @return The AX element or NULL if this process lacks Accessibility permission or the element is unavailable
+ */
++ (nullable AXUIElementRef)createAXElementWithSnapshot:(nullable id)snapshot CF_RETURNS_RETAINED;
 
 @end
 

@@ -21,6 +21,10 @@ static NSString *const FB_NO_SUCH_ELEMENT_ERROR = @"no such element";
 static const HTTPStatusCode FB_NO_SUCH_ELEMENT_ERROR_CODE = kHTTPStatusCodeNotFound;
 static NSString *const FB_NO_SUCH_ELEMENT_MSG = @"An element could not be located on the page using the given search parameters";
 
+static NSString *const FB_NO_SUCH_WINDOW_ERROR = @"no such window";
+static const HTTPStatusCode FB_NO_SUCH_WINDOW_ERROR_CODE = kHTTPStatusCodeNotFound;
+static NSString *const FB_NO_SUCH_WINDOW_MSG = @"A window could not be found. It might have been closed";
+
 static NSString *const FB_INVALID_ELEMENT_STATE_ERROR = @"invalid element state";
 static const HTTPStatusCode FB_INVALID_ELEMENT_STATE_ERROR_CODE = kHTTPStatusCodeBadRequest;
 static NSString *const FB_INVALID_ELEMENT_STATE_MSG = @"An element command could not be completed because the element is in an invalid state (e.g. attempting to click a disabled element)";
@@ -152,6 +156,15 @@ static NSString *const FB_NO_SUCH_DRIVER_MSG = @"A session is either terminated 
   return [[FBCommandStatus alloc] initWithError:FB_NO_SUCH_ELEMENT_ERROR
                                      statusCode:FB_NO_SUCH_ELEMENT_ERROR_CODE
                                         message:message ?: FB_NO_SUCH_ELEMENT_MSG
+                                      traceback:traceback];
+}
+
++ (instancetype)noSuchWindowErrorWithMessage:(NSString *)message
+                                   traceback:(NSString *)traceback
+{
+  return [[FBCommandStatus alloc] initWithError:FB_NO_SUCH_WINDOW_ERROR
+                                     statusCode:FB_NO_SUCH_WINDOW_ERROR_CODE
+                                        message:message ?: FB_NO_SUCH_WINDOW_MSG
                                       traceback:traceback];
 }
 

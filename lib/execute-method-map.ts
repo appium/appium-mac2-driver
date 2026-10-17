@@ -130,6 +130,15 @@ export const executeMethodMap = {
       optional: ['displayId'],
     },
   },
+  'macos: listWindows': {
+    command: 'macosListWindows',
+  },
+  'macos: adjustWindow': {
+    command: 'macosAdjustWindow',
+    params: {
+      optional: ['windowId', 'state', 'x', 'y', 'width', 'height', 'displayId'],
+    },
+  },
   'macos: appleScript': {
     command: 'macosExecAppleScript',
     params: {

@@ -25,6 +25,7 @@ import * as navigationCommands from './commands/navigation.js';
 import * as recordScreenCommands from './commands/record-screen.js';
 import * as screenshotCommands from './commands/screenshots.js';
 import * as sourceCommands from './commands/source.js';
+import * as windowCommands from './commands/windows.js';
 import MAC2_CONSTRAINTS, {type Mac2Constraints} from './constraints.js';
 import {executeMethodMap} from './execute-method-map.js';
 import log from './logger.js';
@@ -110,6 +111,9 @@ export class Mac2Driver
   macosScreenshots = screenshotCommands.macosScreenshots;
 
   macosSource = sourceCommands.macosSource;
+
+  macosListWindows = windowCommands.macosListWindows;
+  macosAdjustWindow = windowCommands.macosAdjustWindow;
 
   _videoChunksBroadcaster!: nativeScreenRecordingCommands.NativeVideoChunksBroadcaster;
   _screenRecorder: recordScreenCommands.ScreenRecorder | null = null;
