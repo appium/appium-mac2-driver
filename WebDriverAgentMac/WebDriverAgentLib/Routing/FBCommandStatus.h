@@ -37,6 +37,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)noSuchElementErrorWithMessage:(nullable NSString *)message
                                     traceback:(nullable NSString *)traceback;
 
++ (instancetype)noSuchWindowErrorWithMessage:(nullable NSString *)message
+                                   traceback:(nullable NSString *)traceback;
+
 + (instancetype)invalidElementStateErrorWithMessage:(nullable NSString *)message
                                           traceback:(nullable NSString *)traceback;
 

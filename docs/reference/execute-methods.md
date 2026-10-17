@@ -651,6 +651,56 @@ value is an object with the following structure:
 | --- | --- | --- |
 | `id`| `number` | Display identifier |
 | `isMain`| `boolean` | Whether this display is the main one |
+| `rect`| `object` | The display bounds (`x`, `y`, `width`, `height`) in the global coordinate space with the top-left origin of the main display |
+
+### macos: listWindows
+
+Lists the windows of the current application. Reading the window traits requires the Accessibility
+permission to be granted to the WebDriverAgentRunner app; without it the traits are `null`.
+Available since driver version 4.5.0.
+
+#### Response
+
+`Array<Record<string, any>>` - a list of objects, where each object has the following structure:
+
+| Key | Value Type | Description |
+| --- | --- | --- |
+| `windowId` | `string` | Identifier of the window element. It can be passed to [`macos: adjustWindow`](#macos-adjustwindow) |
+| `title` | `string` | Window title |
+| `rect` | `object` | Window rectangle (`x`, `y`, `width`, `height`) in the global coordinate space |
+| `displayId` | `number` or `null` | Identifier of the display that contains most of the window |
+| `isMain` | `boolean` or `null` | Whether this is the main window of the application |
+| `isFocused` | `boolean` or `null` | Whether the window has the focus |
+| `isMinimized` | `boolean` or `null` | Whether the window is minimized |
+| `isFullscreen` | `boolean` or `null` | Whether the window is in fullscreen mode |
+| `isMovable` | `boolean` or `null` | Whether the window can be moved |
+| `isResizable` | `boolean` or `null` | Whether the window can be resized |
+
+### macos: adjustWindow
+
+Changes the state and/or geometry of an application window, optionally moving it to another
+display. A minimized or fullscreen window is restored first, unless that is the requested state.
+Requires the Accessibility permission to be granted to the WebDriverAgentRunner app.
+Available since driver version 4.5.0.
+
+#### Arguments
+
+| <div style="width:10em">Name</div> | Type | Description |
+| --- | --- | --- |
+| `windowId?` | `string` | Identifier of the window element, as returned by [`macos: listWindows`](#macos-listwindows). The main window is used by default. |
+| `state?` | `string` | The state to put the window into: `normal` (restores a minimized or fullscreen window), `minimized`, `maximized` (fills the visible area of the display, excluding the menu bar and the Dock) or `fullscreen`. `minimized` and `fullscreen` cannot be combined with the geometry arguments below, and `maximized` can only be combined with `displayId`. |
+| `x?` | `number` | Horizontal window origin. Global coordinates by default; relative to the origin of the `displayId` display if it is set. The current relative position is kept if omitted. |
+| `y?` | `number` | Vertical window origin. Same rules as `x`. |
+| `width?` | `number` | Window width. Unchanged if omitted. |
+| `height?` | `number` | Window height. Unchanged if omitted. |
+| `displayId?` | `number` | Identifier of the display to move the window to, as returned by [`macos: listDisplays`](#macos-listdisplays). The window is kept within the display bounds. |
+
+At least one argument other than `windowId` must be provided.
+
+#### Response
+
+The updated window information, in the same format as the items returned by
+[`macos: listWindows`](#macos-listwindows).
 
 ### macos: setClipboard
 

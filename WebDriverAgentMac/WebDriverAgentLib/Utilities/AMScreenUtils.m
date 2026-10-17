@@ -18,6 +18,29 @@
 
 @implementation AMScreenProperties
 
+- (CGRect)bounds
+{
+  return CGDisplayBounds((CGDirectDisplayID)self.identifier);
+}
+
+- (CGRect)visibleBounds
+{
+  CGRect bounds = self.bounds;
+  for (NSScreen *screen in NSScreen.screens) {
+    if ([screen.deviceDescription[@"NSScreenNumber"] longLongValue] != self.identifier) {
+      continue;
+    }
+    // NSScreen uses the bottom-left origin of the primary screen, which is the first one
+    CGFloat primaryHeight = NSScreen.screens.firstObject.frame.size.height;
+    CGRect visible = screen.visibleFrame;
+    return CGRectMake(visible.origin.x,
+                      primaryHeight - CGRectGetMaxY(visible),
+                      visible.size.width,
+                      visible.size.height);
+  }
+  return bounds;
+}
+
 - (instancetype)initWithIdentifier:(long long)identifier
                             isMain:(BOOL)isMain
 {

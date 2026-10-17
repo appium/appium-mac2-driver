@@ -24,6 +24,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) BOOL isMain;
 /** The integer identifier of a screen */
 @property (readonly, nonatomic) long long identifier;
+/** The display bounds in the global coordinate space with the top-left origin (same as XCUIElement frames) */
+@property (readonly, nonatomic) CGRect bounds;
+/** Same as bounds, but without the menu bar and the Dock */
+@property (readonly, nonatomic) CGRect visibleBounds;
 
 @end
 

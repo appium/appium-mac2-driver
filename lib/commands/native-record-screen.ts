@@ -9,6 +9,7 @@ import {TimeoutError, sleep, waitForCondition, withTimeout} from 'asyncbox';
 import {exec} from 'teen_process';
 
 import type {Mac2Driver} from '../driver.js';
+import type {Rect} from '../types.js';
 import {isPlainObject} from '../utils.js';
 import {BIDI_EVENT_NAME} from './bidi/constants.js';
 import {toNativeVideoChunkAddedEvent} from './bidi/models.js';
@@ -37,6 +38,7 @@ interface ActiveVideoInfo {
 interface DisplayInfo {
   id: number;
   isMain: boolean;
+  rect: Rect;
 }
 
 export class NativeVideoChunksBroadcaster {
