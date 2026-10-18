@@ -687,7 +687,7 @@ Available since driver version 4.5.0.
 
 | <div style="width:10em">Name</div> | Type | Description |
 | --- | --- | --- |
-| `windowId?` | `string` | Identifier of the window element, as returned by [`macos: listWindows`](#macos-listwindows). The main window is used by default. |
+| `windowId?` | `string` | Identifier of the window element, as returned by [`macos: listWindows`](#macos-listwindows). The main window is used by default. Minimized windows are not listed and cannot be addressed by this identifier. If `windowId` is omitted and the application has no visible windows, the first minimized window is adjusted, which is how a minimized window is restored. |
 | `state?` | `string` | The state to put the window into: `normal` (restores a minimized or fullscreen window), `minimized`, `maximized` (fills the visible area of the display, excluding the menu bar and the Dock) or `fullscreen`. `minimized` and `fullscreen` cannot be combined with the geometry arguments below, and `maximized` can only be combined with `displayId`. |
 | `x?` | `number` | Horizontal window origin. Global coordinates by default; relative to the origin of the `displayId` display if it is set. The current relative position is kept if omitted. |
 | `y?` | `number` | Vertical window origin. Same rules as `x`. |
@@ -700,7 +700,7 @@ At least one argument other than `windowId` must be provided.
 #### Response
 
 The updated window information, in the same format as the items returned by
-[`macos: listWindows`](#macos-listwindows).
+[`macos: listWindows`](#macos-listwindows). `windowId` is `null` if a minimized window was adjusted.
 
 ### macos: setClipboard
 
