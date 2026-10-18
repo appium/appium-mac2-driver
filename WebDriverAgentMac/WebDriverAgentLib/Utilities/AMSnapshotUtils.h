@@ -88,6 +88,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (nullable AXUIElementRef)createAXElementWithSnapshot:(nullable id)snapshot CF_RETURNS_RETAINED;
 
+/**
+ Creates an AX element for the XCTest accessibility element (XCAccessibilityElement).
+ The caller owns the result and must CFRelease it.
+
+ @param element XCTest accessibility element
+ @return The AX element or NULL if this process lacks Accessibility permission or the element is unavailable
+ */
++ (nullable AXUIElementRef)createAXElementWithAccessibilityElement:(nullable id)element CF_RETURNS_RETAINED;
+
 @end
 
 NS_ASSUME_NONNULL_END

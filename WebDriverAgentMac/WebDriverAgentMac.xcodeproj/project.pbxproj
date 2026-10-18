@@ -193,6 +193,8 @@
 		71E109222D55EBD0008A800D /* AMScreenUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E109212D55EBD0008A800D /* AMScreenUtils.m */; };
 		71E109232D55EBD0008A800D /* AMScreenUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E109202D55EBD0008A800D /* AMScreenUtils.h */; };
 		7A1D0C0E2F5E4B3100A9C1D2 /* AMWindowUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A1D0C0C2F5E4B3100A9C1D2 /* AMWindowUtils.h */; };
+		7A1D0C2E2F5E4B3100A9C1D2 /* AMXCTAccessibility.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A1D0C2C2F5E4B3100A9C1D2 /* AMXCTAccessibility.h */; };
+		7A1D0C2F2F5E4B3100A9C1D2 /* AMXCTAccessibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A1D0C2D2F5E4B3100A9C1D2 /* AMXCTAccessibility.m */; };
 		7A1D0C0F2F5E4B3100A9C1D2 /* AMWindowUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A1D0C0D2F5E4B3100A9C1D2 /* AMWindowUtils.m */; };
 		7C7DDBDEEA5313473955510E /* RouteResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 99A3E0766E623F457DF47C5D /* RouteResponse.m */; };
 		9658B1E3C9D26CA3A0404106 /* AMHTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = A82A3B74608C4054AD527A2F /* AMHTTPServer.m */; };
@@ -457,6 +459,8 @@
 		71E109212D55EBD0008A800D /* AMScreenUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMScreenUtils.m; sourceTree = "<group>"; };
 		7A1D0C0C2F5E4B3100A9C1D2 /* AMWindowUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMWindowUtils.h; sourceTree = "<group>"; };
 		7A1D0C0D2F5E4B3100A9C1D2 /* AMWindowUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMWindowUtils.m; sourceTree = "<group>"; };
+		7A1D0C2C2F5E4B3100A9C1D2 /* AMXCTAccessibility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMXCTAccessibility.h; sourceTree = "<group>"; };
+		7A1D0C2D2F5E4B3100A9C1D2 /* AMXCTAccessibility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMXCTAccessibility.m; sourceTree = "<group>"; };
 		99A3E0766E623F457DF47C5D /* RouteResponse.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RouteResponse.m; sourceTree = "<group>"; };
 		A14FCEABDDD9E126A7774B1F /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A5BB9951BC45450114B976DD /* RouteResponse.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RouteResponse.h; sourceTree = "<group>"; };
@@ -704,6 +708,8 @@
 				71E109212D55EBD0008A800D /* AMScreenUtils.m */,
 				7A1D0C0C2F5E4B3100A9C1D2 /* AMWindowUtils.h */,
 				7A1D0C0D2F5E4B3100A9C1D2 /* AMWindowUtils.m */,
+				7A1D0C2C2F5E4B3100A9C1D2 /* AMXCTAccessibility.h */,
+				7A1D0C2D2F5E4B3100A9C1D2 /* AMXCTAccessibility.m */,
 				718D2C302567FED3005F533B /* AMSessionCapabilities.h */,
 				718D2C312567FED3005F533B /* AMSessionCapabilities.m */,
 				718D2BF125678B4E005F533B /* AMSnapshotUtils.h */,
@@ -922,6 +928,7 @@
 				7180C216257AA707008FA870 /* XCUIElement+AMHitPoint.h in Headers */,
 				71E109232D55EBD0008A800D /* AMScreenUtils.h in Headers */,
 				7A1D0C0E2F5E4B3100A9C1D2 /* AMWindowUtils.h in Headers */,
+				7A1D0C2E2F5E4B3100A9C1D2 /* AMXCTAccessibility.h in Headers */,
 				719E6A6E25822DB800777988 /* XCUIApplication+AMUIInterruptions.h in Headers */,
 				718D2BF325678B4E005F533B /* AMSnapshotUtils.h in Headers */,
 				7109BFCF2565B517006BFD13 /* FBProtocolHelpers.h in Headers */,
@@ -1168,6 +1175,7 @@
 				7109BFDC2565B529006BFD13 /* AMSettings.m in Sources */,
 				71E109222D55EBD0008A800D /* AMScreenUtils.m in Sources */,
 				7A1D0C0F2F5E4B3100A9C1D2 /* AMWindowUtils.m in Sources */,
+				7A1D0C2F2F5E4B3100A9C1D2 /* AMXCTAccessibility.m in Sources */,
 				713A9D3D2566AA2300118D07 /* AMGeometryUtils.m in Sources */,
 				7109C0312565B5AE006BFD13 /* FBScreenshotCommands.m in Sources */,
 				7109BFFA2565B556006BFD13 /* FBExceptions.m in Sources */,

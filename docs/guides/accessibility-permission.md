@@ -2,15 +2,19 @@
 title: Granting Accessibility Permission
 ---
 
-Some Mac2 driver features read or change UI state through the macOS Accessibility API, which macOS
+Some Mac2 driver features change the UI state through the macOS Accessibility API, which macOS
 only allows for apps that you have explicitly trusted. Regular test automation (finding elements,
 clicking, typing, and so on) does **not** need this permission. These features do:
 
 | Feature | Without the permission |
 | --- | --- |
-| [`macos: adjustWindow`](../reference/execute-methods.md#macos-adjustwindow) | Fails with an error that mentions the Accessibility permission. |
-| Window traits in [`macos: listWindows`](../reference/execute-methods.md#macos-listwindows) (`isMain`, `isMinimized`, `isFullscreen`, and so on) | The traits are `null`. |
+| Moving and resizing windows with [`macos: adjustWindow`](../reference/execute-methods.md#macos-adjustwindow): the `x`, `y`, `width`, `height` and `displayId` arguments and the `maximized` state | Fails with an error that mentions the Accessibility permission. |
+| The `isMovable` and `isResizable` window traits in [`macos: listWindows`](../reference/execute-methods.md#macos-listwindows) | The traits are `null`. |
 | The [`useDomIdAsAccessibilityId`](../reference/settings.md#usedomidasaccessibilityid) setting | Web element DOM identifiers cannot be resolved. |
+
+Listing windows, reading the other window traits, and the `minimized`, `fullscreen` and `normal`
+states of `macos: adjustWindow` work without the permission. The driver uses the accessibility
+interface of XCTest for them and only falls back to the Accessibility API if that is not possible.
 
 The permission must be granted to the **WebDriverAgent runner**, the helper app that the driver
 builds and starts on your Mac. It is called `WebDriverAgentRunner-Runner.app`, and it is not the
@@ -42,7 +46,8 @@ application under test, Appium, or your terminal.
 ## Verify the permission
 
 Call [`macos: listWindows`](../reference/execute-methods.md#macos-listwindows) in a session. If the
-runner is trusted, the window traits are booleans. If they are `null`, the runner is not trusted.
+runner is trusted, the `isMovable` and `isResizable` window traits are booleans. If they are `null`,
+the runner is not trusted.
 
 ## Troubleshooting
 

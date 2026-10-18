@@ -36,9 +36,20 @@ extern NSString *const AMWindowStateFullscreen;
 
 /**
  Inspects and changes application windows. Does not depend on the HTTP layer or sessions.
- Changing windows requires the process to be trusted for the Accessibility API.
+
+ Whenever possible, windows are inspected and changed through the accessibility interface of XCTest,
+ which does not need the Accessibility permission: the window attributes, the minimized windows,
+ minimizing, entering and leaving the fullscreen mode and restoring minimized windows.
+ If this is not possible, the Accessibility API is used, which requires the process to be trusted.
+ Moving and resizing windows always needs the Accessibility permission.
  */
 @interface AMWindowUtils : NSObject
+
+/**
+ Whether the XCTest accessibility interface is used (YES by default). If it is turned off, only
+ the Accessibility API is used. Intended for tests.
+ */
+@property (class, nonatomic) BOOL usesUnprivilegedRoutes;
 
 /**
  @returns Windows of the given application
@@ -54,7 +65,8 @@ extern NSString *const AMWindowStateFullscreen;
  Describes the window. The result contains:
  title, rect (global coordinates), displayId (the display with the biggest part of the window)
  and the isMain, isFocused, isMinimized, isFullscreen, isMovable, isResizable traits.
- The traits are NSNull if the Accessibility permission is not granted.
+ isMovable and isResizable are NSNull if the Accessibility permission is not granted,
+ and all the traits are NSNull if the window cannot be read at all.
 
  @returns The window info or nil if the element does not exist anymore
  */
@@ -64,20 +76,22 @@ extern NSString *const AMWindowStateFullscreen;
  Changes the state and/or geometry of the window.
 
  @param window the window element
+ @param application the application that owns the window
  @param arguments any of: state (normal, minimized, maximized, fullscreen), x, y, width, height
  and displayId. Coordinates are global, or relative to the display if displayId is set.
  minimized and fullscreen states cannot be combined with the geometry, and maximized can only be
- combined with displayId.
+ combined with displayId. The geometry (including maximized) needs the Accessibility permission.
  @param error AMWindowErrorInvalidArgument, AMWindowErrorFailure or AMWindowErrorNotFound
  (the element does not exist anymore, for example because the window has been minimized)
  @returns The updated window info in the infoForWindow: format or nil in case of failure
  */
 + (nullable NSDictionary<NSString *, id> *)adjustWindow:(XCUIElement *)window
+                                          inApplication:(XCUIApplication *)application
                                           withArguments:(NSDictionary<NSString *, id> *)arguments
                                                   error:(NSError **)error;
 
 /**
- Same as adjustWindow:withArguments:error: for the first minimized window of the application.
+ Same as adjustWindow:inApplication:withArguments:error: for the first minimized window of the application.
  Minimized windows cannot be addressed by elements, because they are not a part of the element hierarchy.
 
  @returns The updated window info or nil in case of failure. AMWindowErrorNotFound is returned

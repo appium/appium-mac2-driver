@@ -77,7 +77,7 @@
   NSError *error = nil;
   NSDictionary *info = nil;
   if (nil != window) {
-    info = [AMWindowUtils adjustWindow:window withArguments:request.arguments error:&error];
+    info = [AMWindowUtils adjustWindow:window inApplication:application withArguments:request.arguments error:&error];
   } else if (nil == windowId) {
     // There are no visible windows, so a minimized one could be restored
     info = [AMWindowUtils adjustMinimizedWindowOfApplication:application withArguments:request.arguments error:&error];

@@ -655,9 +655,9 @@ value is an object with the following structure:
 
 ### macos: listWindows
 
-Lists the windows of the current application. Reading the window traits requires the Accessibility
-permission to be granted to the WebDriverAgentRunner app; without it the traits are `null`. Refer to the
-[Granting Accessibility Permission](../guides/accessibility-permission.md) guide.
+Lists the windows of the current application. The `isMovable` and `isResizable` traits require the
+Accessibility permission to be granted to the WebDriverAgentRunner app; without it they are `null`.
+Refer to the [Granting Accessibility Permission](../guides/accessibility-permission.md) guide.
 Available since driver version 4.5.0.
 
 #### Response
@@ -674,15 +674,24 @@ Available since driver version 4.5.0.
 | `isFocused` | `boolean` or `null` | Whether the window has the focus |
 | `isMinimized` | `boolean` or `null` | Whether the window is minimized |
 | `isFullscreen` | `boolean` or `null` | Whether the window is in fullscreen mode |
-| `isMovable` | `boolean` or `null` | Whether the window can be moved |
-| `isResizable` | `boolean` or `null` | Whether the window can be resized |
+| `isMovable` | `boolean` or `null` | Whether the window can be moved. Requires the Accessibility permission. |
+| `isResizable` | `boolean` or `null` | Whether the window can be resized. Requires the Accessibility permission. |
 
 ### macos: adjustWindow
 
 Changes the state and/or geometry of an application window, optionally moving it to another
 display. A minimized or fullscreen window is restored first, unless that is the requested state.
-Requires the Accessibility permission to be granted to the WebDriverAgentRunner app. Refer to the
+
+Changing the state to `normal`, `minimized` or `fullscreen` does not require the Accessibility
+permission. Moving and resizing windows (the `x`, `y`, `width`, `height` and `displayId` arguments)
+and the `maximized` state require it to be granted to the WebDriverAgentRunner app. Refer to the
 [Granting Accessibility Permission](../guides/accessibility-permission.md) guide.
+
+A minimized window is restored by clicking its item in the Dock, which only happens if the item can
+be identified unambiguously by the window title. If another minimized window has the same title, the
+Accessibility API is used instead. Leaving the fullscreen mode activates the application and sends
+the Control+Command+F shortcut to it.
+
 Available since driver version 4.5.0.
 
 #### Arguments

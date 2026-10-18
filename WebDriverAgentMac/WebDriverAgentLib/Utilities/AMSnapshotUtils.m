@@ -116,7 +116,21 @@ static BOOL AMIsAccessibilityTrusted(void)
 
 + (nullable AXUIElementRef)createAXElementWithSnapshot:(nullable id)snapshot
 {
-  if (nil == snapshot || !AMIsAccessibilityTrusted()) {
+  if (nil == snapshot) {
+    return NULL;
+  }
+  @try {
+    return [self createAXElementWithAccessibilityElement:[snapshot valueForKey:@"_accessibilityElement"]];
+  } @catch (NSException *e) {
+    // Only the private _accessibilityElement key path may throw here
+    [FBLogger logFmt:@"Cannot create an AX element from a snapshot. Original error: %@", e.reason];
+    return NULL;
+  }
+}
+
++ (nullable AXUIElementRef)createAXElementWithAccessibilityElement:(nullable id)element
+{
+  if (nil == element || !AMIsAccessibilityTrusted()) {
     return NULL;
   }
   AMCreateWithRemoteTokenFn createRef = AMRemoteTokenFn();
@@ -124,11 +138,11 @@ static BOOL AMIsAccessibilityTrusted(void)
     return NULL;
   }
   @try {
-    NSData *token = [[snapshot valueForKey:@"_accessibilityElement"] valueForKey:@"_token"];
+    NSData *token = [element valueForKey:@"_token"];
     return [token isKindOfClass:NSData.class] ? createRef((__bridge CFDataRef)token) : NULL;
   } @catch (NSException *e) {
-    // Only the private _accessibilityElement._token key path may throw here
-    [FBLogger logFmt:@"Cannot create an AX element from a snapshot. Original error: %@", e.reason];
+    // Only the private _token key path may throw here
+    [FBLogger logFmt:@"Cannot create an AX element from an accessibility element. Original error: %@", e.reason];
     return NULL;
   }
 }

@@ -20,33 +20,55 @@
 #import "AMScreenUtils.h"
 #import "AMSnapshotUtils.h"
 #import "AMWindowUtils.h"
+#import "AMXCTAccessibility.h"
 #import "FBTestMacros.h"
 
 static const CGFloat AM_GEOMETRY_ACCURACY = 1.0;
 
+/**
+ The windows are inspected and changed through the XCTest accessibility interface, which does not
+ need the Accessibility permission, except for the window geometry. AMWindowAccessibilityApiTests
+ runs the same tests using the Accessibility API only.
+ */
 @interface AMWindowTests : AMIntegrationTestCase
+- (BOOL)usesUnprivilegedRoutes;
 @end
 
 @implementation AMWindowTests
 
+- (BOOL)usesUnprivilegedRoutes
+{
+  return YES;
+}
+
 - (void)setUp
 {
   [super setUp];
+  AMWindowUtils.usesUnprivilegedRoutes = [self usesUnprivilegedRoutes];
   [self launchApplication];
 }
 
 - (void)tearDown
 {
-  if (AMSnapshotUtils.isAccessibilityTrusted) {
-    // Leave the window in a regular state for the other tests
-    NSDictionary *normal = @{@"state": AMWindowStateNormal};
-    [AMWindowUtils adjustMinimizedWindowOfApplication:self.testedApplication withArguments:normal error:nil];
-    XCUIElement *window = [AMWindowUtils mainWindowOfApplication:self.testedApplication];
-    if (nil != window) {
-      [AMWindowUtils adjustWindow:window withArguments:normal error:nil];
-    }
+  // Leave the window in a regular state for the other tests
+  NSDictionary *normal = @{@"state": AMWindowStateNormal};
+  [AMWindowUtils adjustMinimizedWindowOfApplication:self.testedApplication withArguments:normal error:nil];
+  XCUIElement *window = [AMWindowUtils mainWindowOfApplication:self.testedApplication];
+  if (nil != window) {
+    [AMWindowUtils adjustWindow:window inApplication:self.testedApplication withArguments:normal error:nil];
   }
+  AMWindowUtils.usesUnprivilegedRoutes = YES;
   [super tearDown];
+}
+
+// Changing states needs the XCTest accessibility interface, or the Accessibility permission if it is not used
+- (void)skipUnlessStateRoutesAvailable
+{
+  if ([self usesUnprivilegedRoutes]) {
+    XCTSkipUnless(AMXCTAccessibility.isAvailable, @"The XCTest accessibility interface is not available");
+  } else {
+    [self skipUnlessAccessibilityTrusted];
+  }
 }
 
 #pragma mark - Helpers
@@ -72,7 +94,7 @@ static const CGFloat AM_GEOMETRY_ACCURACY = 1.0;
 - (NSDictionary<NSString *, id> *)adjustWindow:(XCUIElement *)window arguments:(NSDictionary<NSString *, id> *)arguments
 {
   NSError *error = nil;
-  NSDictionary *result = [AMWindowUtils adjustWindow:window withArguments:arguments error:&error];
+  NSDictionary *result = [AMWindowUtils adjustWindow:window inApplication:self.testedApplication withArguments:arguments error:&error];
   XCTAssertNotNil(result, @"The call has failed: %@", error);
   return result;
 }
@@ -92,7 +114,7 @@ static const CGFloat AM_GEOMETRY_ACCURACY = 1.0;
                                   window:(XCUIElement *)window
 {
   NSError *error = nil;
-  XCTAssertNil([AMWindowUtils adjustWindow:window withArguments:arguments error:&error]);
+  XCTAssertNil([AMWindowUtils adjustWindow:window inApplication:self.testedApplication withArguments:arguments error:&error]);
   XCTAssertEqualObjects(error.domain, AMWindowErrorDomain);
   XCTAssertEqual(error.code, AMWindowErrorInvalidArgument);
   XCTAssertTrue([error.localizedDescription containsString:fragment], @"Unexpected message: %@", error.localizedDescription);
@@ -146,15 +168,23 @@ static const CGFloat AM_GEOMETRY_ACCURACY = 1.0;
 
 - (void)testWindowTraitsAreListed
 {
-  [self skipUnlessAccessibilityTrusted];
+  [self skipUnlessStateRoutesAvailable];
 
   NSDictionary *info = [AMWindowUtils infoForWindow:[self mainWindow]];
-  for (NSString *trait in @[@"isMain", @"isFocused", @"isMinimized", @"isFullscreen", @"isMovable", @"isResizable"]) {
+  for (NSString *trait in @[@"isMain", @"isFocused", @"isMinimized", @"isFullscreen"]) {
     XCTAssertTrue([info[trait] isKindOfClass:NSNumber.class], @"'%@' must be a boolean: %@", trait, info);
   }
+  XCTAssertTrue([info[@"isMain"] boolValue]);
   XCTAssertFalse([info[@"isMinimized"] boolValue]);
   XCTAssertFalse([info[@"isFullscreen"] boolValue]);
-  XCTAssertTrue([info[@"isMovable"] boolValue]);
+  // These can only be asked through the Accessibility API
+  if (AMSnapshotUtils.isAccessibilityTrusted) {
+    XCTAssertTrue([info[@"isMovable"] boolValue]);
+    XCTAssertTrue([info[@"isResizable"] boolValue]);
+  } else {
+    XCTAssertEqualObjects(info[@"isMovable"], NSNull.null);
+    XCTAssertEqualObjects(info[@"isResizable"], NSNull.null);
+  }
 }
 
 #pragma mark - Argument validation
@@ -282,7 +312,7 @@ static const CGFloat AM_GEOMETRY_ACCURACY = 1.0;
 
 - (void)testWindowCanBeMinimizedAndRestored
 {
-  [self skipUnlessAccessibilityTrusted];
+  [self skipUnlessStateRoutesAvailable];
 
   XCUIApplication *application = self.testedApplication;
   CGRect original = [self rectFromInfo:[AMWindowUtils infoForWindow:[self mainWindow]]];
@@ -322,7 +352,7 @@ static const CGFloat AM_GEOMETRY_ACCURACY = 1.0;
 
 - (void)testRestoringRequiresMinimizedWindow
 {
-  [self skipUnlessAccessibilityTrusted];
+  [self skipUnlessStateRoutesAvailable];
 
   NSError *error = nil;
   XCTAssertNil([AMWindowUtils adjustMinimizedWindowOfApplication:self.testedApplication
@@ -331,18 +361,41 @@ static const CGFloat AM_GEOMETRY_ACCURACY = 1.0;
   XCTAssertEqual(error.code, AMWindowErrorNotFound);
 }
 
+- (void)testGeometryRequiresAccessibilityPermission
+{
+  XCTSkipIf(AMSnapshotUtils.isAccessibilityTrusted, @"The process is trusted for the Accessibility API");
+
+  NSError *error = nil;
+  XCTAssertNil([AMWindowUtils adjustWindow:[self mainWindow]
+                             inApplication:self.testedApplication
+                             withArguments:@{@"width": @600}
+                                     error:&error]);
+  XCTAssertEqual(error.code, AMWindowErrorFailure);
+  XCTAssertTrue([error.localizedDescription containsString:@"Accessibility"], @"%@", error.localizedDescription);
+}
+
 - (void)testWindowCanEnterAndLeaveFullscreen
 {
-  [self skipUnlessAccessibilityTrusted];
+  [self skipUnlessStateRoutesAvailable];
 
   XCUIElement *window = [self mainWindow];
-  XCTSkipUnless([[AMWindowUtils infoForWindow:window][@"isResizable"] boolValue],
-                @"The window cannot enter the fullscreen mode");
   NSDictionary *fullscreen = [self adjustWindow:window arguments:@{@"state": AMWindowStateFullscreen}];
   XCTAssertEqualObjects(fullscreen[@"isFullscreen"], @YES);
 
   NSDictionary *restored = [self adjustWindow:window arguments:@{@"state": AMWindowStateNormal}];
   XCTAssertEqualObjects(restored[@"isFullscreen"], @NO);
+}
+
+@end
+
+@interface AMWindowAccessibilityApiTests : AMWindowTests
+@end
+
+@implementation AMWindowAccessibilityApiTests
+
+- (BOOL)usesUnprivilegedRoutes
+{
+  return NO;
 }
 
 @end
