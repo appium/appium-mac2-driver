@@ -51,3 +51,6 @@ export interface WindowInfo {
   isMovable: boolean | null;
   isResizable: boolean | null;
 }
+
+/** `windowId` is null if a minimized window has been adjusted */
+export type AdjustedWindowInfo = Omit<WindowInfo, 'windowId'> & {windowId: string | null};

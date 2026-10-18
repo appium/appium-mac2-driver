@@ -425,10 +425,13 @@ static BOOL AMWaitForWindowFlag(AMWindowHandle *handle, NSString *key, BOOL expe
     }
     rect[key] = value;
   }
-  NSNumber *displayId = arguments[@"displayId"];
-  if ([displayId isKindOfClass:NSNull.class]) {
-    displayId = nil;
+  id rawDisplayId = arguments[@"displayId"];
+  if (nil != rawDisplayId && ![rawDisplayId isKindOfClass:NSNull.class] && ![rawDisplayId isKindOfClass:NSNumber.class]) {
+    AMAssignError(error, [self windowErrorWithCode:AMWindowErrorInvalidArgument
+                                format:@"'displayId' must be a number, got '%@'", rawDisplayId]);
+    return NO;
   }
+  NSNumber *displayId = [rawDisplayId isKindOfClass:NSNumber.class] ? rawDisplayId : nil;
   NSString *state = arguments[@"state"];
   if ([state isKindOfClass:NSNull.class]) {
     state = nil;

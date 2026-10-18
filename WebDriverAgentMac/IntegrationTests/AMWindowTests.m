@@ -222,6 +222,12 @@ static const CGFloat AM_GEOMETRY_ACCURACY = 1.0;
   [self assertInvalidArgumentWithMessage:@"is unknown" forArguments:@{@"displayId": @999999}];
 }
 
+- (void)testAdjustingRejectsMalformedDisplayId
+{
+  [self assertInvalidArgumentWithMessage:@"'displayId' must be a number" forArguments:@{@"displayId": @{}}];
+  [self assertInvalidArgumentWithMessage:@"'displayId' must be a number" forArguments:@{@"displayId": @"foo"}];
+}
+
 - (void)testAdjustingRejectsNonWindowElements
 {
   XCUIElement *button = self.testedApplication.buttons.firstMatch;

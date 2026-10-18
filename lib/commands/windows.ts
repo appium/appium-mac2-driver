@@ -1,5 +1,5 @@
 import type {Mac2Driver} from '../driver.js';
-import type {WindowInfo, WindowState} from '../types.js';
+import type {AdjustedWindowInfo, WindowInfo, WindowState} from '../types.js';
 
 /**
  * Lists the windows of the current application
@@ -20,7 +20,7 @@ export async function macosListWindows(this: Mac2Driver): Promise<WindowInfo[]> 
  * @param width - Window width
  * @param height - Window height
  * @param displayId - Identifier of the display to move the window to
- * @returns The updated window information
+ * @returns The updated window information. `windowId` is null if a minimized window was adjusted
  */
 export async function macosAdjustWindow(
   this: Mac2Driver,
@@ -31,7 +31,7 @@ export async function macosAdjustWindow(
   width?: number,
   height?: number,
   displayId?: number,
-): Promise<WindowInfo> {
+): Promise<AdjustedWindowInfo> {
   return (await this.wda.proxy.command('/wda/window/adjust', 'POST', {
     windowId,
     state,
@@ -40,5 +40,5 @@ export async function macosAdjustWindow(
     width,
     height,
     displayId,
-  })) as WindowInfo;
+  })) as AdjustedWindowInfo;
 }

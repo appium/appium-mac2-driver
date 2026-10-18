@@ -70,7 +70,13 @@
 {
   FBElementCache *cache = request.session.elementCache;
   XCUIApplication *application = request.session.currentApplication;
-  NSString *windowId = [request.arguments[@"windowId"] isKindOfClass:NSString.class] ? request.arguments[@"windowId"] : nil;
+  id rawWindowId = request.arguments[@"windowId"];
+  if (nil != rawWindowId && ![rawWindowId isKindOfClass:NSNull.class] && ![rawWindowId isKindOfClass:NSString.class]) {
+    return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:
+                                 [NSString stringWithFormat:@"'windowId' must be a string, got '%@'", rawWindowId]
+                                                                        traceback:nil]);
+  }
+  NSString *windowId = [rawWindowId isKindOfClass:NSString.class] ? rawWindowId : nil;
   XCUIElement *window = nil != windowId
     ? [cache elementForUUID:windowId]
     : [AMWindowUtils mainWindowOfApplication:application];

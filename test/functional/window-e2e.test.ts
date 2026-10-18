@@ -70,6 +70,17 @@ describe('Mac2Driver - windows', {timeout: TEST_TIMEOUT}, () => {
     assert.equal(win.rect.x, displays[0].rect.x + 50);
   });
 
+  it('should reject malformed identifiers', async () => {
+    await assert.rejects(
+      driver.executeScript('macos: adjustWindow', [{windowId: 123, width: 640}]),
+      /'windowId' must be a string/,
+    );
+    await assert.rejects(
+      driver.executeScript('macos: adjustWindow', [{displayId: {}, x: 0}]),
+      /'displayId' must be a number/,
+    );
+  });
+
   it('should reject an unknown display', async () => {
     await assert.rejects(
       driver.executeScript('macos: adjustWindow', [{displayId: 999999, x: 0}]),
