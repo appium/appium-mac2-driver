@@ -656,7 +656,8 @@ value is an object with the following structure:
 ### macos: listWindows
 
 Lists the windows of the current application. Reading the window traits requires the Accessibility
-permission to be granted to the WebDriverAgentRunner app; without it the traits are `null`.
+permission to be granted to the WebDriverAgentRunner app; without it the traits are `null`. Refer to the
+[Granting Accessibility Permission](../guides/accessibility-permission.md) guide.
 Available since driver version 4.5.0.
 
 #### Response
@@ -680,7 +681,8 @@ Available since driver version 4.5.0.
 
 Changes the state and/or geometry of an application window, optionally moving it to another
 display. A minimized or fullscreen window is restored first, unless that is the requested state.
-Requires the Accessibility permission to be granted to the WebDriverAgentRunner app.
+Requires the Accessibility permission to be granted to the WebDriverAgentRunner app. Refer to the
+[Granting Accessibility Permission](../guides/accessibility-permission.md) guide.
 Available since driver version 4.5.0.
 
 #### Arguments
