@@ -35,8 +35,7 @@ be granted by the user. Refer to the
 steps. Available since driver version 4.5.0.
 
 The Appium server keeps running. The script exits with a non-zero code if the runner cannot be
-built or found. Use the `WDA_RUNNER_PATH` environment variable to point it to a runner in a
-non-default location. Running the script directly with `node scripts/setup-accessibility.mjs` from
+built or found. Running the script directly with `node scripts/setup-accessibility.mjs` from
 the driver folder also supports the `--keep-running` flag, which leaves the running processes alone,
 and the `--no-open` flag, which only prints the runner location.
 
@@ -45,3 +44,9 @@ and the `--no-open` flag, which only prints the runner location.
 ```
 appium driver run mac2 setup-accessibility
 ```
+
+##### Optional Environment Variables
+
+|<div style="width:9em">Variable</div>|Description|Default|
+|--|--|--|
+|`WDA_RUNNER_PATH`|Custom path to the WebDriverAgentRunner app|`~/Library/Developer/Xcode/DerivedData/WebDriverAgentMac-<string>/Build/Products/Debug/WebDriverAgentRunner-Runner.app`|
