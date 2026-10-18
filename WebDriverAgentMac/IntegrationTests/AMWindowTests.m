@@ -392,6 +392,26 @@ static const CGFloat AM_GEOMETRY_ACCURACY = 1.0;
   XCTAssertEqualObjects(restored[@"isFullscreen"], @NO);
 }
 
+- (void)testFullscreenWindowCanBeMinimized
+{
+  [self skipUnlessStateRoutesAvailable];
+
+  XCUIApplication *application = self.testedApplication;
+  XCUIElement *window = [self mainWindow];
+  NSDictionary *fullscreen = [self adjustWindow:window arguments:@{@"state": AMWindowStateFullscreen}];
+  XCTAssertEqualObjects(fullscreen[@"isFullscreen"], @YES);
+
+  NSDictionary *minimized = [self adjustWindow:window arguments:@{@"state": AMWindowStateMinimized}];
+  XCTAssertEqualObjects(minimized[@"isMinimized"], @YES);
+  XCTAssertEqualObjects(minimized[@"isFullscreen"], @NO);
+
+  NSError *error = nil;
+  XCTAssertNotNil([AMWindowUtils adjustMinimizedWindowOfApplication:application
+                                                      withArguments:@{@"state": AMWindowStateNormal}
+                                                              error:&error], @"The call has failed: %@", error);
+  FBAssertWaitTillBecomesTrue(nil != [AMWindowUtils mainWindowOfApplication:application]);
+}
+
 @end
 
 @interface AMWindowAccessibilityApiTests : AMWindowTests

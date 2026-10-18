@@ -606,14 +606,30 @@ static BOOL AMWaitForWindowFlag(AMWindowHandle *handle, NSString *key, BOOL expe
     && AMWaitForWindowFlag(handle, AM_KEY_FULLSCREEN, YES);
 }
 
++ (BOOL)focusHandle:(AMWindowHandle *)handle application:(XCUIApplication *)application
+{
+  [application activate];
+  if (AMWaitForWindowFlag(handle, AM_KEY_FOCUSED, YES)) {
+    return YES;
+  }
+  AXUIElementRef ref = [handle axElement];
+  if (NULL == ref) {
+    return NO;
+  }
+  AXUIElementPerformAction(ref, kAXRaiseAction);
+  return AMWaitForWindowFlag(handle, AM_KEY_FOCUSED, YES);
+}
+
 + (BOOL)leaveFullscreenHandle:(AMWindowHandle *)handle application:(XCUIApplication *)application
 {
   if (gUsesUnprivilegedRoutes) {
-    // The window buttons are hidden in the fullscreen mode, so the standard shortcut is used
-    [application activate];
-    [application typeKey:@"f" modifierFlags:XCUIKeyModifierControl | XCUIKeyModifierCommand];
-    if (AMWaitForWindowFlag(handle, AM_KEY_FULLSCREEN, NO)) {
-      return YES;
+    // The window buttons are hidden in the fullscreen mode, so the standard shortcut is used.
+    // It toggles the focused window, so the shortcut is skipped if the target cannot be focused
+    if ([self focusHandle:handle application:application]) {
+      [application typeKey:@"f" modifierFlags:XCUIKeyModifierControl | XCUIKeyModifierCommand];
+      if (AMWaitForWindowFlag(handle, AM_KEY_FULLSCREEN, NO)) {
+        return YES;
+      }
     }
   }
   AXUIElementRef ref = [handle axElement];
@@ -638,16 +654,13 @@ static BOOL AMWaitForWindowFlag(AMWindowHandle *handle, NSString *key, BOOL expe
     return nil;
   }
 
-  if ([state isEqualToString:AMWindowStateMinimized]) {
-    if (![attrs[AM_KEY_MINIMIZED] boolValue] && ![self minimizeHandle:handle application:application]) {
-      AMAssignError(error, [self windowErrorWithCode:AMWindowErrorFailure format:@"The window cannot be minimized"]);
-      return nil;
-    }
+  BOOL wantsMinimized = [state isEqualToString:AMWindowStateMinimized];
+  BOOL isMinimized = [attrs[AM_KEY_MINIMIZED] boolValue];
+  if (isMinimized && wantsMinimized) {
     return [self infoForHandle:handle];
   }
-
   // Every other change needs a regular window
-  if ([attrs[AM_KEY_MINIMIZED] boolValue] && ![self restoreHandle:handle]) {
+  if (isMinimized && ![self restoreHandle:handle]) {
     AMAssignError(error, [self windowErrorWithCode:AMWindowErrorFailure
                                             format:@"The minimized window cannot be restored. Make sure there are no other minimized windows "
                           @"with the same title or grant the Accessibility permission to the WebDriverAgentRunner app"]);
@@ -659,6 +672,13 @@ static BOOL AMWaitForWindowFlag(AMWindowHandle *handle, NSString *key, BOOL expe
     AMAssignError(error, [self windowErrorWithCode:AMWindowErrorFailure
                                             format:@"The window did not leave the fullscreen mode in %.0f seconds", AM_WINDOW_STATE_TIMEOUT]);
     return nil;
+  }
+  if (wantsMinimized) {
+    if (![self minimizeHandle:handle application:application]) {
+      AMAssignError(error, [self windowErrorWithCode:AMWindowErrorFailure format:@"The window cannot be minimized"]);
+      return nil;
+    }
+    return [self infoForHandle:handle];
   }
   if (wantsFullscreen) {
     if (!isFullscreen && ![self enterFullscreenHandle:handle application:application]) {
