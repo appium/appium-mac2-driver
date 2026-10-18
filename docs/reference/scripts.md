@@ -31,7 +31,7 @@ permission when a process starts, so an active Mac2 session stops working. It th
 yet, using the same build settings as the driver. Finally, it shows the runner in Finder and opens
 the Accessibility settings. It cannot grant the permission itself, because macOS only allows it to
 be granted by the user. Refer to the
-[Granting Accessibility Permission](../guides/accessibility-permission.md) guide for the complete
+[Accessibility Permission](../guides/accessibility-permission.md) guide for the complete
 steps. Available since driver version 4.5.0.
 
 The Appium server keeps running. The script exits with a non-zero code if the runner cannot be

@@ -651,20 +651,20 @@ value is an object with the following structure:
 | --- | --- | --- |
 | `id`| `number` | Display identifier |
 | `isMain`| `boolean` | Whether this display is the main one |
-| `rect`| `object` | The display bounds (`x`, `y`, `width`, `height`) in the global coordinate space with the top-left origin of the main display |
+| `rect`| `object` | The display bounds (`x`, `y`, `width`, `height`) in the global coordinate space with the top-left origin of the main display. Available since driver version 4.5.0. |
 
 ### macos: listWindows
 
 Lists the windows of the current application. The `isMovable` and `isResizable` traits require the
 Accessibility permission to be granted to the WebDriverAgentRunner app; without it they are `null`.
-Refer to the [Granting Accessibility Permission](../guides/accessibility-permission.md) guide.
+Refer to the [Accessibility Permission](../guides/accessibility-permission.md) guide.
 Available since driver version 4.5.0.
 
 #### Response
 
 `Array<Record<string, any>>` - a list of objects, where each object has the following structure:
 
-| Key | Value Type | Description |
+| <div style="width:7em">Key</div> | Value Type | Description |
 | --- | --- | --- |
 | `windowId` | `string` | Identifier of the window element. It can be passed to [`macos: adjustWindow`](#macos-adjustwindow) |
 | `title` | `string` | Window title |
@@ -685,7 +685,7 @@ display. A minimized or fullscreen window is restored first, unless that is the 
 Changing the state to `normal`, `minimized` or `fullscreen` does not require the Accessibility
 permission. Moving and resizing windows (the `x`, `y`, `width`, `height` and `displayId` arguments)
 and the `maximized` state require it to be granted to the WebDriverAgentRunner app. Refer to the
-[Granting Accessibility Permission](../guides/accessibility-permission.md) guide.
+[Accessibility Permission](../guides/accessibility-permission.md) guide.
 
 A minimized window is restored by clicking its item in the Dock, which only happens if the item can
 be identified unambiguously by the window title. If another minimized window has the same title, the
@@ -696,7 +696,7 @@ Available since driver version 4.5.0.
 
 #### Arguments
 
-| <div style="width:10em">Name</div> | Type | Description |
+| <div style="width:6em">Name</div> | Type | Description |
 | --- | --- | --- |
 | `windowId?` | `string` | Identifier of the window element, as returned by [`macos: listWindows`](#macos-listwindows). The main window is used by default. Minimized windows are not listed and cannot be addressed by this identifier. If `windowId` is omitted and the application has no visible windows, the first minimized window is adjusted, which is how a minimized window is restored. |
 | `state?` | `string` | The state to put the window into: `normal` (restores a minimized or fullscreen window), `minimized`, `maximized` (fills the visible area of the display, excluding the menu bar and the Dock) or `fullscreen`. `minimized` and `fullscreen` cannot be combined with the geometry arguments below, and `maximized` can only be combined with `displayId`. |

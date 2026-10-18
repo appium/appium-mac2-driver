@@ -1,5 +1,5 @@
 ---
-title: Granting Accessibility Permission
+title: Accessibility Permission
 ---
 
 Some Mac2 driver features change the UI state through the macOS Accessibility API, which macOS
@@ -18,9 +18,10 @@ interface of XCTest for them and only falls back to the Accessibility API if tha
 
 The permission must be granted to the **WebDriverAgent runner**, the helper app that the driver
 builds and starts on your Mac. It is called `WebDriverAgentRunner-Runner.app`, and it is not the
-application under test, Appium, or your terminal.
+application under test, Appium, or your terminal. Refer to [Technologies Used](../overview.md#technologies-used)
+for more details.
 
-## Steps
+## Granting Permission
 
 1. **End your Mac2 sessions.** The next step stops the running WebDriverAgent runner, because macOS
    decides on the permission when a process starts. A session that is still active stops working.
@@ -31,7 +32,8 @@ application under test, Appium, or your terminal.
     appium driver run mac2 setup-accessibility
     ```
 
-   See [the scripts reference](../reference/scripts.md#setup-accessibility) for details.
+    See [the scripts reference](../reference/scripts.md#setup-accessibility) for details.
+
 3. **Add the runner.** In **System Settings → Privacy & Security → Accessibility**, add
    `WebDriverAgentRunner-Runner.app` with the **+** button (or drag it from the Finder window that
    the script opened), and turn its toggle on. macOS asks for your password or Touch ID.
