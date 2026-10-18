@@ -37,19 +37,15 @@ for more details.
 3. **Add the runner.** In **System Settings → Privacy & Security → Accessibility**, add
    `WebDriverAgentRunner-Runner.app` with the **+** button (or drag it from the Finder window that
    the script opened), and turn its toggle on. macOS asks for your password or Touch ID.
-4. **Start Appium and a new session**, and [verify](#verify-the-permission) that it works.
+4. **Start a new session** and call [`macos: listWindows`](../reference/execute-methods.md#macos-listwindows).
+   If the runner is trusted, the `isMovable` and `isResizable` window traits are booleans. If they
+   are `null`, the runner is not trusted.
 
 !!! note
 
     The name and the position of the Accessibility list differ between macOS versions. On some
     versions it can be grouped under another heading of the Privacy & Security page, for example
     "Device Control and Data Access". If you cannot find it, use the search field of System Settings.
-
-## Verify the permission
-
-Call [`macos: listWindows`](../reference/execute-methods.md#macos-listwindows) in a session. If the
-runner is trusted, the `isMovable` and `isResizable` window traits are booleans. If they are `null`,
-the runner is not trusted.
 
 ## Troubleshooting
 
