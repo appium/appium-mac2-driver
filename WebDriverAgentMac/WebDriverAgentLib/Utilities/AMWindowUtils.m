@@ -554,18 +554,26 @@ static BOOL AMWaitForWindowFlag(AMWindowHandle *handle, NSString *key, BOOL expe
   XCUIApplication *dock = [[XCUIApplication alloc] initWithBundleIdentifier:AM_DOCK_BUNDLE_ID];
   NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title == %@", title];
   NSMutableArray<XCUIElement *> *candidates = [NSMutableArray array];
+  NSMutableArray *elements = [NSMutableArray array];
   for (XCUIElement *item in [[dock descendantsMatchingType:XCUIElementTypeDockItem] matchingPredicate:predicate].allElementsBoundByIndex) {
     id element = [AMXCTAccessibility accessibilityElementWithSnapshot:[item snapshotWithError:nil]];
     NSDictionary *attrs = [AMXCTAccessibility attributes:@[@"AXSubrole"] ofElement:element];
-    if ([attrs[@"AXSubrole"] isEqual:AM_MINIMIZED_DOCK_ITEM_SUBROLE]) {
+    if (nil != element && [attrs[@"AXSubrole"] isEqual:AM_MINIMIZED_DOCK_ITEM_SUBROLE]) {
       [candidates addObject:item];
+      [elements addObject:element];
     }
   }
   if (1 != candidates.count) {
     // Another minimized window with the same title could be restored by mistake
     return NO;
   }
-  [candidates.firstObject click];
+  // An auto-hidden Dock item is not hittable, so it is pressed without the mouse
+  if (![AMXCTAccessibility pressElement:elements.firstObject error:nil]) {
+    if (!candidates.firstObject.hittable) {
+      return NO;
+    }
+    [candidates.firstObject click];
+  }
   return AMWaitForWindowFlag(handle, AM_KEY_MINIMIZED, NO);
 }
 
