@@ -97,7 +97,8 @@
     ],
     "mainClass": "Mac2Driver",
     "scripts": {
-      "open-wda": "./scripts/open-wda.mjs"
+      "open-wda": "./scripts/open-wda.mjs",
+      "setup-accessibility": "./scripts/setup-accessibility.mjs"
     },
     "doctor": {
       "checks": [

@@ -49,6 +49,7 @@ nav:
       - Session Configuration:
           - guides/applescript.md
           - guides/parallel-tests.md
+          - guides/accessibility-permission.md
       - Driver Actions:
           - guides/app-under-test.md
           - guides/key-modifier-flags.md

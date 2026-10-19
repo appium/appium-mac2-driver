@@ -64,6 +64,9 @@ driver reads `AXDOMIdentifier` and uses it as a fallback for `accessibility id` 
 `identifier` attribute and for the page source. The fallback only applies to elements whose native
 identifier is empty, so locating native elements is never affected.
 
+This setting requires the Accessibility permission to be granted to the WebDriverAgent runner.
+Refer to the [Accessibility Permission](../guides/accessibility-permission.md) guide.
+
 Native XCTest predicate/class chain matching cannot reliably observe this fallback for the
 standard `identifier` attribute. To locate web elements by DOM id from `predicate string` or
 `class chain` locators, use the [`amIdentifier`](./element-attributes.md#amidentifier) attribute

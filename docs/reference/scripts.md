@@ -21,3 +21,32 @@ version 1.19.0.
 ```
 appium driver run mac2 open-wda
 ```
+
+### `setup-accessibility`
+
+Helps to grant the macOS Accessibility permission to the WebDriverAgent runner, which is required
+by some features. The script stops the running WebDriverAgent runner, because macOS evaluates the
+permission when a process starts, so an active Mac2 session stops working. It then finds the
+`WebDriverAgentRunner-Runner.app` that the driver has built, or builds it first if it does not exist
+yet, using the same build settings as the driver. Finally, it shows the runner in Finder and opens
+the Accessibility settings. It cannot grant the permission itself, because macOS only allows it to
+be granted by the user. Refer to the
+[Accessibility Permission](../guides/accessibility-permission.md) guide for the complete
+steps. Available since driver version 4.5.0.
+
+The Appium server keeps running. The script exits with a non-zero code if the runner cannot be
+built or found. Running the script directly with `node scripts/setup-accessibility.mjs` from
+the driver folder also supports the `--keep-running` flag, which leaves the running processes alone,
+and the `--no-open` flag, which only prints the runner location.
+
+#### Usage
+
+```
+appium driver run mac2 setup-accessibility
+```
+
+##### Optional Environment Variables
+
+|<div style="width:9em">Variable</div>|Description|Default|
+|--|--|--|
+|`WDA_RUNNER_PATH`|Custom path to the WebDriverAgentRunner app|`~/Library/Developer/Xcode/DerivedData/WebDriverAgentMac-<string>/Build/Products/Debug/WebDriverAgentRunner-Runner.app`|
