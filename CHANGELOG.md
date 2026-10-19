@@ -1,3 +1,9 @@
+## [4.5.0](https://github.com/appium/appium-mac2-driver/compare/v4.4.0...v4.5.0) (2026-10-19)
+
+### Features
+
+* add window listing and adjustment extension methods ([#428](https://github.com/appium/appium-mac2-driver/issues/428)) ([42759b6](https://github.com/appium/appium-mac2-driver/commit/42759b603ade35832369b22f790ebe083bff2f3d))
+
 ## [4.4.0](https://github.com/appium/appium-mac2-driver/compare/v4.3.6...v4.4.0) (2026-10-11)
 
 ### Features
