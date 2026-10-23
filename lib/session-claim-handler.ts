@@ -3,8 +3,7 @@ import {setTimeout as delay} from 'node:timers/promises';
 import type {AppiumLogger, IAppiumIpc, IIpcSubscription, IpcMessage} from '@appium/types';
 import {errors} from 'appium/driver.js';
 import {node, util} from 'appium/support.js';
-import AsyncLock from 'async-lock';
-import {waitForCondition} from 'asyncbox';
+import {AsyncLock, waitForCondition} from 'asyncbox';
 
 import type {Mac2Driver} from './driver.js';
 
