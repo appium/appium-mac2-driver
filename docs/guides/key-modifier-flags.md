@@ -5,8 +5,9 @@ hide:
 title: Key Modifier Flags
 ---
 
-The Mac2 driver supports key modifiers for various click-related [execute methods](../reference/execute-methods.md),
-as the `keyModifierFlags` parameter.
+The Mac2 driver supports key modifiers for various click-related [execute methods](../reference/execute-methods.md)
+(via the `keyModifierFlags` parameter) as well as for keyboard input in [`macos: keys`](../reference/execute-methods.md#macos-keys)
+(via the `modifierFlags` property on each key descriptor).
 
 Supported modifier flag values are based on XCTest's [XCUIElement.KeyModifierFlags](https://developer.apple.com/documentation/xcuiautomation/xcuielement/keymodifierflags),
 and should consist of one or more bitmasks, as defined in XCTest:
@@ -38,4 +39,42 @@ The values you can use for `keyModifierFlags` are therefore as follows:
 | Function |  `(1 << 5)` |
 
 You can also combine multiple modifier keys using the bitwise OR (`|`) operator. For example, in
-order to apply the Control and Shift modifiers, set `keyModifierFlags` to `(1 << 1) | (1 << 2)`.
+order to apply the Control and Shift modifiers during a click, set `keyModifierFlags` to `(1 << 1) | (1 << 2)`.
+
+To send a keyboard shortcut with multiple modifiers (such as `Option` + `Command` + `f`) via `macos: keys`:
+
+=== "Java"
+
+    ```java
+    int modifierFlags = (1 << 3) | (1 << 4); // Option | Command
+    driver.executeScript("macos: keys", Map.of(
+        "keys", List.of(Map.of(
+            "key", "f",
+            "modifierFlags", modifierFlags
+        ))
+    ));
+    ```
+
+=== "JS (WebdriverIO)"
+
+    ```js
+    const modifierFlags = (1 << 3) | (1 << 4); // Option | Command
+    await driver.executeScript('macos: keys', [{
+      keys: [{
+        key: 'f',
+        modifierFlags,
+      }],
+    }]);
+    ```
+
+=== "Python"
+
+    ```python
+    modifier_flags = (1 << 3) | (1 << 4)  # Option | Command
+    driver.execute_script('macos: keys', {
+        'keys': [{
+            'key': 'f',
+            'modifierFlags': modifier_flags,
+        }],
+    })
+    ```
