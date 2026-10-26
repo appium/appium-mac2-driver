@@ -5288,7 +5288,9 @@ or no active screen recording process is found.</p>
 <p>Starts a recording of the device display in the background using XCTest, while the automated test
 is running. Does nothing if a screen recording is already running. The recording can be stopped
 using the <a href="#macos-stopnativescreenrecording"><code>macos: stopNativeScreenRecording</code></a> method, or by
-stopping the session itself. In both cases, the raw video file is deleted.</p>
+stopping the session itself. In both cases, the raw video file is deleted. Unlike
+<a href="#macos-startrecordingscreen"><code>macos: startRecordingScreen</code></a>, native XCTest screen recording does
+not support a maximum duration (<code>timeLimit</code>) option.</p>
 <p>This feature requires Xcode 15 or later. Available since driver version 2.1.0.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -5342,7 +5344,7 @@ all video chunks are properly consumed on the client side.</p>
 <tr>
 <td><code>codec</code></td>
 <td><code>number</code></td>
-<td>Video coded</td>
+<td>Video codec</td>
 </tr>
 <tr>
 <td><code>displayId</code></td>
@@ -5352,7 +5354,7 @@ all video chunks are properly consumed on the client side.</p>
 <tr>
 <td><code>uuid</code></td>
 <td><code>string</code></td>
-<td>Unique video identifier used by XCTest to store the video, located at <code>~/Library/Daemon Containers/&lt;testmanager_id&gt;/Data/Attachments/&lt;uuid&gt;.mp4</code>.</td>
+<td>Unique video identifier used by XCTest to store the video, located at <code>~/Library/Daemon Containers/&lt;testmanager_id&gt;/Data/Attachments/&lt;uuid&gt;.mp4</code> (or <code>~/Library/Daemon Containers/&lt;testmanager_id&gt;/Data/tmp/Attachments/&lt;uuid&gt;.mp4</code> on Xcode 26.5+).</td>
 </tr>
 <tr>
 <td><code>startedAt</code></td>
@@ -5426,8 +5428,8 @@ since driver version 2.1.0.</p>
 </tbody>
 </table>
 <h4 id="response_26">Response<a class="headerlink" href="#response_26" title="Permanent link">&para;</a></h4>
-<p><code>string</code> - base64-encoded string of the video file, or an empty string if <code>remotePath</code> is provided
-or no active screen recording process is found.</p>
+<p><code>string</code> - base64-encoded string of the video file, or an empty string if <code>remotePath</code> is provided,
+<code>ignorePayload</code> is set to <code>true</code>, or no active screen recording process is found.</p>
 <h3 id="macos-listdisplays">macos: listDisplays<a class="headerlink" href="#macos-listdisplays" title="Permanent link">&para;</a></h3>
 <p>Retrieves information about the available displays. Available since driver version 2.1.0.</p>
 <h4 id="response_27">Response<a class="headerlink" href="#response_27" title="Permanent link">&para;</a></h4>
@@ -5719,7 +5721,7 @@ structure:</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="October 19, 2026 18:34:14 UTC"><span class="timeago" datetime="2026-10-19T18:34:14+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 19, 2026 18:34:14 UTC">2026-10-19</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="October 26, 2026 16:51:34 UTC"><span class="timeago" datetime="2026-10-26T16:51:34+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 26, 2026 16:51:34 UTC">2026-10-26</span>
   </span>
 
     

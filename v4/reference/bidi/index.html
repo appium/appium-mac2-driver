@@ -1916,6 +1916,10 @@ and additionally defines the events and commands listed below.</p>
 <p>This event is continuously emitted as soon as the <a href="../execute-methods/#macos-startnativescreenrecording"><code>macos: startNativeScreenRecording</code></a> execute
 method is invoked. Event emission stops as soon as the <a href="../execute-methods/#macos-stopnativescreenrecording"><code>macos: stopNativeScreenRecording</code></a> execute
 method is called, or the test session is stopped.</p>
+<p>By subscribing to this event before starting the recording and passing <code>ignorePayload: true</code> to
+<a href="../execute-methods/#macos-stopnativescreenrecording"><code>macos: stopNativeScreenRecording</code></a>, clients
+can stream and append decoded video chunks directly to a local file without loading the entire
+recording into memory as a Base64 string.</p>
 <p>Available since driver version 2.2.0.</p>
 <h4 id="event-type-cddl">Event Type (CDDL)<a class="headerlink" href="#event-type-cddl" title="Permanent link">&para;</a></h4>
 <div class="language-cddl highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="s">appium</span><span class="p">:</span><span class="nc">mac2.nativeVideoRecordingChunkAdded</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
@@ -1964,7 +1968,7 @@ method is called, or the test session is stopped.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="July 8, 2026 05:45:21 UTC"><span class="timeago" datetime="2026-07-08T05:45:21+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 8, 2026 05:45:21 UTC">2026-07-08</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="October 26, 2026 16:51:34 UTC"><span class="timeago" datetime="2026-10-26T16:51:34+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 26, 2026 16:51:34 UTC">2026-10-26</span>
   </span>
 
     
