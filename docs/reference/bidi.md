@@ -16,6 +16,11 @@ This event is continuously emitted as soon as the [`macos: startNativeScreenReco
 method is invoked. Event emission stops as soon as the [`macos: stopNativeScreenRecording`](./execute-methods.md#macos-stopnativescreenrecording) execute
 method is called, or the test session is stopped.
 
+By subscribing to this event before starting the recording and passing `ignorePayload: true` to
+[`macos: stopNativeScreenRecording`](./execute-methods.md#macos-stopnativescreenrecording), clients
+can stream and append decoded video chunks directly to a local file without loading the entire
+recording into memory as a Base64 string.
+
 Available since driver version 2.2.0.
 
 #### Event Type (CDDL)
