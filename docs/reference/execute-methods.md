@@ -570,7 +570,9 @@ This feature requires Xcode 14.3 or later. Available since driver version 1.15.0
 Starts a recording of the device display in the background using XCTest, while the automated test
 is running. Does nothing if a screen recording is already running. The recording can be stopped
 using the [`macos: stopNativeScreenRecording`](#macos-stopnativescreenrecording) method, or by
-stopping the session itself. In both cases, the raw video file is deleted.
+stopping the session itself. In both cases, the raw video file is deleted. Unlike
+[`macos: startRecordingScreen`](#macos-startrecordingscreen), native XCTest screen recording does
+not support a maximum duration (`timeLimit`) option.
 
 This feature requires Xcode 15 or later. Available since driver version 2.1.0.
 
@@ -595,9 +597,9 @@ This feature requires Xcode 15 or later. Available since driver version 2.1.0.
 | Key | Value Type | Description |
 | --- | --- | --- |
 | `fps`| `number` | Video framerate |
-| `codec`| `number` | Video coded |
+| `codec`| `number` | Video codec |
 | `displayId`| `number` | Display identifier |
-| `uuid`| `string` | Unique video identifier used by XCTest to store the video, located at `~/Library/Daemon Containers/<testmanager_id>/Data/Attachments/<uuid>.mp4`. |
+| `uuid`| `string` | Unique video identifier used by XCTest to store the video, located at `~/Library/Daemon Containers/<testmanager_id>/Data/Attachments/<uuid>.mp4` (or `~/Library/Daemon Containers/<testmanager_id>/Data/tmp/Attachments/<uuid>.mp4` on Xcode 26.5+). |
 | `startedAt`| `number` | Unix timestamp of the recording start time |
 
 ### macos: getNativeScreenRecordingInfo
@@ -635,8 +637,8 @@ since driver version 2.1.0.
 
 #### Response
 
-`string` - base64-encoded string of the video file, or an empty string if `remotePath` is provided
-or no active screen recording process is found.
+`string` - base64-encoded string of the video file, or an empty string if `remotePath` is provided,
+`ignorePayload` is set to `true`, or no active screen recording process is found.
 
 ### macos: listDisplays
 
