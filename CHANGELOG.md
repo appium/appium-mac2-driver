@@ -1,3 +1,13 @@
+## [4.5.1](https://github.com/appium/appium-mac2-driver/compare/v4.5.0...v4.5.1) (2026-10-27)
+
+### Bug Fixes
+
+* **wda:** check opts.reqBasePath instead of caps.reqBasePath in startSession ([#434](https://github.com/appium/appium-mac2-driver/issues/434)) ([8d0d827](https://github.com/appium/appium-mac2-driver/commit/8d0d827325f544c9a7093878fdf704e00ebb5a4f))
+
+### Code Refactoring
+
+* use AsyncLock from asyncbox instead of async-lock ([#430](https://github.com/appium/appium-mac2-driver/issues/430)) ([a795822](https://github.com/appium/appium-mac2-driver/commit/a795822013578cfbe2390a58d4967779ed50cf0e))
+
 ## [4.5.0](https://github.com/appium/appium-mac2-driver/compare/v4.4.0...v4.5.0) (2026-10-19)
 
 ### Features
