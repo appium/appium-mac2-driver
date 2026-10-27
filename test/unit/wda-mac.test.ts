@@ -132,6 +132,13 @@ describe('WDAMacServer single session', () => {
     await assert.rejects(server.startSession({}), /boom/);
     assert.equal(server.isSessionActive(first), false);
   });
+
+  it('forwards opts.reqBasePath to WDAMacProxy', async (t) => {
+    mockSessionCreation(t, ['s1']);
+    const server = makeServer();
+    await server.startSession({}, {reqBasePath: '/wd/hub'});
+    assert.equal(server.proxy.reqBasePath, '/wd/hub');
+  });
 });
 
 describe('WDAMacServer launch isolation', () => {

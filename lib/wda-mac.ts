@@ -331,7 +331,7 @@ export class WDAMacServer {
         base: path,
         keepAlive: true,
       };
-      if (caps.reqBasePath) {
+      if (opts.reqBasePath) {
         proxyOpts.reqBasePath = opts.reqBasePath;
       }
       const proxy = new WDAMacProxy(proxyOpts);
@@ -551,6 +551,5 @@ interface StartSessionCapabilities {
   systemHost?: string;
   systemPort?: number;
   serverStartupTimeout?: number;
-  reqBasePath?: string;
   [key: string]: unknown;
 }
