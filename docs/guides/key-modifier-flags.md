@@ -1,7 +1,6 @@
 ---
 hide:
   - toc
-
 title: Key Modifier Flags
 ---
 
@@ -12,69 +11,31 @@ The Mac2 driver supports key modifiers for various click-related [execute method
 Supported modifier flag values are based on XCTest's [XCUIElement.KeyModifierFlags](https://developer.apple.com/documentation/xcuiautomation/xcuielement/keymodifierflags),
 and should consist of one or more bitmasks, as defined in XCTest:
 
-```objectivec
-typedef NS_OPTIONS(NSUInteger, XCUIKeyModifierFlags) {
-   XCUIKeyModifierNone       = 0,
-   XCUIKeyModifierCapsLock   = (1UL << 0),
-   XCUIKeyModifierShift      = (1UL << 1),
-   XCUIKeyModifierControl    = (1UL << 2),
-   XCUIKeyModifierOption     = (1UL << 3),
-   XCUIKeyModifierCommand    = (1UL << 4),
-   XCUIKeyModifierFunction   = (1UL << 5),
-   // These values align with UIKeyModifierFlags and CGEventFlags.
-   XCUIKeyModifierAlphaShift = XCUIKeyModifierCapsLock,
-   XCUIKeyModifierAlternate  = XCUIKeyModifierOption,
-};
+```swift
+public struct KeyModifierFlags : OptionSet {
+    public init(rawValue: UInt)
+
+    public static var capsLock: XCUIElement.KeyModifierFlags { get } // 1 << 0
+    public static var shift: XCUIElement.KeyModifierFlags { get } // 1 << 1
+    public static var control: XCUIElement.KeyModifierFlags { get } // 1 << 2
+    public static var option: XCUIElement.KeyModifierFlags { get } // 1 << 3
+    public static var command: XCUIElement.KeyModifierFlags { get } // 1 << 4
+    public static var numericPad: XCUIElement.KeyModifierFlags { get } // 1 << 5
+    public static var function: XCUIElement.KeyModifierFlags { get } // 1 << 6
+}
 ```
 
 The values you can use for `keyModifierFlags` are therefore as follows:
 
-| Key | User value |
-| --- |  --- |
-| Caps Lock |  `1` |
-| Shift |  `(1 << 1)` |
-| Control |  `(1 << 2)` |
-| Option |  `(1 << 3)` |
-| Command |  `(1 << 4)` |
+| Modifier | Value |
+| --- | --- |
+| Caps Lock | `(1 << 0)` |
+| Shift | `(1 << 1)` |
+| Control | `(1 << 2)` |
+| Option / Alt | `(1 << 3)` |
+| Command | `(1 << 4)` |
+| Numeric Pad | `(1 << 5)` |
 | Function |  `(1 << 5)` |
 
 You can also combine multiple modifier keys using the bitwise OR (`|`) operator. For example, in
 order to apply the Control and Shift modifiers during a click, set `keyModifierFlags` to `(1 << 1) | (1 << 2)`.
-
-To send a keyboard shortcut with multiple modifiers (such as `Option` + `Command` + `f`) via `macos: keys`:
-
-=== "Java"
-
-    ```java
-    int modifierFlags = (1 << 3) | (1 << 4); // Option | Command
-    driver.executeScript("macos: keys", Map.of(
-        "keys", List.of(Map.of(
-            "key", "f",
-            "modifierFlags", modifierFlags
-        ))
-    ));
-    ```
-
-=== "JS (WebdriverIO)"
-
-    ```js
-    const modifierFlags = (1 << 3) | (1 << 4); // Option | Command
-    await driver.executeScript('macos: keys', [{
-      keys: [{
-        key: 'f',
-        modifierFlags,
-      }],
-    }]);
-    ```
-
-=== "Python"
-
-    ```python
-    modifier_flags = (1 << 3) | (1 << 4)  # Option | Command
-    driver.execute_script('macos: keys', {
-        'keys': [{
-            'key': 'f',
-            'modifierFlags': modifier_flags,
-        }],
-    })
-    ```
