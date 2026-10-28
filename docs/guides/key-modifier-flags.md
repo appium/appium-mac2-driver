@@ -1,6 +1,7 @@
 ---
 hide:
   - toc
+
 title: Key Modifier Flags
 ---
 
@@ -11,30 +12,30 @@ The Mac2 driver supports key modifiers for various click-related [execute method
 Supported modifier flag values are based on XCTest's [XCUIElement.KeyModifierFlags](https://developer.apple.com/documentation/xcuiautomation/xcuielement/keymodifierflags),
 and should consist of one or more bitmasks, as defined in XCTest:
 
-```swift
-public struct KeyModifierFlags : OptionSet {
-    public init(rawValue: UInt)
-
-    public static var capsLock: XCUIElement.KeyModifierFlags { get } // 1 << 0
-    public static var shift: XCUIElement.KeyModifierFlags { get } // 1 << 1
-    public static var control: XCUIElement.KeyModifierFlags { get } // 1 << 2
-    public static var option: XCUIElement.KeyModifierFlags { get } // 1 << 3
-    public static var command: XCUIElement.KeyModifierFlags { get } // 1 << 4
-    public static var numericPad: XCUIElement.KeyModifierFlags { get } // 1 << 5
-    public static var function: XCUIElement.KeyModifierFlags { get } // 1 << 6
-}
+```objectivec
+typedef NS_OPTIONS(NSUInteger, XCUIKeyModifierFlags) {
+   XCUIKeyModifierNone       = 0,
+   XCUIKeyModifierCapsLock   = (1UL << 0),
+   XCUIKeyModifierShift      = (1UL << 1),
+   XCUIKeyModifierControl    = (1UL << 2),
+   XCUIKeyModifierOption     = (1UL << 3),
+   XCUIKeyModifierCommand    = (1UL << 4),
+   XCUIKeyModifierFunction   = (1UL << 5),
+   // These values align with UIKeyModifierFlags and CGEventFlags.
+   XCUIKeyModifierAlphaShift = XCUIKeyModifierCapsLock,
+   XCUIKeyModifierAlternate  = XCUIKeyModifierOption,
+};
 ```
 
 The values you can use for `keyModifierFlags` are therefore as follows:
 
-| Modifier | Value |
-| --- | --- |
-| Caps Lock | `(1 << 0)` |
-| Shift | `(1 << 1)` |
-| Control | `(1 << 2)` |
-| Option / Alt | `(1 << 3)` |
-| Command | `(1 << 4)` |
-| Numeric Pad | `(1 << 5)` |
+| Key | User value |
+| --- |  --- |
+| Caps Lock |  `1` |
+| Shift |  `(1 << 1)` |
+| Control |  `(1 << 2)` |
+| Option |  `(1 << 3)` |
+| Command |  `(1 << 4)` |
 | Function |  `(1 << 5)` |
 
 You can also combine multiple modifier keys using the bitwise OR (`|`) operator. For example, in
