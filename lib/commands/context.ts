@@ -1,14 +1,19 @@
+import path from 'node:path';
+
 import {Chromedriver} from 'appium-chromedriver';
+import type {ChromedriverOpts} from 'appium-chromedriver';
 import {errors} from 'appium/driver.js';
 import axios from 'axios';
 import {findAPortNotInUse} from 'portscanner';
 
 import type {Mac2Driver} from '../driver.js';
 import type {CdpPage, CdpVersionInfo, WebViewDetails} from '../types.js';
+import {getModuleRoot} from '../utils.js';
 
 export const NATIVE_APP = 'NATIVE_APP';
 export const WEBVIEW_PREFIX = 'WEBVIEW_';
 export const DEBUGGING_PORT_FLAG = '--remote-debugging-port';
+const CHROMEDRIVER_AUTODOWNLOAD_FEATURE = 'chromedriver_autodownload';
 const CDP_HOST = '127.0.0.1';
 const CDP_REQUEST_TIMEOUT_MS = 10000;
 const PORT_RANGE_START = 10900;
@@ -57,25 +62,10 @@ export async function setContext(this: Mac2Driver, name?: string | null): Promis
     throw new errors.InvalidArgumentError(`Web view '${name}' does not expose a debugger address`);
   }
 
-  const executable = this.opts.chromedriverExecutablePath as string | undefined;
-  const storageDir = this.cliArgs?.chromedriverStorageDir as string | undefined;
-  if (!executable && !storageDir) {
-    throw new errors.InvalidArgumentError(
-      `Either the 'chromedriverExecutablePath' capability or the '--driver-mac2-chromedriver-storage-dir' ` +
-        `server argument must be provided to switch to a web view`,
-    );
-  }
-
   // Only one Chromedriver may be alive at a time, so a webview-to-webview switch replaces it
   await this.stopChromedriver();
 
-  const cd = new Chromedriver({
-    details: details.info ? {info: {Browser: details.info.Browser}} : undefined,
-    ...(executable ? {executable} : {}),
-    // A custom dir makes Chromedriver pick/download a version matching the app
-    ...(storageDir ? {executableDir: storageDir, isAutodownloadEnabled: true} : {}),
-    ...(this.basePath ? {reqBasePath: this.basePath} : {}),
-  });
+  const cd = new Chromedriver(getChromedriverOpts.call(this, details));
   cd.on(Chromedriver.EVENT_CHANGED, (msg: {state: string}) => {
     // An unexpected exit must not leave the proxy pointing at a dead process
     if (msg.state === Chromedriver.STATE_STOPPED && this.chromedriver === cd) {
@@ -98,6 +88,22 @@ export async function setContext(this: Mac2Driver, name?: string | null): Promis
   }
   this.chromedriver = cd;
   this._currentContext = `${WEBVIEW_PREFIX}${page.id}`;
+}
+
+/**
+ * @param details - The web view details
+ * @returns Chromedriver options. The download is only enabled by the `chromedriver_autodownload` feature.
+ */
+export function getChromedriverOpts(this: Mac2Driver, details: WebViewDetails): ChromedriverOpts {
+  const {chromedriverExecutable, chromedriverExecutableDir} = this.opts;
+  return {
+    details: details.info ? {info: {Browser: details.info.Browser}} : undefined,
+    ...(chromedriverExecutable ? {executable: chromedriverExecutable} : {}),
+    // Any explicit dir makes Chromedriver select a version matching the app instead of a fixed default
+    executableDir: chromedriverExecutableDir ?? path.join(getModuleRoot(), 'chromedriver'),
+    isAutodownloadEnabled: this.isFeatureEnabled(CHROMEDRIVER_AUTODOWNLOAD_FEATURE),
+    ...(this.basePath ? {reqBasePath: this.basePath} : {}),
+  };
 }
 
 /**

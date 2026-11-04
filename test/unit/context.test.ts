@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
 
-import {getContexts, prepareWebviewLaunch, setContext} from '../../lib/commands/context.js';
+import {getChromedriverOpts, getContexts, prepareWebviewLaunch, setContext} from '../../lib/commands/context.js';
 import {Mac2Driver} from '../../lib/driver.js';
 
 function makeDriver(opts: Record<string, unknown> = {webviewEnabled: true}) {
@@ -61,15 +61,6 @@ describe('webview contexts', () => {
       await assert.rejects(setContext.call(driver, 'WEBVIEW_X'), /Web view not found/);
     });
 
-    it('requires either a Chromedriver path or a storage dir', async () => {
-      const driver = makeDriver();
-      driver.getWebViewDetails = (async () => ({
-        port: 1,
-        pages: [{id: 'A', type: 'page', webSocketDebuggerUrl: 'ws://127.0.0.1:1/devtools/page/A'}],
-      })) as any;
-      await assert.rejects(setContext.call(driver, 'WEBVIEW_A'), /chromedriver-storage-dir/);
-    });
-
     it('requires webviewEnabled', async () => {
       await assert.rejects(setContext.call(makeDriver({}), 'WEBVIEW_X'), /webviewEnabled/);
     });
@@ -87,6 +78,35 @@ describe('webview contexts', () => {
       assert.equal(stopped, 1);
       assert.equal(driver.chromedriver, null);
       assert.equal(await driver.getCurrentContext(), 'NATIVE_APP');
+    });
+  });
+
+  describe('getChromedriverOpts', () => {
+    const details = {port: 1, pages: [], info: {Browser: 'Chrome/150.0.0.1'}};
+
+    it('does not download Chromedriver unless the feature is enabled', () => {
+      const driver = makeDriver();
+      driver.isFeatureEnabled = () => false;
+      assert.equal(getChromedriverOpts.call(driver, details).isAutodownloadEnabled, false);
+      driver.isFeatureEnabled = (name: string) => name === 'chromedriver_autodownload';
+      assert.equal(getChromedriverOpts.call(driver, details).isAutodownloadEnabled, true);
+    });
+
+    it('uses the capabilities when provided', () => {
+      const driver = makeDriver({
+        webviewEnabled: true,
+        chromedriverExecutable: '/bin/cd',
+        chromedriverExecutableDir: '/cds',
+      });
+      const opts = getChromedriverOpts.call(driver, details);
+      assert.equal(opts.executable, '/bin/cd');
+      assert.equal(opts.executableDir, '/cds');
+    });
+
+    it('falls back to the default dir when no capabilities are provided', () => {
+      const opts = getChromedriverOpts.call(makeDriver(), details);
+      assert.equal(opts.executable, undefined);
+      assert.match(String(opts.executableDir), /chromedriver$/);
     });
   });
 

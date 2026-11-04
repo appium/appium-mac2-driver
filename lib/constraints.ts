@@ -58,7 +58,10 @@ const MAC2_CONSTRAINTS = {
   webviewDevtoolsPort: {
     isNumber: true,
   },
-  chromedriverExecutablePath: {
+  chromedriverExecutable: {
+    isString: true,
+  },
+  chromedriverExecutableDir: {
     isString: true,
   },
 } as const satisfies Constraints;

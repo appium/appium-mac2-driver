@@ -99,20 +99,6 @@
       "open-wda": "./scripts/open-wda.mjs",
       "setup-accessibility": "./scripts/setup-accessibility.mjs"
     },
-    "schema": {
-      "$schema": "http://json-schema.org/draft-07/schema",
-      "type": "object",
-      "properties": {
-        "chromedriver-storage-dir": {
-          "appiumCliDest": "chromedriverStorageDir",
-          "description": "Folder to store the Chromedrivers matching the web views. Enables the automatic Chromedriver download",
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "title": "Mac2 Driver Configuration",
-      "description": "Appium configuration schema for the Mac2 driver."
-    },
     "doctor": {
       "checks": [
         "./build/lib/doctor/required-checks.js",

@@ -50,7 +50,7 @@ nav:
           - guides/applescript.md
           - guides/parallel-tests.md
           - guides/accessibility-permission.md
-          - guides/webview-contexts.md
+          - guides/hybrid.md
       - Driver Actions:
           - guides/app-under-test.md
           - guides/key-modifier-flags.md
