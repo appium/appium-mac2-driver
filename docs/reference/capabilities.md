@@ -212,3 +212,31 @@ Full path to a custom directory containing the `WebDriverAgentMac.xcodeproj` WDA
 | `appium:serverStartupTimeout` | `number` | `120000` |
 
 Time in milliseconds to wait until the WDA server is built and started.
+
+### webviewEnabled
+
+| Name | Type | Default |
+| -- | -- | -- |
+| `appium:webviewEnabled` | `boolean` | `false` |
+
+Enables [web view contexts](../guides/webview-contexts.md) for Chromium-based apps. The driver adds
+`--remote-debugging-port` to the app arguments (unless it is already there) and exposes the app pages
+as `WEBVIEW_<id>` contexts.
+
+### webviewDevtoolsPort
+
+| Name | Type | Default |
+| -- | -- | -- |
+| `appium:webviewDevtoolsPort` | `number` | A free port in the 10900-11000 range |
+
+The port of the app's Chrome DevTools endpoint. Only used if `appium:webviewEnabled` is set.
+
+### chromedriverExecutablePath
+
+| Name | Type | Default |
+| -- | -- | -- |
+| `appium:chromedriverExecutablePath` | `string` | Not specified |
+
+Full path to a Chromedriver binary matching the app's Chromium version. If not set, the
+`--driver-mac2-chromedriver-storage-dir` server argument must be provided. Only used if
+`appium:webviewEnabled` is set.

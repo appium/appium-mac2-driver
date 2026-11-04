@@ -54,3 +54,25 @@ export interface WindowInfo {
 
 /** `windowId` is null if a minimized window has been adjusted */
 export type AdjustedWindowInfo = Omit<WindowInfo, 'windowId'> & {windowId: string | null};
+
+/** A debuggable target reported by the CDP `/json/list` endpoint */
+export interface CdpPage {
+  id: string;
+  type: string;
+  title?: string;
+  url?: string;
+  webSocketDebuggerUrl?: string;
+  [key: string]: unknown;
+}
+
+/** The output of the CDP `/json/version` endpoint */
+export interface CdpVersionInfo {
+  Browser: string;
+  [key: string]: unknown;
+}
+
+export interface WebViewDetails {
+  port: number;
+  info?: CdpVersionInfo;
+  pages: CdpPage[];
+}

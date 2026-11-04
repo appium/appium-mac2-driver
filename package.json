@@ -64,6 +64,7 @@
   "dependencies": {
     "@appium/strongbox": "^2.0.0",
     "@colors/colors": "^1.6.0",
+    "appium-chromedriver": "^9.1.14",
     "appium-xcode": "^7.1.1",
     "asyncbox": "^6.5.0",
     "axios": "^1.18.0",
@@ -97,6 +98,20 @@
     "scripts": {
       "open-wda": "./scripts/open-wda.mjs",
       "setup-accessibility": "./scripts/setup-accessibility.mjs"
+    },
+    "schema": {
+      "$schema": "http://json-schema.org/draft-07/schema",
+      "type": "object",
+      "properties": {
+        "chromedriver-storage-dir": {
+          "appiumCliDest": "chromedriverStorageDir",
+          "description": "Folder to store the Chromedrivers matching the web views. Enables the automatic Chromedriver download",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "title": "Mac2 Driver Configuration",
+      "description": "Appium configuration schema for the Mac2 driver."
     },
     "doctor": {
       "checks": [
