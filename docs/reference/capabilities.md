@@ -220,8 +220,8 @@ Time in milliseconds to wait until the WDA server is built and started.
 | `appium:webviewEnabled` | `boolean` | `false` |
 
 Enables [web view contexts](../guides/hybrid.md) for Chromium-based apps. The driver adds
-`--remote-debugging-port` to the app arguments (unless it is already there) and exposes the app pages
-as `WEBVIEW_<id>` contexts.
+`--remote-debugging-port` to the app arguments and exposes the app pages as `WEBVIEW_<id>` contexts.
+The flag must not be set in `appium:arguments`, as such a value is ignored.
 
 ### webviewDevtoolsPort
 

@@ -7,6 +7,7 @@ import axios from 'axios';
 import {findAPortNotInUse} from 'portscanner';
 
 import type {Mac2Driver} from '../driver.js';
+import log from '../logger.js';
 import type {CdpPage, CdpVersionInfo, WebViewDetails} from '../types.js';
 import {getModuleRoot} from '../utils.js';
 
@@ -147,7 +148,8 @@ export async function macosGetContexts(
 }
 
 /**
- * Picks the debugging port and makes sure the app is launched with it.
+ * Picks the debugging port and makes sure the app is launched with it. The driver owns the flag,
+ * so one passed in the app arguments is replaced.
  *
  * @param caps - The session capabilities
  * @returns The capabilities to start the WDA session with and the port, if web views are enabled
@@ -158,24 +160,17 @@ export async function prepareWebviewLaunch<T extends {arguments?: unknown}>(
   if (!caps.webviewEnabled) {
     return {caps, port: null};
   }
+  const port = caps.webviewDevtoolsPort ?? (await findAPortNotInUse(PORT_RANGE_START, PORT_RANGE_END, CDP_HOST));
   const args = Array.isArray(caps.arguments) ? (caps.arguments as unknown[]).map(String) : [];
-  const userPort = parseDebuggingPort(args);
-  const port =
-    caps.webviewDevtoolsPort ?? userPort ?? (await findAPortNotInUse(PORT_RANGE_START, PORT_RANGE_END, CDP_HOST));
-  if (userPort !== null) {
-    return {caps, port};
+  const userArgs = args.filter((arg) => !isDebuggingPortArg(arg));
+  if (userArgs.length !== args.length) {
+    log.warn(`Ignoring '${DEBUGGING_PORT_FLAG}' in the app arguments. Use 'webviewDevtoolsPort' capability instead`);
   }
-  return {caps: {...caps, arguments: [...args, `${DEBUGGING_PORT_FLAG}=${port}`]}, port};
+  return {caps: {...caps, arguments: [...userArgs, `${DEBUGGING_PORT_FLAG}=${port}`]}, port};
 }
 
-function parseDebuggingPort(args: string[]): number | null {
-  for (const arg of args) {
-    const match = new RegExp(`^${DEBUGGING_PORT_FLAG}=(\\d+)$`).exec(arg);
-    if (match) {
-      return Number(match[1]);
-    }
-  }
-  return null;
+function isDebuggingPortArg(arg: string): boolean {
+  return arg === DEBUGGING_PORT_FLAG || arg.startsWith(`${DEBUGGING_PORT_FLAG}=`);
 }
 
 async function cdpRequest<T>(driver: Mac2Driver, port: number, endpoint: string): Promise<T | null> {

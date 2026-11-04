@@ -12,9 +12,9 @@ through the native accessibility tree (see the `useDomIdAsAccessibilityId` [sett
 ## Enabling Web Views
 
 Set the [`appium:webviewEnabled`](../reference/capabilities.md#webviewenabled) capability to `true`.
-The driver then launches the app with the `--remote-debugging-port` argument (unless it is already
-provided in `appium:arguments`), so that the web views are debuggable and accessible to the driver.
-The port could be customized with the [`appium:webviewDevtoolsPort`](../reference/capabilities.md#webviewdevtoolsport)
+The driver then launches the app with the `--remote-debugging-port` argument, so that the web views
+are debuggable and accessible to the driver. The flag must not be set in `appium:arguments`, as such
+a value is ignored. The port could be customized with the [`appium:webviewDevtoolsPort`](../reference/capabilities.md#webviewdevtoolsport)
 capability.
 
 !!! note

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
 
 import {getChromedriverOpts, getContexts, prepareWebviewLaunch, setContext} from '../../lib/commands/context.js';
+import {findElOrEls} from '../../lib/commands/find.js';
 import {Mac2Driver} from '../../lib/driver.js';
 
 function makeDriver(opts: Record<string, unknown> = {webviewEnabled: true}) {
@@ -33,11 +34,15 @@ describe('webview contexts', () => {
       assert.deepEqual(result.caps.arguments, [`--remote-debugging-port=${result.port}`]);
     });
 
-    it('reuses a port supplied by the user in the arguments', async () => {
-      const caps = {webviewEnabled: true, arguments: ['--remote-debugging-port=9444']};
+    it('replaces a debugging flag supplied by the user', async () => {
+      const caps = {
+        webviewEnabled: true,
+        webviewDevtoolsPort: 9555,
+        arguments: ['--remote-debugging-port=9444', '-a'],
+      };
       const result = await prepareWebviewLaunch(caps);
-      assert.equal(result.caps, caps);
-      assert.equal(result.port, 9444);
+      assert.deepEqual(result.caps.arguments, ['-a', '--remote-debugging-port=9555']);
+      assert.equal(result.port, 9555);
     });
   });
 
@@ -120,6 +125,21 @@ describe('webview contexts', () => {
       assert.ok(native.some((r) => r.includes('timeouts')));
       assert.ok(!web.some((r) => r.includes('timeouts') || r.includes('element')));
       assert.ok(web.some((r) => r.includes('context')));
+    });
+
+    it('finds elements through Chromedriver in a web view', async () => {
+      const driver = makeDriver();
+      const calls: unknown[][] = [];
+      driver.chromedriver = {
+        jwproxy: {
+          command: async (...args: unknown[]) => {
+            calls.push(args);
+            return [];
+          },
+        },
+      } as any;
+      await findElOrEls.call(driver, 'css selector', '#b', true);
+      assert.deepEqual(calls, [['/elements', 'POST', {using: 'css selector', value: '#b'}]]);
     });
 
     it('stops Chromedriver on session teardown', async () => {
