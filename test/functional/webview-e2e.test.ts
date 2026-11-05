@@ -8,6 +8,8 @@ import type {Browser} from 'webdriverio';
 
 import {HOST, PORT, TEST_TIMEOUT} from '../utils.js';
 
+// Without it the server must be started with `--allow-insecure mac2:chromedriver_autodownload`
+const CHROMEDRIVER_EXECUTABLE = process.env.APPIUM_TEST_CHROMEDRIVER_EXECUTABLE;
 const CHROME_BUNDLE_ID = 'com.google.Chrome';
 const PAGE_URL = 'data:text/html,<title>mac2</title><button id="b" onclick="this.textContent=\'clicked\'">go</button>';
 
@@ -22,10 +24,10 @@ describe('Mac2Driver - web view contexts', {timeout: TEST_TIMEOUT}, () => {
         platformName: 'mac',
         'appium:automationName': 'mac2',
         'appium:bundleId': CHROME_BUNDLE_ID,
-        // @ts-expect-error not in webdriverio's capability typings
         'appium:webviewEnabled': true,
+        ...(CHROMEDRIVER_EXECUTABLE ? {'appium:chromedriverExecutable': CHROMEDRIVER_EXECUTABLE} : {}),
         'appium:arguments': [`--user-data-dir=${path.join(os.tmpdir(), 'mac2-webview-e2e')}`, PAGE_URL],
-      },
+      } as WebdriverIO.Capabilities,
     });
   });
 

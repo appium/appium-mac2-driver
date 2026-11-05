@@ -3,7 +3,7 @@ title: Hybrid Applications
 ---
 
 The Mac2 driver supports automation of hybrid apps that use Chromium-based web views, such as
-Electron, Chrome, Edge or CEF apps. This enables actions such as retrieving the web-specific page
+Electron, Chrome or CEF apps. This enables actions such as retrieving the web-specific page
 source, as well as finding and interacting with elements located inside the web view.
 
 Web views of other engines, such as `WKWebView`, are not supported. Their content is only available

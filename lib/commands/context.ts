@@ -58,6 +58,9 @@ export async function setContext(this: Mac2Driver, name?: string | null): Promis
   if (!page) {
     throw new errors.InvalidArgumentError(`Web view not found: ${name}`);
   }
+  if (/\bEdg\//.test(details.info?.Browser ?? '')) {
+    throw new errors.InvalidArgumentError('Microsoft Edge web views are not supported');
+  }
   const debuggerAddress = (page.webSocketDebuggerUrl ?? '').replace(/^wss?:\/\//, '').split('/')[0];
   if (!debuggerAddress) {
     throw new errors.InvalidArgumentError(`Web view '${name}' does not expose a debugger address`);
@@ -77,6 +80,7 @@ export async function setContext(this: Mac2Driver, name?: string | null): Promis
 
   try {
     await cd.start({'goog:chromeOptions': {debuggerAddress}});
+    await switchToPage(cd, page.id);
     // Timeouts belong to the session, but a new Chromedriver session starts with implicit wait 0
     if (this.implicitWaitMs) {
       await cd.jwproxy.command('/timeouts', 'POST', {implicit: this.implicitWaitMs});
@@ -89,6 +93,21 @@ export async function setContext(this: Mac2Driver, name?: string | null): Promis
   }
   this.chromedriver = cd;
   this._currentContext = `${WEBVIEW_PREFIX}${page.id}`;
+}
+
+/**
+ * Chromedriver attaches to the browser, so the requested page must be selected explicitly.
+ *
+ * @param cd - Started Chromedriver
+ * @param pageId - The CDP target id of the page
+ */
+export async function switchToPage(cd: Pick<Chromedriver, 'jwproxy'>, pageId: string): Promise<void> {
+  const handles: string[] = await cd.jwproxy.command('/window/handles', 'GET');
+  const handle = handles.find((h) => h === pageId || h === `CDwindow-${pageId}`);
+  if (!handle) {
+    throw new errors.NoSuchWindowError(`Chromedriver does not see the web view '${pageId}'`);
+  }
+  await cd.jwproxy.command('/window', 'POST', {handle});
 }
 
 /**

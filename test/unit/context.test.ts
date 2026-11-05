@@ -1,7 +1,14 @@
 import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
 
-import {getChromedriverOpts, getContexts, prepareWebviewLaunch, setContext} from '../../lib/commands/context.js';
+import {macosGetClipboard} from '../../lib/commands/clipboard.js';
+import {
+  getChromedriverOpts,
+  getContexts,
+  prepareWebviewLaunch,
+  setContext,
+  switchToPage,
+} from '../../lib/commands/context.js';
 import {findElOrEls} from '../../lib/commands/find.js';
 import {Mac2Driver} from '../../lib/driver.js';
 
@@ -66,6 +73,16 @@ describe('webview contexts', () => {
       await assert.rejects(setContext.call(driver, 'WEBVIEW_X'), /Web view not found/);
     });
 
+    it('rejects Microsoft Edge web views', async () => {
+      const driver = makeDriver();
+      driver.getWebViewDetails = (async () => ({
+        port: 1,
+        info: {Browser: 'Edg/150.0.0.1'},
+        pages: [{id: 'A', type: 'page', webSocketDebuggerUrl: 'ws://127.0.0.1:1/devtools/page/A'}],
+      })) as any;
+      await assert.rejects(setContext.call(driver, 'WEBVIEW_A'), /Edge/);
+    });
+
     it('requires webviewEnabled', async () => {
       await assert.rejects(setContext.call(makeDriver({}), 'WEBVIEW_X'), /webviewEnabled/);
     });
@@ -115,15 +132,101 @@ describe('webview contexts', () => {
     });
   });
 
-  describe('proxy routing', () => {
-    it('sends find and timeouts to Chromedriver only in a web view', () => {
+  describe('switchToPage', () => {
+    function makeChromedriver(handles: string[]) {
+      const calls: unknown[][] = [];
+      const cd = {
+        jwproxy: {
+          command: async (...args: unknown[]) => {
+            calls.push(args);
+            return args[0] === '/window/handles' ? handles : null;
+          },
+        },
+      } as any;
+      return {cd, calls};
+    }
+
+    it('selects the requested page among several', async () => {
+      const {cd, calls} = makeChromedriver(['PAGE_A', 'PAGE_B']);
+      await switchToPage(cd, 'PAGE_B');
+      assert.deepEqual(calls[1], ['/window', 'POST', {handle: 'PAGE_B'}]);
+    });
+
+    it('fails if Chromedriver does not see the page', async () => {
+      const {cd} = makeChromedriver(['PAGE_A']);
+      await assert.rejects(switchToPage(cd, 'PAGE_B'), /does not see the web view/);
+    });
+  });
+
+  describe('timeouts', () => {
+    function withChromedriver(driver: Mac2Driver) {
+      const calls: unknown[][] = [];
+      driver.chromedriver = {
+        jwproxy: {
+          command: async (...args: unknown[]) => {
+            calls.push(args);
+          },
+        },
+      } as any;
+      return calls;
+    }
+
+    it('keeps the implicit wait in the driver and mirrors it to Chromedriver', async () => {
       const driver = makeDriver();
-      const routes = (list: ReturnType<Mac2Driver['getProxyAvoidList']>) => list.map(([, re]) => String(re));
+      const calls = withChromedriver(driver);
+      await driver.timeouts(undefined, undefined, undefined, undefined, 5000);
+      assert.equal(driver.implicitWaitMs, 5000);
+      assert.deepEqual(calls, [['/timeouts', 'POST', {implicit: 5000}]]);
+    });
+
+    it('forwards page load and script timeouts to Chromedriver', async () => {
+      const driver = makeDriver();
+      const calls = withChromedriver(driver);
+      await driver.timeouts(undefined, undefined, 3000, 4000);
+      assert.deepEqual(calls, [
+        ['/timeouts', 'POST', {script: 3000}],
+        ['/timeouts', 'POST', {pageLoad: 4000}],
+      ]);
+    });
+
+    it('does not support page load timeouts natively', async () => {
+      await assert.rejects(makeDriver().timeouts(undefined, undefined, undefined, 4000), /Not implemented/);
+    });
+
+    it('routes POST timeouts to the driver in a web view', () => {
+      const driver = makeDriver();
+      driver.chromedriver = {} as any;
+      assert.ok(driver.getProxyAvoidList('s').some(([method, re]) => method === 'POST' && /timeouts/.test(String(re))));
+    });
+  });
+
+  describe('proxy routing', () => {
+    it('keeps native clipboard commands on WDA in a web view', async () => {
+      const driver = makeDriver();
+      const calls: unknown[][] = [];
+      (driver as any)._wda = {
+        proxy: {
+          command: async (...args: unknown[]) => {
+            calls.push(args);
+            return 'Zm9v';
+          },
+        },
+      } as any;
+      driver.chromedriver = {jwproxy: {command: async () => assert.fail('must stay native')}} as any;
+      assert.equal(await macosGetClipboard.call(driver, 'plaintext'), 'Zm9v');
+      assert.equal(calls[0][0], '/wda/getPasteboard');
+    });
+
+    it('sends find and timeout reads to Chromedriver only in a web view', () => {
+      const driver = makeDriver();
+      const routes = (list: ReturnType<Mac2Driver['getProxyAvoidList']>) =>
+        list.map(([method, re]) => `${method} ${String(re)}`);
       const native = routes(driver.getProxyAvoidList('s'));
       driver.chromedriver = {} as any;
       const web = routes(driver.getProxyAvoidList('s'));
-      assert.ok(native.some((r) => r.includes('timeouts')));
-      assert.ok(!web.some((r) => r.includes('timeouts') || r.includes('element')));
+      assert.ok(native.some((r) => r.startsWith('GET') && r.includes('timeouts')));
+      assert.ok(!web.some((r) => r.startsWith('GET') && r.includes('timeouts')));
+      assert.ok(!web.some((r) => r.includes('element')));
       assert.ok(web.some((r) => r.includes('context')));
     });
 

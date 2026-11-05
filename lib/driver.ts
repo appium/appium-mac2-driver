@@ -54,6 +54,8 @@ const WEBVIEW_NO_PROXY: RouteMatcher[] = [
   ['POST', new RegExp('^/session/[^/]+/context')],
   ['POST', new RegExp('^/session/[^/]+/execute')],
   ['POST', new RegExp('^/session/[^/]+/execute/sync')],
+  // Handled by the driver to keep the session timeouts across contexts
+  ['POST', new RegExp('^/session/[^/]+/timeouts$')],
 ];
 
 interface PrerunCapability {
@@ -210,6 +212,26 @@ export class Mac2Driver
       return await this.chromedriver.jwproxy.command(url, method, body);
     }
     return await this.wda.proxy.command(url, method, body);
+  }
+
+  // Timeouts belong to the session: keep them here and mirror to Chromedriver in a web view
+  override async implicitWaitW3C(ms: number): Promise<void> {
+    await super.implicitWaitW3C(ms);
+    await this.chromedriver?.jwproxy.command('/timeouts', 'POST', {implicit: this.implicitWaitMs});
+  }
+
+  override async pageLoadTimeoutW3C(ms: number): Promise<void> {
+    if (!this.chromedriver) {
+      return await super.pageLoadTimeoutW3C(ms);
+    }
+    await this.chromedriver.jwproxy.command('/timeouts', 'POST', {pageLoad: this.parseTimeoutArgument(ms)});
+  }
+
+  override async scriptTimeoutW3C(ms: number): Promise<void> {
+    if (!this.chromedriver) {
+      return await super.scriptTimeoutW3C(ms);
+    }
+    await this.chromedriver.jwproxy.command('/timeouts', 'POST', {script: this.parseTimeoutArgument(ms)});
   }
 
   isWebviewEnabled(): boolean {
