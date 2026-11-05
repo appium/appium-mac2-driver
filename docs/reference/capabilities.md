@@ -230,6 +230,7 @@ The flag must not be set in `appium:arguments`, as such a value is ignored.
 | `appium:webviewDevtoolsPort` | `number` | A free port in the 10900-11000 range |
 
 The port of the app's Chrome DevTools endpoint. Only used if `appium:webviewEnabled` is set.
+Required if `appium:noReset` is also set.
 
 ### chromedriverExecutable
 

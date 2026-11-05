@@ -81,9 +81,14 @@ export async function setContext(this: Mac2Driver, name?: string | null): Promis
   try {
     await cd.start({'goog:chromeOptions': {debuggerAddress}});
     await switchToPage(cd, page.id);
-    // Timeouts belong to the session, but a new Chromedriver session starts with implicit wait 0
-    if (this.implicitWaitMs) {
-      await cd.jwproxy.command('/timeouts', 'POST', {implicit: this.implicitWaitMs});
+    // Timeouts belong to the session, but a new Chromedriver session starts with its defaults
+    const timeouts = {
+      ...(this.implicitWaitMs ? {implicit: this.implicitWaitMs} : {}),
+      ...(this._pageLoadTimeoutMs !== null ? {pageLoad: this._pageLoadTimeoutMs} : {}),
+      ...(this._scriptTimeoutMs !== null ? {script: this._scriptTimeoutMs} : {}),
+    };
+    if (Object.keys(timeouts).length) {
+      await cd.jwproxy.command('/timeouts', 'POST', timeouts);
     }
   } catch (e) {
     try {
@@ -174,22 +179,40 @@ export async function macosGetContexts(
  * @returns The capabilities to start the WDA session with and the port, if web views are enabled
  */
 export async function prepareWebviewLaunch<T extends {arguments?: unknown}>(
-  caps: T & {webviewEnabled?: boolean; webviewDevtoolsPort?: number},
+  caps: T & {webviewEnabled?: boolean; webviewDevtoolsPort?: number; noReset?: boolean},
 ): Promise<{caps: T; port: number | null}> {
   if (!caps.webviewEnabled) {
     return {caps, port: null};
   }
+  // The arguments are ignored if the already running app is just activated
+  if (caps.noReset && !caps.webviewDevtoolsPort) {
+    throw new errors.InvalidArgumentError(
+      `'webviewDevtoolsPort' capability must be set along with 'noReset', since the app arguments ` +
+        `might be ignored and the debugging port cannot be chosen by the driver`,
+    );
+  }
   const port = caps.webviewDevtoolsPort ?? (await findAPortNotInUse(PORT_RANGE_START, PORT_RANGE_END, CDP_HOST));
   const args = Array.isArray(caps.arguments) ? (caps.arguments as unknown[]).map(String) : [];
-  const userArgs = args.filter((arg) => !isDebuggingPortArg(arg));
+  const userArgs = removeDebuggingPortArgs(args);
   if (userArgs.length !== args.length) {
     log.warn(`Ignoring '${DEBUGGING_PORT_FLAG}' in the app arguments. Use 'webviewDevtoolsPort' capability instead`);
   }
   return {caps: {...caps, arguments: [...userArgs, `${DEBUGGING_PORT_FLAG}=${port}`]}, port};
 }
 
-function isDebuggingPortArg(arg: string): boolean {
-  return arg === DEBUGGING_PORT_FLAG || arg.startsWith(`${DEBUGGING_PORT_FLAG}=`);
+// Handles both the `--flag=value` and the `--flag value` forms
+function removeDebuggingPortArgs(args: string[]): string[] {
+  const result: string[] = [];
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === DEBUGGING_PORT_FLAG) {
+      if (i + 1 < args.length && !args[i + 1].startsWith('-')) {
+        i++;
+      }
+    } else if (!args[i].startsWith(`${DEBUGGING_PORT_FLAG}=`)) {
+      result.push(args[i]);
+    }
+  }
+  return result;
 }
 
 async function cdpRequest<T>(driver: Mac2Driver, port: number, endpoint: string): Promise<T | null> {

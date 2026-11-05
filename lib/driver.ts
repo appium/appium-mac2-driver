@@ -141,6 +141,8 @@ export class Mac2Driver
 
   chromedriver: Chromedriver | null = null;
   _currentContext: string | null = null;
+  _pageLoadTimeoutMs: number | null = null;
+  _scriptTimeoutMs: number | null = null;
   _webviewDevtoolsPort: number | null = null;
 
   private isProxyActive: boolean = false;
@@ -224,14 +226,18 @@ export class Mac2Driver
     if (!this.chromedriver) {
       return await super.pageLoadTimeoutW3C(ms);
     }
-    await this.chromedriver.jwproxy.command('/timeouts', 'POST', {pageLoad: this.parseTimeoutArgument(ms)});
+    const pageLoad = this.parseTimeoutArgument(ms);
+    await this.chromedriver.jwproxy.command('/timeouts', 'POST', {pageLoad});
+    this._pageLoadTimeoutMs = pageLoad;
   }
 
   override async scriptTimeoutW3C(ms: number): Promise<void> {
     if (!this.chromedriver) {
       return await super.scriptTimeoutW3C(ms);
     }
-    await this.chromedriver.jwproxy.command('/timeouts', 'POST', {script: this.parseTimeoutArgument(ms)});
+    const script = this.parseTimeoutArgument(ms);
+    await this.chromedriver.jwproxy.command('/timeouts', 'POST', {script});
+    this._scriptTimeoutMs = script;
   }
 
   isWebviewEnabled(): boolean {
@@ -374,6 +380,8 @@ export class Mac2Driver
     this._hasClaimedHost = false;
     this.isProxyActive = false;
     this.resetWebviewState();
+    this._pageLoadTimeoutMs = null;
+    this._scriptTimeoutMs = null;
     this._webviewDevtoolsPort = null;
     this._videoChunksBroadcaster = new nativeScreenRecordingCommands.NativeVideoChunksBroadcaster(
       this.eventEmitter,

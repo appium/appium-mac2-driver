@@ -20,7 +20,8 @@ capability.
 !!! note
 
     The debugging argument only applies to a fresh app launch. It is ignored if the app is already
-    running or if `appium:noReset` is set. Chrome additionally needs a dedicated profile to start
+    running and `appium:noReset` is set, so the port the app listens on must then be provided
+    explicitly via `appium:webviewDevtoolsPort`. Chrome additionally needs a dedicated profile to start
     a new instance, e.g. `appium:arguments: ['--user-data-dir=/tmp/profile']`.
 
 The availability of a particular web view could be easily verified by using the

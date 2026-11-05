@@ -42,6 +42,22 @@ describe('webview contexts', () => {
       assert.deepEqual(result.caps.arguments, [`--remote-debugging-port=${result.port}`]);
     });
 
+    it('removes the value of a standalone debugging flag', async () => {
+      const caps = {
+        webviewEnabled: true,
+        webviewDevtoolsPort: 9555,
+        arguments: ['--remote-debugging-port', '9444', '-a', '--remote-debugging-port'],
+      };
+      const result = await prepareWebviewLaunch(caps);
+      assert.deepEqual(result.caps.arguments, ['-a', '--remote-debugging-port=9555']);
+    });
+
+    it('requires the port along with noReset', async () => {
+      await assert.rejects(prepareWebviewLaunch({webviewEnabled: true, noReset: true}), /webviewDevtoolsPort/);
+      const result = await prepareWebviewLaunch({webviewEnabled: true, noReset: true, webviewDevtoolsPort: 9555});
+      assert.equal(result.port, 9555);
+    });
+
     it('replaces a debugging flag supplied by the user', async () => {
       const caps = {
         webviewEnabled: true,
@@ -188,6 +204,14 @@ describe('webview contexts', () => {
         ['/timeouts', 'POST', {script: 3000}],
         ['/timeouts', 'POST', {pageLoad: 4000}],
       ]);
+    });
+
+    it('remembers page load and script timeouts for the next Chromedriver', async () => {
+      const driver = makeDriver();
+      withChromedriver(driver);
+      await driver.timeouts(undefined, undefined, 3000, 4000);
+      assert.equal(driver._scriptTimeoutMs, 3000);
+      assert.equal(driver._pageLoadTimeoutMs, 4000);
     });
 
     it('does not support page load timeouts natively', async () => {
