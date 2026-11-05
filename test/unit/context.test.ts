@@ -9,6 +9,7 @@ import {
   setContext,
   switchToPage,
 } from '../../lib/commands/context.js';
+import {execute} from '../../lib/commands/execute.js';
 import {findElOrEls} from '../../lib/commands/find.js';
 import {Mac2Driver} from '../../lib/driver.js';
 
@@ -201,6 +202,30 @@ describe('webview contexts', () => {
   });
 
   describe('proxy routing', () => {
+    it('executes macos: scripts natively and other scripts in the page', async () => {
+      const driver = makeDriver();
+      const native: unknown[][] = [];
+      const web: unknown[][] = [];
+      driver.executeMethod = (async (...args: unknown[]) => {
+        native.push(args);
+      }) as any;
+      driver.chromedriver = {
+        jwproxy: {
+          command: async (...args: unknown[]) => {
+            web.push(args);
+          },
+        },
+      } as any;
+      await execute.call(driver, 'macos: click', [{x: 1}]);
+      await execute.call(driver, '  macos:click', [{x: 2}]);
+      await execute.call(driver, 'return 1', []);
+      assert.deepEqual(native, [
+        ['macos: click', [{x: 1}]],
+        ['macos: click', [{x: 2}]],
+      ]);
+      assert.deepEqual(web, [['/execute/sync', 'POST', {script: 'return 1', args: []}]]);
+    });
+
     it('keeps native clipboard commands on WDA in a web view', async () => {
       const driver = makeDriver();
       const calls: unknown[][] = [];
