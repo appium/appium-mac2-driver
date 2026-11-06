@@ -1,3 +1,9 @@
+## [4.6.0](https://github.com/appium/appium-mac2-driver/compare/v4.5.1...v4.6.0) (2026-11-06)
+
+### Features
+
+* add Chromium web view contexts via appium-chromedriver ([#437](https://github.com/appium/appium-mac2-driver/issues/437)) ([8c3a3d3](https://github.com/appium/appium-mac2-driver/commit/8c3a3d3530244c1c60cc57f3d082cb31683fb5ab))
+
 ## [4.5.1](https://github.com/appium/appium-mac2-driver/compare/v4.5.0...v4.5.1) (2026-10-27)
 
 ### Bug Fixes
