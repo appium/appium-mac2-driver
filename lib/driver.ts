@@ -11,12 +11,14 @@ import type {
   DriverOpts,
   W3CDriverCaps,
 } from '@appium/types';
+import type {Chromedriver} from 'appium-chromedriver';
 import {BaseDriver, DeviceSettings, errors} from 'appium/driver.js';
 
 import * as appManagemenetCommands from './commands/app-management.js';
 import * as appleScriptCommands from './commands/applescript.js';
 import * as auditCommands from './commands/audit.js';
 import * as clipboardCommands from './commands/clipboard.js';
+import * as contextCommands from './commands/context.js';
 import * as executeCommands from './commands/execute.js';
 import * as findCommands from './commands/find.js';
 import * as gesturesCommands from './commands/gestures.js';
@@ -41,6 +43,18 @@ const NO_PROXY: RouteMatcher[] = [
   ['POST', new RegExp('^/session/[^/]+/execute')],
   ['POST', new RegExp('^/session/[^/]+/execute/sync')],
   ['GET', new RegExp('^/session/[^/]+/timeouts$')],
+  ['POST', new RegExp('^/session/[^/]+/timeouts$')],
+];
+
+// In a web view everything but these routes goes to Chromedriver, including find and timeouts
+const WEBVIEW_NO_PROXY: RouteMatcher[] = [
+  ['GET', new RegExp('^/session/[^/]+/appium')],
+  ['POST', new RegExp('^/session/[^/]+/appium')],
+  ['GET', new RegExp('^/session/[^/]+/context')],
+  ['POST', new RegExp('^/session/[^/]+/context')],
+  ['POST', new RegExp('^/session/[^/]+/execute')],
+  ['POST', new RegExp('^/session/[^/]+/execute/sync')],
+  // Handled by the driver to keep the session timeouts across contexts
   ['POST', new RegExp('^/session/[^/]+/timeouts$')],
 ];
 
@@ -73,6 +87,12 @@ export class Mac2Driver
   macosExecAppleScript = appleScriptCommands.macosExecAppleScript;
 
   execute = executeCommands.execute;
+
+  getCurrentContext = contextCommands.getCurrentContext;
+  getContexts = contextCommands.getContexts;
+  setContext = contextCommands.setContext;
+  getWebViewDetails = contextCommands.getWebViewDetails;
+  macosGetContexts = contextCommands.macosGetContexts;
 
   findElOrEls = findCommands.findElOrEls;
 
@@ -118,6 +138,12 @@ export class Mac2Driver
   _videoChunksBroadcaster!: nativeScreenRecordingCommands.NativeVideoChunksBroadcaster;
   _screenRecorder: recordScreenCommands.ScreenRecorder | null = null;
   public proxyReqRes!: (...args: any) => any;
+
+  chromedriver: Chromedriver | null = null;
+  _currentContext: string | null = null;
+  _pageLoadTimeoutMs: number | null = null;
+  _scriptTimeoutMs: number | null = null;
+  _webviewDevtoolsPort: number | null = null;
 
   private isProxyActive: boolean = false;
   private _wda: WDAMacServer | null = null;
@@ -176,7 +202,7 @@ export class Mac2Driver
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   override getProxyAvoidList(sessionId: string): RouteMatcher[] {
-    return NO_PROXY;
+    return this.chromedriver ? WEBVIEW_NO_PROXY : NO_PROXY;
   }
 
   override canProxy(): boolean {
@@ -184,7 +210,62 @@ export class Mac2Driver
   }
 
   async proxyCommand(url: string, method: HTTPMethod, body: HTTPBody = null): Promise<any> {
+    if (this.chromedriver) {
+      return await this.chromedriver.jwproxy.command(url, method, body);
+    }
     return await this.wda.proxy.command(url, method, body);
+  }
+
+  // Timeouts belong to the session: keep them here and mirror to Chromedriver in a web view
+  override async implicitWaitW3C(ms: number): Promise<void> {
+    await super.implicitWaitW3C(ms);
+    await this.chromedriver?.jwproxy.command('/timeouts', 'POST', {implicit: this.implicitWaitMs});
+  }
+
+  override async pageLoadTimeoutW3C(ms: number): Promise<void> {
+    if (!this.chromedriver) {
+      return await super.pageLoadTimeoutW3C(ms);
+    }
+    const pageLoad = this.parseTimeoutArgument(ms);
+    await this.chromedriver.jwproxy.command('/timeouts', 'POST', {pageLoad});
+    this._pageLoadTimeoutMs = pageLoad;
+  }
+
+  override async scriptTimeoutW3C(ms: number): Promise<void> {
+    if (!this.chromedriver) {
+      return await super.scriptTimeoutW3C(ms);
+    }
+    const script = this.parseTimeoutArgument(ms);
+    await this.chromedriver.jwproxy.command('/timeouts', 'POST', {script});
+    this._scriptTimeoutMs = script;
+  }
+
+  isWebviewEnabled(): boolean {
+    return !!this.opts?.webviewEnabled;
+  }
+
+  assertWebviewEnabled(): void {
+    if (!this.isWebviewEnabled()) {
+      throw new errors.InvalidArgumentError(`Web view support must be enabled with the 'webviewEnabled' capability`);
+    }
+  }
+
+  /** Stops Chromedriver, if any, and routes the commands back to WebDriverAgentMac */
+  async stopChromedriver(): Promise<void> {
+    const cd = this.chromedriver;
+    this.resetWebviewState();
+    if (cd) {
+      try {
+        await cd.stop();
+      } catch (e: any) {
+        log.warn(`Chromedriver cannot be stopped: ${e.message}`);
+      }
+    }
+  }
+
+  resetWebviewState(): void {
+    this.chromedriver = null;
+    this._currentContext = null;
   }
 
   override async getStatus(): Promise<any> {
@@ -231,7 +312,9 @@ export class Mac2Driver
             log.info(`Prerun script output: ${output}`);
           }
         }
-        this._wdaSessionId = await this.wda.startSession(caps, {
+        const launch = await contextCommands.prepareWebviewLaunch(caps);
+        this._webviewDevtoolsPort = launch.port;
+        this._wdaSessionId = await this.wda.startSession(launch.caps, {
           reqBasePath: this.basePath,
         });
       } catch (e: any) {
@@ -240,7 +323,9 @@ export class Mac2Driver
       }
     });
     this.proxyReqRes = (...args: any[]) =>
-      (this.wda.proxy.proxyReqRes as (...a: any[]) => any).apply(this.wda.proxy, args);
+      this.chromedriver
+        ? (this.chromedriver.proxyReq as (...a: any[]) => any).apply(this.chromedriver, args)
+        : (this.wda.proxy.proxyReqRes as (...a: any[]) => any).apply(this.wda.proxy, args);
     this.isProxyActive = true;
     return [sessionId, caps];
   }
@@ -252,6 +337,7 @@ export class Mac2Driver
   }
 
   private async teardownSession(): Promise<void> {
+    await this.stopChromedriver();
     await this._screenRecorder?.stop(true);
     if (this._videoChunksBroadcaster.hasPublishers) {
       if (this._wda?.isSessionActive(this._wdaSessionId)) {
@@ -293,6 +379,10 @@ export class Mac2Driver
     this._wdaSessionId = null;
     this._hasClaimedHost = false;
     this.isProxyActive = false;
+    this.resetWebviewState();
+    this._pageLoadTimeoutMs = null;
+    this._scriptTimeoutMs = null;
+    this._webviewDevtoolsPort = null;
     this._videoChunksBroadcaster = new nativeScreenRecordingCommands.NativeVideoChunksBroadcaster(
       this.eventEmitter,
       this.log,

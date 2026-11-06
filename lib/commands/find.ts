@@ -20,6 +20,11 @@ export async function findElOrEls(
   const contextId = context ? util.unwrapElement(context) : context;
   const endpoint = `/element${contextId ? `/${contextId}/element` : ''}${mult ? 's' : ''}`;
 
+  // Web view elements are located by Chromedriver using the standard W3C strategies
+  if (this.chromedriver) {
+    return await this.chromedriver.jwproxy.command(endpoint, 'POST', {using: strategy, value: selector});
+  }
+
   let normalizedStrategy = strategy;
   if (strategy === '-ios predicate string') {
     normalizedStrategy = 'predicate string';

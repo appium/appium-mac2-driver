@@ -53,6 +53,21 @@ from your client code:
     }));
     ```
 
+### macos: getContexts
+
+Lists the available contexts together with the details of each web view (title, URL, etc.).
+Requires `appium:webviewEnabled`.
+
+#### Arguments
+
+| <div style="width:10em">Name</div> | Type | Description |
+| --- | --- | --- |
+| `waitForWebviewMs?` | `number` | How long to wait for at least one web view to appear. `0` by default. |
+
+#### Response
+
+An array of objects. The `id` of each is either `NATIVE_APP` or `WEBVIEW_<id>`.
+
 ### macos: click
 
 Performs a click gesture on an element, or by relative/absolute coordinates. Based on XCTest's

@@ -1,6 +1,12 @@
 import type {ExecuteMethodMap} from '@appium/types';
 
 export const executeMethodMap = {
+  'macos: getContexts': {
+    command: 'macosGetContexts',
+    params: {
+      optional: ['waitForWebviewMs'],
+    },
+  },
   'macos: click': {
     command: 'macosClick',
     params: {

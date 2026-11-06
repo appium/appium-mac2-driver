@@ -10,6 +10,10 @@ const EXECUTE_SCRIPT_PREFIX = 'macos:';
  * @param args - Arguments to pass to the script
  */
 export async function execute(this: Mac2Driver, script: string, args?: readonly any[] | StringRecord): Promise<any> {
+  // Non-macos scripts belong to the web page when a web view is active
+  if (this.chromedriver && !/^\s*macos:/.test(String(script))) {
+    return await this.chromedriver.jwproxy.command('/execute/sync', 'POST', {script, args: args ?? []});
+  }
   this.log.info(`Executing extension command '${script}'`);
   const formattedScript = String(script)
     .trim()

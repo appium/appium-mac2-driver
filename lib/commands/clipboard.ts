@@ -12,7 +12,7 @@ export async function macosSetClipboard(
   content: string,
   contentType: string = 'plaintext',
 ): Promise<void> {
-  await this.proxyCommand('/wda/setPasteboard', 'POST', {
+  await this.wda.proxy.command('/wda/setPasteboard', 'POST', {
     content,
     contentType,
   });
@@ -27,7 +27,7 @@ export async function macosSetClipboard(
  * An empty string is returned if the clipboard contains no data for the given content type.
  */
 export async function macosGetClipboard(this: Mac2Driver, contentType: string = 'plaintext'): Promise<string> {
-  return /** @type {string} */ await this.proxyCommand('/wda/getPasteboard', 'POST', {
+  return /** @type {string} */ await this.wda.proxy.command('/wda/getPasteboard', 'POST', {
     contentType,
   });
 }

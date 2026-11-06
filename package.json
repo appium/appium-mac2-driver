@@ -64,6 +64,7 @@
   "dependencies": {
     "@appium/strongbox": "^2.0.0",
     "@colors/colors": "^1.6.0",
+    "appium-chromedriver": "^9.1.14",
     "appium-xcode": "^7.1.1",
     "asyncbox": "^6.5.0",
     "axios": "^1.18.0",

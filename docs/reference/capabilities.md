@@ -212,3 +212,48 @@ Full path to a custom directory containing the `WebDriverAgentMac.xcodeproj` WDA
 | `appium:serverStartupTimeout` | `number` | `120000` |
 
 Time in milliseconds to wait until the WDA server is built and started.
+
+### webviewEnabled
+
+| Name | Type | Default |
+| -- | -- | -- |
+| `appium:webviewEnabled` | `boolean` | `false` |
+
+Enables [web view contexts](../guides/hybrid.md) for Chromium-based apps. The driver adds
+`--remote-debugging-port` to the app arguments and exposes the app pages as `WEBVIEW_<id>` contexts.
+The flag must not be set in `appium:arguments`, as such a value is ignored.
+
+### webviewDevtoolsPort
+
+| Name | Type | Default |
+| -- | -- | -- |
+| `appium:webviewDevtoolsPort` | `number` | A free port in the 10900-11000 range |
+
+The port of the app's Chrome DevTools endpoint. Only used if `appium:webviewEnabled` is set.
+Required if `appium:noReset` is also set.
+
+### chromedriverExecutable
+
+| Name | Type | Default |
+| -- | -- | -- |
+| `appium:chromedriverExecutable` | `string` | Not specified |
+
+Custom path to a Chromedriver executable on the host file system. Takes priority over
+[`appium:chromedriverExecutableDir`](#chromedriverexecutabledir). Only used if `appium:webviewEnabled`
+is set.
+
+Refer to the [Managing Chromedriver guide](../guides/hybrid.md#managing-chromedriver) for more
+details.
+
+### chromedriverExecutableDir
+
+| Name | Type | Default |
+| -- | -- | -- |
+| `appium:chromedriverExecutableDir` | `string` | `chromedriver` folder in the driver's installation directory |
+
+Custom path to a directory on the host file system, containing Chromedriver executables. If
+automatic Chromedriver download is enabled, this folder is also used to store the downloaded
+executables. Only used if `appium:webviewEnabled` is set.
+
+Refer to the [Managing Chromedriver guide](../guides/hybrid.md#managing-chromedriver) for more
+details.

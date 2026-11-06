@@ -52,6 +52,18 @@ const MAC2_CONSTRAINTS = {
   initialDeeplinkUrl: {
     isString: true,
   },
+  webviewEnabled: {
+    isBoolean: true,
+  },
+  webviewDevtoolsPort: {
+    isNumber: true,
+  },
+  chromedriverExecutable: {
+    isString: true,
+  },
+  chromedriverExecutableDir: {
+    isString: true,
+  },
 } as const satisfies Constraints;
 
 export default MAC2_CONSTRAINTS;

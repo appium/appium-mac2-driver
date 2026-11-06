@@ -21,3 +21,4 @@ For other insecure feature names recognized by the Appium server, see
 |<div style="width:7em">Feature Name</div>|Description|
 |------------|-----------|
 |`apple_script`|Allows execution of arbitrary AppleScript commands and scripts. Refer to [the AppleScript guide](../guides/applescript.md) for more details.|
+|`chromedriver_autodownload`|Enables automatic download of a Chromedriver binary compatible with the active web view. Only relevant in a web view context. Refer to [the Hybrid Applications guide](../guides/hybrid.md#managing-chromedriver) for more details.|
