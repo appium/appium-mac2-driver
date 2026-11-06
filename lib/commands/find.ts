@@ -45,12 +45,15 @@ export async function findElOrEls(
   // The WDA server ignores the /timeouts API, so the implicit wait is applied here
   let result: any;
   let lastError: Error | undefined;
+  // A lookup error other than NoSuchElementError stops the wait and must reach the caller as is
+  let lookupError: unknown;
   try {
     await this.implicitWaitForCondition(async () => {
       try {
         result = await doFind();
       } catch (e) {
         if (!isErrorType(e, errors.NoSuchElementError)) {
+          lookupError = e;
           throw e;
         }
         lastError = e as Error;
@@ -59,6 +62,9 @@ export async function findElOrEls(
       return !mult || (Array.isArray(result) && result.length > 0);
     });
   } catch (e) {
+    if (lookupError !== undefined) {
+      throw lookupError;
+    }
     if (!/Condition unmet/.test((e as Error)?.message ?? '')) {
       throw e;
     }
