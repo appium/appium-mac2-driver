@@ -10,7 +10,7 @@ Certain features of the Mac2 driver support executing arbitrary AppleScript comm
 !!! warning
 
     This is considered an insecure feature, so it must be explicitly enabled on the Appium server
-    using the [`apple_script` feature name](../reference/insecure-features.md).
+    using the [`apple_script` feature name](../reference/insecure-features.md#apple_script).
 
 AppleScript is supported in the following features:
 
