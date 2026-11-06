@@ -1,3 +1,9 @@
+## [4.6.1](https://github.com/appium/appium-mac2-driver/compare/v4.6.0...v4.6.1) (2026-11-06)
+
+### Bug Fixes
+
+* initialize NSApplication in the runner to avoid Xcode 27.2 input event crash ([#440](https://github.com/appium/appium-mac2-driver/issues/440)) ([08143a7](https://github.com/appium/appium-mac2-driver/commit/08143a739223618f0c729c65c708e6e225b22633))
+
 ## [4.6.0](https://github.com/appium/appium-mac2-driver/compare/v4.5.1...v4.6.0) (2026-11-06)
 
 ### Features
