@@ -13,10 +13,10 @@
         <link rel="canonical" href="https://appium.github.io/appium-mac2-driver/v4/guides/hybrid/">
       
       
-        <link rel="prev" href="../accessibility-permission/">
+        <link rel="prev" href="../parallel-tests/">
       
       
-        <link rel="next" href="../app-under-test/">
+        <link rel="next" href="../accessibility-permission/">
       
       
         
@@ -1330,34 +1330,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../accessibility-permission/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Accessibility Permission
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -1556,13 +1528,13 @@
 <li class="md-nav__item">
   <a href="#managing-chromedriver" class="md-nav__link">
     <span class="md-ellipsis">
-      Managing Chromedriver
+      Managing ChromeDriver
     </span>
   </a>
 
   <!-- Table of contents list -->
   
-    <nav class="md-nav" aria-label="Managing Chromedriver">
+    <nav class="md-nav" aria-label="Managing ChromeDriver">
       <ul class="md-nav__list">
         
           <!--
@@ -1728,6 +1700,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../accessibility-permission/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accessibility Permission
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -2121,13 +2121,13 @@
 <li class="md-nav__item">
   <a href="#managing-chromedriver" class="md-nav__link">
     <span class="md-ellipsis">
-      Managing Chromedriver
+      Managing ChromeDriver
     </span>
   </a>
 
   <!-- Table of contents list -->
   
-    <nav class="md-nav" aria-label="Managing Chromedriver">
+    <nav class="md-nav" aria-label="Managing ChromeDriver">
       <ul class="md-nav__list">
         
           <!--
@@ -2393,21 +2393,20 @@
 <p>The Mac2 driver supports automation of hybrid apps that use Chromium-based web views, such as
 Electron, Chrome or CEF apps. This enables actions such as retrieving the web-specific page
 source, as well as finding and interacting with elements located inside the web view.</p>
-<p>Web views of other engines, such as <code>WKWebView</code>, are not supported. Their content is only available
-through the native accessibility tree (see the <code>useDomIdAsAccessibilityId</code> <a href="../../reference/settings/">setting</a>).</p>
-<h2 id="enabling-web-views">Enabling Web Views<a class="headerlink" href="#enabling-web-views" title="Permanent link">&para;</a></h2>
-<p>Set the <a href="../../reference/capabilities/#webviewenabled"><code>appium:webviewEnabled</code></a> capability to <code>true</code>.
-The driver then launches the app with the <code>--remote-debugging-port</code> argument, so that the web views
-are debuggable and accessible to the driver. The flag must not be set in <code>appium:arguments</code>, as such
-a value is ignored. The port could be customized with the <a href="../../reference/capabilities/#webviewdevtoolsport"><code>appium:webviewDevtoolsPort</code></a>
-capability.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The debugging argument only applies to a fresh app launch. It is ignored if the app is already
-running and <code>appium:noReset</code> is set, so the port the app listens on must then be provided
-explicitly via <code>appium:webviewDevtoolsPort</code>. Chrome additionally needs a dedicated profile to start
-a new instance, e.g. <code>appium:arguments: ['--user-data-dir=/tmp/profile']</code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Webviews based on other engines, such as WebKit/Safari (<code>WKWebView</code>), are not supported. Their
+content is only available through the native accessibility tree (see the <a href="../../reference/settings/#usedomidasaccessibilityid"><code>useDomIdAsAccessibilityId</code></a>
+setting).</p>
 </div>
+<h2 id="enabling-web-views">Enabling Web Views<a class="headerlink" href="#enabling-web-views" title="Permanent link">&para;</a></h2>
+<p>Access to webviews is not available by default, and must be explicitly enabled by setting the
+<a href="../../reference/capabilities/#webviewenabled"><code>appium:webviewEnabled</code></a> capability to <code>true</code>.</p>
+<p>If the app is already running and <a href="../../reference/capabilities/#noreset"><code>appium:noReset</code></a> is set,
+it is also required to explicitly provide the debugging port using the
+<a href="../../reference/capabilities/#webviewdevtoolsport"><code>appium:webviewDevtoolsPort</code></a> capability. The
+underlying Chromium engine additionally needs a dedicated profile to start a new instance, e.g.
+<a href="../../reference/capabilities/#arguments"><code>appium:arguments</code></a> may be set to <code>['--user-data-dir=/tmp/profile']</code>.</p>
 <p>The availability of a particular web view could be easily verified by using the
 <a href="https://developer.chrome.com/docs/devtools/remote-debugging/">Chrome Remote Debugger</a>.</p>
 <h2 id="contexts">Contexts<a class="headerlink" href="#contexts" title="Permanent link">&para;</a></h2>
@@ -2415,62 +2414,60 @@ a new instance, e.g. <code>appium:arguments: ['--user-data-dir=/tmp/profile']</c
 driver makes use of Appium's <a href="https://appium.io/docs/en/latest/guides/context/">Context Management API</a>,
 where each available web view is separated into its own context. As such, in order to interact with
 any web view, it is necessary to first switch to its specific context using the context API.</p>
-<div class="language-js highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">contexts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">driver</span><span class="p">.</span><span class="nx">getContexts</span><span class="p">();</span><span class="w"> </span><span class="c1">// ['NATIVE_APP', 'WEBVIEW_&lt;id&gt;']</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">driver</span><span class="p">.</span><span class="nx">switchContext</span><span class="p">(</span><span class="nx">contexts</span><span class="p">[</span><span class="mf">1</span><span class="p">]);</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">await</span><span class="w"> </span><span class="nx">driver</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">'#submit'</span><span class="p">).</span><span class="nx">click</span><span class="p">();</span><span class="w"> </span><span class="c1">// handled by Chromedriver</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">await</span><span class="w"> </span><span class="nx">driver</span><span class="p">.</span><span class="nx">switchContext</span><span class="p">(</span><span class="s1">'NATIVE_APP'</span><span class="p">);</span>
-</span></code></pre></div>
-<p>By default, a Mac2 driver session starts in the native context (named <code>NATIVE_APP</code>). To retrieve
-detailed information about the web views, the driver also provides the
+<p>By default, a Mac2 driver session starts in the native context (named <code>NATIVE_APP</code>). This is
+usually the only context available in native apps. Hybrid apps, however, can have one or more web
+contexts in addition to the native context, and each web context can contain zero or more
+pages/windows. To retrieve detailed information about these webviews, the driver also provides the
 <a href="../../reference/execute-methods/#macos-getcontexts"><code>macos: getContexts</code></a> execute method.</p>
 <p>In practice, when switching the application context from native to web view, the Mac2 driver
 simply changes the underlying component to which it forwards most API commands:</p>
 <ul>
 <li>Native context: WebDriverAgentMac</li>
-<li>Web view context: an instance of <a href="https://developer.chrome.com/docs/chromedriver">Chromedriver</a></li>
+<li>Web view context: an instance of <a href="https://developer.chrome.com/docs/chromedriver">ChromeDriver</a></li>
 </ul>
 <p>Refer to <a href="../../overview/#technologies-used">Technologies Used</a> for more details.</p>
 <h2 id="web-context-specifics">Web Context Specifics<a class="headerlink" href="#web-context-specifics" title="Permanent link">&para;</a></h2>
-<p>Switching from the native context to a Chromedriver-backed web context brings a few benefits and
+<p>Switching from the native context to a ChromeDriver-backed web context brings a few benefits and
 drawbacks alike:</p>
 <ul>
 <li>Web view-specific page source with web elements, similar to the one in Chrome DevTools</li>
 <li>Support for standard W3C WebDriver element locator strategies</li>
 <li>No support for driver-specific native locator strategies</li>
 <li>The <code>macos:</code> execute methods are still handled by the native layer, while any other script is
-  executed in the page</li>
+  executed in the webpage</li>
 </ul>
-<p>Switching to <code>NATIVE_APP</code>, or to another web view, stops the current Chromedriver instance.</p>
-<h2 id="managing-chromedriver">Managing Chromedriver<a class="headerlink" href="#managing-chromedriver" title="Permanent link">&para;</a></h2>
-<p>The most important property of the Chromedriver instance is its version: Google requires it to
+<p>Switching to the <code>NATIVE_APP</code> context, or to another webview, stops the current ChromeDriver
+instance.</p>
+<h2 id="managing-chromedriver">Managing ChromeDriver<a class="headerlink" href="#managing-chromedriver" title="Permanent link">&para;</a></h2>
+<p>The most important property of the ChromeDriver instance is its version: Google requires it to
 follow the version of Chromium used to build the web view under test, and in case of a mismatch,
-Chromedriver will simply fail to attach to the web view (exact matches are not required, but major
+ChromeDriver will simply fail to attach to the web view (exact matches are not required, but major
 versions must almost always match).</p>
 <p>There are several approaches to obtaining a matching Chromedriver version:</p>
 <h3 id="automatic-discovery">Automatic Discovery<a class="headerlink" href="#automatic-discovery" title="Permanent link">&para;</a></h3>
-<p>The Mac2 driver allows to automatically download the version of Chromedriver compatible with the
+<p>The Mac2 driver allows to automatically download the version of ChromeDriver compatible with the
 web view under test. This download is initiated upon switching to the web view context.</p>
 <p>However, since this approach allows clients to download files to the Appium server host machine, it
 is considered an insecure feature, and requires explicit enablement on the server side via the
 <a href="../../reference/insecure-features/"><code>chromedriver_autodownload</code></a> feature name:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>appium<span class="w"> </span>server<span class="w"> </span>--allow-insecure<span class="w"> </span>mac2:chromedriver_autodownload
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>appium<span class="w"> </span>server<span class="w"> </span>--allow-insecure<span class="w"> </span>mac2:chromedriver_autodownload
 </span></code></pre></div>
 <p>Once this feature is enabled, no additional configuration is required on the client side.</p>
 <p>The downloaded executables are stored in the folder set by the
 <a href="../../reference/capabilities/#chromedriverexecutabledir"><code>appium:chromedriverExecutableDir</code></a> capability.</p>
 <h3 id="using-capabilities">Using Capabilities<a class="headerlink" href="#using-capabilities" title="Permanent link">&para;</a></h3>
-<p>If the target Chromedriver executable already exists on the host machine, it is possible to simply
+<p>If the target ChromeDriver executable already exists on the host machine, it is possible to simply
 provide a path to it using the <a href="../../reference/capabilities/#chromedriverexecutable"><code>appium:chromedriverExecutable</code></a>
 capability. Alternatively, the <a href="../../reference/capabilities/#chromedriverexecutabledir"><code>appium:chromedriverExecutableDir</code></a>
-capability points to a folder containing several Chromedriver executables, from which the one
+capability points to a folder containing several ChromeDriver executables, from which the one
 matching the web view is selected.</p>
-<p>In order to manually download the correct Chromedriver executable, refer to the Chromedriver
+<p>In order to manually download the correct ChromeDriver executable, refer to the ChromeDriver
 <a href="https://developer.chrome.com/docs/chromedriver/downloads/version-selection">Version Selection</a>
 guide.</p>
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <h3 id="downloading">Downloading<a class="headerlink" href="#downloading" title="Permanent link">&para;</a></h3>
 <p>In case of issues when downloading Chromedriver, the underlying <code>appium-chromedriver</code> package
-allows changing the download CDN. Refer to <a href="https://github.com/appium/appium-chromedriver#custom-binaries-url">its README</a>
+allows changing the download CDN. Refer to <a href="https://github.com/appium/appium-android/tree/main/packages/chromedriver#custom-binaries-url">its README</a>
 for details.</p>
 <p>It may also be necessary to adjust network proxy and firewall settings for the above to work.</p>
 
@@ -2493,7 +2490,7 @@ for details.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 6, 2026 07:44:21 UTC"><span class="timeago" datetime="2026-11-06T07:44:21+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 6, 2026 07:44:21 UTC">2026-11-06</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 6, 2026 12:08:55 UTC"><span class="timeago" datetime="2026-11-06T12:08:55+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 6, 2026 12:08:55 UTC">2026-11-06</span>
   </span>
 
     

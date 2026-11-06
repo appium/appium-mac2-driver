@@ -1808,6 +1808,49 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- modified from https://raw.githubusercontent.com/squidfunk/mkdocs-material/master/src/templates/partials/toc-item.html
+     for the purpose of not showing all heading objects in the TOC -->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
+  <a href="#web-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      Web Context
+    </span>
+  </a>
+
+  <!-- Table of contents list -->
+  
+    <nav class="md-nav" aria-label="Web Context">
+      <ul class="md-nav__list">
+        
           <!--
   Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
 
@@ -2405,14 +2448,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/accessibility-permission/" class="md-nav__link">
+      <a href="../../guides/hybrid/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Accessibility Permission
+    Hybrid Applications
   
 
     
@@ -2433,14 +2476,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/hybrid/" class="md-nav__link">
+      <a href="../../guides/accessibility-permission/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Hybrid Applications
+    Accessibility Permission
   
 
     
@@ -3569,6 +3612,49 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- modified from https://raw.githubusercontent.com/squidfunk/mkdocs-material/master/src/templates/partials/toc-item.html
+     for the purpose of not showing all heading objects in the TOC -->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
+  <a href="#web-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      Web Context
+    </span>
+  </a>
+
+  <!-- Table of contents list -->
+  
+    <nav class="md-nav" aria-label="Web Context">
+      <ul class="md-nav__list">
+        
           <!--
   Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
 
@@ -4211,6 +4297,7 @@ at this URL, instead of launching a new WDA instance.</p>
 </tbody>
 </table>
 <p>Time in milliseconds to wait until the WDA server is built and started.</p>
+<h2 id="web-context">Web Context<a class="headerlink" href="#web-context" title="Permanent link">&para;</a></h2>
 <h3 id="webviewenabled">webviewEnabled<a class="headerlink" href="#webviewenabled" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4224,13 +4311,17 @@ at this URL, instead of launching a new WDA instance.</p>
 <tr>
 <td><code>appium:webviewEnabled</code></td>
 <td><code>boolean</code></td>
-<td><code>false</code></td>
+<td>Not specified</td>
 </tr>
 </tbody>
 </table>
-<p>Enables <a href="../../guides/hybrid/">web view contexts</a> for Chromium-based apps. The driver adds
-<code>--remote-debugging-port</code> to the app arguments and exposes the app pages as <code>WEBVIEW_&lt;id&gt;</code> contexts.
-The flag must not be set in <code>appium:arguments</code>, as such a value is ignored.</p>
+<p>Enables web view contexts for Chromium-based apps.</p>
+<p>The driver adds the <code>--remote-debugging-port</code> flag to the application arguments, exposing its
+webview pages as <code>WEBVIEW_&lt;id&gt;</code> contexts. Note that providing <code>--remote-debugging-port</code> via
+<a href="#arguments"><code>appium:arguments</code></a> is not supported and will be ignored. The port can instead be
+configured using the <a href="#webviewdevtoolsport"><code>appium:webviewDevtoolsPort</code></a> capability.</p>
+<p>Refer to the <a href="../../guides/hybrid/">Hybrid Applications guide</a> for more details.</p>
+<p>Available since driver version 4.6.0.</p>
 <h3 id="webviewdevtoolsport">webviewDevtoolsPort<a class="headerlink" href="#webviewdevtoolsport" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4244,12 +4335,16 @@ The flag must not be set in <code>appium:arguments</code>, as such a value is ig
 <tr>
 <td><code>appium:webviewDevtoolsPort</code></td>
 <td><code>number</code></td>
-<td>A free port in the 10900-11000 range</td>
+<td><code>10900</code></td>
 </tr>
 </tbody>
 </table>
-<p>The port of the app's Chrome DevTools endpoint. Only used if <code>appium:webviewEnabled</code> is set.
-Required if <code>appium:noReset</code> is also set.</p>
+<p>The port to use for communicating with webviews over the DevTools protocol. Only used if
+<a href="#webviewenabled"><code>appium:webviewEnabled</code></a> is set.</p>
+<p>If not provided, Appium will try the first available port in the range <code>[10900, 11000]</code>, except if
+<a href="#noreset"><code>appium:noReset</code></a> is also set, in which case this capability must be explicitly
+provided.</p>
+<p>Available since driver version 4.6.0.</p>
 <h3 id="chromedriverexecutable">chromedriverExecutable<a class="headerlink" href="#chromedriverexecutable" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4268,10 +4363,11 @@ Required if <code>appium:noReset</code> is also set.</p>
 </tbody>
 </table>
 <p>Custom path to a Chromedriver executable on the host file system. Takes priority over
-<a href="#chromedriverexecutabledir"><code>appium:chromedriverExecutableDir</code></a>. Only used if <code>appium:webviewEnabled</code>
+<a href="#chromedriverexecutabledir"><code>appium:chromedriverExecutableDir</code></a>. Only used if <a href="#webviewenabled"><code>appium:webviewEnabled</code></a>
 is set.</p>
 <p>Refer to the <a href="../../guides/hybrid/#managing-chromedriver">Managing Chromedriver guide</a> for more
 details.</p>
+<p>Available since driver version 4.6.0.</p>
 <h3 id="chromedriverexecutabledir">chromedriverExecutableDir<a class="headerlink" href="#chromedriverexecutabledir" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4285,15 +4381,18 @@ details.</p>
 <tr>
 <td><code>appium:chromedriverExecutableDir</code></td>
 <td><code>string</code></td>
-<td><code>chromedriver</code> folder in the driver's installation directory</td>
+<td>See below</td>
 </tr>
 </tbody>
 </table>
 <p>Custom path to a directory on the host file system, containing Chromedriver executables. If
 automatic Chromedriver download is enabled, this folder is also used to store the downloaded
-executables. Only used if <code>appium:webviewEnabled</code> is set.</p>
+executables. Only used if <a href="#webviewenabled"><code>appium:webviewEnabled</code></a> is set.</p>
+<p>The default value is <code>node_modules/appium-chromedriver/chromedriver</code> in the driver's installation
+directory.</p>
 <p>Refer to the <a href="../../guides/hybrid/#managing-chromedriver">Managing Chromedriver guide</a> for more
 details.</p>
+<p>Available since driver version 4.6.0.</p>
 
 
 
@@ -4314,7 +4413,7 @@ details.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 6, 2026 07:44:21 UTC"><span class="timeago" datetime="2026-11-06T07:44:21+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 6, 2026 07:44:21 UTC">2026-11-06</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 6, 2026 12:08:55 UTC"><span class="timeago" datetime="2026-11-06T12:08:55+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 6, 2026 12:08:55 UTC">2026-11-06</span>
   </span>
 
     

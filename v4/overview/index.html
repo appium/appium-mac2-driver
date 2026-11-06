@@ -659,6 +659,43 @@
 
 <!-- Table of contents item -->
 <li class="md-nav__item">
+  <a href="#contexts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contexts
+    </span>
+  </a>
+
+  <!-- Table of contents list -->
+  
+</li>
+      
+        <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- modified from https://raw.githubusercontent.com/squidfunk/mkdocs-material/master/src/templates/partials/toc-item.html
+     for the purpose of not showing all heading objects in the TOC -->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
   <a href="#technologies-used" class="md-nav__link">
     <span class="md-ellipsis">
       Technologies Used
@@ -1440,14 +1477,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/accessibility-permission/" class="md-nav__link">
+      <a href="../guides/hybrid/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Accessibility Permission
+    Hybrid Applications
   
 
     
@@ -1468,14 +1505,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/hybrid/" class="md-nav__link">
+      <a href="../guides/accessibility-permission/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Hybrid Applications
+    Accessibility Permission
   
 
     
@@ -1800,6 +1837,43 @@
 
 <!-- Table of contents item -->
 <li class="md-nav__item">
+  <a href="#contexts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contexts
+    </span>
+  </a>
+
+  <!-- Table of contents list -->
+  
+</li>
+      
+        <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- modified from https://raw.githubusercontent.com/squidfunk/mkdocs-material/master/src/templates/partials/toc-item.html
+     for the purpose of not showing all heading objects in the TOC -->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
   <a href="#technologies-used" class="md-nav__link">
     <span class="md-ellipsis">
       Technologies Used
@@ -1867,12 +1941,35 @@ It is the successor to the deprecated <a href="https://github.com/appium/appium-
 </tr>
 </tbody>
 </table>
+<h2 id="contexts">Contexts<a class="headerlink" href="#contexts" title="Permanent link">&para;</a></h2>
+<p>The following application contexts are supported for automation:</p>
+<ul>
+<li>Native applications</li>
+<li>Webviews based on Chrome</li>
+<li>Hybrid applications</li>
+</ul>
 <h2 id="technologies-used">Technologies Used<a class="headerlink" href="#technologies-used" title="Permanent link">&para;</a></h2>
 <p>The Mac2 driver uses the <a href="https://www.w3.org/TR/webdriver/">W3C WebDriver protocol</a> for session
-management.</p>
-<p>Under the hood, the driver relies on Apple's <a href="https://developer.apple.com/documentation/xctest">XCTest</a>
-framework. Communication with XCTest is provided by the bundled WebDriverAgentMac component (a fork of
-<a href="https://github.com/facebookarchive/WebDriverAgent">the original implementation by Facebook</a>).</p>
+management. Under the hood, the driver combines several different technologies to achieve its
+functionality:</p>
+<ul>
+<li>Native testing<ul>
+<li>Based on Apple's <a href="https://developer.apple.com/documentation/xctest">XCTest</a> framework</li>
+<li>Provided by the bundled WebDriverAgentMac component (a fork of <a href="https://github.com/facebookarchive/WebDriverAgent">the original implementation by Facebook</a>)</li>
+</ul>
+</li>
+<li>Webview testing<ul>
+<li>Based on <a href="https://developer.chrome.com/docs/chromedriver">the ChromeDriver server</a></li>
+<li>Provided by the <a href="https://github.com/appium/appium-android/tree/main/packages/chromedriver"><code>appium-chromedriver</code></a>
+library</li>
+</ul>
+</li>
+<li>Additional tools<ul>
+<li>Communication with Xcode is handled by the <a href="https://github.com/appium/appium-ios/tree/main/packages/xcode"><code>appium-xcode</code></a>
+library</li>
+</ul>
+</li>
+</ul>
 
 
 
@@ -1893,7 +1990,7 @@ framework. Communication with XCTest is provided by the bundled WebDriverAgentMa
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="July 8, 2026 05:45:21 UTC"><span class="timeago" datetime="2026-07-08T05:45:21+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 8, 2026 05:45:21 UTC">2026-07-08</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 6, 2026 12:08:55 UTC"><span class="timeago" datetime="2026-11-06T12:08:55+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 6, 2026 12:08:55 UTC">2026-11-06</span>
   </span>
 
     
