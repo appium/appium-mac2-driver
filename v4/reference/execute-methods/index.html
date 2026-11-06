@@ -147,7 +147,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#macos-click" class="md-skip">
+        <a href="#macos-getcontexts" class="md-skip">
           Skip to content
         </a>
       
@@ -1049,6 +1049,43 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- modified from https://raw.githubusercontent.com/squidfunk/mkdocs-material/master/src/templates/partials/toc-item.html
+     for the purpose of not showing all heading objects in the TOC -->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
+  <a href="#macos-getcontexts" class="md-nav__link">
+    <span class="md-ellipsis">
+      macos: getContexts
+    </span>
+  </a>
+
+  <!-- Table of contents list -->
+  
+</li>
       
         <!--
   Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
@@ -2493,6 +2530,8 @@
       
         
       
+        
+      
     
     
     
@@ -2609,6 +2648,34 @@
     
   
     Accessibility Permission
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/hybrid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hybrid Applications
   
 
     
@@ -2866,6 +2933,43 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- modified from https://raw.githubusercontent.com/squidfunk/mkdocs-material/master/src/templates/partials/toc-item.html
+     for the purpose of not showing all heading objects in the TOC -->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
+  <a href="#macos-getcontexts" class="md-nav__link">
+    <span class="md-ellipsis">
+      macos: getContexts
+    </span>
+  </a>
+
+  <!-- Table of contents list -->
+  
+</li>
       
         <!--
   Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
@@ -4233,12 +4337,34 @@ from your client code:</p>
 </div>
 </div>
 </div>
+<h3 id="macos-getcontexts">macos: getContexts<a class="headerlink" href="#macos-getcontexts" title="Permanent link">&para;</a></h3>
+<p>Lists the available contexts together with the details of each web view (title, URL, etc.).
+Requires <code>appium:webviewEnabled</code>.</p>
+<h4 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th><div style="width:10em">Name</div></th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>waitForWebviewMs?</code></td>
+<td><code>number</code></td>
+<td>How long to wait for at least one web view to appear. <code>0</code> by default.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response">Response<a class="headerlink" href="#response" title="Permanent link">&para;</a></h4>
+<p>An array of objects. The <code>id</code> of each is either <code>NATIVE_APP</code> or <code>WEBVIEW_&lt;id&gt;</code>.</p>
 <h3 id="macos-click">macos: click<a class="headerlink" href="#macos-click" title="Permanent link">&para;</a></h3>
 <p>Performs a click gesture on an element, or by relative/absolute coordinates. Based on XCTest's
 <a href="https://developer.apple.com/documentation/xcuiautomation/xcuielement/click()"><code>click</code> (XCUIElement)</a>
 and <a href="https://developer.apple.com/documentation/xcuiautomation/xcuicoordinate/click()"><code>click</code> (XCUICoordinate)</a>
 methods.</p>
-<h4 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_1">Arguments<a class="headerlink" href="#arguments_1" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4270,14 +4396,14 @@ methods.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response">Response<a class="headerlink" href="#response" title="Permanent link">&para;</a></h4>
+<h4 id="response_1">Response<a class="headerlink" href="#response_1" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-scroll">macos: scroll<a class="headerlink" href="#macos-scroll" title="Permanent link">&para;</a></h3>
 <p>Performs a scroll gesture on an element, or by relative/absolute coordinates. Based on XCTest's
 <a href="https://developer.apple.com/documentation/xcuiautomation/xcuielement/scroll(bydeltax:deltay:)"><code>scrollByDeltaX:deltaY:</code> (XCUIElement)</a>
 and <a href="https://developer.apple.com/documentation/xcuiautomation/xcuicoordinate/scroll(bydeltax:deltay:)"><code>scrollByDeltaX:deltaY:</code> (XCUICoordinate)</a>
 methods.</p>
-<h4 id="arguments_1">Arguments<a class="headerlink" href="#arguments_1" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_2">Arguments<a class="headerlink" href="#arguments_2" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4319,14 +4445,14 @@ methods.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_1">Response<a class="headerlink" href="#response_1" title="Permanent link">&para;</a></h4>
+<h4 id="response_2">Response<a class="headerlink" href="#response_2" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-rightclick">macos: rightClick<a class="headerlink" href="#macos-rightclick" title="Permanent link">&para;</a></h3>
 <p>Performs a right click gesture on an element, or by relative/absolute coordinates. Based on XCTest's
 <a href="https://developer.apple.com/documentation/xcuiautomation/xcuielement/rightclick()"><code>rightClick</code> (XCUIElement)</a>
 and <a href="https://developer.apple.com/documentation/xcuiautomation/xcuicoordinate/rightclick()"><code>rightClick</code> (XCUICoordinate)</a>
 methods.</p>
-<h4 id="arguments_2">Arguments<a class="headerlink" href="#arguments_2" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_3">Arguments<a class="headerlink" href="#arguments_3" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4358,14 +4484,14 @@ methods.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_2">Response<a class="headerlink" href="#response_2" title="Permanent link">&para;</a></h4>
+<h4 id="response_3">Response<a class="headerlink" href="#response_3" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-hover">macos: hover<a class="headerlink" href="#macos-hover" title="Permanent link">&para;</a></h3>
 <p>Performs a hover gesture on an element, or by relative/absolute coordinates. Based on XCTest's
 <a href="https://developer.apple.com/documentation/xcuiautomation/xcuielement/hover()"><code>hover</code> (XCUIElement)</a>
 and <a href="https://developer.apple.com/documentation/xcuiautomation/xcuicoordinate/hover()"><code>hover</code> (XCUICoordinate)</a>
 methods.</p>
-<h4 id="arguments_3">Arguments<a class="headerlink" href="#arguments_3" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_4">Arguments<a class="headerlink" href="#arguments_4" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4397,14 +4523,14 @@ methods.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_3">Response<a class="headerlink" href="#response_3" title="Permanent link">&para;</a></h4>
+<h4 id="response_4">Response<a class="headerlink" href="#response_4" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-doubleclick">macos: doubleClick<a class="headerlink" href="#macos-doubleclick" title="Permanent link">&para;</a></h3>
 <p>Performs a double click gesture on an element, or by relative/absolute coordinates. Based on
 XCTest's <a href="https://developer.apple.com/documentation/xcuiautomation/xcuielement/doubleclick()"><code>doubleClick</code> (XCUIElement)</a>
 and <a href="https://developer.apple.com/documentation/xcuiautomation/xcuicoordinate/doubleclick()"><code>doubleClick</code> (XCUICoordinate)</a>
 methods.</p>
-<h4 id="arguments_4">Arguments<a class="headerlink" href="#arguments_4" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_5">Arguments<a class="headerlink" href="#arguments_5" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4436,14 +4562,14 @@ methods.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_4">Response<a class="headerlink" href="#response_4" title="Permanent link">&para;</a></h4>
+<h4 id="response_5">Response<a class="headerlink" href="#response_5" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-clickanddrag">macos: clickAndDrag<a class="headerlink" href="#macos-clickanddrag" title="Permanent link">&para;</a></h3>
 <p>Performs a long click and drag gesture on an element, or by absolute coordinates. Based on XCTest's
 <a href="https://developer.apple.com/documentation/xcuiautomation/xcuielement/click(forduration:thendragto:)"><code>clickForDuration:thenDragToElement:</code> (XCUIElement)</a>
 and <a href="https://developer.apple.com/documentation/xcuiautomation/xcuicoordinate/click(forduration:thendragto:)"><code>clickForDuration:thenDragToCoordinate:</code> (XCUICoordinate)</a>
 methods.</p>
-<h4 id="arguments_5">Arguments<a class="headerlink" href="#arguments_5" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_6">Arguments<a class="headerlink" href="#arguments_6" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4495,14 +4621,14 @@ methods.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_5">Response<a class="headerlink" href="#response_5" title="Permanent link">&para;</a></h4>
+<h4 id="response_6">Response<a class="headerlink" href="#response_6" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-clickanddragandhold">macos: clickAndDragAndHold<a class="headerlink" href="#macos-clickanddragandhold" title="Permanent link">&para;</a></h3>
 <p>Performs a long click, drag and hold gesture on an element, or by absolute coordinates. Based on
 XCTest's <a href="https://developer.apple.com/documentation/xcuiautomation/xcuielement/click(forduration:thendragto:withvelocity:thenholdforduration:)"><code>clickForDuration:thenDragToElement:withVelocity:thenHoldForDuration:</code> (XCUIElement)</a>
 and <a href="https://developer.apple.com/documentation/xcuiautomation/xcuicoordinate/click(forduration:thendragto:withvelocity:thenholdforduration:)"><code>clickForDuration:thenDragToCoordinate:withVelocity:thenHoldForDuration:</code> (XCUICoordinate)</a>
 methods.</p>
-<h4 id="arguments_6">Arguments<a class="headerlink" href="#arguments_6" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_7">Arguments<a class="headerlink" href="#arguments_7" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4564,7 +4690,7 @@ methods.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_6">Response<a class="headerlink" href="#response_6" title="Permanent link">&para;</a></h4>
+<h4 id="response_7">Response<a class="headerlink" href="#response_7" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-swipe">macos: swipe<a class="headerlink" href="#macos-swipe" title="Permanent link">&para;</a></h3>
 <p>Performs a swipe gesture on an element, or by relative/absolute coordinates. Based on various XCTest
@@ -4573,7 +4699,7 @@ methods: <a href="https://developer.apple.com/documentation/xcuiautomation/xcuie
 <a href="https://developer.apple.com/documentation/xcuiautomation/xcuielement/swipedown(velocity:)"><code>swipeDownWithVelocity:</code> (XCUIElement)</a>,
 <a href="https://developer.apple.com/documentation/xcuiautomation/xcuicoordinate/swipedown(velocity:)"><code>swipeDownWithVelocity:</code> (XCUICoordinate)</a>,
 and equivalent methods for the <code>Up</code>, <code>Left</code> and <code>Right</code> directions.</p>
-<h4 id="arguments_7">Arguments<a class="headerlink" href="#arguments_7" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_8">Arguments<a class="headerlink" href="#arguments_8" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4615,14 +4741,14 @@ and equivalent methods for the <code>Up</code>, <code>Left</code> and <code>Righ
 </tr>
 </tbody>
 </table>
-<h4 id="response_7">Response<a class="headerlink" href="#response_7" title="Permanent link">&para;</a></h4>
+<h4 id="response_8">Response<a class="headerlink" href="#response_8" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-press">macos: press<a class="headerlink" href="#macos-press" title="Permanent link">&para;</a></h3>
 <p>Performs a press gesture on a Touch Bar element, or by relative/absolute coordinates. Based on
 XCTest's <a href="https://developer.apple.com/documentation/xcuiautomation/xcuielement/press(forduration:)"><code>pressForDuration:</code> (XCUIElement)</a>
 and <a href="https://developer.apple.com/documentation/xcuiautomation/xcuicoordinate/press(forduration:)"><code>pressForDuration:</code> (XCUICoordinate)</a>
 methods.</p>
-<h4 id="arguments_8">Arguments<a class="headerlink" href="#arguments_8" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_9">Arguments<a class="headerlink" href="#arguments_9" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4659,14 +4785,14 @@ methods.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_8">Response<a class="headerlink" href="#response_8" title="Permanent link">&para;</a></h4>
+<h4 id="response_9">Response<a class="headerlink" href="#response_9" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-tap">macos: tap<a class="headerlink" href="#macos-tap" title="Permanent link">&para;</a></h3>
 <p>Performs a tap gesture on a Touch Bar element, or by relative/absolute coordinates. Based on
 XCTest's <a href="https://developer.apple.com/documentation/xcuiautomation/xcuielement/tap()"><code>tap</code> (XCUIElement)</a>
 and <a href="https://developer.apple.com/documentation/xcuiautomation/xcuicoordinate/tap()"><code>tap</code> (XCUICoordinate)</a>
 methods.</p>
-<h4 id="arguments_9">Arguments<a class="headerlink" href="#arguments_9" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_10">Arguments<a class="headerlink" href="#arguments_10" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4698,14 +4824,14 @@ methods.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_9">Response<a class="headerlink" href="#response_9" title="Permanent link">&para;</a></h4>
+<h4 id="response_10">Response<a class="headerlink" href="#response_10" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-doubletap">macos: doubleTap<a class="headerlink" href="#macos-doubletap" title="Permanent link">&para;</a></h3>
 <p>Performs a double tap gesture on a Touch Bar element, or by relative/absolute coordinates. Based on
 XCTest's <a href="https://developer.apple.com/documentation/xcuiautomation/xcuielement/doubletap()"><code>doubleTap</code> (XCUIElement)</a>
 and <a href="https://developer.apple.com/documentation/xcuiautomation/xcuicoordinate/doubletap()"><code>doubleTap</code> (XCUICoordinate)</a>
 methods.</p>
-<h4 id="arguments_10">Arguments<a class="headerlink" href="#arguments_10" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_11">Arguments<a class="headerlink" href="#arguments_11" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4737,14 +4863,14 @@ methods.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_10">Response<a class="headerlink" href="#response_10" title="Permanent link">&para;</a></h4>
+<h4 id="response_11">Response<a class="headerlink" href="#response_11" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-pressanddrag">macos: pressAndDrag<a class="headerlink" href="#macos-pressanddrag" title="Permanent link">&para;</a></h3>
 <p>Performs a long press and drag gesture on a Touch Bar element, or by absolute coordinates. Based on
 XCTest's <a href="https://developer.apple.com/documentation/xcuiautomation/xcuielement/press(forduration:thendragto:)"><code>pressForDuration:thenDragToElement:</code> (XCUIElement)</a>
 and <a href="https://developer.apple.com/documentation/xcuiautomation/xcuicoordinate/press(forduration:thendragto:)"><code>pressForDuration:thenDragToCoordinate:</code> (XCUICoordinate)</a>
 methods.</p>
-<h4 id="arguments_11">Arguments<a class="headerlink" href="#arguments_11" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_12">Arguments<a class="headerlink" href="#arguments_12" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4796,14 +4922,14 @@ methods.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_11">Response<a class="headerlink" href="#response_11" title="Permanent link">&para;</a></h4>
+<h4 id="response_12">Response<a class="headerlink" href="#response_12" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-pressanddragandhold">macos: pressAndDragAndHold<a class="headerlink" href="#macos-pressanddragandhold" title="Permanent link">&para;</a></h3>
 <p>Performs a long press, drag and hold gesture on a Touch Bar element, or by absolute coordinates.
 Based on XCTest's <a href="https://developer.apple.com/documentation/xcuiautomation/xcuielement/press(forduration:thendragto:withvelocity:thenholdforduration:)"><code>pressForDuration:thenDragToElement:withVelocity:thenHoldForDuration:</code> (XCUIElement)</a>
 and <a href="https://developer.apple.com/documentation/xcuiautomation/xcuicoordinate/press(forduration:thendragto:withvelocity:thenholdforduration:)"><code>pressForDuration:thenDragToCoordinate:withVelocity:thenHoldForDuration:</code> (XCUICoordinate)</a>
 methods.</p>
-<h4 id="arguments_12">Arguments<a class="headerlink" href="#arguments_12" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_13">Arguments<a class="headerlink" href="#arguments_13" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4865,13 +4991,13 @@ methods.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_12">Response<a class="headerlink" href="#response_12" title="Permanent link">&para;</a></h4>
+<h4 id="response_13">Response<a class="headerlink" href="#response_13" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-keys">macos: keys<a class="headerlink" href="#macos-keys" title="Permanent link">&para;</a></h3>
 <p>Sends keys to an element, or the application under test.
 Based on XCTest's <a href="https://developer.apple.com/documentation/xcuiautomation/xcuielement/typekey(_:modifierflags:)-9ubn"><code>typeKey:modifierFlags:</code></a>
 method.</p>
-<h4 id="arguments_13">Arguments<a class="headerlink" href="#arguments_13" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_14">Arguments<a class="headerlink" href="#arguments_14" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4899,13 +5025,13 @@ method.</p>
 <li><code>[{key: 'h', modifierFlags: 1 &lt;&lt; 1}, {key: 'i', modifierFlags: 1 &lt;&lt; 2}]</code></li>
 <li><code>['XCUIKeyboardKeyEscape']</code></li>
 </ul>
-<h4 id="response_13">Response<a class="headerlink" href="#response_13" title="Permanent link">&para;</a></h4>
+<h4 id="response_14">Response<a class="headerlink" href="#response_14" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-source">macos: source<a class="headerlink" href="#macos-source" title="Permanent link">&para;</a></h3>
 <p>Retrieves a string representation of the current app source. Based on XCTest's
 <a href="https://developer.apple.com/documentation/xcuiautomation/xcuielement/debugdescription"><code>debugDescription</code></a>
 method.</p>
-<h4 id="arguments_14">Arguments<a class="headerlink" href="#arguments_14" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_15">Arguments<a class="headerlink" href="#arguments_15" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4922,7 +5048,7 @@ method.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_14">Response<a class="headerlink" href="#response_14" title="Permanent link">&para;</a></h4>
+<h4 id="response_15">Response<a class="headerlink" href="#response_15" title="Permanent link">&para;</a></h4>
 <p><code>string</code> - the application source</p>
 <h3 id="macos-launchapp">macos: launchApp<a class="headerlink" href="#macos-launchapp" title="Permanent link">&para;</a></h3>
 <p>Launches the application with the given bundle identifier/path, or activates the application if it
@@ -4931,7 +5057,7 @@ is already running. An exception is thrown if the app cannot be found. Based on 
 and <a href="https://developer.apple.com/documentation/xcuiautomation/xcuiapplication/activate()"><code>activate</code></a>
 methods.</p>
 <p>This method influences the state of the <a href="../../guides/app-under-test/">Application Under Test</a>.</p>
-<h4 id="arguments_15">Arguments<a class="headerlink" href="#arguments_15" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_16">Arguments<a class="headerlink" href="#arguments_16" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4963,7 +5089,7 @@ methods.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_15">Response<a class="headerlink" href="#response_15" title="Permanent link">&para;</a></h4>
+<h4 id="response_16">Response<a class="headerlink" href="#response_16" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-activateapp">macos: activateApp<a class="headerlink" href="#macos-activateapp" title="Permanent link">&para;</a></h3>
 <p>Activates the application with the given bundle identifier/path. An exception is thrown if the app
@@ -4971,7 +5097,7 @@ cannot be found, or the app is not running. Based on XCTest's
 <a href="https://developer.apple.com/documentation/xcuiautomation/xcuiapplication/activate()"><code>activate</code></a>
 method.</p>
 <p>This method influences the state of the <a href="../../guides/app-under-test/">Application Under Test</a>.</p>
-<h4 id="arguments_16">Arguments<a class="headerlink" href="#arguments_16" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_17">Arguments<a class="headerlink" href="#arguments_17" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -4993,7 +5119,7 @@ method.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_16">Response<a class="headerlink" href="#response_16" title="Permanent link">&para;</a></h4>
+<h4 id="response_17">Response<a class="headerlink" href="#response_17" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-terminateapp">macos: terminateApp<a class="headerlink" href="#macos-terminateapp" title="Permanent link">&para;</a></h3>
 <p>Terminates the application with the given bundle identifier/path. An exception is thrown if the app
@@ -5001,7 +5127,7 @@ cannot be found. Based on XCTest's
 <a href="https://developer.apple.com/documentation/xcuiautomation/xcuiapplication/terminate()"><code>terminate</code></a>
 method.</p>
 <p>This method influences the state of the <a href="../../guides/app-under-test/">Application Under Test</a>.</p>
-<h4 id="arguments_17">Arguments<a class="headerlink" href="#arguments_17" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_18">Arguments<a class="headerlink" href="#arguments_18" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -5023,12 +5149,12 @@ method.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_17">Response<a class="headerlink" href="#response_17" title="Permanent link">&para;</a></h4>
+<h4 id="response_18">Response<a class="headerlink" href="#response_18" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-queryappstate">macos: queryAppState<a class="headerlink" href="#macos-queryappstate" title="Permanent link">&para;</a></h3>
 <p>Queries the state of the application with the given bundle identifier/path. An exception is thrown
 if the app cannot be found.</p>
-<h4 id="arguments_18">Arguments<a class="headerlink" href="#arguments_18" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_19">Arguments<a class="headerlink" href="#arguments_19" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -5050,13 +5176,13 @@ if the app cannot be found.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_18">Response<a class="headerlink" href="#response_18" title="Permanent link">&para;</a></h4>
+<h4 id="response_19">Response<a class="headerlink" href="#response_19" title="Permanent link">&para;</a></h4>
 <p><code>number</code> - an integer value representing the application state. See the <a href="https://developer.apple.com/documentation/xcuiautomation/xcuiapplication/state-swift.enum">XCUITest documentation on XCUIApplicationState</a>
 for more details.</p>
 <h3 id="macos-applescript">macos: appleScript<a class="headerlink" href="#macos-applescript" title="Permanent link">&para;</a></h3>
 <p>Executes the provided AppleScript command or script. The <a href="../insecure-features/"><code>apple_script</code> insecure feature</a>
 must be enabled. Refer to the <a href="../../guides/applescript/">AppleScript guide</a> for more details.</p>
-<h4 id="arguments_19">Arguments<a class="headerlink" href="#arguments_19" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_20">Arguments<a class="headerlink" href="#arguments_20" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -5093,7 +5219,7 @@ must be enabled. Refer to the <a href="../../guides/applescript/">AppleScript gu
 </tr>
 </tbody>
 </table>
-<h4 id="response_19">Response<a class="headerlink" href="#response_19" title="Permanent link">&para;</a></h4>
+<h4 id="response_20">Response<a class="headerlink" href="#response_20" title="Permanent link">&para;</a></h4>
 <p><code>any</code> - the stdout of the provided script/command, if successful</p>
 <h3 id="macos-startrecordingscreen">macos: startRecordingScreen<a class="headerlink" href="#macos-startrecordingscreen" title="Permanent link">&para;</a></h3>
 <p>Starts a recording of the device display in the background using <code>ffmpeg</code>, while the automated test
@@ -5103,7 +5229,7 @@ method, or by stopping the session itself. In both cases, the raw video file is 
 <p>This method requires <code>ffmpeg</code> to be installed and present in PATH. Additionally, the Appium process
 must be granted recording permissions in macOS System Settings -&gt; <em>Privacy &amp; Security</em> -&gt;
 <em>Screen &amp; System Audio Recording</em>.</p>
-<h4 id="arguments_20">Arguments<a class="headerlink" href="#arguments_20" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_21">Arguments<a class="headerlink" href="#arguments_21" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -5155,12 +5281,12 @@ must be granted recording permissions in macOS System Settings -&gt; <em>Privacy
 </tr>
 </tbody>
 </table>
-<h4 id="response_20">Response<a class="headerlink" href="#response_20" title="Permanent link">&para;</a></h4>
+<h4 id="response_21">Response<a class="headerlink" href="#response_21" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-stoprecordingscreen">macos: stopRecordingScreen<a class="headerlink" href="#macos-stoprecordingscreen" title="Permanent link">&para;</a></h3>
 <p>Stops the active <code>ffmpeg</code> screen recording process started by <a href="#macos-startrecordingscreen"><code>macos: startRecordingScreen</code></a>,
 either returning its payload or uploading it to a remote location.</p>
-<h4 id="arguments_21">Arguments<a class="headerlink" href="#arguments_21" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_22">Arguments<a class="headerlink" href="#arguments_22" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -5207,12 +5333,12 @@ either returning its payload or uploading it to a remote location.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_21">Response<a class="headerlink" href="#response_21" title="Permanent link">&para;</a></h4>
+<h4 id="response_22">Response<a class="headerlink" href="#response_22" title="Permanent link">&para;</a></h4>
 <p><code>string</code> - base64-encoded string of the video file, or an empty string if <code>remotePath</code> is provided
 or no active screen recording process is found.</p>
 <h3 id="macos-screenshots">macos: screenshots<a class="headerlink" href="#macos-screenshots" title="Permanent link">&para;</a></h3>
 <p>Retrieves a screenshot of one or more available displays. Available since driver version 1.1.0.</p>
-<h4 id="arguments_22">Arguments<a class="headerlink" href="#arguments_22" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_23">Arguments<a class="headerlink" href="#arguments_23" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -5229,7 +5355,7 @@ or no active screen recording process is found.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_22">Response<a class="headerlink" href="#response_22" title="Permanent link">&para;</a></h4>
+<h4 id="response_23">Response<a class="headerlink" href="#response_23" title="Permanent link">&para;</a></h4>
 <p><code>Array&lt;Record&lt;string, any&gt;&gt;</code> - a list of objects, where each object has the following structure:</p>
 <table>
 <thead>
@@ -5260,7 +5386,7 @@ or no active screen recording process is found.</p>
 <h3 id="macos-deeplink">macos: deepLink<a class="headerlink" href="#macos-deeplink" title="Permanent link">&para;</a></h3>
 <p>Opens the specified URL within the default or specified application.</p>
 <p>This feature requires Xcode 14.3 or later. Available since driver version 1.15.0.</p>
-<h4 id="arguments_23">Arguments<a class="headerlink" href="#arguments_23" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_24">Arguments<a class="headerlink" href="#arguments_24" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -5282,7 +5408,7 @@ or no active screen recording process is found.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_23">Response<a class="headerlink" href="#response_23" title="Permanent link">&para;</a></h4>
+<h4 id="response_24">Response<a class="headerlink" href="#response_24" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-startnativescreenrecording">macos: startNativeScreenRecording<a class="headerlink" href="#macos-startnativescreenrecording" title="Permanent link">&para;</a></h3>
 <p>Starts a recording of the device display in the background using XCTest, while the automated test
@@ -5298,7 +5424,7 @@ not support a maximum duration (<code>timeLimit</code>) option.</p>
 Make sure to subscribe to these events <em>before</em> calling this execute method, to ensure that
 all video chunks are properly consumed on the client side.</p>
 </div>
-<h4 id="arguments_24">Arguments<a class="headerlink" href="#arguments_24" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_25">Arguments<a class="headerlink" href="#arguments_25" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -5325,7 +5451,7 @@ all video chunks are properly consumed on the client side.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_24">Response<a class="headerlink" href="#response_24" title="Permanent link">&para;</a></h4>
+<h4 id="response_25">Response<a class="headerlink" href="#response_25" title="Permanent link">&para;</a></h4>
 <p><code>Record&lt;string, any&gt;</code> - an object with the following structure:</p>
 <table>
 <thead>
@@ -5366,7 +5492,7 @@ all video chunks are properly consumed on the client side.</p>
 <h3 id="macos-getnativescreenrecordinginfo">macos: getNativeScreenRecordingInfo<a class="headerlink" href="#macos-getnativescreenrecordinginfo" title="Permanent link">&para;</a></h3>
 <p>Fetches the information of the currently running native video recording.</p>
 <p>This feature requires Xcode 15 or later. Available since driver version 2.1.0.</p>
-<h4 id="response_25">Response<a class="headerlink" href="#response_25" title="Permanent link">&para;</a></h4>
+<h4 id="response_26">Response<a class="headerlink" href="#response_26" title="Permanent link">&para;</a></h4>
 <p><code>Record&lt;string, any&gt; | null</code> - either the same object returned by <a href="#macos-startnativescreenrecording"><code>macos: startNativeScreenRecording</code></a>, or <code>null</code> if no native video recording is active.</p>
 <h3 id="macos-stopnativescreenrecording">macos: stopNativeScreenRecording<a class="headerlink" href="#macos-stopnativescreenrecording" title="Permanent link">&para;</a></h3>
 <p>Stops the active XCTest screen recording process started by <a href="#macos-startnativescreenrecording"><code>macos: startNativeScreenRecording</code></a>,
@@ -5375,7 +5501,7 @@ active XCTest screen recording process is found.</p>
 <p>This feature requires Xcode 15 or later, and the Appium process must be granted filesystem
 permissions in macOS System Settings -&gt; <em>Privacy &amp; Security</em> -&gt; <em>Full Disk Access</em>. Available
 since driver version 2.1.0.</p>
-<h4 id="arguments_25">Arguments<a class="headerlink" href="#arguments_25" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_26">Arguments<a class="headerlink" href="#arguments_26" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -5427,12 +5553,12 @@ since driver version 2.1.0.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_26">Response<a class="headerlink" href="#response_26" title="Permanent link">&para;</a></h4>
+<h4 id="response_27">Response<a class="headerlink" href="#response_27" title="Permanent link">&para;</a></h4>
 <p><code>string</code> - base64-encoded string of the video file, or an empty string if <code>remotePath</code> is provided,
 <code>ignorePayload</code> is set to <code>true</code>, or no active screen recording process is found.</p>
 <h3 id="macos-listdisplays">macos: listDisplays<a class="headerlink" href="#macos-listdisplays" title="Permanent link">&para;</a></h3>
 <p>Retrieves information about the available displays. Available since driver version 2.1.0.</p>
-<h4 id="response_27">Response<a class="headerlink" href="#response_27" title="Permanent link">&para;</a></h4>
+<h4 id="response_28">Response<a class="headerlink" href="#response_28" title="Permanent link">&para;</a></h4>
 <p><code>Record&lt;string, Record&lt;string, any&gt;&gt;</code> - an object where each key is a display identifier, and the
 value is an object with the following structure:</p>
 <table>
@@ -5466,7 +5592,7 @@ value is an object with the following structure:</p>
 Accessibility permission to be granted to the WebDriverAgentRunner app; without it they are <code>null</code>.
 Refer to the <a href="../../guides/accessibility-permission/">Accessibility Permission</a> guide.
 Available since driver version 4.5.0.</p>
-<h4 id="response_28">Response<a class="headerlink" href="#response_28" title="Permanent link">&para;</a></h4>
+<h4 id="response_29">Response<a class="headerlink" href="#response_29" title="Permanent link">&para;</a></h4>
 <p><code>Array&lt;Record&lt;string, any&gt;&gt;</code> - a list of objects, where each object has the following structure:</p>
 <table>
 <thead>
@@ -5541,7 +5667,7 @@ be identified unambiguously by the window title. If another minimized window has
 Accessibility API is used instead. Leaving the fullscreen mode activates the application and sends
 the Control+Command+F shortcut to it.</p>
 <p>Available since driver version 4.5.0.</p>
-<h4 id="arguments_26">Arguments<a class="headerlink" href="#arguments_26" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_27">Arguments<a class="headerlink" href="#arguments_27" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -5589,13 +5715,13 @@ the Control+Command+F shortcut to it.</p>
 </tbody>
 </table>
 <p>At least one argument other than <code>windowId</code> must be provided.</p>
-<h4 id="response_29">Response<a class="headerlink" href="#response_29" title="Permanent link">&para;</a></h4>
+<h4 id="response_30">Response<a class="headerlink" href="#response_30" title="Permanent link">&para;</a></h4>
 <p>The updated window information, in the same format as the items returned by
 <a href="#macos-listwindows"><code>macos: listWindows</code></a>. <code>windowId</code> is <code>null</code> if a minimized window was adjusted.</p>
 <h3 id="macos-setclipboard">macos: setClipboard<a class="headerlink" href="#macos-setclipboard" title="Permanent link">&para;</a></h3>
 <p>Sets the macOS clipboard content. The existing clipboard content (if present) will be cleared.</p>
 <p>Available since driver version 3.1.0.</p>
-<h4 id="arguments_27">Arguments<a class="headerlink" href="#arguments_27" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_28">Arguments<a class="headerlink" href="#arguments_28" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -5617,12 +5743,12 @@ the Control+Command+F shortcut to it.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_30">Response<a class="headerlink" href="#response_30" title="Permanent link">&para;</a></h4>
+<h4 id="response_31">Response<a class="headerlink" href="#response_31" title="Permanent link">&para;</a></h4>
 <p><code>null</code></p>
 <h3 id="macos-getclipboard">macos: getClipboard<a class="headerlink" href="#macos-getclipboard" title="Permanent link">&para;</a></h3>
 <p>Retrieves the macOS clipboard content as a base64-encoded string.</p>
 <p>Available since driver version 3.1.0.</p>
-<h4 id="arguments_28">Arguments<a class="headerlink" href="#arguments_28" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_29">Arguments<a class="headerlink" href="#arguments_29" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -5639,13 +5765,13 @@ the Control+Command+F shortcut to it.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_31">Response<a class="headerlink" href="#response_31" title="Permanent link">&para;</a></h4>
+<h4 id="response_32">Response<a class="headerlink" href="#response_32" title="Permanent link">&para;</a></h4>
 <p><code>string</code> - the base64-encoded clipboard contents, or an empty string if the clipboard contains no
 data for the specified <code>contentType</code>.</p>
 <h3 id="macos-performaccessibilityaudit">macos: performAccessibilityAudit<a class="headerlink" href="#macos-performaccessibilityaudit" title="Permanent link">&para;</a></h3>
 <p>Performs an accessibility audit for the application under test.</p>
 <p>This feature requires Xcode 15 or later. Available since driver version 3.3.0.</p>
-<h4 id="arguments_29">Arguments<a class="headerlink" href="#arguments_29" title="Permanent link">&para;</a></h4>
+<h4 id="arguments_30">Arguments<a class="headerlink" href="#arguments_30" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -5662,7 +5788,7 @@ data for the specified <code>contentType</code>.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="response_32">Response<a class="headerlink" href="#response_32" title="Permanent link">&para;</a></h4>
+<h4 id="response_33">Response<a class="headerlink" href="#response_33" title="Permanent link">&para;</a></h4>
 <p><code>Array&lt;Record&lt;string, any&gt;&gt;</code> - an array of audit issue objects, where each object has the following
 structure:</p>
 <table>
@@ -5721,7 +5847,7 @@ structure:</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="October 26, 2026 16:51:34 UTC"><span class="timeago" datetime="2026-10-26T16:51:34+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 26, 2026 16:51:34 UTC">2026-10-26</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 6, 2026 07:44:21 UTC"><span class="timeago" datetime="2026-11-06T07:44:21+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 6, 2026 07:44:21 UTC">2026-11-06</span>
   </span>
 
     
