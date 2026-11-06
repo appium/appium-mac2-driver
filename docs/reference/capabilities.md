@@ -213,24 +213,39 @@ Full path to a custom directory containing the `WebDriverAgentMac.xcodeproj` WDA
 
 Time in milliseconds to wait until the WDA server is built and started.
 
+## Web Context
+
 ### webviewEnabled
 
 | Name | Type | Default |
 | -- | -- | -- |
-| `appium:webviewEnabled` | `boolean` | `false` |
+| `appium:webviewEnabled` | `boolean` | Not specified |
 
-Enables [web view contexts](../guides/hybrid.md) for Chromium-based apps. The driver adds
-`--remote-debugging-port` to the app arguments and exposes the app pages as `WEBVIEW_<id>` contexts.
-The flag must not be set in `appium:arguments`, as such a value is ignored.
+Enables web view contexts for Chromium-based apps.
+
+The driver adds the `--remote-debugging-port` flag to the application arguments, exposing its
+webview pages as `WEBVIEW_<id>` contexts. Note that providing `--remote-debugging-port` via
+[`appium:arguments`](#arguments) is not supported and will be ignored. The port can instead be
+configured using the [`appium:webviewDevtoolsPort`](#webviewdevtoolsport) capability.
+
+Refer to the [Hybrid Applications guide](../guides/hybrid.md) for more details.
+
+Available since driver version 4.6.0.
 
 ### webviewDevtoolsPort
 
 | Name | Type | Default |
 | -- | -- | -- |
-| `appium:webviewDevtoolsPort` | `number` | A free port in the 10900-11000 range |
+| `appium:webviewDevtoolsPort` | `number` | `10900` |
 
-The port of the app's Chrome DevTools endpoint. Only used if `appium:webviewEnabled` is set.
-Required if `appium:noReset` is also set.
+The port to use for communicating with webviews over the DevTools protocol. Only used if
+[`appium:webviewEnabled`](#webviewenabled) is set.
+
+If not provided, Appium will try the first available port in the range `[10900, 11000]`, except if
+[`appium:noReset`](#noreset) is also set, in which case this capability must be explicitly
+provided.
+
+Available since driver version 4.6.0.
 
 ### chromedriverExecutable
 
@@ -239,21 +254,28 @@ Required if `appium:noReset` is also set.
 | `appium:chromedriverExecutable` | `string` | Not specified |
 
 Custom path to a Chromedriver executable on the host file system. Takes priority over
-[`appium:chromedriverExecutableDir`](#chromedriverexecutabledir). Only used if `appium:webviewEnabled`
+[`appium:chromedriverExecutableDir`](#chromedriverexecutabledir). Only used if [`appium:webviewEnabled`](#webviewenabled)
 is set.
 
 Refer to the [Managing Chromedriver guide](../guides/hybrid.md#managing-chromedriver) for more
 details.
 
+Available since driver version 4.6.0.
+
 ### chromedriverExecutableDir
 
 | Name | Type | Default |
 | -- | -- | -- |
-| `appium:chromedriverExecutableDir` | `string` | `chromedriver` folder in the driver's installation directory |
+| `appium:chromedriverExecutableDir` | `string` | See below |
 
 Custom path to a directory on the host file system, containing Chromedriver executables. If
 automatic Chromedriver download is enabled, this folder is also used to store the downloaded
-executables. Only used if `appium:webviewEnabled` is set.
+executables. Only used if [`appium:webviewEnabled`](#webviewenabled) is set.
+
+The default value is `node_modules/appium-chromedriver/chromedriver` in the driver's installation
+directory.
 
 Refer to the [Managing Chromedriver guide](../guides/hybrid.md#managing-chromedriver) for more
 details.
+
+Available since driver version 4.6.0.

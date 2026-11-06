@@ -56,13 +56,15 @@ from your client code:
 ### macos: getContexts
 
 Lists the available contexts together with the details of each web view (title, URL, etc.).
-Requires `appium:webviewEnabled`.
+Requires the [`appium:webviewEnabled`](./capabilities.md#webviewenabled) capability to be set.
+
+Available since driver version 4.6.0.
 
 #### Arguments
 
 | <div style="width:10em">Name</div> | Type | Description |
 | --- | --- | --- |
-| `waitForWebviewMs?` | `number` | How long to wait for at least one web view to appear. `0` by default. |
+| `waitForWebviewMs?` | `number` | Number of milliseconds for how long to retry retrieval of webview data. Set to `0` by default. Higher values can help prevent ChromeDriver errors such as `failed to connect to socket 'localabstract:chrome_devtools_remote'`. |
 
 #### Response
 
@@ -476,8 +478,9 @@ for more details.
 
 ### macos: appleScript
 
-Executes the provided AppleScript command or script. The [`apple_script` insecure feature](./insecure-features.md)
-must be enabled. Refer to the [AppleScript guide](../guides/applescript.md) for more details.
+Executes the provided AppleScript command or script. The [`apple_script`](./insecure-features.md#apple_script)
+insecure feature must be enabled. Refer to the [AppleScript guide](../guides/applescript.md) for
+more details.
 
 #### Arguments
 
