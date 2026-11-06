@@ -6,9 +6,11 @@ The Mac2 driver supports automation of hybrid apps that use Chromium-based web v
 Electron, Chrome or CEF apps. This enables actions such as retrieving the web-specific page
 source, as well as finding and interacting with elements located inside the web view.
 
-Web views of other engines, such as `WKWebView`, are not supported. Their content is only available
-through the native accessibility tree (see the [`useDomIdAsAccessibilityId`](../reference/settings.md#usedomidasaccessibilityid)
-setting).
+!!! warning
+
+    Webviews based on other engines, such as WebKit/Safari (`WKWebView`), are not supported. Their
+    content is only available through the native accessibility tree (see the [`useDomIdAsAccessibilityId`](../reference/settings.md#usedomidasaccessibilityid)
+    setting).
 
 ## Enabling Web Views
 
@@ -17,8 +19,8 @@ Access to webviews is not available by default, and must be explicitly enabled b
 
 If the app is already running and [`appium:noReset`](../reference/capabilities.md#noreset) is set,
 it is also required to explicitly provide the debugging port using the
-[`appium:webviewDevtoolsPort`](../reference/capabilities.md#webviewdevtoolsport) capability. Chrome
-additionally needs a dedicated profile to start a new instance, e.g.
+[`appium:webviewDevtoolsPort`](../reference/capabilities.md#webviewdevtoolsport) capability. The
+underlying Chromium engine additionally needs a dedicated profile to start a new instance, e.g.
 [`appium:arguments`](../reference/capabilities.md#arguments) may be set to `['--user-data-dir=/tmp/profile']`.
 
 The availability of a particular web view could be easily verified by using the
