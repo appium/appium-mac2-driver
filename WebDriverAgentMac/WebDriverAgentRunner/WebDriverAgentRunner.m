@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import <AppKit/AppKit.h>
 #import <XCTest/XCTest.h>
 
 #import <WebDriverAgentLib/WebDriverAgentLib.h>
@@ -31,6 +32,8 @@
   FBConfiguration.sharedConfiguration.automaticScreenRecordings =
     [NSProcessInfo.processInfo.environment[@"ENABLE_AUTOMATIC_SCREEN_RECORDINGS"] boolValue];
   [super setUp];
+  // Xcode 27.2+ aborts in SLSGetDisplaysWithRect on input events without a window server connection
+  [NSApplication sharedApplication];
 }
 
 - (void)setUp
