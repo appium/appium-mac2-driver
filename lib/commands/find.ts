@@ -1,3 +1,4 @@
+import {errors, isErrorType} from 'appium/driver.js';
 import {util} from 'appium/support.js';
 
 import type {Mac2Driver} from '../driver.js';
@@ -32,8 +33,44 @@ export async function findElOrEls(
     normalizedStrategy = 'class chain';
   }
 
-  return await this.wda.proxy.command(endpoint, 'POST', {
-    using: normalizedStrategy,
-    value: selector,
-  });
+  const doFind = async (): Promise<any> =>
+    await this.wda.proxy.command(endpoint, 'POST', {
+      using: normalizedStrategy,
+      value: selector,
+    });
+  if (!this.implicitWaitMs) {
+    return await doFind();
+  }
+
+  // The WDA server ignores the /timeouts API, so the implicit wait is applied here
+  let result: any;
+  let lastError: Error | undefined;
+  // A lookup error other than NoSuchElementError stops the wait and must reach the caller as is
+  let lookupError: unknown;
+  try {
+    await this.implicitWaitForCondition(async () => {
+      try {
+        result = await doFind();
+      } catch (e) {
+        if (!isErrorType(e, errors.NoSuchElementError)) {
+          lookupError = e;
+          throw e;
+        }
+        lastError = e as Error;
+        return false;
+      }
+      return !mult || (Array.isArray(result) && result.length > 0);
+    });
+  } catch (e) {
+    if (lookupError !== undefined) {
+      throw lookupError;
+    }
+    if (!/Condition unmet/.test((e as Error)?.message ?? '')) {
+      throw e;
+    }
+    if (!mult && lastError) {
+      throw lastError;
+    }
+  }
+  return result;
 }
