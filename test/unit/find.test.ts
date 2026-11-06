@@ -70,4 +70,18 @@ describe('findElOrEls', () => {
     await assert.rejects(driver.findElOrEls('xpath', '//', false), errors.InvalidSelectorError);
     assert.equal(calls.length, 1);
   });
+
+  it('throws a lookup error whose message looks like the wait timeout', async () => {
+    const {driver, calls} = makeDriver(
+      [
+        () => {
+          throw new errors.InvalidSelectorError('Invalid selector: Condition unmet');
+        },
+      ],
+      2000,
+    );
+    await assert.rejects(driver.findElOrEls('xpath', '//', false), errors.InvalidSelectorError);
+    await assert.rejects(driver.findElOrEls('xpath', '//', true), errors.InvalidSelectorError);
+    assert.equal(calls.length, 2);
+  });
 });
