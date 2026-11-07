@@ -4,6 +4,11 @@ import {ConditionUnmetError} from 'asyncbox';
 
 import type {Mac2Driver} from '../driver.js';
 
+// Older asyncbox (possibly bundled with the base driver) throws a plain Error
+function isConditionUnmet(e: unknown): boolean {
+  return e instanceof ConditionUnmetError || /Condition unmet/.test((e as Error)?.message ?? '');
+}
+
 /**
  * This is needed to make lookup by image working
  *
@@ -66,7 +71,7 @@ export async function findElOrEls(
     if (lookupError !== undefined) {
       throw lookupError;
     }
-    if (!(e instanceof ConditionUnmetError)) {
+    if (!isConditionUnmet(e)) {
       throw e;
     }
     if (!mult && lastError) {
