@@ -6,7 +6,7 @@ import {strongbox} from '@appium/strongbox';
 import type {HTTPMethod, HTTPBody, ProxyResponse, ProxyOptions} from '@appium/types';
 import {WebDriverProxy, errors} from 'appium/driver.js';
 import {fs, logger, util, timing} from 'appium/support.js';
-import {waitForCondition} from 'asyncbox';
+import {ConditionUnmetError, waitForCondition} from 'asyncbox';
 import axios from 'axios';
 import {checkPortStatus} from 'portscanner';
 import {SubProcess, exec} from 'teen_process';
@@ -355,7 +355,7 @@ export class WDAMacServer {
           // avoid "frozen" processes,
           await this._process.kill();
         }
-        if (/Condition unmet/.test(e.message)) {
+        if (e instanceof ConditionUnmetError) {
           const msg = this._isProxyingToRemoteServer
             ? `No response from '${scheme}://${host}:${port}${path}' within ${this._serverStartupTimeoutMs}ms timeout.` +
               `Please make sure the remote server is running and accessible by Appium`
