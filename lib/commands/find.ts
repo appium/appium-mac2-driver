@@ -1,5 +1,6 @@
 import {errors, isErrorType} from 'appium/driver.js';
 import {util} from 'appium/support.js';
+import {ConditionUnmetError} from 'asyncbox';
 
 import type {Mac2Driver} from '../driver.js';
 
@@ -65,7 +66,7 @@ export async function findElOrEls(
     if (lookupError !== undefined) {
       throw lookupError;
     }
-    if (!/Condition unmet/.test((e as Error)?.message ?? '')) {
+    if (!(e instanceof ConditionUnmetError)) {
       throw e;
     }
     if (!mult && lastError) {
