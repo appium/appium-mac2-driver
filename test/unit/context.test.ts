@@ -218,6 +218,19 @@ describe('webview contexts', () => {
       await assert.rejects(makeDriver().timeouts(undefined, undefined, undefined, 4000), /Not implemented/);
     });
 
+    it('rejects unknown legacy timeout types', async () => {
+      const driver = makeDriver();
+      withChromedriver(driver);
+      await assert.rejects(driver.timeouts('random timeout', 42), /not supported/);
+    });
+
+    it('mirrors legacy timeouts to Chromedriver', async () => {
+      const driver = makeDriver();
+      const calls = withChromedriver(driver);
+      await driver.timeouts('implicit', 5000);
+      assert.deepEqual(calls, [['/timeouts', 'POST', {implicit: 5000}]]);
+    });
+
     it('routes POST timeouts to the driver in a web view', () => {
       const driver = makeDriver();
       driver.chromedriver = {} as any;

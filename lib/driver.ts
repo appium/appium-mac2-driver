@@ -226,15 +226,11 @@ export class Mac2Driver
     command?: number,
   ): Promise<void> {
     if (type && ms !== undefined) {
-      // Deprecated 'type'/'ms' form: normalize to the W3C one
+      // The deprecated 'type'/'ms' form is validated by the base driver; only map it for mirroring
       const legacyMs = this.parseTimeoutArgument(ms);
-      ({script, pageLoad, implicit} = {
-        script: type === 'script' ? legacyMs : undefined,
-        pageLoad: type === 'page load' ? legacyMs : undefined,
-        implicit: type === 'implicit' ? legacyMs : undefined,
-      });
-      command = type === 'command' ? legacyMs : undefined;
-      type = ms = undefined;
+      script = type === 'script' ? legacyMs : undefined;
+      pageLoad = type === 'page load' ? legacyMs : undefined;
+      implicit = type === 'implicit' ? legacyMs : undefined;
     }
     if (pageLoad !== undefined && !this.chromedriver) {
       throw new errors.NotImplementedError('Not implemented: page load timeout is only supported in web view contexts');
