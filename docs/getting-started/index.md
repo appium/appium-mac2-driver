@@ -29,7 +29,8 @@ and prerequisites of Appium itself can be found in [the Appium documentation](ht
 
 | Mac2 driver version | Supported Appium server version |
 | --- | --- |
-| >= 3.0.0 | Appium 3 |
+| >= 5.0.0 | Appium 4 |
+| 3.0.0 - 4.x | Appium 3 |
 | 1.0.0 - 2.2.2 | Appium 2 |
 
 ## Installation

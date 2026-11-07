@@ -3,13 +3,13 @@ import type {
   HTTPMethod,
   HTTPBody,
   DefaultCreateSessionResult,
-  DriverData,
   InitialOpts,
   StringRecord,
   ExternalDriver,
   DriverCaps,
   DriverOpts,
   W3CDriverCaps,
+  TimeoutValue,
 } from '@appium/types';
 import type {Chromedriver} from 'appium-chromedriver';
 import {BaseDriver, DeviceSettings, errors} from 'appium/driver.js';
@@ -217,27 +217,40 @@ export class Mac2Driver
   }
 
   // Timeouts belong to the session: keep them here and mirror to Chromedriver in a web view
-  override async implicitWaitW3C(ms: number): Promise<void> {
-    await super.implicitWaitW3C(ms);
-    await this.chromedriver?.jwproxy.command('/timeouts', 'POST', {implicit: this.implicitWaitMs});
-  }
-
-  override async pageLoadTimeoutW3C(ms: number): Promise<void> {
-    if (!this.chromedriver) {
-      return await super.pageLoadTimeoutW3C(ms);
+  override async timeouts(
+    type?: string,
+    ms?: number | string,
+    script?: TimeoutValue,
+    pageLoad?: TimeoutValue,
+    implicit?: TimeoutValue,
+    command?: number,
+  ): Promise<void> {
+    if (type && ms !== undefined) {
+      // Deprecated 'type'/'ms' form: normalize to the W3C one
+      const legacyMs = this.parseTimeoutArgument(ms);
+      ({script, pageLoad, implicit} = {
+        script: type === 'script' ? legacyMs : undefined,
+        pageLoad: type === 'page load' ? legacyMs : undefined,
+        implicit: type === 'implicit' ? legacyMs : undefined,
+      });
+      command = type === 'command' ? legacyMs : undefined;
+      type = ms = undefined;
     }
-    const pageLoad = this.parseTimeoutArgument(ms);
-    await this.chromedriver.jwproxy.command('/timeouts', 'POST', {pageLoad});
-    this._pageLoadTimeoutMs = pageLoad;
-  }
-
-  override async scriptTimeoutW3C(ms: number): Promise<void> {
-    if (!this.chromedriver) {
-      return await super.scriptTimeoutW3C(ms);
+    if (pageLoad !== undefined && !this.chromedriver) {
+      throw new errors.NotImplementedError('Not implemented: page load timeout is only supported in web view contexts');
     }
-    const script = this.parseTimeoutArgument(ms);
-    await this.chromedriver.jwproxy.command('/timeouts', 'POST', {script});
-    this._scriptTimeoutMs = script;
+    await super.timeouts(type, ms, script, pageLoad, implicit, command);
+    if (script !== undefined) {
+      this._scriptTimeoutMs = script;
+    }
+    if (pageLoad !== undefined) {
+      this._pageLoadTimeoutMs = pageLoad;
+    }
+    for (const [name, value] of Object.entries({script, pageLoad, implicit})) {
+      if (value !== undefined) {
+        await this.chromedriver?.jwproxy.command('/timeouts', 'POST', {[name]: value});
+      }
+    }
   }
 
   isWebviewEnabled(): boolean {
@@ -281,12 +294,9 @@ export class Mac2Driver
   }
 
   override async createSession(
-    w3cCaps1: W3CMac2DriverCaps,
-    w3cCaps2?: W3CMac2DriverCaps,
-    w3cCaps3?: W3CMac2DriverCaps,
-    driverData?: DriverData[],
+    w3cCapabilities: W3CMac2DriverCaps,
   ): Promise<DefaultCreateSessionResult<Mac2Constraints>> {
-    const [sessionId, caps] = await super.createSession(w3cCaps1, w3cCaps2, w3cCaps3, driverData);
+    const [sessionId, caps] = await super.createSession(w3cCapabilities);
     this._wda = WDA_MAC_SERVER;
     this.caps = caps as Mac2DriverCaps;
     // oxlint-disable-next-line no-self-assign -- narrows this.opts' type for the rest of the method
