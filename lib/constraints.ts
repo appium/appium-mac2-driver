@@ -1,6 +1,6 @@
 import type {Constraints} from '@appium/types';
 
-const MAC2_CONSTRAINTS = {
+export const MAC2_CONSTRAINTS = {
   systemPort: {
     isNumber: true,
   },
@@ -65,7 +65,5 @@ const MAC2_CONSTRAINTS = {
     isString: true,
   },
 } as const satisfies Constraints;
-
-export default MAC2_CONSTRAINTS;
 
 export type Mac2Constraints = typeof MAC2_CONSTRAINTS;

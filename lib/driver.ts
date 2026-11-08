@@ -63,9 +63,9 @@ import {
 import {macosScreenshots} from './commands/screenshots.js';
 import {macosSource} from './commands/source.js';
 import {macosListWindows, macosAdjustWindow} from './commands/windows.js';
-import MAC2_CONSTRAINTS, {type Mac2Constraints} from './constraints.js';
+import {MAC2_CONSTRAINTS, type Mac2Constraints} from './constraints.js';
 import {executeMethodMap} from './execute-method-map.js';
-import log from './logger.js';
+import {log} from './logger.js';
 import {newMethodMap} from './method-map.js';
 import {sessionClaimHandler} from './session-claim-handler.js';
 import {WDA_MAC_SERVER, type WDAMacServer} from './wda-mac.js';
@@ -372,8 +372,6 @@ export class Mac2Driver
     this._screenRecorder = null;
   }
 }
-
-export default Mac2Driver;
 
 Object.assign(Mac2Driver.prototype, {
   // app-management

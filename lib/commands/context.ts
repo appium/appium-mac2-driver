@@ -7,7 +7,7 @@ import axios from 'axios';
 import {findAPortNotInUse} from 'portscanner';
 
 import type {Mac2Driver} from '../driver.js';
-import log from '../logger.js';
+import {log} from '../logger.js';
 import type {CdpPage, CdpVersionInfo, WebViewDetails} from '../types.js';
 import {getModuleRoot} from '../utils.js';
 
