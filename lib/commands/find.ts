@@ -4,6 +4,12 @@ import {ConditionUnmetError} from 'asyncbox';
 
 import type {Mac2Driver} from '../driver.js';
 
+declare module '../driver.js' {
+  interface Mac2Driver {
+    findElOrEls(...args: Parameters<typeof findElOrEls>): ReturnType<typeof findElOrEls>;
+  }
+}
+
 // Older asyncbox (possibly bundled with the base driver) throws a plain Error
 function isConditionUnmet(e: unknown): boolean {
   return e instanceof ConditionUnmetError || /Condition unmet/.test((e as Error)?.message ?? '');

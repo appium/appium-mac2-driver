@@ -15,6 +15,21 @@ import {BIDI_EVENT_NAME} from './bidi/constants.js';
 import {toNativeVideoChunkAddedEvent} from './bidi/models.js';
 import {uploadRecordedMedia} from './helpers.js';
 
+declare module '../driver.js' {
+  interface Mac2Driver {
+    macosStartNativeScreenRecording(
+      ...args: Parameters<typeof macosStartNativeScreenRecording>
+    ): ReturnType<typeof macosStartNativeScreenRecording>;
+    macosGetNativeScreenRecordingInfo(
+      ...args: Parameters<typeof macosGetNativeScreenRecordingInfo>
+    ): ReturnType<typeof macosGetNativeScreenRecordingInfo>;
+    macosStopNativeScreenRecording(
+      ...args: Parameters<typeof macosStopNativeScreenRecording>
+    ): ReturnType<typeof macosStopNativeScreenRecording>;
+    macosListDisplays(...args: Parameters<typeof macosListDisplays>): ReturnType<typeof macosListDisplays>;
+  }
+}
+
 const RECORDING_STARTUP_TIMEOUT_MS = 5000;
 const BUFFER_SIZE = 0xffff;
 const MONITORING_INTERVAL_DURATION_MS = 1000;

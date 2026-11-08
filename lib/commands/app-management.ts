@@ -2,6 +2,15 @@ import type {StringRecord} from '@appium/types';
 
 import type {Mac2Driver} from '../driver.js';
 
+declare module '../driver.js' {
+  interface Mac2Driver {
+    macosLaunchApp(...args: Parameters<typeof macosLaunchApp>): ReturnType<typeof macosLaunchApp>;
+    macosActivateApp(...args: Parameters<typeof macosActivateApp>): ReturnType<typeof macosActivateApp>;
+    macosTerminateApp(...args: Parameters<typeof macosTerminateApp>): ReturnType<typeof macosTerminateApp>;
+    macosQueryAppState(...args: Parameters<typeof macosQueryAppState>): ReturnType<typeof macosQueryAppState>;
+  }
+}
+
 /**
  * Start an app with given bundle identifier or activates it
  * if the app is already running. An exception is thrown if the

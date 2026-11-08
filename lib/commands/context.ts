@@ -11,6 +11,16 @@ import log from '../logger.js';
 import type {CdpPage, CdpVersionInfo, WebViewDetails} from '../types.js';
 import {getModuleRoot} from '../utils.js';
 
+declare module '../driver.js' {
+  interface Mac2Driver {
+    getCurrentContext(...args: Parameters<typeof getCurrentContext>): ReturnType<typeof getCurrentContext>;
+    getContexts(...args: Parameters<typeof getContexts>): ReturnType<typeof getContexts>;
+    setContext(...args: Parameters<typeof setContext>): ReturnType<typeof setContext>;
+    getWebViewDetails(...args: Parameters<typeof getWebViewDetails>): ReturnType<typeof getWebViewDetails>;
+    macosGetContexts(...args: Parameters<typeof macosGetContexts>): ReturnType<typeof macosGetContexts>;
+  }
+}
+
 export const NATIVE_APP = 'NATIVE_APP';
 export const WEBVIEW_PREFIX = 'WEBVIEW_';
 export const DEBUGGING_PORT_FLAG = '--remote-debugging-port';
