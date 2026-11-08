@@ -6,7 +6,7 @@ import {errors} from 'appium/driver.js';
 import {Mac2Driver} from '../../lib/driver.js';
 
 describe('findElOrEls', () => {
-  function makeDriver(responses: (() => unknown)[], implicitWaitMs: number) {
+  function makeDriver(responses: (() => unknown)[], implicitWaitMs: number | null) {
     const driver = new Mac2Driver({} as any);
     const calls: string[] = [];
     (driver as any)._wda = {
@@ -30,6 +30,13 @@ describe('findElOrEls', () => {
     const {driver, calls} = makeDriver([notFound], 0);
     await assert.rejects(driver.findElOrEls('accessibility id', 'foo', false), errors.NoSuchElementError);
     assert.equal(calls.length, 1);
+  });
+
+  it('retries without a deadline if the implicit wait is null', async () => {
+    const element = {ELEMENT: '1'};
+    const {driver, calls} = makeDriver([notFound, () => element], null);
+    assert.deepEqual(await driver.findElOrEls('accessibility id', 'foo', false), element);
+    assert.equal(calls.length, 2);
   });
 
   it('retries a single element lookup within the implicit wait', async () => {

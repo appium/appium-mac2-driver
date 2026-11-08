@@ -50,7 +50,8 @@ export async function findElOrEls(
       using: normalizedStrategy,
       value: selector,
     });
-  if (!this.implicitWaitMs) {
+  // `null` means no timeout, which the implicit wait helper treats as unlimited
+  if (this.implicitWaitMs === 0) {
     return await doFind();
   }
 

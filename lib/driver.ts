@@ -120,8 +120,6 @@ export class Mac2Driver
 
   chromedriver: Chromedriver | null = null;
   _currentContext: string | null = null;
-  _pageLoadTimeoutMs: number | null = null;
-  _scriptTimeoutMs: number | null = null;
   _webviewDevtoolsPort: number | null = null;
 
   private isProxyActive: boolean = false;
@@ -215,12 +213,6 @@ export class Mac2Driver
       throw new errors.NotImplementedError('Not implemented: page load timeout is only supported in web view contexts');
     }
     await super.timeouts(type, ms, script, pageLoad, implicit, command);
-    if (script !== undefined) {
-      this._scriptTimeoutMs = script;
-    }
-    if (pageLoad !== undefined) {
-      this._pageLoadTimeoutMs = pageLoad;
-    }
     for (const [name, value] of Object.entries({script, pageLoad, implicit})) {
       if (value !== undefined) {
         await this.chromedriver?.jwproxy.command('/timeouts', 'POST', {[name]: value});
@@ -365,8 +357,6 @@ export class Mac2Driver
     this._hasClaimedHost = false;
     this.isProxyActive = false;
     this.resetWebviewState();
-    this._pageLoadTimeoutMs = null;
-    this._scriptTimeoutMs = null;
     this._webviewDevtoolsPort = null;
     this._videoChunksBroadcaster = new NativeVideoChunksBroadcaster(this.eventEmitter, this.log);
     this._screenRecorder = null;

@@ -4,6 +4,7 @@ import {describe, it} from 'node:test';
 import {macosGetClipboard} from '../../lib/commands/clipboard.js';
 import {
   getChromedriverOpts,
+  getSessionTimeouts,
   getContexts,
   prepareWebviewLaunch,
   setContext,
@@ -206,12 +207,11 @@ describe('webview contexts', () => {
       ]);
     });
 
-    it('remembers page load and script timeouts for the next Chromedriver', async () => {
+    it('keeps explicit null timeouts for the next Chromedriver', async () => {
       const driver = makeDriver();
       withChromedriver(driver);
-      await driver.timeouts(undefined, undefined, 3000, 4000);
-      assert.equal(driver._scriptTimeoutMs, 3000);
-      assert.equal(driver._pageLoadTimeoutMs, 4000);
+      await driver.timeouts(undefined, undefined, null, 4000, 5000);
+      assert.deepEqual(getSessionTimeouts.call(driver), {implicit: 5000, pageLoad: 4000, script: null});
     });
 
     it('does not support page load timeouts natively', async () => {

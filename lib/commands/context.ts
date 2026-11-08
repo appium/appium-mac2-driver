@@ -1,5 +1,6 @@
 import path from 'node:path';
 
+import type {TimeoutValue} from '@appium/types';
 import {Chromedriver} from 'appium-chromedriver';
 import type {ChromedriverOpts} from 'appium-chromedriver';
 import {errors} from 'appium/driver.js';
@@ -92,14 +93,7 @@ export async function setContext(this: Mac2Driver, name?: string | null): Promis
     await cd.start({'goog:chromeOptions': {debuggerAddress}});
     await switchToPage(cd, page.id);
     // Timeouts belong to the session, but a new Chromedriver session starts with its defaults
-    const timeouts = {
-      ...(this.implicitWaitMs ? {implicit: this.implicitWaitMs} : {}),
-      ...(this._pageLoadTimeoutMs !== null ? {pageLoad: this._pageLoadTimeoutMs} : {}),
-      ...(this._scriptTimeoutMs !== null ? {script: this._scriptTimeoutMs} : {}),
-    };
-    if (Object.keys(timeouts).length) {
-      await cd.jwproxy.command('/timeouts', 'POST', timeouts);
-    }
+    await cd.jwproxy.command('/timeouts', 'POST', getSessionTimeouts.call(this));
   } catch (e) {
     try {
       await cd.stop();
@@ -108,6 +102,17 @@ export async function setContext(this: Mac2Driver, name?: string | null): Promis
   }
   this.chromedriver = cd;
   this._currentContext = `${WEBVIEW_PREFIX}${page.id}`;
+}
+
+/**
+ * The session timeouts, including explicit `null` (no timeout), to apply to a new Chromedriver session.
+ */
+export function getSessionTimeouts(this: Mac2Driver): {
+  implicit: TimeoutValue;
+  pageLoad: TimeoutValue;
+  script: TimeoutValue;
+} {
+  return {implicit: this.implicitWaitMs, pageLoad: this.pageLoadTimeoutMs, script: this.scriptTimeoutMs};
 }
 
 /**
