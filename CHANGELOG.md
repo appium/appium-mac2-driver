@@ -1,3 +1,21 @@
+## [5.0.0](https://github.com/appium/appium-mac2-driver/compare/v4.6.1...v5.0.0) (2026-11-09)
+
+### ⚠ BREAKING CHANGES
+
+* Requires Appium ^4.0.0-beta.6 (peer dependency). No longer compatible with Appium 3.
+* Drops Node 20. The minimum is now ^22.22.2 || ^24.15.0 || >=26.0.0, matching Appium 4's engine range.
+* Driver API: createSession takes a single w3cCapabilities argument, following the Appium 4 base driver. This only matters to anyone subclassing Mac2Driver.
+* Default exports removed: the package no longer has a default export. Use the named export instead: import {Mac2Driver} from 'appium-mac2-driver'. The internal logger and constraints modules now use named exports too (log, MAC2_CONSTRAINTS).
+* Command methods live on the prototype: the command methods are attached to Mac2Driver.prototype (with declare module typings) rather than being instance fields, so subclasses can call super for them.
+
+### Features
+
+* target Appium 4 beta ([#442](https://github.com/appium/appium-mac2-driver/issues/442)) ([59e7605](https://github.com/appium/appium-mac2-driver/commit/59e7605a3014e6bfb4a28f0b722ba2bba8cb1c59))
+
+### Code Refactoring
+
+* use ConditionUnmetError instead of message matching ([#441](https://github.com/appium/appium-mac2-driver/issues/441)) ([f2abf50](https://github.com/appium/appium-mac2-driver/commit/f2abf505568932547bb158c99eca9cec7af9a827))
+
 ## [4.6.1](https://github.com/appium/appium-mac2-driver/compare/v4.6.0...v4.6.1) (2026-11-06)
 
 ### Bug Fixes
