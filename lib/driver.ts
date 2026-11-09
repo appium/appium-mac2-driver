@@ -3,34 +3,69 @@ import type {
   HTTPMethod,
   HTTPBody,
   DefaultCreateSessionResult,
-  DriverData,
   InitialOpts,
   StringRecord,
   ExternalDriver,
   DriverCaps,
   DriverOpts,
   W3CDriverCaps,
+  TimeoutValue,
 } from '@appium/types';
 import type {Chromedriver} from 'appium-chromedriver';
 import {BaseDriver, DeviceSettings, errors} from 'appium/driver.js';
 
-import * as appManagemenetCommands from './commands/app-management.js';
-import * as appleScriptCommands from './commands/applescript.js';
-import * as auditCommands from './commands/audit.js';
-import * as clipboardCommands from './commands/clipboard.js';
-import * as contextCommands from './commands/context.js';
-import * as executeCommands from './commands/execute.js';
-import * as findCommands from './commands/find.js';
-import * as gesturesCommands from './commands/gestures.js';
-import * as nativeScreenRecordingCommands from './commands/native-record-screen.js';
-import * as navigationCommands from './commands/navigation.js';
-import * as recordScreenCommands from './commands/record-screen.js';
-import * as screenshotCommands from './commands/screenshots.js';
-import * as sourceCommands from './commands/source.js';
-import * as windowCommands from './commands/windows.js';
-import MAC2_CONSTRAINTS, {type Mac2Constraints} from './constraints.js';
+import {macosLaunchApp, macosActivateApp, macosTerminateApp, macosQueryAppState} from './commands/app-management.js';
+import {macosExecAppleScript} from './commands/applescript.js';
+import {macosPerformAccessibilityAudit} from './commands/audit.js';
+import {macosGetClipboard, macosSetClipboard} from './commands/clipboard.js';
+import {
+  getCurrentContext,
+  getContexts,
+  setContext,
+  getWebViewDetails,
+  macosGetContexts,
+  prepareWebviewLaunch,
+} from './commands/context.js';
+import {execute} from './commands/execute.js';
+import {findElOrEls} from './commands/find.js';
+import {
+  macosSetValue,
+  macosClick,
+  macosScroll,
+  macosSwipe,
+  macosRightClick,
+  macosHover,
+  macosDoubleClick,
+  macosClickAndDrag,
+  macosClickAndDragAndHold,
+  macosKeys,
+  macosPressAndHold,
+  macosTap,
+  macosDoubleTap,
+  macosPressAndDrag,
+  macosPressAndDragAndHold,
+} from './commands/gestures.js';
+import {
+  macosStartNativeScreenRecording,
+  macosGetNativeScreenRecordingInfo,
+  macosStopNativeScreenRecording,
+  macosListDisplays,
+  NativeVideoChunksBroadcaster,
+} from './commands/native-record-screen.js';
+import {macosDeepLink} from './commands/navigation.js';
+import {
+  startRecordingScreen,
+  stopRecordingScreen,
+  macosStartRecordingScreen,
+  macosStopRecordingScreen,
+  type ScreenRecorder,
+} from './commands/record-screen.js';
+import {macosScreenshots} from './commands/screenshots.js';
+import {macosSource} from './commands/source.js';
+import {macosListWindows, macosAdjustWindow} from './commands/windows.js';
+import {MAC2_CONSTRAINTS, type Mac2Constraints} from './constraints.js';
 import {executeMethodMap} from './execute-method-map.js';
-import log from './logger.js';
+import {log} from './logger.js';
 import {newMethodMap} from './method-map.js';
 import {sessionClaimHandler} from './session-claim-handler.js';
 import {WDA_MAC_SERVER, type WDAMacServer} from './wda-mac.js';
@@ -79,70 +114,12 @@ export class Mac2Driver
   static newMethodMap = newMethodMap;
   static executeMethodMap = executeMethodMap;
 
-  macosLaunchApp = appManagemenetCommands.macosLaunchApp;
-  macosActivateApp = appManagemenetCommands.macosActivateApp;
-  macosTerminateApp = appManagemenetCommands.macosTerminateApp;
-  macosQueryAppState = appManagemenetCommands.macosQueryAppState;
-
-  macosExecAppleScript = appleScriptCommands.macosExecAppleScript;
-
-  execute = executeCommands.execute;
-
-  getCurrentContext = contextCommands.getCurrentContext;
-  getContexts = contextCommands.getContexts;
-  setContext = contextCommands.setContext;
-  getWebViewDetails = contextCommands.getWebViewDetails;
-  macosGetContexts = contextCommands.macosGetContexts;
-
-  findElOrEls = findCommands.findElOrEls;
-
-  macosSetValue = gesturesCommands.macosSetValue;
-  macosClick = gesturesCommands.macosClick;
-  macosScroll = gesturesCommands.macosScroll;
-  macosSwipe = gesturesCommands.macosSwipe;
-  macosRightClick = gesturesCommands.macosRightClick;
-  macosHover = gesturesCommands.macosHover;
-  macosDoubleClick = gesturesCommands.macosDoubleClick;
-  macosClickAndDrag = gesturesCommands.macosClickAndDrag;
-  macosClickAndDragAndHold = gesturesCommands.macosClickAndDragAndHold;
-  macosKeys = gesturesCommands.macosKeys;
-  macosPressAndHold = gesturesCommands.macosPressAndHold;
-  macosTap = gesturesCommands.macosTap;
-  macosDoubleTap = gesturesCommands.macosDoubleTap;
-  macosPressAndDrag = gesturesCommands.macosPressAndDrag;
-  macosPressAndDragAndHold = gesturesCommands.macosPressAndDragAndHold;
-
-  macosGetClipboard = clipboardCommands.macosGetClipboard;
-  macosSetClipboard = clipboardCommands.macosSetClipboard;
-  macosPerformAccessibilityAudit = auditCommands.macosPerformAccessibilityAudit;
-
-  macosDeepLink = navigationCommands.macosDeepLink;
-
-  startRecordingScreen = recordScreenCommands.startRecordingScreen;
-  stopRecordingScreen = recordScreenCommands.stopRecordingScreen;
-  macosStartRecordingScreen = recordScreenCommands.macosStartRecordingScreen;
-  macosStopRecordingScreen = recordScreenCommands.macosStopRecordingScreen;
-
-  macosStartNativeScreenRecording = nativeScreenRecordingCommands.macosStartNativeScreenRecording;
-  macosGetNativeScreenRecordingInfo = nativeScreenRecordingCommands.macosGetNativeScreenRecordingInfo;
-  macosStopNativeScreenRecording = nativeScreenRecordingCommands.macosStopNativeScreenRecording;
-  macosListDisplays = nativeScreenRecordingCommands.macosListDisplays;
-
-  macosScreenshots = screenshotCommands.macosScreenshots;
-
-  macosSource = sourceCommands.macosSource;
-
-  macosListWindows = windowCommands.macosListWindows;
-  macosAdjustWindow = windowCommands.macosAdjustWindow;
-
-  _videoChunksBroadcaster!: nativeScreenRecordingCommands.NativeVideoChunksBroadcaster;
-  _screenRecorder: recordScreenCommands.ScreenRecorder | null = null;
+  _videoChunksBroadcaster!: NativeVideoChunksBroadcaster;
+  _screenRecorder: ScreenRecorder | null = null;
   public proxyReqRes!: (...args: any) => any;
 
   chromedriver: Chromedriver | null = null;
   _currentContext: string | null = null;
-  _pageLoadTimeoutMs: number | null = null;
-  _scriptTimeoutMs: number | null = null;
   _webviewDevtoolsPort: number | null = null;
 
   private isProxyActive: boolean = false;
@@ -217,27 +194,30 @@ export class Mac2Driver
   }
 
   // Timeouts belong to the session: keep them here and mirror to Chromedriver in a web view
-  override async implicitWaitW3C(ms: number): Promise<void> {
-    await super.implicitWaitW3C(ms);
-    await this.chromedriver?.jwproxy.command('/timeouts', 'POST', {implicit: this.implicitWaitMs});
-  }
-
-  override async pageLoadTimeoutW3C(ms: number): Promise<void> {
-    if (!this.chromedriver) {
-      return await super.pageLoadTimeoutW3C(ms);
+  override async timeouts(
+    type?: string,
+    ms?: number | string,
+    script?: TimeoutValue,
+    pageLoad?: TimeoutValue,
+    implicit?: TimeoutValue,
+    command?: number,
+  ): Promise<void> {
+    if (type && ms !== undefined) {
+      // The deprecated 'type'/'ms' form is validated by the base driver; only map it for mirroring
+      const legacyMs = this.parseTimeoutArgument(ms);
+      script = type === 'script' ? legacyMs : undefined;
+      pageLoad = type === 'page load' ? legacyMs : undefined;
+      implicit = type === 'implicit' ? legacyMs : undefined;
     }
-    const pageLoad = this.parseTimeoutArgument(ms);
-    await this.chromedriver.jwproxy.command('/timeouts', 'POST', {pageLoad});
-    this._pageLoadTimeoutMs = pageLoad;
-  }
-
-  override async scriptTimeoutW3C(ms: number): Promise<void> {
-    if (!this.chromedriver) {
-      return await super.scriptTimeoutW3C(ms);
+    if (pageLoad !== undefined && !this.chromedriver) {
+      throw new errors.NotImplementedError('Not implemented: page load timeout is only supported in web view contexts');
     }
-    const script = this.parseTimeoutArgument(ms);
-    await this.chromedriver.jwproxy.command('/timeouts', 'POST', {script});
-    this._scriptTimeoutMs = script;
+    await super.timeouts(type, ms, script, pageLoad, implicit, command);
+    for (const [name, value] of Object.entries({script, pageLoad, implicit})) {
+      if (value !== undefined) {
+        await this.chromedriver?.jwproxy.command('/timeouts', 'POST', {[name]: value});
+      }
+    }
   }
 
   isWebviewEnabled(): boolean {
@@ -281,12 +261,9 @@ export class Mac2Driver
   }
 
   override async createSession(
-    w3cCaps1: W3CMac2DriverCaps,
-    w3cCaps2?: W3CMac2DriverCaps,
-    w3cCaps3?: W3CMac2DriverCaps,
-    driverData?: DriverData[],
+    w3cCapabilities: W3CMac2DriverCaps,
   ): Promise<DefaultCreateSessionResult<Mac2Constraints>> {
-    const [sessionId, caps] = await super.createSession(w3cCaps1, w3cCaps2, w3cCaps3, driverData);
+    const [sessionId, caps] = await super.createSession(w3cCapabilities);
     this._wda = WDA_MAC_SERVER;
     this.caps = caps as Mac2DriverCaps;
     // oxlint-disable-next-line no-self-assign -- narrows this.opts' type for the rest of the method
@@ -312,7 +289,7 @@ export class Mac2Driver
             log.info(`Prerun script output: ${output}`);
           }
         }
-        const launch = await contextCommands.prepareWebviewLaunch(caps);
+        const launch = await prepareWebviewLaunch(caps);
         this._webviewDevtoolsPort = launch.port;
         this._wdaSessionId = await this.wda.startSession(launch.caps, {
           reqBasePath: this.basePath,
@@ -380,15 +357,68 @@ export class Mac2Driver
     this._hasClaimedHost = false;
     this.isProxyActive = false;
     this.resetWebviewState();
-    this._pageLoadTimeoutMs = null;
-    this._scriptTimeoutMs = null;
     this._webviewDevtoolsPort = null;
-    this._videoChunksBroadcaster = new nativeScreenRecordingCommands.NativeVideoChunksBroadcaster(
-      this.eventEmitter,
-      this.log,
-    );
+    this._videoChunksBroadcaster = new NativeVideoChunksBroadcaster(this.eventEmitter, this.log);
     this._screenRecorder = null;
   }
 }
 
-export default Mac2Driver;
+Object.assign(Mac2Driver.prototype, {
+  // app-management
+  macosLaunchApp,
+  macosActivateApp,
+  macosTerminateApp,
+  macosQueryAppState,
+  // applescript
+  macosExecAppleScript,
+  // execute
+  execute,
+  // context
+  getCurrentContext,
+  getContexts,
+  setContext,
+  getWebViewDetails,
+  macosGetContexts,
+  // find
+  findElOrEls,
+  // gestures
+  macosSetValue,
+  macosClick,
+  macosScroll,
+  macosSwipe,
+  macosRightClick,
+  macosHover,
+  macosDoubleClick,
+  macosClickAndDrag,
+  macosClickAndDragAndHold,
+  macosKeys,
+  macosPressAndHold,
+  macosTap,
+  macosDoubleTap,
+  macosPressAndDrag,
+  macosPressAndDragAndHold,
+  // clipboard
+  macosGetClipboard,
+  macosSetClipboard,
+  // audit
+  macosPerformAccessibilityAudit,
+  // navigation
+  macosDeepLink,
+  // record-screen
+  startRecordingScreen,
+  stopRecordingScreen,
+  macosStartRecordingScreen,
+  macosStopRecordingScreen,
+  // native-record-screen
+  macosStartNativeScreenRecording,
+  macosGetNativeScreenRecordingInfo,
+  macosStopNativeScreenRecording,
+  macosListDisplays,
+  // screenshots
+  macosScreenshots,
+  // source
+  macosSource,
+  // windows
+  macosListWindows,
+  macosAdjustWindow,
+});

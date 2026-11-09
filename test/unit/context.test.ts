@@ -4,6 +4,7 @@ import {describe, it} from 'node:test';
 import {macosGetClipboard} from '../../lib/commands/clipboard.js';
 import {
   getChromedriverOpts,
+  getSessionTimeouts,
   getContexts,
   prepareWebviewLaunch,
   setContext,
@@ -206,16 +207,28 @@ describe('webview contexts', () => {
       ]);
     });
 
-    it('remembers page load and script timeouts for the next Chromedriver', async () => {
+    it('keeps explicit null timeouts for the next Chromedriver', async () => {
       const driver = makeDriver();
       withChromedriver(driver);
-      await driver.timeouts(undefined, undefined, 3000, 4000);
-      assert.equal(driver._scriptTimeoutMs, 3000);
-      assert.equal(driver._pageLoadTimeoutMs, 4000);
+      await driver.timeouts(undefined, undefined, null, 4000, 5000);
+      assert.deepEqual(getSessionTimeouts.call(driver), {implicit: 5000, pageLoad: 4000, script: null});
     });
 
     it('does not support page load timeouts natively', async () => {
       await assert.rejects(makeDriver().timeouts(undefined, undefined, undefined, 4000), /Not implemented/);
+    });
+
+    it('rejects unknown legacy timeout types', async () => {
+      const driver = makeDriver();
+      withChromedriver(driver);
+      await assert.rejects(driver.timeouts('random timeout', 42), /not supported/);
+    });
+
+    it('mirrors legacy timeouts to Chromedriver', async () => {
+      const driver = makeDriver();
+      const calls = withChromedriver(driver);
+      await driver.timeouts('implicit', 5000);
+      assert.deepEqual(calls, [['/timeouts', 'POST', {implicit: 5000}]]);
     });
 
     it('routes POST timeouts to the driver in a web view', () => {

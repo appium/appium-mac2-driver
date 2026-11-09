@@ -31,7 +31,7 @@
 This is an Appium driver for automating macOS applications using Apple's XCTest framework.
 
 > [!IMPORTANT]
-> Since major version *3.0.0*, this driver is only compatible with Appium 3.
+> Since major version *5.0.0*, this driver is only compatible with Appium 4.
 
 
 ## Documentation

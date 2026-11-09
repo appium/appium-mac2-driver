@@ -1,5 +1,11 @@
 import type {Mac2Driver} from '../driver.js';
 
+declare module '../driver.js' {
+  interface Mac2Driver {
+    macosSource(...args: Parameters<typeof macosSource>): ReturnType<typeof macosSource>;
+  }
+}
+
 /**
  * Retrieves the string representation of the current application
  *

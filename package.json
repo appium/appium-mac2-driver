@@ -72,20 +72,20 @@
     "teen_process": "^4.2.0"
   },
   "devDependencies": {
-    "@appium/docutils": "^3.0.0",
-    "@appium/oxc-config": "^1.1.0",
-    "@appium/semantic-release-config": "^1.1.0",
-    "@appium/tsconfig": "^1.2.0",
-    "@appium/types": "^1.0.0-rc.1",
+    "@appium/docutils": "^4.0.0-beta.5",
+    "@appium/oxc-config": "^2.0.0-beta.2",
+    "@appium/semantic-release-config": "^2.0.0-beta.1",
+    "@appium/tsconfig": "^2.0.0-beta.1",
+    "@appium/types": "^2.0.0-beta.5",
     "@types/node": "^26.0.0",
     "@types/portscanner": "^2.1.1",
-    "webdriverio": "^9.0.0"
+    "webdriverio": "^10.1.0"
   },
   "peerDependencies": {
-    "appium": "^3.0.0-rc.2"
+    "appium": "^4.0.0-beta.6"
   },
   "engines": {
-    "node": "^20.19.0 || ^22.12.0 || >=24.0.0",
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0",
     "npm": ">=10"
   },
   "appium": {

@@ -1,5 +1,13 @@
 import type {Mac2Driver} from '../driver.js';
 
+declare module '../driver.js' {
+  interface Mac2Driver {
+    macosPerformAccessibilityAudit(
+      ...args: Parameters<typeof macosPerformAccessibilityAudit>
+    ): ReturnType<typeof macosPerformAccessibilityAudit>;
+  }
+}
+
 export interface AccessibilityAuditItem {
   detailedDescription: string;
   compactDescription: string;

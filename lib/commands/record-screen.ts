@@ -6,6 +6,19 @@ import {SubProcess} from 'teen_process';
 import type {Mac2Driver} from '../driver.js';
 import {uploadRecordedMedia} from './helpers.js';
 
+declare module '../driver.js' {
+  interface Mac2Driver {
+    startRecordingScreen(...args: Parameters<typeof startRecordingScreen>): ReturnType<typeof startRecordingScreen>;
+    stopRecordingScreen(...args: Parameters<typeof stopRecordingScreen>): ReturnType<typeof stopRecordingScreen>;
+    macosStartRecordingScreen(
+      ...args: Parameters<typeof macosStartRecordingScreen>
+    ): ReturnType<typeof macosStartRecordingScreen>;
+    macosStopRecordingScreen(
+      ...args: Parameters<typeof macosStopRecordingScreen>
+    ): ReturnType<typeof macosStopRecordingScreen>;
+  }
+}
+
 const RETRY_PAUSE = 300;
 const RETRY_TIMEOUT = 5000;
 const DEFAULT_TIME_LIMIT = 60 * 10; // 10 minutes

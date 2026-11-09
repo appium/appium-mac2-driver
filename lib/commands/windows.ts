@@ -1,6 +1,13 @@
 import type {Mac2Driver} from '../driver.js';
 import type {AdjustedWindowInfo, WindowInfo, WindowState} from '../types.js';
 
+declare module '../driver.js' {
+  interface Mac2Driver {
+    macosListWindows(...args: Parameters<typeof macosListWindows>): ReturnType<typeof macosListWindows>;
+    macosAdjustWindow(...args: Parameters<typeof macosAdjustWindow>): ReturnType<typeof macosAdjustWindow>;
+  }
+}
+
 /**
  * Lists the windows of the current application
  *

@@ -4,6 +4,30 @@ import {util} from 'appium/support.js';
 import type {Mac2Driver} from '../driver.js';
 import type {KeyOptions} from '../types.js';
 
+declare module '../driver.js' {
+  interface Mac2Driver {
+    macosSetValue(...args: Parameters<typeof macosSetValue>): ReturnType<typeof macosSetValue>;
+    macosClick(...args: Parameters<typeof macosClick>): ReturnType<typeof macosClick>;
+    macosScroll(...args: Parameters<typeof macosScroll>): ReturnType<typeof macosScroll>;
+    macosSwipe(...args: Parameters<typeof macosSwipe>): ReturnType<typeof macosSwipe>;
+    macosRightClick(...args: Parameters<typeof macosRightClick>): ReturnType<typeof macosRightClick>;
+    macosHover(...args: Parameters<typeof macosHover>): ReturnType<typeof macosHover>;
+    macosDoubleClick(...args: Parameters<typeof macosDoubleClick>): ReturnType<typeof macosDoubleClick>;
+    macosClickAndDrag(...args: Parameters<typeof macosClickAndDrag>): ReturnType<typeof macosClickAndDrag>;
+    macosClickAndDragAndHold(
+      ...args: Parameters<typeof macosClickAndDragAndHold>
+    ): ReturnType<typeof macosClickAndDragAndHold>;
+    macosKeys(...args: Parameters<typeof macosKeys>): ReturnType<typeof macosKeys>;
+    macosPressAndHold(...args: Parameters<typeof macosPressAndHold>): ReturnType<typeof macosPressAndHold>;
+    macosTap(...args: Parameters<typeof macosTap>): ReturnType<typeof macosTap>;
+    macosDoubleTap(...args: Parameters<typeof macosDoubleTap>): ReturnType<typeof macosDoubleTap>;
+    macosPressAndDrag(...args: Parameters<typeof macosPressAndDrag>): ReturnType<typeof macosPressAndDrag>;
+    macosPressAndDragAndHold(
+      ...args: Parameters<typeof macosPressAndDragAndHold>
+    ): ReturnType<typeof macosPressAndDragAndHold>;
+  }
+}
+
 /**
  * Set value to the given element.
  * Note:

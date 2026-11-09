@@ -1,5 +1,12 @@
 import type {Mac2Driver} from '../driver.js';
 
+declare module '../driver.js' {
+  interface Mac2Driver {
+    macosGetClipboard(...args: Parameters<typeof macosGetClipboard>): ReturnType<typeof macosGetClipboard>;
+    macosSetClipboard(...args: Parameters<typeof macosSetClipboard>): ReturnType<typeof macosSetClipboard>;
+  }
+}
+
 /**
  * Sets the content of the clipboard.
  *

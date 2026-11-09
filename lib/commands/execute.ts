@@ -2,6 +2,12 @@ import type {StringRecord} from '@appium/types';
 
 import type {Mac2Driver} from '../driver.js';
 
+declare module '../driver.js' {
+  interface Mac2Driver {
+    execute(...args: Parameters<typeof execute>): ReturnType<typeof execute>;
+  }
+}
+
 const EXECUTE_SCRIPT_PREFIX = 'macos:';
 
 /**

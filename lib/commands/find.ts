@@ -1,6 +1,19 @@
+import {errors, isErrorType} from 'appium/driver.js';
 import {util} from 'appium/support.js';
+import {ConditionUnmetError} from 'asyncbox';
 
 import type {Mac2Driver} from '../driver.js';
+
+declare module '../driver.js' {
+  interface Mac2Driver {
+    findElOrEls(...args: Parameters<typeof findElOrEls>): ReturnType<typeof findElOrEls>;
+  }
+}
+
+// Older asyncbox (possibly bundled with the base driver) throws a plain Error
+function isConditionUnmet(e: unknown): boolean {
+  return e instanceof ConditionUnmetError || /Condition unmet/.test((e as Error)?.message ?? '');
+}
 
 /**
  * This is needed to make lookup by image working
@@ -32,8 +45,45 @@ export async function findElOrEls(
     normalizedStrategy = 'class chain';
   }
 
-  return await this.wda.proxy.command(endpoint, 'POST', {
-    using: normalizedStrategy,
-    value: selector,
-  });
+  const doFind = async (): Promise<any> =>
+    await this.wda.proxy.command(endpoint, 'POST', {
+      using: normalizedStrategy,
+      value: selector,
+    });
+  // `null` means no timeout, which the implicit wait helper treats as unlimited
+  if (this.implicitWaitMs === 0) {
+    return await doFind();
+  }
+
+  // The WDA server ignores the /timeouts API, so the implicit wait is applied here
+  let result: any;
+  let lastError: Error | undefined;
+  // A lookup error other than NoSuchElementError stops the wait and must reach the caller as is
+  let lookupError: unknown;
+  try {
+    await this.implicitWaitForCondition(async () => {
+      try {
+        result = await doFind();
+      } catch (e) {
+        if (!isErrorType(e, errors.NoSuchElementError)) {
+          lookupError = e;
+          throw e;
+        }
+        lastError = e as Error;
+        return false;
+      }
+      return !mult || (Array.isArray(result) && result.length > 0);
+    });
+  } catch (e) {
+    if (lookupError !== undefined) {
+      throw lookupError;
+    }
+    if (!isConditionUnmet(e)) {
+      throw e;
+    }
+    if (!mult && lastError) {
+      throw lastError;
+    }
+  }
+  return result;
 }

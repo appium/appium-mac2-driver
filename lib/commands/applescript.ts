@@ -5,6 +5,12 @@ import {exec} from 'teen_process';
 
 import type {Mac2Driver} from '../driver.js';
 
+declare module '../driver.js' {
+  interface Mac2Driver {
+    macosExecAppleScript(...args: Parameters<typeof macosExecAppleScript>): ReturnType<typeof macosExecAppleScript>;
+  }
+}
+
 const OSASCRIPT = 'osascript';
 const APPLE_SCRIPT_FEATURE = 'apple_script';
 

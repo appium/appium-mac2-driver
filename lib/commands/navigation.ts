@@ -1,5 +1,11 @@
 import type {Mac2Driver} from '../driver.js';
 
+declare module '../driver.js' {
+  interface Mac2Driver {
+    macosDeepLink(...args: Parameters<typeof macosDeepLink>): ReturnType<typeof macosDeepLink>;
+  }
+}
+
 /**
  * Opens the given URL with the default or the given application.
  * Xcode must be at version 14.3+.

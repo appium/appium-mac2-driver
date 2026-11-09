@@ -1,6 +1,12 @@
 import type {Mac2Driver} from '../driver.js';
 import type {ScreenshotsInfo} from '../types.js';
 
+declare module '../driver.js' {
+  interface Mac2Driver {
+    macosScreenshots(...args: Parameters<typeof macosScreenshots>): ReturnType<typeof macosScreenshots>;
+  }
+}
+
 /**
  * Retrieves screenshots of each display available to macOS
  *
