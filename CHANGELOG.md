@@ -1,3 +1,9 @@
+## [5.0.1](https://github.com/appium/appium-mac2-driver/compare/v5.0.0...v5.0.1) (2026-11-13)
+
+### Miscellaneous Chores
+
+* **deps:** bump appium to 4.0.0-beta.8 ([#444](https://github.com/appium/appium-mac2-driver/issues/444)) ([c596ebd](https://github.com/appium/appium-mac2-driver/commit/c596ebd4280c6ff16a2ec489b45648009eef846d))
+
 ## [5.0.0](https://github.com/appium/appium-mac2-driver/compare/v4.6.1...v5.0.0) (2026-11-09)
 
 ### ⚠ BREAKING CHANGES
