@@ -2,11 +2,11 @@ import os from 'node:os';
 import path from 'node:path';
 
 import type {IDoctorCheck, AppiumLogger, DoctorCheckResult} from '@appium/types';
+import colors from '@colors/colors';
 import {doctor, fs, util} from 'appium/support.js';
 import {exec} from 'teen_process';
 
 import {resolveExecutablePath} from './utils.js';
-import '@colors/colors';
 
 export class OptionalFfmpegCheck implements IDoctorCheck {
   static readonly FFMPEG_BINARY = 'ffmpeg';
@@ -24,7 +24,7 @@ export class OptionalFfmpegCheck implements IDoctorCheck {
 
   async fix(): Promise<string> {
     return (
-      `${`${OptionalFfmpegCheck.FFMPEG_BINARY}`.bold} is used to capture screen recordings. ` +
+      `${colors.bold(OptionalFfmpegCheck.FFMPEG_BINARY)} is used to capture screen recordings. ` +
       `Please read ${OptionalFfmpegCheck.FFMPEG_INSTALL_LINK}.`
     );
   }
@@ -110,7 +110,7 @@ export class OptionalFullDiskAccessDaemonContainersCheck implements IDoctorCheck
 
   async fix(): Promise<string> {
     return (
-      `Open ${'System Settings'.bold} → ${'Privacy & Security'.bold} → ${'Full Disk Access'.bold} ` +
+      `Open ${colors.bold('System Settings')} → ${colors.bold('Privacy & Security')} → ${colors.bold('Full Disk Access')} ` +
       `and enable the Terminal, IDE, or launchd parent that starts Appium Server. ` +
       `Native screen recordings live under ` +
       `~/Library/Daemon Containers/*/Data/Attachments/ or, since Xcode 26.5, ` +

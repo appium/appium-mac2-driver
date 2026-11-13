@@ -169,7 +169,9 @@ async function setupAccessibility() {
   await exec('open', [SETTINGS_URL]);
 }
 
-setupAccessibility().catch((e) => {
+try {
+  await setupAccessibility();
+} catch (e) {
   log.error(e.message);
   process.exitCode = 1;
-});
+}

@@ -15,4 +15,4 @@ async function openWda() {
   await exec('open', [dstPath]);
 }
 
-(async () => await openWda())();
+await openWda();

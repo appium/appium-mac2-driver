@@ -1,8 +1,8 @@
 import type {IDoctorCheck, AppiumLogger, DoctorCheckResult} from '@appium/types';
+import colors from '@colors/colors';
 import {getPath as getXcodePath} from 'appium-xcode';
 import {doctor} from 'appium/support.js';
 import {exec} from 'teen_process';
-import '@colors/colors';
 
 export class XcodeCheck implements IDoctorCheck {
   log!: AppiumLogger;
@@ -17,7 +17,7 @@ export class XcodeCheck implements IDoctorCheck {
   }
 
   async fix(): Promise<string> {
-    return `Manually install ${'Xcode'.bold} and configure the active developer directory path using the xcode-select tool`;
+    return `Manually install ${colors.bold('Xcode')} and configure the active developer directory path using the xcode-select tool`;
   }
 
   hasAutofix(): boolean {
@@ -63,7 +63,7 @@ export class XcodebuildCheck implements IDoctorCheck {
   }
 
   async fix(): Promise<string> {
-    return `Install ${'Xcode'.bold} ${XcodebuildCheck.MIN_XCODE_VERSION}+ or upgrade the existing setup`;
+    return `Install ${colors.bold('Xcode')} ${XcodebuildCheck.MIN_XCODE_VERSION}+ or upgrade the existing setup`;
   }
 
   hasAutofix(): boolean {
