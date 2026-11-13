@@ -5,10 +5,9 @@ import url from 'node:url';
 import {strongbox} from '@appium/strongbox';
 import type {HTTPMethod, HTTPBody, ProxyResponse, ProxyOptions} from '@appium/types';
 import {WebDriverProxy, errors} from 'appium/driver.js';
-import {fs, logger, util, timing} from 'appium/support.js';
+import {fs, logger, util, timing, net} from 'appium/support.js';
 import {ConditionUnmetError, waitForCondition} from 'asyncbox';
 import axios from 'axios';
-import {checkPortStatus} from 'portscanner';
 import {SubProcess, exec} from 'teen_process';
 
 import {listChildrenProcessIds, getModuleRoot, clearArray, removeAllOccurrences} from './utils.js';
@@ -145,7 +144,8 @@ class WDAMacProcess {
 
     log.debug(`Using ${this.host} as server host`);
     log.debug(`Using port ${this.port}`);
-    const isPortBusy = async (): Promise<boolean> => (await checkPortStatus(this.port, this.host)) === 'open';
+    const isPortBusy = async (): Promise<boolean> =>
+      (await net.checkPortStatus(this.port, {host: this.host})) === 'open';
     if (await isPortBusy()) {
       log.warn(
         `The port #${this.port} at ${this.host} is busy. ` +

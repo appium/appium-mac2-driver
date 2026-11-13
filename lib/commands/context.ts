@@ -4,8 +4,8 @@ import type {TimeoutValue} from '@appium/types';
 import {Chromedriver} from 'appium-chromedriver';
 import type {ChromedriverOpts} from 'appium-chromedriver';
 import {errors} from 'appium/driver.js';
+import {net} from 'appium/support.js';
 import axios from 'axios';
-import {findAPortNotInUse} from 'portscanner';
 
 import type {Mac2Driver} from '../driver.js';
 import {log} from '../logger.js';
@@ -206,7 +206,8 @@ export async function prepareWebviewLaunch<T extends {arguments?: unknown}>(
         `might be ignored and the debugging port cannot be chosen by the driver`,
     );
   }
-  const port = caps.webviewDevtoolsPort ?? (await findAPortNotInUse(PORT_RANGE_START, PORT_RANGE_END, CDP_HOST));
+  const port =
+    caps.webviewDevtoolsPort ?? (await net.getFreePort({port: [PORT_RANGE_START, PORT_RANGE_END], host: CDP_HOST}));
   const args = Array.isArray(caps.arguments) ? (caps.arguments as unknown[]).map(String) : [];
   const userArgs = removeDebuggingPortArgs(args);
   if (userArgs.length !== args.length) {
