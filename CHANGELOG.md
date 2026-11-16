@@ -1,3 +1,13 @@
+## [5.0.2](https://github.com/appium/appium-mac2-driver/compare/v5.0.1...v5.0.2) (2026-11-16)
+
+### Miscellaneous Chores
+
+* **deps:** bump asyncbox from 6.6.1 to 7.0.0 ([#446](https://github.com/appium/appium-mac2-driver/issues/446)) ([7197585](https://github.com/appium/appium-mac2-driver/commit/719758595b2f679d060d730f694131f4013b077a))
+
+### Code Refactoring
+
+* use port helpers from appium/support instead of portscanner ([#445](https://github.com/appium/appium-mac2-driver/issues/445)) ([3c786ae](https://github.com/appium/appium-mac2-driver/commit/3c786aea1b61c69e17ba03fa05365752c19270f9))
+
 ## [5.0.1](https://github.com/appium/appium-mac2-driver/compare/v5.0.0...v5.0.1) (2026-11-13)
 
 ### Miscellaneous Chores
