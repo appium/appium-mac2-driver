@@ -1,6 +1,5 @@
 import {errors, isErrorType} from 'appium/driver.js';
 import {util} from 'appium/support.js';
-import {ConditionUnmetError} from 'asyncbox';
 
 import type {Mac2Driver} from '../driver.js';
 
@@ -10,9 +9,13 @@ declare module '../driver.js' {
   }
 }
 
-// Older asyncbox (possibly bundled with the base driver) throws a plain Error
+const CONDITION_UNMET_CODE = 'ERR_ASYNCBOX_CONDITION_UNMET';
+
+// `instanceof` fails across asyncbox copies (e.g. the base driver's); the message covers asyncbox < 6.6.0 (no `code`)
 function isConditionUnmet(e: unknown): boolean {
-  return e instanceof ConditionUnmetError || /Condition unmet/.test((e as Error)?.message ?? '');
+  return (
+    (e as {code?: unknown} | null)?.code === CONDITION_UNMET_CODE || /Condition unmet/.test((e as Error)?.message ?? '')
+  );
 }
 
 /**
