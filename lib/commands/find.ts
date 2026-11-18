@@ -10,9 +10,9 @@ declare module '../driver.js' {
   }
 }
 
-// Older asyncbox (possibly bundled with the base driver) throws a plain Error
+// The message covers errors of asyncbox < 6.6.0 (no `code`)
 function isConditionUnmet(e: unknown): boolean {
-  return e instanceof ConditionUnmetError || /Condition unmet/.test((e as Error)?.message ?? '');
+  return ConditionUnmetError.is(e) || /Condition unmet/.test((e as Error)?.message ?? '');
 }
 
 /**
