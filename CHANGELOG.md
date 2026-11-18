@@ -1,3 +1,9 @@
+## [5.0.5](https://github.com/appium/appium-mac2-driver/compare/v5.0.4...v5.0.5) (2026-11-18)
+
+### Bug Fixes
+
+* match asyncbox condition-unmet errors by code ([#452](https://github.com/appium/appium-mac2-driver/issues/452)) ([de79632](https://github.com/appium/appium-mac2-driver/commit/de7963265dca1ef16e87a37a4ee1e723f643a1a7))
+
 ## [5.0.4](https://github.com/appium/appium-mac2-driver/compare/v5.0.3...v5.0.4) (2026-11-18)
 
 ### Miscellaneous Chores
