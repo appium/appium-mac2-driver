@@ -1,3 +1,10 @@
+## [5.0.3](https://github.com/appium/appium-mac2-driver/compare/v5.0.2...v5.0.3) (2026-11-18)
+
+### Miscellaneous Chores
+
+* **deps:** bump appium-xcode from 7.2.5 to 8.0.4 ([#453](https://github.com/appium/appium-mac2-driver/issues/453)) ([8cf79be](https://github.com/appium/appium-mac2-driver/commit/8cf79be089ab2a8f12dc9ec05a5ff1ba3d9b08b8))
+* **deps:** bump teen_process from 4.2.2 to 5.0.1 ([#455](https://github.com/appium/appium-mac2-driver/issues/455)) ([95813be](https://github.com/appium/appium-mac2-driver/commit/95813becba153b0a2cc70948013e0b93d5039520))
+
 ## [5.0.2](https://github.com/appium/appium-mac2-driver/compare/v5.0.1...v5.0.2) (2026-11-16)
 
 ### Miscellaneous Chores
