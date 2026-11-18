@@ -1,3 +1,9 @@
+## [5.0.4](https://github.com/appium/appium-mac2-driver/compare/v5.0.3...v5.0.4) (2026-11-18)
+
+### Miscellaneous Chores
+
+* **deps:** bump appium-chromedriver from 9.2.4 to 10.0.5 ([#454](https://github.com/appium/appium-mac2-driver/issues/454)) ([27816bb](https://github.com/appium/appium-mac2-driver/commit/27816bbb94e229575e929039e02f5be128cc98ea))
+
 ## [5.0.3](https://github.com/appium/appium-mac2-driver/compare/v5.0.2...v5.0.3) (2026-11-18)
 
 ### Miscellaneous Chores
