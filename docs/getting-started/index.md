@@ -76,8 +76,8 @@ The server log output should include a line like the following:
         open /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/
         ```
 
-    * Without closing Finder, open System Settings -> _Privacy & Security_ -> _Accessibility_
-    * Drag and drop Xcode Helper from Finder to the Accessibility list in System Settings
+    * Without closing Finder, open System Settings -> _Privacy & Security_ -> _Device Control and Data Access_ (or _Accessibility_, if using macOS < 27)
+    * Drag and drop Xcode Helper from Finder to the apps list in System Settings
 
 * Starting from macOS 12 Monterey, when starting a Mac2 driver session, macOS may occasionally [show a system prompt in order to enable automation](https://developer.apple.com/forums/thread/693850). The prompt can be disabled by running the following command:
 
