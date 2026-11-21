@@ -1,3 +1,9 @@
+## [5.0.7](https://github.com/appium/appium-mac2-driver/compare/v5.0.6...v5.0.7) (2026-11-21)
+
+### Bug Fixes
+
+* make context endpoints work in native context ([#457](https://github.com/appium/appium-mac2-driver/issues/457)) ([2e89f4f](https://github.com/appium/appium-mac2-driver/commit/2e89f4f7d6976e6cb402db888782c939b97620d3))
+
 ## [5.0.6](https://github.com/appium/appium-mac2-driver/compare/v5.0.5...v5.0.6) (2026-11-21)
 
 ### Miscellaneous Chores
