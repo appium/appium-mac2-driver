@@ -73,6 +73,8 @@ import {WDA_MAC_SERVER, type WDAMacServer} from './wda-mac.js';
 const NO_PROXY: RouteMatcher[] = [
   ['GET', new RegExp('^/session/[^/]+/appium')],
   ['POST', new RegExp('^/session/[^/]+/appium')],
+  ['GET', new RegExp('^/session/[^/]+/context')],
+  ['POST', new RegExp('^/session/[^/]+/context')],
   ['POST', new RegExp('^/session/[^/]+/element/[^/]+/elements?$')],
   ['POST', new RegExp('^/session/[^/]+/elements?$')],
   ['POST', new RegExp('^/session/[^/]+/execute')],
