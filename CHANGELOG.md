@@ -1,3 +1,9 @@
+## [5.0.6](https://github.com/appium/appium-mac2-driver/compare/v5.0.5...v5.0.6) (2026-11-21)
+
+### Miscellaneous Chores
+
+* **deps:** bump @appium/strongbox from 2.0.1 to 3.0.0 ([#456](https://github.com/appium/appium-mac2-driver/issues/456)) ([60a964c](https://github.com/appium/appium-mac2-driver/commit/60a964c3a5941c1c74bb0b703e36c16572bb544c))
+
 ## [5.0.5](https://github.com/appium/appium-mac2-driver/compare/v5.0.4...v5.0.5) (2026-11-18)
 
 ### Bug Fixes
