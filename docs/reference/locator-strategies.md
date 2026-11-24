@@ -91,8 +91,43 @@ match `WKWebView` web elements by their DOM id.
 !!! info "When to Use"
 
     Use this strategy for elements that _cannot_ be identified only using their own attributes,
-    but _can_ be identified upon additionally using their parent element(s) and/or their
-    descendant element attribute(s).
+    but _can_ be identified upon additionally using their parent element(s), sibling element(s)
+    and/or their descendant element attribute(s).
+
+### Axis Steps
+
+Axis steps select elements relative to the ones matched by the previous step, so a chain can
+move to the parent, ancestors or siblings. They cover most of the cases that otherwise
+require XPath axes.
+
+|Step|Selects|XPath equivalent|
+|---|---|---|
+|`..`|the parent|`..` or `parent::*`|
+|`^XCUIElementTypeWindow`|all ancestors of the given type|`ancestor::XCUIElementTypeWindow`|
+|`>XCUIElementTypeButton`|all following siblings of the given type|`following-sibling::XCUIElementTypeButton`|
+|`<XCUIElementTypeButton`|all preceding siblings of the given type|`preceding-sibling::XCUIElementTypeButton`|
+|`~XCUIElementTypeButton`|all siblings of the given type, except the matched element itself|`preceding-sibling::XCUIElementTypeButton \| following-sibling::XCUIElementTypeButton`|
+
+For example, ``**/XCUIElementTypeButton[`identifier == "OK"`]/<XCUIElementTypeButton[1]`` selects the
+button right before the "OK" button, and ``**/XCUIElementTypeButton[`identifier == "OK"`]/^XCUIElementTypeWindow``
+selects the window containing it.
+
+- Axis steps accept `*`, predicates and positions, same as regular steps. Positions count along
+  the axis: starting from the nearest element for `^` and `<`, in document order for `>` and `~`,
+  and from the other end if negative. `..` has neither a class name nor a position,
+  but may have predicates.
+- An axis step may follow any step, and may also start the chain, in which case it is relative to the
+  element the search is made from. It cannot directly follow `**/`, but `**/` may follow it,
+  for example `XCUIElementTypeButton/../**/XCUIElementTypeImage`.
+- The matches of a chain containing axis steps are always returned in document order.
+- Axes may leave the subtree of the element the search is made from, as long as the element belongs
+  to the application. Such chains are evaluated on the accessibility snapshot of the whole application,
+  because `XCUIElementQuery` has no parent or sibling axes. Chains without axis steps are still
+  resolved by native queries.
+
+Class chain syntax is strict: a position is an integer that is not zero, and a predicate must not be empty.
+A class name directly after `**` is an error, and predicate text is not a format string, so it must not
+contain format specifiers like `%@`.
 
 ## XPath
 
@@ -109,5 +144,8 @@ XPath 2.0 is supported since Mac2 driver version 1.20.0. Older driver versions o
 
 !!! info "When to Use"
 
-    Use this strategy for elements that can _only_ be identified when using their siblings and/or
-    specific descendants. It is _strongly_ recommended to use more performant strategies if possible.
+    Use this strategy for elements that can _only_ be identified when using conditions
+    that cannot be expressed by the other strategies, for example the complex ones that
+    combine several elements of the hierarchy. It is _strongly_ recommended to use more
+    performant strategies if possible, such as [class chain](#class-chain) with
+    [axis steps](#axis-steps) for the parent, ancestor and sibling relationships.
