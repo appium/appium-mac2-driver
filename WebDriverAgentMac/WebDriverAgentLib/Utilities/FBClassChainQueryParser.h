@@ -3,8 +3,7 @@
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * LICENSE file in the root directory of this source tree.
  */
 
 #import <XCTest/XCTest.h>
@@ -35,13 +34,33 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+/*! The way a chain item is related to the elements matched by the previous item */
+typedef NS_ENUM(NSUInteger, FBClassChainAxis) {
+  /*! Direct children, `T` */
+  FBClassChainAxisChild,
+  /*! All descendants, selected with the double star marker */
+  FBClassChainAxisDescendant,
+  /*! The parent, `..` */
+  FBClassChainAxisParent,
+  /*! All ancestors, nearest first, `^T` */
+  FBClassChainAxisAncestor,
+  /*! Siblings after the element, in document order, `>T` */
+  FBClassChainAxisFollowingSibling,
+  /*! Siblings before the element, nearest first, `<T` */
+  FBClassChainAxisPrecedingSibling,
+  /*! All siblings except the element, in document order, `~T` */
+  FBClassChainAxisSibling,
+};
+
 @interface FBClassChainItem : NSObject
 
 /*! Element's position */
 @property (readonly, nonatomic, nullable) NSNumber *position;
 /*! Element's type */
 @property (readonly, nonatomic) XCUIElementType type;
-/*! Whether an element is a descendant of the previous element */
+/*! The relation of the element to the previous element in the chain */
+@property (readonly, nonatomic) FBClassChainAxis axis;
+/*! Whether an element is a descendant of the previos element */
 @property (readonly, nonatomic) BOOL isDescendant;
 /*! The ordered list of matching predicates for the current element */
 @property (readonly, nonatomic) NSArray<FBAbstractPredicateItem *> *predicates;
@@ -62,6 +81,16 @@ NS_ASSUME_NONNULL_BEGIN
  @return FBClassChainElement instance
  */
 - (instancetype)initWithType:(XCUIElementType)type position:(nullable NSNumber *)position predicates:(NSArray<FBAbstractPredicateItem *> *)predicates isDescendant:(BOOL)isDescendant;
+
+/**
+ Same as above, but sets the relation to the previous element explicitly.
+ Positions of axis items count along the axis: from the nearest element for the parent,
+ ancestor and preceding sibling axes, in document order otherwise.
+
+ @param axis the relation of the element to the previous element in the chain
+ @return FBClassChainElement instance
+ */
+- (instancetype)initWithType:(XCUIElementType)type position:(nullable NSNumber *)position predicates:(NSArray<FBAbstractPredicateItem *> *)predicates axis:(FBClassChainAxis)axis;
 
 @end
 
@@ -84,14 +113,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Method used to interpret class chain queries
-
+ 
  @param classChainQuery class chain query as string. See the documentation of
    XCUIElement+FBClassChain category for more details about the expected query format
- @param error standard NSError object, which is going to be initialized if
+ @param error standard NSError object, which is going to be initializaed if
    there are query parsing errors
  @return list of parsed primitives packed to FBClassChainElement class or nil in case
    there was parsing error (the parameter will be initialized with detailed error description in such case)
- @throws FBUnknownAttributeException if any of predicates in the chain contains unknown attribute
+ @throws FBElementAttributeUnknownException if any of predicates in the chain contains unknown attribute
+ @throws NSInvalidArgumentException if the text of any predicate in the chain is not a valid predicate.
+   The text is never used as a format, so it must not contain format specifiers.
+   An empty query is reported as an error, not as an exception.
  */
 + (nullable FBClassChain*)parseQuery:(NSString*)classChainQuery error:(NSError **)error;
 
