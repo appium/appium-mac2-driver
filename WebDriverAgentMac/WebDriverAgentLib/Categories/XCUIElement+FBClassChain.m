@@ -9,6 +9,8 @@
 
 #import "XCUIElement+FBClassChain.h"
 
+#import <objc/message.h>
+
 #import "AMSnapshotUtils.h"
 #import "FBClassChainQueryParser.h"
 #import "FBExceptions.h"
@@ -229,13 +231,14 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
     NSString *reason = [NSString stringWithFormat:@"Cannot take a snapshot of the element to evaluate the class chain. Original error: %@", error.description];
     @throw [NSException exceptionWithName:FBClassChainQueryParseException reason:reason userInfo:@{}];
   }
-  // Axes may leave the subtree of the element, so the whole application is snapshotted if the element belongs to it
+  // Axes may leave the subtree of the element, so the whole application is walked if the element belongs to it.
+  // The application snapshot is the context itself if the search starts from the application, so it is taken once.
   XCUIElement *rootElement = self;
   AMSnapshotTree *tree = nil;
   XCUIApplication *application = [self am_owningApplication];
-  id<XCUIElementSnapshot> applicationSnapshot = application ? [application snapshotWithError:nil] : nil;
-  if (nil != applicationSnapshot) {
-    AMSnapshotTree *applicationTree = [[AMSnapshotTree alloc] initWithRoot:applicationSnapshot];
+  if (nil != application && application != self) {
+    id<XCUIElementSnapshot> applicationSnapshot = [application snapshotWithError:nil];
+    AMSnapshotTree *applicationTree = applicationSnapshot ? [[AMSnapshotTree alloc] initWithRoot:applicationSnapshot] : nil;
     id<XCUIElementSnapshot> mappedContext = [self.class am_snapshotWithHash:[AMSnapshotUtils hashWithSnapshot:contextSnapshot]
                                                                      inTree:applicationTree];
     if (nil != mappedContext) {
@@ -254,6 +257,11 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
   if (0 == matches.count) {
     return @[];
   }
+  NSArray<XCUIElement *> *bound = [self.class am_elementsWithSnapshots:matches rootElement:rootElement rootSnapshot:tree.root];
+  if (nil != bound) {
+    return bound;
+  }
+  // Binding by the snapshot hashes takes one more snapshot of the root element
   NSMutableSet<NSString *> *hashes = [NSMutableSet setWithCapacity:matches.count];
   for (id<XCUIElementSnapshot> match in matches) {
     [hashes addObject:[AMSnapshotUtils hashWithSnapshot:match]];
@@ -262,6 +270,32 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
                                  rootElement:rootElement
                                 rootSnapshot:tree.root
                        includeOnlyFirstMatch:shouldReturnAfterFirstMatch];
+}
+
+// Binds the snapshots to elements the way allElementsBoundByAccessibilityElement does,
+// but without taking one more snapshot of the application. Nil if it is not possible.
++ (nullable NSArray<XCUIElement *> *)am_elementsWithSnapshots:(NSArray<id<XCUIElementSnapshot>> *)snapshots
+                                                  rootElement:(XCUIElement *)rootElement
+                                                 rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot
+{
+  SEL selector = NSSelectorFromString(@"_elementMatchingAccessibilityElementOfSnapshot:");
+  XCUIElementQuery *query = [rootElement descendantsMatchingType:XCUIElementTypeAny];
+  if (FBSession.activeSession.boundElementsByIndex || ![query respondsToSelector:selector]) {
+    return nil;
+  }
+  NSMutableArray<XCUIElement *> *result = [NSMutableArray arrayWithCapacity:snapshots.count];
+  for (id<XCUIElementSnapshot> snapshot in snapshots) {
+    if (snapshot == rootSnapshot) {
+      [result addObject:rootElement];
+      continue;
+    }
+    id element = ((id (*)(id, SEL, id))objc_msgSend)(query, selector, snapshot);
+    if (![element isKindOfClass:XCUIElement.class]) {
+      return nil;
+    }
+    [result addObject:element];
+  }
+  return result.copy;
 }
 
 - (nullable XCUIApplication *)am_owningApplication
@@ -281,7 +315,7 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
 
 + (nullable id<XCUIElementSnapshot>)am_snapshotWithHash:(NSString *)snapshotHash inTree:(AMSnapshotTree *)tree
 {
-  if (nil == snapshotHash) {
+  if (nil == snapshotHash || nil == tree) {
     return nil;
   }
   NSArray<id<XCUIElementSnapshot>> *all = [@[tree.root] arrayByAddingObjectsFromArray:[tree descendantsOf:tree.root]];

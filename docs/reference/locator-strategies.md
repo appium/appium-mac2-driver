@@ -123,7 +123,8 @@ selects the window containing it.
 - Axes may leave the subtree of the element the search is made from, as long as the element belongs
   to the application. Such chains are evaluated on the accessibility snapshot of the whole application,
   because `XCUIElementQuery` has no parent or sibling axes. Chains without axis steps are still
-  resolved by native queries.
+  resolved by native queries. Such a lookup takes about one snapshot of the application, which
+  made it around 2x faster than the equivalent XPath in measurements on several apps.
 
 Class chain syntax is strict: a position is an integer that is not zero, and a predicate must not be empty.
 A class name directly after `**` is an error, and predicate text is not a format string, so it must not
