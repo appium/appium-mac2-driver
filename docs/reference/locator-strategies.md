@@ -59,7 +59,7 @@ This strategy is an alias for the [`name` strategy](#name).
 |`predicate string`|⭐⭐⭐⭐⭐|`(identifier == 'done' OR value == 'done') AND amType IN {'XCUIElementTypeButton', 'XCUIElementTypeCheckBox'}`|
 
 This strategy is mapped to the native XCTest predicate locator. Refer to the
-[Predicate Locator Strategy guide](./predicate.md) for more details on how to build effective
+[Predicate Locator Strategy guide](../guides/predicate.md) for more details on how to build effective
 predicate expressions, and which [element attributes](./element-attributes.md) can be used in them.
 
 !!! info "When to Use"
@@ -75,8 +75,8 @@ predicate expressions, and which [element attributes](./element-attributes.md) c
 
 This strategy is mapped to the native XCTest predicate locator, but with respect to the actual
 element tree hierarchy. Such locators are basically a supertype of [predicate string](#predicate-string).
-Refer to the [Class Chain Locator Strategy guide](./class-chain.md) for more details on how to build
-such locators, including the [axis steps](./class-chain.md#axis-steps) (driver version 5.1.0+) that
+Refer to the [Class Chain Locator Strategy guide](../guides/class-chain.md) for more details on how to build
+such locators, including the [axis steps](../guides/class-chain.md#axis-steps) (driver version 5.1.0+) that
 select the parent, ancestors and siblings of an element. As with predicate string, the `am`-prefixed
 attribute aliases can be used at any position in the chain, including `amIdentifier` to reliably
 match `WKWebView` web elements by their DOM id.
@@ -106,4 +106,4 @@ XPath 2.0 is supported since Mac2 driver version 1.20.0. Older driver versions o
     that cannot be expressed by the other strategies, for example the complex ones that
     combine several elements of the hierarchy. It is _strongly_ recommended to use more
     performant strategies if possible, such as [class chain](#class-chain) with
-    [axis steps](./class-chain.md#axis-steps) for the parent, ancestor and sibling relationships.
+    [axis steps](../guides/class-chain.md#axis-steps) for the parent, ancestor and sibling relationships.

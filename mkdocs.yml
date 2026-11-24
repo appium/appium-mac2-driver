@@ -44,8 +44,6 @@ nav:
           - reference/execute-methods.md
       - Element Management:
           - reference/locator-strategies.md
-          - reference/class-chain.md
-          - reference/predicate.md
           - reference/element-attributes.md
   - Guides:
       - Session Configuration:
@@ -56,6 +54,8 @@ nav:
       - Driver Actions:
           - guides/app-under-test.md
           - guides/key-modifier-flags.md
+          - guides/class-chain.md
+          - guides/predicate.md
           - guides/w3c-action-recipes.md
   - Troubleshooting: troubleshooting/index.md
   - contributing.md

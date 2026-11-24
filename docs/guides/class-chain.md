@@ -3,7 +3,7 @@ title: Class Chain Locator Strategy
 ---
 
 The Mac2 driver supports searching elements using the _class chain_
-[locator search strategy](./locator-strategies.md#class-chain) (`class chain`, or `-ios class chain`
+[locator search strategy](../reference/locator-strategies.md#class-chain) (`class chain`, or `-ios class chain`
 in the clients that only know this name). It is very similar to a simplified XPath, but is much
 faster, because the lookup does not need the page source of the whole application. It is a layer
 over the native [XCUIElementQuery](https://developer.apple.com/documentation/xctest/xcuielementquery)
@@ -75,7 +75,7 @@ intermediate steps if possible, because they make the lookup slower.
 
 Predicates restrict the elements of a step. They are put into square brackets before the position,
 and every predicate is a [predicate expression](./predicate.md) using
-the [element attributes](./element-attributes.md):
+the [element attributes](../reference/element-attributes.md):
 
 - ``[`predicate`]`` - the predicate is applied to the matched elements themselves. It is the direct
   alternative of the native [matchingPredicate:](https://developer.apple.com/documentation/xctest/xcuielementquery/1500471-matchingpredicate?language=objc) selector
@@ -248,6 +248,6 @@ and `<`, in document order for `>` and `~`, and from the other end if negative.
 
 ## More Information
 
-- [Locator Strategies](./locator-strategies.md) — overview of all strategies and their performance
+- [Locator Strategies](../reference/locator-strategies.md) — overview of all strategies and their performance
 - [Predicate Locator Strategy](./predicate.md) — how to write the predicates used in class chains
-- [Element Attributes](./element-attributes.md) — element attributes available in predicates
+- [Element Attributes](../reference/element-attributes.md) — element attributes available in predicates

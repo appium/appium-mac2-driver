@@ -3,7 +3,7 @@ title: Predicate Locator Strategy
 ---
 
 The Mac2 driver supports searching elements using the _predicate string_ and _class chain_
-[locator search strategies](./locator-strategies.md). They are powered by Apple XCTest, provide
+[locator search strategies](../reference/locator-strategies.md). They are powered by Apple XCTest, provide
 flexibility and are much faster than XPath. Predicates can be used to restrict a set of elements to
 select only those for which some condition evaluates to true.
 
@@ -36,15 +36,15 @@ article for how to build such queries.
 
 ## Available Attributes
 
-All supported element [attributes](./element-attributes.md) can be used in predicate expressions.
+All supported element [attributes](../reference/element-attributes.md) can be used in predicate expressions.
 A few of them have no native XCTest equivalent that predicate expressions can reference directly,
 so they are only usable through their `am`-prefixed alias:
-[`amRect`](./element-attributes.md#amrect), [`amText`](./element-attributes.md#amtext),
-[`amType`](./element-attributes.md#amtype) and
-[`amHasKeyboardInputFocus`](./element-attributes.md#amhaskeyboardinputfocus). Separately,
-[`amIdentifier`](./element-attributes.md#amidentifier) is the only reliable way to match
+[`amRect`](../reference/element-attributes.md#amrect), [`amText`](../reference/element-attributes.md#amtext),
+[`amType`](../reference/element-attributes.md#amtype) and
+[`amHasKeyboardInputFocus`](../reference/element-attributes.md#amhaskeyboardinputfocus). Separately,
+[`amIdentifier`](../reference/element-attributes.md#amidentifier) is the only reliable way to match
 `WKWebView` web elements by their DOM id - see
-[`useDomIdAsAccessibilityId`](./settings.md#usedomidasaccessibilityid) - e.g. `amIdentifier == 'done'`.
+[`useDomIdAsAccessibilityId`](../reference/settings.md#usedomidasaccessibilityid) - e.g. `amIdentifier == 'done'`.
 
 ## Basic Comparisons
 
