@@ -9,8 +9,6 @@
 
 #import "XCUIElement+FBClassChain.h"
 
-#import <objc/message.h>
-
 #import "AMSnapshotUtils.h"
 #import "FBClassChainQueryParser.h"
 #import "FBExceptions.h"
@@ -274,7 +272,7 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
   if (0 == matches.count) {
     return @[];
   }
-  NSArray<XCUIElement *> *bound = [self.class am_elementsWithSnapshots:matches rootElement:rootElement rootSnapshot:tree.root];
+  NSArray<XCUIElement *> *bound = [AMSnapshotUtils elementsWithSnapshots:matches rootElement:rootElement rootSnapshot:tree.root];
   if (nil != bound) {
     return bound;
   }
@@ -290,32 +288,6 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
                                  rootElement:rootElement
                                 rootSnapshot:tree.root
                        includeOnlyFirstMatch:shouldReturnAfterFirstMatch];
-}
-
-// Binds the snapshots to elements the way allElementsBoundByAccessibilityElement does,
-// but without taking one more snapshot of the application. Nil if it is not possible.
-+ (nullable NSArray<XCUIElement *> *)am_elementsWithSnapshots:(NSArray<id<XCUIElementSnapshot>> *)snapshots
-                                                  rootElement:(XCUIElement *)rootElement
-                                                 rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot
-{
-  SEL selector = NSSelectorFromString(@"_elementMatchingAccessibilityElementOfSnapshot:");
-  XCUIElementQuery *query = [rootElement descendantsMatchingType:XCUIElementTypeAny];
-  if (FBSession.activeSession.boundElementsByIndex || ![query respondsToSelector:selector]) {
-    return nil;
-  }
-  NSMutableArray<XCUIElement *> *result = [NSMutableArray arrayWithCapacity:snapshots.count];
-  for (id<XCUIElementSnapshot> snapshot in snapshots) {
-    if (snapshot == rootSnapshot) {
-      [result addObject:rootElement];
-      continue;
-    }
-    id element = ((id (*)(id, SEL, id))objc_msgSend)(query, selector, snapshot);
-    if (![element isKindOfClass:XCUIElement.class]) {
-      return nil;
-    }
-    [result addObject:element];
-  }
-  return result.copy;
 }
 
 - (nullable XCUIApplication *)am_owningApplication
