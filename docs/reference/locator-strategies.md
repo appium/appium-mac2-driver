@@ -76,8 +76,8 @@ predicate expressions, and which [element attributes](./element-attributes.md) c
 This strategy is mapped to the native XCTest predicate locator, but with respect to the actual
 element tree hierarchy. Such locators are basically a supertype of [predicate string](#predicate-string).
 Refer to the [Class Chain Locator Strategy guide](./class-chain.md) for more details on how to build
-such locators, including the [axis steps](./class-chain.md#axis-steps) that select the parent,
-ancestors and siblings of an element. As with predicate string, the `am`-prefixed
+such locators, including the [axis steps](./class-chain.md#axis-steps) (driver version 5.1.0+) that
+select the parent, ancestors and siblings of an element. As with predicate string, the `am`-prefixed
 attribute aliases can be used at any position in the chain, including `amIdentifier` to reliably
 match `WKWebView` web elements by their DOM id.
 

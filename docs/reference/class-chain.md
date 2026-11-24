@@ -98,6 +98,11 @@ as a format string, so it must not contain format specifiers like `%@`.
 
 ## Axis Steps
 
+!!! info "Availability"
+
+    Axis steps are available since driver version 5.1.0. Older versions fail such locators
+    with a parse error.
+
 Axis steps select elements relative to the elements matched by the previous step in a direction
 other than "down". They replace the XPath axes, which are the most common reason to use the
 much slower XPath strategy.
