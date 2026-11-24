@@ -44,6 +44,8 @@ nav:
           - reference/execute-methods.md
       - Element Management:
           - reference/locator-strategies.md
+          - reference/class-chain.md
+          - reference/predicate.md
           - reference/element-attributes.md
   - Guides:
       - Session Configuration:
