@@ -721,6 +721,21 @@ static NSString *FBDescribeChain(FBClassChain *chain)
   XCTAssertEqualObjects([self labelsForQuery:[prefix stringByAppendingString:@"<XCUIElementTypeButton"]], (@[@"b1", @"b2", @"b3"]));
 }
 
+- (void)testChildrenOfNestedRootsAreInDocumentOrder
+{
+  // app > outer > [x1, inner > [y], x2]: the children of both starting elements are merged in document order
+  FBTreeSnapshotDouble *(^button)(NSString *) = ^FBTreeSnapshotDouble *(NSString *label) {
+    return [FBTreeSnapshotDouble type:XCUIElementTypeButton label:label children:@[]];
+  };
+  FBTreeSnapshotDouble *inner = [FBTreeSnapshotDouble type:XCUIElementTypeOther label:@"inner" children:@[button(@"y")]];
+  FBTreeSnapshotDouble *outer = [FBTreeSnapshotDouble type:XCUIElementTypeOther label:@"outer" children:@[button(@"x1"), inner, button(@"x2")]];
+  FBTreeSnapshotDouble *app = [FBTreeSnapshotDouble type:XCUIElementTypeApplication label:@"app" children:@[outer]];
+  self.root = app;
+  XCTAssertEqualObjects([self labelsForQuery:@"**/XCUIElementTypeOther/XCUIElementTypeButton[2]" from:app firstMatch:NO], @[@"y"]);
+  XCTAssertEqualObjects([self labelsForQuery:@"**/XCUIElementTypeOther/XCUIElementTypeButton[-1]" from:app firstMatch:NO], @[@"x2"]);
+  XCTAssertEqualObjects([self labelsForQuery:@"**/XCUIElementTypeOther/XCUIElementTypeButton" from:app firstMatch:NO], (@[@"x1", @"y", @"x2"]));
+}
+
 - (void)testNextStepFollowsAxisMatchesInDocumentOrder
 {
   // The ancestors of v2 come before the ancestors of v3 in the candidates, but not in the document

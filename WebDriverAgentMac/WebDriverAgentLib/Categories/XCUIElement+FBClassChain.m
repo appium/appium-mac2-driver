@@ -14,6 +14,7 @@
 #import "AMSnapshotUtils.h"
 #import "FBClassChainQueryParser.h"
 #import "FBExceptions.h"
+#import "FBLogger.h"
 #import "FBSession.h"
 #import "XCUIElementQuery+AMHelpers.h"
 
@@ -245,6 +246,8 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
       rootElement = application;
       tree = applicationTree;
       contextSnapshot = mappedContext;
+    } else {
+      [FBLogger log:@"The element is not found in the application snapshot, so the class chain axes cannot leave its subtree"];
     }
   }
   if (nil == tree) {
@@ -264,7 +267,10 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
   // Binding by the snapshot hashes takes one more snapshot of the root element
   NSMutableSet<NSString *> *hashes = [NSMutableSet setWithCapacity:matches.count];
   for (id<XCUIElementSnapshot> match in matches) {
-    [hashes addObject:[AMSnapshotUtils hashWithSnapshot:match]];
+    NSString *matchHash = [AMSnapshotUtils hashWithSnapshot:match];
+    if (nil != matchHash) {
+      [hashes addObject:matchHash];
+    }
   }
   return [AMSnapshotUtils elementsWithHashes:hashes.copy
                                  rootElement:rootElement
@@ -399,8 +405,9 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
       }
     }
     typeMatches = deduped;
-    if (FBClassChainAxisFollowingSibling == item.axis || FBClassChainAxisSibling == item.axis) {
-      // Positions of these axes count in document order of all the candidates
+    if (FBClassChainAxisParent != item.axis && FBClassChainAxisAncestor != item.axis && FBClassChainAxisPrecedingSibling != item.axis) {
+      // Positions of these steps count in document order of all the candidates, while
+      // the matches of the ancestor and preceding axes stay in the order of the axis
       typeMatches = [[tree inDocumentOrder:typeMatches] mutableCopy];
     }
   }

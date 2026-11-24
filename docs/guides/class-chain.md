@@ -193,7 +193,7 @@ The text field, which is next to the label "Email", found through the parent:
         "//XCUIElementTypeStaticText[@label='Email']/../XCUIElementTypeTextField"));
     ```
 
-The window containing the "OK" button, using a predicate on the parent:
+The sheet containing the "OK" button, using a predicate on the parent:
 
 === "Class Chain"
 
