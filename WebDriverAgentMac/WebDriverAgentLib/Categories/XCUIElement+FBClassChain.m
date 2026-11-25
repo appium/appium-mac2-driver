@@ -279,7 +279,7 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
     return bound;
   }
   // Binding by the snapshot hashes takes one more snapshot of the root element
-  NSMutableSet<NSString *> *hashes = [NSMutableSet setWithCapacity:matches.count];
+  NSMutableOrderedSet<NSString *> *hashes = [NSMutableOrderedSet orderedSetWithCapacity:matches.count];
   for (id<XCUIElementSnapshot> match in matches) {
     NSString *matchHash = [AMSnapshotUtils hashWithSnapshot:match];
     if (nil != matchHash) {

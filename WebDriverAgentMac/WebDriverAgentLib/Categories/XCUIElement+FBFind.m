@@ -27,7 +27,7 @@
 static BOOL AMCollectIdentifierMatches(id<XCUIElementSnapshot> snapshot,
                                        NSString *accessibilityId,
                                        BOOL firstMatchOnly,
-                                       NSMutableSet<NSString *> *matchedHashes)
+                                       NSMutableOrderedSet<NSString *> *matchedHashes)
 {
   if (nil == snapshot) {
     return NO;
@@ -153,7 +153,7 @@ static BOOL AMCollectIdentifierMatches(id<XCUIElementSnapshot> snapshot,
   if (nil == rootSnapshot) {
     return @[];
   }
-  NSMutableSet<NSString *> *matchedHashes = [NSMutableSet set];
+  NSMutableOrderedSet<NSString *> *matchedHashes = [NSMutableOrderedSet orderedSet];
   AMCollectIdentifierMatches(rootSnapshot, accessibilityId, shouldReturnAfterFirstMatch, matchedHashes);
   return [AMSnapshotUtils elementsWithHashes:matchedHashes.copy
                                  rootElement:self

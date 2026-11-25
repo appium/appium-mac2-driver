@@ -58,13 +58,14 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Resolves snapshot hashes back to live elements below the given root element.
 
- @param hashes snapshot hashes to resolve, as returned by hashWithSnapshot:
+ @param hashes snapshot hashes to resolve, as returned by hashWithSnapshot:. The result
+ follows their order, so pass them in document order
  @param rootElement the element the hashes were collected from
  @param rootSnapshot the snapshot of rootElement
  @param firstMatch whether to only return the first matching element
  @return The matching elements. Could be empty
  */
-+ (NSArray<XCUIElement *> *)elementsWithHashes:(NSSet<NSString *> *)hashes
++ (NSArray<XCUIElement *> *)elementsWithHashes:(NSOrderedSet<NSString *> *)hashes
                                    rootElement:(XCUIElement *)rootElement
                                   rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot
                          includeOnlyFirstMatch:(BOOL)firstMatch;

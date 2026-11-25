@@ -88,7 +88,7 @@ static BOOL AMIsAccessibilityTrusted(void)
   return AMIsAccessibilityTrusted();
 }
 
-+ (NSArray<XCUIElement *> *)elementsWithHashes:(NSSet<NSString *> *)hashes
++ (NSArray<XCUIElement *> *)elementsWithHashes:(NSOrderedSet<NSString *> *)hashes
                                    rootElement:(XCUIElement *)rootElement
                                   rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot
                          includeOnlyFirstMatch:(BOOL)firstMatch
@@ -98,20 +98,60 @@ static BOOL AMIsAccessibilityTrusted(void)
   }
 
   NSMutableArray<XCUIElement *> *matchingElements = [NSMutableArray array];
-  if ([hashes containsObject:[self hashWithSnapshot:rootSnapshot]]) {
+  NSMutableArray<NSString *> *matchingHashes = [NSMutableArray array];
+  NSString *rootHash = [self hashWithSnapshot:rootSnapshot];
+  if ([hashes containsObject:rootHash]) {
     [matchingElements addObject:rootElement];
+    [matchingHashes addObject:rootHash];
     if (firstMatch) {
       return matchingElements.copy;
     }
   }
+  // The query yields elements in XCTest order, which may differ from the snapshot
+  // tree order. Remember the order of the evaluated snapshots to restore the requested one.
+  NSMutableOrderedSet<NSString *> *evaluated = [NSMutableOrderedSet orderedSet];
   NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id snapshot, NSDictionary *bindings) {
-    return [hashes containsObject:[self hashWithSnapshot:snapshot]];
+    NSString *snapshotHash = [self hashWithSnapshot:snapshot];
+    BOOL isMatch = [hashes containsObject:snapshotHash];
+    if (isMatch) {
+      [evaluated addObject:snapshotHash];
+    }
+    return isMatch;
   }];
-  [matchingElements addObjectsFromArray:[[rootElement descendantsMatchingType:XCUIElementTypeAny]
-                                         matchingPredicate:predicate].am_allMatches];
+  NSArray<XCUIElement *> *queryMatches = [[rootElement descendantsMatchingType:XCUIElementTypeAny]
+                                          matchingPredicate:predicate].am_allMatches;
+  [matchingElements addObjectsFromArray:queryMatches];
+  if (evaluated.count == queryMatches.count) {
+    [matchingHashes addObjectsFromArray:evaluated.array];
+    matchingElements = [self am_elements:matchingElements sortedByHashes:matchingHashes order:hashes];
+  } else {
+    [FBLogger log:@"Cannot restore the order of the matching elements, so XCTest order is used"];
+  }
   return firstMatch && matchingElements.count > 0
     ? @[matchingElements.firstObject]
     : matchingElements.copy;
+}
+
++ (NSMutableArray<XCUIElement *> *)am_elements:(NSArray<XCUIElement *> *)elements
+                                sortedByHashes:(NSArray<NSString *> *)elementHashes
+                                         order:(NSOrderedSet<NSString *> *)order
+{
+  NSMutableArray<NSNumber *> *indexes = [NSMutableArray arrayWithCapacity:elements.count];
+  for (NSUInteger i = 0; i < elements.count; ++i) {
+    [indexes addObject:@(i)];
+  }
+  // Stable sort by the position of the element hash in the requested order
+  [indexes sortWithOptions:NSSortStable
+           usingComparator:^NSComparisonResult(NSNumber *a, NSNumber *b) {
+    NSUInteger rankA = [order indexOfObject:elementHashes[a.unsignedIntegerValue]];
+    NSUInteger rankB = [order indexOfObject:elementHashes[b.unsignedIntegerValue]];
+    return rankA < rankB ? NSOrderedAscending : (rankA > rankB ? NSOrderedDescending : NSOrderedSame);
+  }];
+  NSMutableArray<XCUIElement *> *result = [NSMutableArray arrayWithCapacity:elements.count];
+  for (NSNumber *index in indexes) {
+    [result addObject:elements[index.unsignedIntegerValue]];
+  }
+  return result;
 }
 
 + (nullable AXUIElementRef)createAXElementWithSnapshot:(nullable id)snapshot
