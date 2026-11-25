@@ -70,6 +70,20 @@ NS_ASSUME_NONNULL_BEGIN
                          includeOnlyFirstMatch:(BOOL)firstMatch;
 
 /**
+ Binds the given snapshots to elements the way allElementsBoundByAccessibilityElement does,
+ but without taking one more snapshot of the root element.
+
+ @param snapshots snapshots of the root element subtree (or the root snapshot itself)
+ @param rootElement the element the snapshots were taken from
+ @param rootSnapshot the snapshot of rootElement
+ @return The elements in the order of the given snapshots, or nil if they cannot be bound
+ this way (the private API is not available or elements are bound by index)
+ */
++ (nullable NSArray<XCUIElement *> *)elementsWithSnapshots:(NSArray<id<XCUIElementSnapshot>> *)snapshots
+                                               rootElement:(XCUIElement *)rootElement
+                                              rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot;
+
+/**
  Reads the non-standard AXDOMIdentifier attribute, where WebKit publishes a web
  node's HTML `id`. Returns nil for native elements, which report
  kAXErrorAttributeUnsupported for it, or when this process lacks Accessibility
