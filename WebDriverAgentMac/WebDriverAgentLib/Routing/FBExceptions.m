@@ -21,3 +21,4 @@ NSString *const FBInvalidXPathException = @"FBInvalidXPathException";
 NSString *const FBXPathQueryEvaluationException = @"FBXPathQueryEvaluationException";
 NSString *const FBClassChainQueryParseException = @"FBClassChainQueryParseException";
 NSString *const FBApplicationCrashedException = @"FBApplicationCrashedException";
+NSString *const FBApplicationBlockedException = @"FBApplicationBlockedException";

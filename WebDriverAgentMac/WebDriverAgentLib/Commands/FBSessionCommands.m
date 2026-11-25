@@ -9,6 +9,7 @@
 
 #import "FBSessionCommands.h"
 
+#import "AMGatekeeperUtils.h"
 #import "AMSessionCapabilities.h"
 #import "AMSettings.h"
 #import "AMXCUIDeviceWrapper.h"
@@ -128,6 +129,14 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
     if (noReset && app.state > XCUIApplicationStateNotRunning) {
       [app activate];
     } else {
+      // XCTest would wait for a blocking Gatekeeper dialog forever
+      NSString *blockReason = app.state <= XCUIApplicationStateNotRunning
+        ? [AMGatekeeperUtils blockingReasonForAppWithBundleId:bundleID path:appPath]
+        : nil;
+      if (nil != blockReason) {
+        return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:blockReason
+                                                                  traceback:nil]);
+      }
       NSMutableArray<NSString *> *launchArguments = [NSMutableArray new];
       if (nil != requirements[AM_APP_ARGUMENTS_CAPABILITY]) {
         [launchArguments addObjectsFromArray:(NSArray<NSString *> *)requirements[AM_APP_ARGUMENTS_CAPABILITY]];

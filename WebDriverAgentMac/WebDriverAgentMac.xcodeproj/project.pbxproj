@@ -192,7 +192,9 @@
 		71B8B68226726369009CE50C /* AMSwipeHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B8B68026726369009CE50C /* AMSwipeHelpers.m */; };
 		71B8B684267265D7009CE50C /* AMVariousElementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B8B683267265D7009CE50C /* AMVariousElementTests.m */; };
 		71E109222D55EBD0008A800D /* AMScreenUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E109212D55EBD0008A800D /* AMScreenUtils.m */; };
+		7A91C0012F0000000000A003 /* AMGatekeeperUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A91C0012F0000000000A002 /* AMGatekeeperUtils.m */; };
 		71E109232D55EBD0008A800D /* AMScreenUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E109202D55EBD0008A800D /* AMScreenUtils.h */; };
+		7A91C0012F0000000000A004 /* AMGatekeeperUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A91C0012F0000000000A001 /* AMGatekeeperUtils.h */; };
 		7A1D0C0E2F5E4B3100A9C1D2 /* AMWindowUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A1D0C0C2F5E4B3100A9C1D2 /* AMWindowUtils.h */; };
 		7A1D0C2E2F5E4B3100A9C1D2 /* AMXCTAccessibility.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A1D0C2C2F5E4B3100A9C1D2 /* AMXCTAccessibility.h */; };
 		7A1D0C2F2F5E4B3100A9C1D2 /* AMXCTAccessibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A1D0C2D2F5E4B3100A9C1D2 /* AMXCTAccessibility.m */; };
@@ -458,7 +460,9 @@
 		71B8B68026726369009CE50C /* AMSwipeHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMSwipeHelpers.m; sourceTree = "<group>"; };
 		71B8B683267265D7009CE50C /* AMVariousElementTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMVariousElementTests.m; sourceTree = "<group>"; };
 		71E109202D55EBD0008A800D /* AMScreenUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMScreenUtils.h; sourceTree = "<group>"; };
+		7A91C0012F0000000000A001 /* AMGatekeeperUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMGatekeeperUtils.h; sourceTree = "<group>"; };
 		71E109212D55EBD0008A800D /* AMScreenUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMScreenUtils.m; sourceTree = "<group>"; };
+		7A91C0012F0000000000A002 /* AMGatekeeperUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMGatekeeperUtils.m; sourceTree = "<group>"; };
 		7A1D0C0C2F5E4B3100A9C1D2 /* AMWindowUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMWindowUtils.h; sourceTree = "<group>"; };
 		7A1D0C0D2F5E4B3100A9C1D2 /* AMWindowUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMWindowUtils.m; sourceTree = "<group>"; };
 		7A1D0C2C2F5E4B3100A9C1D2 /* AMXCTAccessibility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMXCTAccessibility.h; sourceTree = "<group>"; };
@@ -708,6 +712,8 @@
 				715117512E8C452E00C90122 /* AMPasteboard.m */,
 				71E109202D55EBD0008A800D /* AMScreenUtils.h */,
 				71E109212D55EBD0008A800D /* AMScreenUtils.m */,
+				7A91C0012F0000000000A001 /* AMGatekeeperUtils.h */,
+				7A91C0012F0000000000A002 /* AMGatekeeperUtils.m */,
 				7A1D0C0C2F5E4B3100A9C1D2 /* AMWindowUtils.h */,
 				7A1D0C0D2F5E4B3100A9C1D2 /* AMWindowUtils.m */,
 				7A1D0C2C2F5E4B3100A9C1D2 /* AMXCTAccessibility.h */,
@@ -930,6 +936,7 @@
 				7109C0172565B581006BFD13 /* FBRouteRequest.h in Headers */,
 				7180C216257AA707008FA870 /* XCUIElement+AMHitPoint.h in Headers */,
 				71E109232D55EBD0008A800D /* AMScreenUtils.h in Headers */,
+				7A91C0012F0000000000A004 /* AMGatekeeperUtils.h in Headers */,
 				7A1D0C0E2F5E4B3100A9C1D2 /* AMWindowUtils.h in Headers */,
 				7A1D0C2E2F5E4B3100A9C1D2 /* AMXCTAccessibility.h in Headers */,
 				719E6A6E25822DB800777988 /* XCUIApplication+AMUIInterruptions.h in Headers */,
@@ -1178,6 +1185,7 @@
 				71440CC82D54AB460048EA32 /* AMVideoCommands.m in Sources */,
 				7109BFDC2565B529006BFD13 /* AMSettings.m in Sources */,
 				71E109222D55EBD0008A800D /* AMScreenUtils.m in Sources */,
+				7A91C0012F0000000000A003 /* AMGatekeeperUtils.m in Sources */,
 				7A1D0C0F2F5E4B3100A9C1D2 /* AMWindowUtils.m in Sources */,
 				7A1D0C2F2F5E4B3100A9C1D2 /* AMXCTAccessibility.m in Sources */,
 				713A9D3D2566AA2300118D07 /* AMGeometryUtils.m in Sources */,
