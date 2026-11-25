@@ -31,6 +31,8 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
 - (instancetype)initWithRoot:(id<XCUIElementSnapshot>)root;
 - (nullable id<XCUIElementSnapshot>)parentOf:(id<XCUIElementSnapshot>)snapshot;
 - (NSArray<id<XCUIElementSnapshot>> *)childrenOf:(id<XCUIElementSnapshot>)snapshot;
+/*! The index of the snapshot among the children of its parent, NSNotFound if it has none */
+- (NSUInteger)siblingIndexOf:(id<XCUIElementSnapshot>)snapshot;
 - (NSArray<id<XCUIElementSnapshot>> *)descendantsOf:(id<XCUIElementSnapshot>)snapshot;
 - (NSArray<id<XCUIElementSnapshot>> *)inDocumentOrder:(NSArray<id<XCUIElementSnapshot>> *)snapshots;
 
@@ -40,6 +42,7 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
   NSMapTable<id, id> *_parents;
   NSMapTable<id, NSArray *> *_children;
   NSMapTable<id, NSNumber *> *_positions;
+  NSMapTable<id, NSNumber *> *_siblingIndexes;
 }
 
 - (instancetype)initWithRoot:(id<XCUIElementSnapshot>)root
@@ -53,6 +56,8 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
                                       valueOptions:NSPointerFunctionsStrongMemory];
     _positions = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsObjectPointerPersonality
                                        valueOptions:NSPointerFunctionsStrongMemory];
+    _siblingIndexes = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsObjectPointerPersonality
+                                            valueOptions:NSPointerFunctionsStrongMemory];
     [self indexSubtree:root];
   }
   return self;
@@ -73,6 +78,9 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
       [_parents setObject:node forKey:child];
       [stack addObject:child];
     }
+    for (NSUInteger i = 0; i < children.count; i++) {
+      [_siblingIndexes setObject:@(i) forKey:children[i]];
+    }
   }
 }
 
@@ -84,6 +92,12 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
 - (NSArray<id<XCUIElementSnapshot>> *)childrenOf:(id<XCUIElementSnapshot>)snapshot
 {
   return [_children objectForKey:snapshot] ?: @[];
+}
+
+- (NSUInteger)siblingIndexOf:(id<XCUIElementSnapshot>)snapshot
+{
+  NSNumber *index = [_siblingIndexes objectForKey:snapshot];
+  return nil == index ? NSNotFound : index.unsignedIntegerValue;
 }
 
 - (NSArray<id<XCUIElementSnapshot>> *)descendantsOf:(id<XCUIElementSnapshot>)snapshot
@@ -389,7 +403,7 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
       }
     }
   };
-  if (roots.count > 1 && (FBClassChainAxisSibling == item.axis || FBClassChainAxisFollowingSibling == item.axis)) {
+  if (roots.count > 1 && (FBClassChainAxisSibling == item.axis || FBClassChainAxisFollowingSibling == item.axis || FBClassChainAxisPrecedingSibling == item.axis)) {
     collect([self am_siblingSnapshotsOfRoots:roots axis:item.axis tree:tree]);
   } else {
     for (id<XCUIElementSnapshot> root in roots) {
@@ -426,11 +440,33 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
   return typeMatches.copy;
 }
 
-// Siblings of several roots in document order, each parent is walked once however many roots it has
+// Siblings of several roots, each parent is walked once however many roots it has.
+// Preceding ones keep the order of the axis, root after root, and are not repeated.
 + (NSArray<id<XCUIElementSnapshot>> *)am_siblingSnapshotsOfRoots:(NSArray<id<XCUIElementSnapshot>> *)roots
                                                             axis:(FBClassChainAxis)axis
                                                             tree:(AMSnapshotTree *)tree
 {
+  if (FBClassChainAxisPrecedingSibling == axis) {
+    // Whatever is before the farthest root seen so far in a parent is already collected
+    NSMapTable<id<XCUIElementSnapshot>, NSNumber *> *collected = [NSMapTable strongToStrongObjectsMapTable];
+    NSMutableArray<id<XCUIElementSnapshot>> *preceding = [NSMutableArray array];
+    for (id<XCUIElementSnapshot> root in roots) {
+      id<XCUIElementSnapshot> parent = [tree parentOf:root];
+      NSUInteger index = [tree siblingIndexOf:root];
+      if (nil == parent || NSNotFound == index) {
+        continue;
+      }
+      NSUInteger from = [[collected objectForKey:parent] unsignedIntegerValue];
+      NSArray<id<XCUIElementSnapshot>> *children = [tree childrenOf:parent];
+      for (NSUInteger i = index; i > from; i--) {
+        [preceding addObject:children[i - 1]];
+      }
+      if (index > from) {
+        [collected setObject:@(index) forKey:parent];
+      }
+    }
+    return preceding.copy;
+  }
   NSMapTable<id<XCUIElementSnapshot>, NSMutableArray<id<XCUIElementSnapshot>> *> *rootsByParent = [NSMapTable strongToStrongObjectsMapTable];
   NSMutableArray<id<XCUIElementSnapshot>> *parents = [NSMutableArray array];
   for (id<XCUIElementSnapshot> root in roots) {
@@ -454,7 +490,7 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
       // Everything after the first root, the other roots are followed by the first one's siblings anyway
       NSUInteger first = children.count;
       for (id<XCUIElementSnapshot> root in siblingRoots) {
-        first = MIN(first, [children indexOfObjectIdenticalTo:root]);
+        first = MIN(first, [tree siblingIndexOf:root]);
       }
       if (first < children.count) {
         [result addObjectsFromArray:[children subarrayWithRange:NSMakeRange(first + 1, children.count - first - 1)]];
@@ -496,7 +532,7 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
     case FBClassChainAxisPrecedingSibling:
     case FBClassChainAxisSibling: {
       NSArray<id<XCUIElementSnapshot>> *siblings = [tree childrenOf:parent];
-      NSUInteger index = [siblings indexOfObjectIdenticalTo:root];
+      NSUInteger index = [tree siblingIndexOf:root];
       if (NSNotFound == index) {
         return @[];
       }

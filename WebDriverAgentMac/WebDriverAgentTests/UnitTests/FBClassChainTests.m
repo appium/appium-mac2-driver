@@ -754,6 +754,24 @@ static NSString *FBDescribeChain(FBClassChain *chain)
   XCTAssertEqualObjects([self labelsForQuery:@"**/XCUIElementTypeCell/~*" from:app firstMatch:NO], (@[@"r1", @"r2", @"r3"]));
 }
 
+- (void)testPrecedingSiblingsOfManyStartingElements
+{
+  // Candidates are b1's (t0) followed by b3's (t2, b1), so the positions count in that order
+  FBTreeSnapshotDouble *(^node)(XCUIElementType, NSString *) = ^FBTreeSnapshotDouble *(XCUIElementType type, NSString *label) {
+    return [FBTreeSnapshotDouble type:type label:label children:@[]];
+  };
+  FBTreeSnapshotDouble *group = [FBTreeSnapshotDouble type:XCUIElementTypeGroup label:@"g" children:@[
+    node(XCUIElementTypeStaticText, @"t0"), node(XCUIElementTypeButton, @"b1"), node(XCUIElementTypeStaticText, @"t2"),
+    node(XCUIElementTypeButton, @"b3"), node(XCUIElementTypeStaticText, @"t4")]];
+  FBTreeSnapshotDouble *app = [FBTreeSnapshotDouble type:XCUIElementTypeApplication label:@"app" children:@[group]];
+  self.root = app;
+  NSString *query = @"**/XCUIElementTypeButton[`label IN {'b3', 'b1'}`]/<*";
+  XCTAssertEqualObjects([self labelsForQuery:query from:app firstMatch:NO], (@[@"t0", @"b1", @"t2"]));
+  XCTAssertEqualObjects([self labelsForQuery:@"**/XCUIElementTypeButton/<XCUIElementTypeStaticText" from:app firstMatch:NO], (@[@"t0", @"t2"]));
+  XCTAssertEqualObjects([self labelsForQuery:@"**/XCUIElementTypeButton/<*[1]" from:app firstMatch:NO], @[@"t0"]);
+  XCTAssertEqualObjects([self labelsForQuery:@"**/XCUIElementTypeButton/<*[-1]" from:app firstMatch:NO], @[@"b1"]);
+}
+
 - (void)testNextStepFollowsAxisMatchesInDocumentOrder
 {
   // The ancestors of v2 come before the ancestors of v3 in the candidates, but not in the document
