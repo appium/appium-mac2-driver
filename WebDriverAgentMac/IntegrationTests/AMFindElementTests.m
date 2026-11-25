@@ -195,6 +195,79 @@ static NSTimeInterval const AMWebContentTimeout = 10.0;
   XCTAssertEqualObjects([matches objectAtIndex:2].identifier, @"_XCUI:MinimizeWindow");
 }
 
+- (void)testParentWithClassChain
+{
+  NSString *query = @"**/XCUIElementTypeButton[`identifier == '_XCUI:CloseWindow'`]/..";
+  NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingClassChain:query
+                                                                 shouldReturnAfterFirstMatch:NO];
+  XCTAssertEqual(matches.count, 1);
+  XCTAssertEqual(matches.firstObject.elementType, XCUIElementTypeWindow);
+}
+
+- (void)testAncestorsWithClassChain
+{
+  NSString *query = @"**/XCUIElementTypeButton[`identifier == '_XCUI:CloseWindow'`]/^XCUIElementTypeWindow";
+  NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingClassChain:query
+                                                                 shouldReturnAfterFirstMatch:NO];
+  XCTAssertEqual(matches.count, 1);
+  XCTAssertEqual(matches.firstObject.elementType, XCUIElementTypeWindow);
+  NSArray<XCUIElement *> *all = [self.testedApplication fb_descendantsMatchingClassChain:[query stringByReplacingOccurrencesOfString:@"^XCUIElementTypeWindow" withString:@"^*"]
+                                                                 shouldReturnAfterFirstMatch:NO];
+  // The nearest ancestor is the last one in document order
+  XCTAssertTrue(all.count >= 2);
+  XCTAssertEqual(all.lastObject.elementType, XCUIElementTypeWindow);
+}
+
+- (void)testSiblingsWithClassChain
+{
+  NSString *prefix = @"**/XCUIElementTypeButton[`identifier == '_XCUI:CloseWindow'`]/";
+  NSArray<XCUIElement *> *siblings = [self.testedApplication fb_descendantsMatchingClassChain:[prefix stringByAppendingString:@"~XCUIElementTypeButton"]
+                                                                  shouldReturnAfterFirstMatch:NO];
+  XCTAssertTrue(siblings.count >= 2);
+  for (XCUIElement *sibling in siblings) {
+    XCTAssertNotEqualObjects(sibling.identifier, @"_XCUI:CloseWindow");
+  }
+  NSArray<XCUIElement *> *following = [self.testedApplication fb_descendantsMatchingClassChain:[prefix stringByAppendingString:@">XCUIElementTypeButton[1]"]
+                                                                   shouldReturnAfterFirstMatch:NO];
+  XCTAssertEqual(following.count, 1);
+  XCTAssertEqualObjects(following.firstObject.identifier, siblings.firstObject.identifier);
+  // The close button comes first in its window, so there is nothing before it
+  NSArray<XCUIElement *> *preceding = [self.testedApplication fb_descendantsMatchingClassChain:[prefix stringByAppendingString:@"<XCUIElementTypeButton"]
+                                                                   shouldReturnAfterFirstMatch:NO];
+  XCTAssertEqual(preceding.count, 0);
+}
+
+- (void)testAxisThenDescendantWithClassChain
+{
+  NSString *query = @"**/XCUIElementTypeButton[`identifier == '_XCUI:CloseWindow'`]/../**/XCUIElementTypeButton[`identifier == '_XCUI:MinimizeWindow'`]";
+  NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingClassChain:query
+                                                                 shouldReturnAfterFirstMatch:YES];
+  XCTAssertEqual(matches.count, 1);
+  XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:MinimizeWindow");
+}
+
+- (void)testAxisFromContextElementWithClassChain
+{
+  XCUIElement *closeButton = [self.testedApplication fb_descendantsMatchingIdentifier:@"_XCUI:CloseWindow"
+                                                          shouldReturnAfterFirstMatch:YES].firstObject;
+  XCTAssertNotNil(closeButton);
+  NSArray<XCUIElement *> *matches = [closeButton fb_descendantsMatchingClassChain:@"../XCUIElementTypeButton[`identifier == '_XCUI:CloseWindow'`]"
+                                                      shouldReturnAfterFirstMatch:NO];
+  XCTAssertEqual(matches.count, 1);
+  XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
+  NSArray<XCUIElement *> *ancestors = [closeButton fb_descendantsMatchingClassChain:@"^XCUIElementTypeWindow"
+                                                        shouldReturnAfterFirstMatch:NO];
+  XCTAssertEqual(ancestors.count, 1);
+}
+
+- (void)testAxisWithoutMatchesWithClassChain
+{
+  NSString *query = @"**/XCUIElementTypeButton[`identifier == 'nonexistent'`]/..";
+  XCTAssertEqual([self.testedApplication fb_descendantsMatchingClassChain:query shouldReturnAfterFirstMatch:NO].count, 0);
+  query = @"**/XCUIElementTypeButton[`identifier == '_XCUI:CloseWindow'`]/>XCUIElementTypeButton[100]";
+  XCTAssertEqual([self.testedApplication fb_descendantsMatchingClassChain:query shouldReturnAfterFirstMatch:NO].count, 0);
+}
+
 - (void)testSingleDescendantWithPredicateMatchingAmIdentifierWhileDomIdFallbackIsEnabled
 {
   [self skipUnlessAccessibilityTrusted];

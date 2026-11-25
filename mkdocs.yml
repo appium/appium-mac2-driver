@@ -54,6 +54,8 @@ nav:
       - Driver Actions:
           - guides/app-under-test.md
           - guides/key-modifier-flags.md
+          - guides/class-chain.md
+          - guides/predicate.md
           - guides/w3c-action-recipes.md
   - Troubleshooting: troubleshooting/index.md
   - contributing.md

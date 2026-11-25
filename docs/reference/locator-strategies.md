@@ -56,19 +56,11 @@ This strategy is an alias for the [`name` strategy](#name).
 
 |<div style="width:9em">Name</div>|Speed Ranking|Example|
 |---|---|---|
-|`predicate string`|⭐⭐⭐⭐⭐|`(name == 'done' OR value == 'done') AND type IN {'XCUIElementTypeButton', 'XCUIElementTypeKey'}`|
+|`predicate string`|⭐⭐⭐⭐⭐|`(identifier == 'done' OR value == 'done') AND amType IN {'XCUIElementTypeButton', 'XCUIElementTypeCheckBox'}`|
 
-This strategy is mapped to the native XCTest predicate locator. Refer to the XCUITest driver's
-[Predicate Locator Strategy guide](https://appium.github.io/appium-xcuitest-driver/latest/reference/ios-predicate/)
-for more details on how to build effective predicate expressions. All supported element [attributes](./element-attributes.md)
-can be used in these expressions. A few of them have no native XCTest equivalent that predicate
-expressions can reference directly, so they are only usable through their `am`-prefixed alias:
-[`amRect`](./element-attributes.md#amrect), [`amText`](./element-attributes.md#amtext),
-[`amType`](./element-attributes.md#amtype) and
-[`amHasKeyboardInputFocus`](./element-attributes.md#amhaskeyboardinputfocus). Separately,
-[`amIdentifier`](./element-attributes.md#amidentifier) is the only reliable way to match
-`WKWebView` web elements by their DOM id from this strategy - see
-[`useDomIdAsAccessibilityId`](./settings.md#usedomidasaccessibilityid) - e.g. `amIdentifier == 'done'`.
+This strategy is mapped to the native XCTest predicate locator. Refer to the
+[Predicate Locator Strategy guide](../guides/predicate.md) for more details on how to build effective
+predicate expressions, and which [element attributes](./element-attributes.md) can be used in them.
 
 !!! info "When to Use"
 
@@ -79,20 +71,21 @@ expressions can reference directly, so they are only usable through their `am`-p
 
 |<div style="width:7em">Name</div>|Speed Ranking|Example|
 |---|---|---|
-|`class chain`|⭐⭐⭐⭐|`**/XCUIElementTypeCell[$name == 'done' OR value == 'done'$]/XCUIElementTypeButton[-1]`|
+|`class chain`|⭐⭐⭐⭐|`**/XCUIElementTypeGroup[$identifier == 'done' OR value == 'done'$]/XCUIElementTypeButton[-1]`|
 
 This strategy is mapped to the native XCTest predicate locator, but with respect to the actual
 element tree hierarchy. Such locators are basically a supertype of [predicate string](#predicate-string).
-Read [Class Chain Queries Construction Rules](https://github.com/facebookarchive/WebDriverAgent/wiki/Class-Chain-Queries-Construction-Rules)
-for more details on how to build such locators. As with predicate string, the `am`-prefixed
+Refer to the [Class Chain Locator Strategy guide](../guides/class-chain.md) for more details on how to build
+such locators, including the [axis steps](../guides/class-chain.md#axis-steps) (driver version 5.1.0+) that
+select the parent, ancestors and siblings of an element. As with predicate string, the `am`-prefixed
 attribute aliases can be used at any position in the chain, including `amIdentifier` to reliably
 match `WKWebView` web elements by their DOM id.
 
 !!! info "When to Use"
 
     Use this strategy for elements that _cannot_ be identified only using their own attributes,
-    but _can_ be identified upon additionally using their parent element(s) and/or their
-    descendant element attribute(s).
+    but _can_ be identified upon additionally using their parent element(s), sibling element(s)
+    and/or their descendant element attribute(s).
 
 ## XPath
 
@@ -109,5 +102,8 @@ XPath 2.0 is supported since Mac2 driver version 1.20.0. Older driver versions o
 
 !!! info "When to Use"
 
-    Use this strategy for elements that can _only_ be identified when using their siblings and/or
-    specific descendants. It is _strongly_ recommended to use more performant strategies if possible.
+    Use this strategy for elements that can _only_ be identified when using conditions
+    that cannot be expressed by the other strategies, for example the complex ones that
+    combine several elements of the hierarchy. It is _strongly_ recommended to use more
+    performant strategies if possible, such as [class chain](#class-chain) with
+    [axis steps](../guides/class-chain.md#axis-steps) for the parent, ancestor and sibling relationships.

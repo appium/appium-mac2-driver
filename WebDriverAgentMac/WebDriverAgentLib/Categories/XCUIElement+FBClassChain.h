@@ -41,7 +41,19 @@ NS_ASSUME_NONNULL_BEGIN
  ** /XCUIElementTypeCell[`name BEGINSWITH "D"`]/ ** /XCUIElementTypeButton - select the all descendant buttons of the first cell in the tree, whose name starts with 'D'.
 
  Double star and slash is the marker of the fact, that the next following item is the descendant of the previous chain item, rather than its child.
- 
+
+ Axis steps select elements relative to the ones matched by the previous step. The axis marker is written before the type, and the type can be a class name or '*':
+ .. - the parent (no type, no position, predicates only)
+ ^T - ancestors of type T, nearest first
+ >T - following siblings of type T, in document order
+ <T - preceding siblings of type T, nearest first
+ ~T - all siblings of type T except the element itself, in document order
+ ** /XCUIElementTypeButton[`name == "OK"`]/<XCUIElementTypeButton[1] - the button right before "OK".
+ ** /XCUIElementTypeButton[`name == "OK"`]/^XCUIElementTypeWindow - the window containing "OK".
+ ** /XCUIElementTypeButton[`name == "OK"`]/../XCUIElementTypeButton - "OK" and its sibling buttons.
+ Axis steps accept predicates and positions like other steps, which count along the axis. They cannot directly follow the '** /' marker, but a descendant step can follow them.
+ Elements matching a chain with axes are always returned in document order. Such chains are evaluated on accessibility snapshots, because XCUIElementQuery has no parent/sibling axes.
+
  The matching result is similar to what XCTest's children... and descendants... selector calls of XCUIElement class instances produce when combined into a chain.
  
  @param classChainQuery valid class chain query string

@@ -9,9 +9,137 @@
 
 #import "XCUIElement+FBClassChain.h"
 
+#import <objc/message.h>
+
+#import "AMSnapshotUtils.h"
 #import "FBClassChainQueryParser.h"
 #import "FBExceptions.h"
+#import "FBLogger.h"
+#import "FBSession.h"
 #import "XCUIElementQuery+AMHelpers.h"
+
+static BOOL AMIsAxisItem(FBClassChainItem *item)
+{
+  return FBClassChainAxisChild != item.axis && FBClassChainAxisDescendant != item.axis;
+}
+
+/*! The parent, children and document order of every node of a snapshot tree, collected in one pass */
+@interface AMSnapshotTree : NSObject
+
+@property (nonatomic, readonly) id<XCUIElementSnapshot> root;
+
+- (instancetype)initWithRoot:(id<XCUIElementSnapshot>)root;
+- (nullable id<XCUIElementSnapshot>)parentOf:(id<XCUIElementSnapshot>)snapshot;
+- (NSArray<id<XCUIElementSnapshot>> *)childrenOf:(id<XCUIElementSnapshot>)snapshot;
+/*! The index of the snapshot among the children of its parent, NSNotFound if it has none */
+- (NSUInteger)siblingIndexOf:(id<XCUIElementSnapshot>)snapshot;
+- (NSArray<id<XCUIElementSnapshot>> *)descendantsOf:(id<XCUIElementSnapshot>)snapshot;
+- (NSArray<id<XCUIElementSnapshot>> *)inDocumentOrder:(NSArray<id<XCUIElementSnapshot>> *)snapshots;
+
+@end
+
+@implementation AMSnapshotTree {
+  NSMapTable<id, id> *_parents;
+  NSMapTable<id, NSArray *> *_children;
+  NSMapTable<id, NSNumber *> *_positions;
+  NSMapTable<id, NSNumber *> *_siblingIndexes;
+}
+
+- (instancetype)initWithRoot:(id<XCUIElementSnapshot>)root
+{
+  self = [super init];
+  if (self) {
+    _root = root;
+    _parents = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsObjectPointerPersonality
+                                     valueOptions:NSPointerFunctionsObjectPointerPersonality];
+    _children = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsObjectPointerPersonality
+                                      valueOptions:NSPointerFunctionsStrongMemory];
+    _positions = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsObjectPointerPersonality
+                                       valueOptions:NSPointerFunctionsStrongMemory];
+    _siblingIndexes = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsObjectPointerPersonality
+                                            valueOptions:NSPointerFunctionsStrongMemory];
+    [self indexSubtree:root];
+  }
+  return self;
+}
+
+// Iterative pre-order walk, so deep trees cannot overflow the stack
+- (void)indexSubtree:(id<XCUIElementSnapshot>)root
+{
+  NSUInteger position = 0;
+  NSMutableArray<id<XCUIElementSnapshot>> *stack = [NSMutableArray arrayWithObject:root];
+  while (stack.count > 0) {
+    id<XCUIElementSnapshot> node = stack.lastObject;
+    [stack removeLastObject];
+    [_positions setObject:@(position++) forKey:node];
+    NSArray<id<XCUIElementSnapshot>> *children = node.children ?: @[];
+    [_children setObject:children forKey:node];
+    for (id<XCUIElementSnapshot> child in children.reverseObjectEnumerator) {
+      [_parents setObject:node forKey:child];
+      [stack addObject:child];
+    }
+    for (NSUInteger i = 0; i < children.count; i++) {
+      [_siblingIndexes setObject:@(i) forKey:children[i]];
+    }
+  }
+}
+
+- (id<XCUIElementSnapshot>)parentOf:(id<XCUIElementSnapshot>)snapshot
+{
+  return [_parents objectForKey:snapshot];
+}
+
+- (NSArray<id<XCUIElementSnapshot>> *)childrenOf:(id<XCUIElementSnapshot>)snapshot
+{
+  return [_children objectForKey:snapshot] ?: @[];
+}
+
+- (NSUInteger)siblingIndexOf:(id<XCUIElementSnapshot>)snapshot
+{
+  NSNumber *index = [_siblingIndexes objectForKey:snapshot];
+  return nil == index ? NSNotFound : index.unsignedIntegerValue;
+}
+
+- (NSArray<id<XCUIElementSnapshot>> *)descendantsOf:(id<XCUIElementSnapshot>)snapshot
+{
+  NSMutableArray<id<XCUIElementSnapshot>> *result = [NSMutableArray array];
+  NSMutableArray<id<XCUIElementSnapshot>> *stack = [NSMutableArray arrayWithArray:[[self childrenOf:snapshot] reverseObjectEnumerator].allObjects];
+  while (stack.count > 0) {
+    id<XCUIElementSnapshot> node = stack.lastObject;
+    [stack removeLastObject];
+    [result addObject:node];
+    [stack addObjectsFromArray:[[self childrenOf:node] reverseObjectEnumerator].allObjects];
+  }
+  return result.copy;
+}
+
+- (NSArray<id<XCUIElementSnapshot>> *)inDocumentOrder:(NSArray<id<XCUIElementSnapshot>> *)snapshots
+{
+  if (snapshots.count < 2) {
+    return snapshots;
+  }
+  NSNumber *unknown = @(NSUIntegerMax);
+  return [snapshots sortedArrayWithOptions:NSSortStable usingComparator:^NSComparisonResult(id a, id b) {
+    return [([_positions objectForKey:a] ?: unknown) compare:([_positions objectForKey:b] ?: unknown)];
+  }];
+}
+
+@end
+
+@interface XCUIElement (AMClassChainAxes)
+
+/*! Evaluates the chain in memory on the tree under the root snapshot, the context snapshot belongs to it */
++ (NSArray<id<XCUIElementSnapshot>> *)am_snapshotsMatchingChainItems:(NSArray<FBClassChainItem *> *)chainItems
+                                                     contextSnapshot:(id<XCUIElementSnapshot>)contextSnapshot
+                                                        rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot
+                                         shouldReturnAfterFirstMatch:(BOOL)shouldReturnAfterFirstMatch;
+
++ (NSArray<id<XCUIElementSnapshot>> *)am_snapshotsMatchingChainItems:(NSArray<FBClassChainItem *> *)chainItems
+                                                     contextSnapshot:(id<XCUIElementSnapshot>)contextSnapshot
+                                                                tree:(AMSnapshotTree *)tree
+                                         shouldReturnAfterFirstMatch:(BOOL)shouldReturnAfterFirstMatch;
+
+@end
 
 @implementation XCUIElement (FBClassChain)
 
@@ -23,6 +151,13 @@
   if (nil == parsedChain) {
     @throw [NSException exceptionWithName:FBClassChainQueryParseException reason:error.localizedDescription userInfo:error.userInfo];
     return nil;
+  }
+  for (FBClassChainItem *item in parsedChain.elements) {
+    if (AMIsAxisItem(item)) {
+      // XCUIElementQuery has no parent/sibling axes, so such chains are evaluated on snapshots
+      return [self am_descendantsMatchingAxisChainItems:parsedChain.elements
+                            shouldReturnAfterFirstMatch:shouldReturnAfterFirstMatch];
+    }
   }
   NSMutableArray<FBClassChainItem *> *lookupChain = parsedChain.elements.mutableCopy;
   FBClassChainItem *chainItem = lookupChain.firstObject;
@@ -98,6 +233,344 @@
       : @[[allMatches objectAtIndex:allMatches.count + item.position.integerValue]];
   }
   return @[];
+}
+
+#pragma mark - Axis chains
+
+- (NSArray<XCUIElement *> *)am_descendantsMatchingAxisChainItems:(NSArray<FBClassChainItem *> *)chainItems
+                                     shouldReturnAfterFirstMatch:(BOOL)shouldReturnAfterFirstMatch
+{
+  NSError *error;
+  id<XCUIElementSnapshot> contextSnapshot = [self snapshotWithError:&error];
+  if (nil == contextSnapshot) {
+    NSString *reason = [NSString stringWithFormat:@"Cannot take a snapshot of the element to evaluate the class chain, it is probably not attached to the UI anymore. Original error: %@", error.description];
+    @throw [NSException exceptionWithName:FBStaleElementException reason:reason userInfo:@{}];
+  }
+  // Axes may leave the subtree of the element, so the whole application is walked if the element belongs to it.
+  // The application snapshot is the context itself if the search starts from the application, so it is taken once.
+  XCUIElement *rootElement = self;
+  AMSnapshotTree *tree = nil;
+  XCUIApplication *application = [self am_owningApplication];
+  if (nil != application && application != self) {
+    id<XCUIElementSnapshot> applicationSnapshot = [application snapshotWithError:nil];
+    AMSnapshotTree *applicationTree = applicationSnapshot ? [[AMSnapshotTree alloc] initWithRoot:applicationSnapshot] : nil;
+    id<XCUIElementSnapshot> mappedContext = [self.class am_snapshotWithHash:[AMSnapshotUtils hashWithSnapshot:contextSnapshot]
+                                                                     inTree:applicationTree];
+    if (nil != mappedContext) {
+      rootElement = application;
+      tree = applicationTree;
+      contextSnapshot = mappedContext;
+    } else {
+      [FBLogger log:@"The element is not found in the application snapshot, so the class chain axes cannot leave its subtree"];
+    }
+  }
+  if (nil == tree) {
+    tree = [[AMSnapshotTree alloc] initWithRoot:contextSnapshot];
+  }
+  NSArray<id<XCUIElementSnapshot>> *matches = [self.class am_snapshotsMatchingChainItems:chainItems
+                                                                         contextSnapshot:contextSnapshot
+                                                                                    tree:tree
+                                                             shouldReturnAfterFirstMatch:shouldReturnAfterFirstMatch];
+  if (0 == matches.count) {
+    return @[];
+  }
+  NSArray<XCUIElement *> *bound = [self.class am_elementsWithSnapshots:matches rootElement:rootElement rootSnapshot:tree.root];
+  if (nil != bound) {
+    return bound;
+  }
+  // Binding by the snapshot hashes takes one more snapshot of the root element
+  NSMutableSet<NSString *> *hashes = [NSMutableSet setWithCapacity:matches.count];
+  for (id<XCUIElementSnapshot> match in matches) {
+    NSString *matchHash = [AMSnapshotUtils hashWithSnapshot:match];
+    if (nil != matchHash) {
+      [hashes addObject:matchHash];
+    }
+  }
+  return [AMSnapshotUtils elementsWithHashes:hashes.copy
+                                 rootElement:rootElement
+                                rootSnapshot:tree.root
+                       includeOnlyFirstMatch:shouldReturnAfterFirstMatch];
+}
+
+// Binds the snapshots to elements the way allElementsBoundByAccessibilityElement does,
+// but without taking one more snapshot of the application. Nil if it is not possible.
++ (nullable NSArray<XCUIElement *> *)am_elementsWithSnapshots:(NSArray<id<XCUIElementSnapshot>> *)snapshots
+                                                  rootElement:(XCUIElement *)rootElement
+                                                 rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot
+{
+  SEL selector = NSSelectorFromString(@"_elementMatchingAccessibilityElementOfSnapshot:");
+  XCUIElementQuery *query = [rootElement descendantsMatchingType:XCUIElementTypeAny];
+  if (FBSession.activeSession.boundElementsByIndex || ![query respondsToSelector:selector]) {
+    return nil;
+  }
+  NSMutableArray<XCUIElement *> *result = [NSMutableArray arrayWithCapacity:snapshots.count];
+  for (id<XCUIElementSnapshot> snapshot in snapshots) {
+    if (snapshot == rootSnapshot) {
+      [result addObject:rootElement];
+      continue;
+    }
+    id element = ((id (*)(id, SEL, id))objc_msgSend)(query, selector, snapshot);
+    if (![element isKindOfClass:XCUIElement.class]) {
+      return nil;
+    }
+    [result addObject:element];
+  }
+  return result.copy;
+}
+
+- (nullable XCUIApplication *)am_owningApplication
+{
+  if ([self isKindOfClass:XCUIApplication.class]) {
+    return (XCUIApplication *)self;
+  }
+  // The private property is not available in all XCTest versions
+  if ([self respondsToSelector:NSSelectorFromString(@"application")]) {
+    id application = [self valueForKey:@"application"];
+    if ([application isKindOfClass:XCUIApplication.class]) {
+      return application;
+    }
+  }
+  return FBSession.activeSession.currentApplication;
+}
+
++ (nullable id<XCUIElementSnapshot>)am_snapshotWithHash:(NSString *)snapshotHash inTree:(AMSnapshotTree *)tree
+{
+  if (nil == snapshotHash || nil == tree) {
+    return nil;
+  }
+  NSArray<id<XCUIElementSnapshot>> *all = [@[tree.root] arrayByAddingObjectsFromArray:[tree descendantsOf:tree.root]];
+  for (id<XCUIElementSnapshot> snapshot in all) {
+    if ([[AMSnapshotUtils hashWithSnapshot:snapshot] isEqualToString:snapshotHash]) {
+      return snapshot;
+    }
+  }
+  return nil;
+}
+
++ (NSArray<id<XCUIElementSnapshot>> *)am_snapshotsMatchingChainItems:(NSArray<FBClassChainItem *> *)chainItems
+                                                     contextSnapshot:(id<XCUIElementSnapshot>)contextSnapshot
+                                                        rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot
+                                         shouldReturnAfterFirstMatch:(BOOL)shouldReturnAfterFirstMatch
+{
+  return [self am_snapshotsMatchingChainItems:chainItems
+                              contextSnapshot:contextSnapshot
+                                         tree:[[AMSnapshotTree alloc] initWithRoot:rootSnapshot]
+                  shouldReturnAfterFirstMatch:shouldReturnAfterFirstMatch];
+}
+
+// Matches come in document order, whatever the axes inside the chain are
++ (NSArray<id<XCUIElementSnapshot>> *)am_snapshotsMatchingChainItems:(NSArray<FBClassChainItem *> *)chainItems
+                                                     contextSnapshot:(id<XCUIElementSnapshot>)contextSnapshot
+                                                                tree:(AMSnapshotTree *)tree
+                                         shouldReturnAfterFirstMatch:(BOOL)shouldReturnAfterFirstMatch
+{
+  NSArray<id<XCUIElementSnapshot>> *currentRoots = @[contextSnapshot];
+  for (NSUInteger i = 0; i < chainItems.count; i++) {
+    FBClassChainItem *chainItem = chainItems[i];
+    NSArray<id<XCUIElementSnapshot>> *candidates = [self am_snapshotsMatchingItem:chainItem inRoots:currentRoots tree:tree];
+    if (i + 1 == chainItems.count) {
+      // Positions of axis items count along the axis, the matches are put in document order afterwards
+      NSArray<id<XCUIElementSnapshot>> *matches = [tree inDocumentOrder:[self am_snapshotsWithItem:chainItem candidates:candidates]];
+      return shouldReturnAfterFirstMatch && matches.count > 1 ? @[matches.firstObject] : matches;
+    }
+    if (nil != chainItem.position) {
+      // An explicit position narrows the matches down to a single element, which becomes the root of the next step
+      NSArray<id<XCUIElementSnapshot>> *selected = [self am_snapshotsWithItem:chainItem candidates:candidates];
+      if (0 == selected.count) {
+        return @[];
+      }
+      currentRoots = @[selected.firstObject];
+    } else {
+      // Matches of an axis step follow each other per root element, the next step needs them in document order
+      currentRoots = AMIsAxisItem(chainItem) ? [tree inDocumentOrder:candidates] : candidates;
+    }
+  }
+  return @[];
+}
+
++ (NSArray<id<XCUIElementSnapshot>> *)am_snapshotsMatchingItem:(FBClassChainItem *)item
+                                                       inRoots:(NSArray<id<XCUIElementSnapshot>> *)roots
+                                                          tree:(AMSnapshotTree *)tree
+{
+  NSMutableArray<id<XCUIElementSnapshot>> *typeMatches = [NSMutableArray array];
+  // Duplicates are dropped while collecting, since overlapping roots can yield the same snapshot twice
+  NSHashTable<id<XCUIElementSnapshot>> *seen = roots.count > 1 ? [NSHashTable hashTableWithOptions:NSHashTableObjectPointerPersonality] : nil;
+  void (^collect)(NSArray<id<XCUIElementSnapshot>> *) = ^(NSArray<id<XCUIElementSnapshot>> *pool) {
+    for (id<XCUIElementSnapshot> candidate in pool) {
+      if ((item.type == XCUIElementTypeAny || candidate.elementType == item.type) && ![seen containsObject:candidate]) {
+        [seen addObject:candidate];
+        [typeMatches addObject:candidate];
+      }
+    }
+  };
+  if (roots.count > 1 && (FBClassChainAxisSibling == item.axis || FBClassChainAxisFollowingSibling == item.axis || FBClassChainAxisPrecedingSibling == item.axis)) {
+    collect([self am_siblingSnapshotsOfRoots:roots axis:item.axis tree:tree]);
+  } else {
+    for (id<XCUIElementSnapshot> root in roots) {
+      if (AMIsAxisItem(item)) {
+        collect([self am_axisSnapshotsOfRoot:root axis:item.axis tree:tree]);
+      } else if (item.isDescendant) {
+        collect([tree descendantsOf:root]);
+      } else {
+        collect([tree childrenOf:root]);
+      }
+    }
+  }
+  if (roots.count > 1 && FBClassChainAxisParent != item.axis && FBClassChainAxisAncestor != item.axis && FBClassChainAxisPrecedingSibling != item.axis) {
+    // Positions of these steps count in document order of all the candidates, while
+    // the matches of the ancestor and preceding axes stay in the order of the axis
+    typeMatches = [[tree inDocumentOrder:typeMatches] mutableCopy];
+  }
+  for (FBAbstractPredicateItem *predicateItem in item.predicates) {
+    if ([predicateItem isKindOfClass:FBSelfPredicateItem.class]) {
+      typeMatches = [[typeMatches filteredArrayUsingPredicate:predicateItem.value] mutableCopy];
+    } else if ([predicateItem isKindOfClass:FBDescendantPredicateItem.class]) {
+      NSMutableArray<id<XCUIElementSnapshot>> *containing = [NSMutableArray array];
+      for (id<XCUIElementSnapshot> candidate in typeMatches) {
+        for (id<XCUIElementSnapshot> descendant in [tree descendantsOf:candidate]) {
+          if ([predicateItem.value evaluateWithObject:descendant]) {
+            [containing addObject:candidate];
+            break;
+          }
+        }
+      }
+      typeMatches = containing;
+    }
+  }
+  return typeMatches.copy;
+}
+
+// Siblings of several roots, each parent is walked once however many roots it has.
+// Preceding ones keep the order of the axis, root after root, and are not repeated.
++ (NSArray<id<XCUIElementSnapshot>> *)am_siblingSnapshotsOfRoots:(NSArray<id<XCUIElementSnapshot>> *)roots
+                                                            axis:(FBClassChainAxis)axis
+                                                            tree:(AMSnapshotTree *)tree
+{
+  if (FBClassChainAxisPrecedingSibling == axis) {
+    // Whatever is before the farthest root seen so far in a parent is already collected
+    NSMapTable<id<XCUIElementSnapshot>, NSNumber *> *collected = [NSMapTable strongToStrongObjectsMapTable];
+    NSMutableArray<id<XCUIElementSnapshot>> *preceding = [NSMutableArray array];
+    for (id<XCUIElementSnapshot> root in roots) {
+      id<XCUIElementSnapshot> parent = [tree parentOf:root];
+      NSUInteger index = [tree siblingIndexOf:root];
+      if (nil == parent || NSNotFound == index) {
+        continue;
+      }
+      NSUInteger from = [[collected objectForKey:parent] unsignedIntegerValue];
+      NSArray<id<XCUIElementSnapshot>> *children = [tree childrenOf:parent];
+      for (NSUInteger i = index; i > from; i--) {
+        [preceding addObject:children[i - 1]];
+      }
+      if (index > from) {
+        [collected setObject:@(index) forKey:parent];
+      }
+    }
+    return preceding.copy;
+  }
+  NSMapTable<id<XCUIElementSnapshot>, NSMutableArray<id<XCUIElementSnapshot>> *> *rootsByParent = [NSMapTable strongToStrongObjectsMapTable];
+  NSMutableArray<id<XCUIElementSnapshot>> *parents = [NSMutableArray array];
+  for (id<XCUIElementSnapshot> root in roots) {
+    id<XCUIElementSnapshot> parent = [tree parentOf:root];
+    if (nil == parent) {
+      continue;
+    }
+    NSMutableArray<id<XCUIElementSnapshot>> *siblingRoots = [rootsByParent objectForKey:parent];
+    if (nil == siblingRoots) {
+      siblingRoots = [NSMutableArray array];
+      [rootsByParent setObject:siblingRoots forKey:parent];
+      [parents addObject:parent];
+    }
+    [siblingRoots addObject:root];
+  }
+  NSMutableArray<id<XCUIElementSnapshot>> *result = [NSMutableArray array];
+  for (id<XCUIElementSnapshot> parent in parents) {
+    NSArray<id<XCUIElementSnapshot>> *siblingRoots = [rootsByParent objectForKey:parent];
+    NSArray<id<XCUIElementSnapshot>> *children = [tree childrenOf:parent];
+    if (FBClassChainAxisFollowingSibling == axis) {
+      // Everything after the first root, the other roots are followed by the first one's siblings anyway
+      NSUInteger first = children.count;
+      for (id<XCUIElementSnapshot> root in siblingRoots) {
+        first = MIN(first, [tree siblingIndexOf:root]);
+      }
+      if (first < children.count) {
+        [result addObjectsFromArray:[children subarrayWithRange:NSMakeRange(first + 1, children.count - first - 1)]];
+      }
+    } else if (siblingRoots.count > 1) {
+      // With two roots, every child is a sibling of one of them
+      [result addObjectsFromArray:children];
+    } else {
+      for (id<XCUIElementSnapshot> child in children) {
+        if (child != siblingRoots.firstObject) {
+          [result addObject:child];
+        }
+      }
+    }
+  }
+  return result.copy;
+}
+
+// The snapshots on the axis in the order positions count along it
++ (NSArray<id<XCUIElementSnapshot>> *)am_axisSnapshotsOfRoot:(id<XCUIElementSnapshot>)root
+                                                        axis:(FBClassChainAxis)axis
+                                                        tree:(AMSnapshotTree *)tree
+{
+  id<XCUIElementSnapshot> parent = [tree parentOf:root];
+  if (nil == parent) {
+    return @[];
+  }
+  switch (axis) {
+    case FBClassChainAxisParent:
+      return @[parent];
+    case FBClassChainAxisAncestor: {
+      NSMutableArray<id<XCUIElementSnapshot>> *ancestors = [NSMutableArray array];
+      for (id<XCUIElementSnapshot> ancestor = parent; nil != ancestor; ancestor = [tree parentOf:ancestor]) {
+        [ancestors addObject:ancestor];
+      }
+      return ancestors.copy;
+    }
+    case FBClassChainAxisFollowingSibling:
+    case FBClassChainAxisPrecedingSibling:
+    case FBClassChainAxisSibling: {
+      NSArray<id<XCUIElementSnapshot>> *siblings = [tree childrenOf:parent];
+      NSUInteger index = [tree siblingIndexOf:root];
+      if (NSNotFound == index) {
+        return @[];
+      }
+      NSRange range = NSMakeRange(0, siblings.count);
+      if (FBClassChainAxisFollowingSibling == axis) {
+        range = NSMakeRange(index + 1, siblings.count - index - 1);
+      } else if (FBClassChainAxisPrecedingSibling == axis) {
+        range = NSMakeRange(0, index);
+      }
+      NSMutableArray<id<XCUIElementSnapshot>> *result = [NSMutableArray array];
+      for (NSUInteger i = range.location; i < NSMaxRange(range); i++) {
+        if (i != index) {
+          [result addObject:siblings[i]];
+        }
+      }
+      return FBClassChainAxisPrecedingSibling == axis
+        ? result.reverseObjectEnumerator.allObjects
+        : result.copy;
+    }
+    case FBClassChainAxisChild:
+    case FBClassChainAxisDescendant:
+      return @[];
+  }
+}
+
++ (NSArray<id<XCUIElementSnapshot>> *)am_snapshotsWithItem:(FBClassChainItem *)item
+                                                candidates:(NSArray<id<XCUIElementSnapshot>> *)candidates
+{
+  NSInteger position = item.position.integerValue;
+  if (0 == position) {
+    return candidates;
+  }
+  if (candidates.count < (NSUInteger)ABS(position)) {
+    return @[];
+  }
+  return position > 0
+    ? @[candidates[position - 1]]
+    : @[candidates[candidates.count + position]];
 }
 
 @end
