@@ -421,8 +421,8 @@ This method influences the state of the [Application Under Test](../guides/app-u
 
 ### macos: activateApp
 
-Activates the application with the given bundle identifier/path. An exception is thrown if the app
-cannot be found, or the app is not running. Based on XCTest's
+Activates the application with the given bundle identifier/path, or launches it if it is not
+running. An exception is thrown if the app cannot be found. Based on XCTest's
 [`activate`](https://developer.apple.com/documentation/xcuiautomation/xcuiapplication/activate())
 method.
 
