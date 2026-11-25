@@ -41,8 +41,8 @@ export async function macosLaunchApp(
 }
 
 /**
- * Activate an app with given bundle identifier. An exception is thrown if the
- * app cannot be found or is not running.
+ * Activate an app with given bundle identifier, or launch it if it is not
+ * running. An exception is thrown if the app cannot be found.
  *
  * @param bundleId - Bundle identifier of the app to be activated.
  *                 Either this property or `path` must be provided
