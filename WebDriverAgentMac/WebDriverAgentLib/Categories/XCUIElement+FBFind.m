@@ -123,6 +123,20 @@ static BOOL AMCollectIdentifierMatches(id<XCUIElementSnapshot> snapshot,
 - (NSArray<XCUIElement *> *)fb_descendantsMatchingIdentifier:(NSString *)accessibilityId
                                  shouldReturnAfterFirstMatch:(BOOL)shouldReturnAfterFirstMatch
 {
+  // One snapshot instead of one per element read, query and DOM id fallback.
+  // Web nodes match by DOM id only if no native identifier matches.
+  BOOL useDomId = FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId;
+  NSArray<XCUIElement *> *matches = [AMSnapshotUtils elementsMatchingInSnapshotOfElement:self
+                                                                   includeOnlyFirstMatch:shouldReturnAfterFirstMatch
+                                                                                 matcher:^BOOL(id<XCUIElementSnapshot> snapshot) {
+    return [snapshot.identifier isEqualToString:accessibilityId];
+  }
+                                                                         fallbackMatcher:!useDomId ? nil : ^BOOL(id<XCUIElementSnapshot> snapshot) {
+    return [[AMSnapshotUtils wdIdentifierWithSnapshot:snapshot] isEqualToString:accessibilityId];
+  }];
+  if (nil != matches) {
+    return matches;
+  }
   NSMutableArray *result = [NSMutableArray array];
   if (nil != self.identifier && [self.identifier isEqualToString:accessibilityId]) {
     [result addObject:self];
