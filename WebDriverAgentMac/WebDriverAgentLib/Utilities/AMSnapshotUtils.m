@@ -18,9 +18,11 @@
 
 #import <ApplicationServices/ApplicationServices.h>
 #import <dlfcn.h>
+#import <objc/message.h>
 
 #import "FBConfiguration.h"
 #import "FBLogger.h"
+#import "FBSession.h"
 #import "XCUIElementQuery+AMHelpers.h"
 
 static NSString *const AM_DOM_IDENTIFIER_ATTRIBUTE = @"AXDOMIdentifier";
@@ -65,7 +67,134 @@ static BOOL AMIsAccessibilityTrusted(void)
   return isTrusted;
 }
 
+// Collects the matching snapshots in document order. Returns YES to stop descending (first match found).
+static BOOL AMCollectSnapshots(id<XCUIElementSnapshot> snapshot,
+                               BOOL firstMatchOnly,
+                               BOOL (^matcher)(id<XCUIElementSnapshot>),
+                               NSMutableArray<id<XCUIElementSnapshot>> *result)
+{
+  if (matcher(snapshot)) {
+    [result addObject:snapshot];
+    if (firstMatchOnly) {
+      return YES;
+    }
+  }
+  for (id<XCUIElementSnapshot> child in snapshot.children) {
+    if (AMCollectSnapshots(child, firstMatchOnly, matcher, result)) {
+      return YES;
+    }
+  }
+  return NO;
+}
+
+// The private binding selector, or NULL if snapshots cannot be bound to elements directly
+static SEL AMSnapshotBindingSelector(void)
+{
+  static SEL selector = NULL;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    SEL candidate = NSSelectorFromString(@"_elementMatchingAccessibilityElementOfSnapshot:");
+    selector = [XCUIElementQuery instancesRespondToSelector:candidate] ? candidate : NULL;
+  });
+  return FBSession.activeSession.boundElementsByIndex ? NULL : selector;
+}
+
+// Resolves the hashes with a query, which snapshots the root element once more
+static NSArray<XCUIElement *> *AMElementsWithHashesViaQuery(NSSet<NSString *> *hashes,
+                                                             XCUIElement *rootElement,
+                                                             id<XCUIElementSnapshot> rootSnapshot,
+                                                             BOOL firstMatch)
+{
+  NSMutableArray<XCUIElement *> *matchingElements = [NSMutableArray array];
+  if ([hashes containsObject:[AMSnapshotUtils hashWithSnapshot:rootSnapshot]]) {
+    [matchingElements addObject:rootElement];
+    if (firstMatch) {
+      return matchingElements.copy;
+    }
+  }
+  NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id snapshot, NSDictionary *bindings) {
+    return [hashes containsObject:[AMSnapshotUtils hashWithSnapshot:snapshot]];
+  }];
+  [matchingElements addObjectsFromArray:[[rootElement descendantsMatchingType:XCUIElementTypeAny]
+                                         matchingPredicate:predicate].am_allMatches];
+  return firstMatch && matchingElements.count > 0
+    ? @[matchingElements.firstObject]
+    : matchingElements.copy;
+}
+
 @implementation AMSnapshotUtils
+
++ (nullable NSArray<XCUIElement *> *)elementsWithSnapshots:(NSArray<id<XCUIElementSnapshot>> *)snapshots
+                                               rootElement:(XCUIElement *)rootElement
+                                              rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot
+{
+  SEL selector = AMSnapshotBindingSelector();
+  if (NULL == selector) {
+    return nil;
+  }
+  XCUIElementQuery *query = [rootElement descendantsMatchingType:XCUIElementTypeAny];
+  NSMutableArray<XCUIElement *> *result = [NSMutableArray arrayWithCapacity:snapshots.count];
+  @try {
+    for (id<XCUIElementSnapshot> snapshot in snapshots) {
+      if (snapshot == rootSnapshot) {
+        [result addObject:rootElement];
+        continue;
+      }
+      id element = ((id (*)(id, SEL, id))objc_msgSend)(query, selector, snapshot);
+      if (![element isKindOfClass:XCUIElement.class]) {
+        return nil;
+      }
+      [result addObject:element];
+    }
+  } @catch (NSException *e) {
+    // The private API is the only thing that may throw here
+    [FBLogger logFmt:@"Cannot bind snapshots to elements directly. Original error: %@", e.reason];
+    return nil;
+  }
+  return result.copy;
+}
+
++ (nullable NSArray<XCUIElement *> *)elementsMatchingInSnapshotOfElement:(XCUIElement *)rootElement
+                                                   includeOnlyFirstMatch:(BOOL)firstMatch
+                                                                 matcher:(BOOL (^)(id<XCUIElementSnapshot> snapshot))matcher
+                                                         fallbackMatcher:(nullable BOOL (^)(id<XCUIElementSnapshot> snapshot))fallbackMatcher
+{
+  id<XCUIElementSnapshot> rootSnapshot = [rootElement snapshotWithError:nil];
+  if (nil == rootSnapshot) {
+    return nil;
+  }
+  NSMutableArray<id<XCUIElementSnapshot>> *matches = [NSMutableArray array];
+  @try {
+    AMCollectSnapshots(rootSnapshot, firstMatch, matcher, matches);
+    if (0 == matches.count && NULL != fallbackMatcher) {
+      AMCollectSnapshots(rootSnapshot, firstMatch, fallbackMatcher, matches);
+    }
+  } @catch (NSException *e) {
+    [FBLogger logFmt:@"Cannot match the snapshot in memory. Original error: %@", e.reason];
+    return nil;
+  }
+  if (0 == matches.count) {
+    return @[];
+  }
+  return [self elementsWithSnapshots:matches rootElement:rootElement rootSnapshot:rootSnapshot]
+    ?: [self elementsWithMatchedSnapshots:matches rootElement:rootElement rootSnapshot:rootSnapshot firstMatch:firstMatch];
+}
+
+// Binds through the hashes if direct binding is not possible, so the snapshot at hand is not wasted
++ (NSArray<XCUIElement *> *)elementsWithMatchedSnapshots:(NSArray<id<XCUIElementSnapshot>> *)snapshots
+                                             rootElement:(XCUIElement *)rootElement
+                                            rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot
+                                              firstMatch:(BOOL)firstMatch
+{
+  NSMutableSet<NSString *> *hashes = [NSMutableSet setWithCapacity:snapshots.count];
+  for (id<XCUIElementSnapshot> snapshot in snapshots) {
+    NSString *hash = [self hashWithSnapshot:snapshot];
+    if (nil != hash) {
+      [hashes addObject:hash];
+    }
+  }
+  return 0 == hashes.count ? @[] : AMElementsWithHashesViaQuery(hashes, rootElement, rootSnapshot, firstMatch);
+}
 
 + (NSString *)hashWithSnapshot:(id)snapshot
 {
@@ -97,21 +226,26 @@ static BOOL AMIsAccessibilityTrusted(void)
     return @[];
   }
 
-  NSMutableArray<XCUIElement *> *matchingElements = [NSMutableArray array];
-  if ([hashes containsObject:[self hashWithSnapshot:rootSnapshot]]) {
-    [matchingElements addObject:rootElement];
-    if (firstMatch) {
-      return matchingElements.copy;
+  // Resolving the matches from the snapshot at hand saves one more snapshot of the root element
+  if (NULL != AMSnapshotBindingSelector()) {
+    NSMutableArray<id<XCUIElementSnapshot>> *matchedSnapshots = [NSMutableArray array];
+    @try {
+      AMCollectSnapshots(rootSnapshot, firstMatch, ^BOOL(id<XCUIElementSnapshot> snapshot) {
+        return [hashes containsObject:[AMSnapshotUtils hashWithSnapshot:snapshot]];
+      }, matchedSnapshots);
+    } @catch (NSException *e) {
+      [FBLogger logFmt:@"Cannot collect snapshots by hashes. Original error: %@", e.reason];
+      matchedSnapshots = nil;
+    }
+    // Nothing found although the hashes come from this very tree means the hashes cannot be trusted
+    NSArray<XCUIElement *> *boundElements = matchedSnapshots.count > 0
+      ? [self elementsWithSnapshots:matchedSnapshots rootElement:rootElement rootSnapshot:rootSnapshot]
+      : nil;
+    if (nil != boundElements) {
+      return boundElements;
     }
   }
-  NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id snapshot, NSDictionary *bindings) {
-    return [hashes containsObject:[self hashWithSnapshot:snapshot]];
-  }];
-  [matchingElements addObjectsFromArray:[[rootElement descendantsMatchingType:XCUIElementTypeAny]
-                                         matchingPredicate:predicate].am_allMatches];
-  return firstMatch && matchingElements.count > 0
-    ? @[matchingElements.firstObject]
-    : matchingElements.copy;
+  return AMElementsWithHashesViaQuery(hashes, rootElement, rootSnapshot, firstMatch);
 }
 
 + (nullable AXUIElementRef)createAXElementWithSnapshot:(nullable id)snapshot

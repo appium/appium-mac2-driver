@@ -77,6 +77,31 @@ static NSTimeInterval const AMWebContentTimeout = 10.0;
   XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
 }
 
+- (void)testFirstMatchOfDescendantsWithIdentifier
+{
+  NSArray<XCUIElement *> *matches = [self.testedApplication fb_descendantsMatchingIdentifier:@"_XCUI:CloseWindow"
+                                                                 shouldReturnAfterFirstMatch:YES];
+  XCTAssertEqual(matches.count, 1);
+  XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
+}
+
+- (void)testIdentifierLookupIncludesTheElementItself
+{
+  XCUIElement *closeButton = [self.testedApplication fb_descendantsMatchingIdentifier:@"_XCUI:CloseWindow"
+                                                          shouldReturnAfterFirstMatch:YES].firstObject;
+  XCTAssertNotNil(closeButton);
+  NSArray<XCUIElement *> *matches = [closeButton fb_descendantsMatchingIdentifier:@"_XCUI:CloseWindow"
+                                                      shouldReturnAfterFirstMatch:NO];
+  XCTAssertEqual(matches.count, 1);
+  XCTAssertEqualObjects(matches.firstObject.identifier, @"_XCUI:CloseWindow");
+}
+
+- (void)testIdentifierLookupFindsNothing
+{
+  XCTAssertEqual([self.testedApplication fb_descendantsMatchingIdentifier:@"there_is_no_such_identifier"
+                                              shouldReturnAfterFirstMatch:NO].count, 0);
+}
+
 - (void)testSingleDescendantWithIdentifierWhileDomIdFallbackIsEnabled
 {
   [self skipUnlessAccessibilityTrusted];

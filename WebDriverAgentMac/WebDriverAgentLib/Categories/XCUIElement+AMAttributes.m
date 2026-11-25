@@ -89,16 +89,18 @@ NSString *const AM_HAS_KEYBOARD_INPUT_FOCUS_ATTRIBUTE_NAME = @"amHasKeyboardInpu
 + (nullable id)am_valueForPredicateAttributeName:(NSString *)name target:(id)target
 {
   if ([name isEqualToString:AM_IDENTIFIER_ATTRIBUTE_NAME]) {
-    NSString *identifier = [target valueForKey:@"identifier"];
-    // Snapshotting is not free, so only pay for it when the fallback can apply.
-    if (identifier.length > 0 || !FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId) {
-      return identifier;
+    if (!FBConfiguration.sharedConfiguration.useDomIdAsAccessibilityId) {
+      return [target valueForKey:@"identifier"];
     }
     // domIdentifierWithSnapshot: relies on snapshot-only key paths (_accessibilityElement._token),
-    // which a live XCUIElement does not have, so it must be snapshotted first.
+    // which a live XCUIElement does not have. Snapshot it once and read everything from there.
     id snapshotTarget = [target isKindOfClass:XCUIElement.class]
       ? [(XCUIElement *)target snapshotWithError:nil]
       : target;
+    NSString *identifier = [snapshotTarget valueForKey:@"identifier"];
+    if (identifier.length > 0) {
+      return identifier;
+    }
     return [AMSnapshotUtils domIdentifierWithSnapshot:snapshotTarget] ?: identifier;
   }
   if ([name isEqualToString:AM_RECT_ATTRIBUTE_NAME]) {
