@@ -229,8 +229,8 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
   NSError *error;
   id<XCUIElementSnapshot> contextSnapshot = [self snapshotWithError:&error];
   if (nil == contextSnapshot) {
-    NSString *reason = [NSString stringWithFormat:@"Cannot take a snapshot of the element to evaluate the class chain. Original error: %@", error.description];
-    @throw [NSException exceptionWithName:FBClassChainQueryParseException reason:reason userInfo:@{}];
+    NSString *reason = [NSString stringWithFormat:@"Cannot take a snapshot of the element to evaluate the class chain, it is probably not attached to the UI anymore. Original error: %@", error.description];
+    @throw [NSException exceptionWithName:FBStaleElementException reason:reason userInfo:@{}];
   }
   // Axes may leave the subtree of the element, so the whole application is walked if the element belongs to it.
   // The application snapshot is the context itself if the search starts from the application, so it is taken once.
@@ -379,37 +379,33 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
                                                           tree:(AMSnapshotTree *)tree
 {
   NSMutableArray<id<XCUIElementSnapshot>> *typeMatches = [NSMutableArray array];
-  for (id<XCUIElementSnapshot> root in roots) {
-    NSArray<id<XCUIElementSnapshot>> *pool;
-    if (AMIsAxisItem(item)) {
-      pool = [self am_axisSnapshotsOfRoot:root axis:item.axis tree:tree];
-    } else if (item.isDescendant) {
-      pool = [tree descendantsOf:root];
-    } else {
-      pool = [tree childrenOf:root];
-    }
+  // Duplicates are dropped while collecting, since overlapping roots can yield the same snapshot twice
+  NSHashTable<id<XCUIElementSnapshot>> *seen = roots.count > 1 ? [NSHashTable hashTableWithOptions:NSHashTableObjectPointerPersonality] : nil;
+  void (^collect)(NSArray<id<XCUIElementSnapshot>> *) = ^(NSArray<id<XCUIElementSnapshot>> *pool) {
     for (id<XCUIElementSnapshot> candidate in pool) {
-      if (item.type == XCUIElementTypeAny || candidate.elementType == item.type) {
+      if ((item.type == XCUIElementTypeAny || candidate.elementType == item.type) && ![seen containsObject:candidate]) {
+        [seen addObject:candidate];
         [typeMatches addObject:candidate];
       }
     }
-  }
-  if (roots.count > 1) {
-    // Overlapping roots can yield the same snapshot twice, which would skew positions
-    NSMutableArray<id<XCUIElementSnapshot>> *deduped = [NSMutableArray arrayWithCapacity:typeMatches.count];
-    NSHashTable<id<XCUIElementSnapshot>> *seen = [NSHashTable hashTableWithOptions:NSHashTableObjectPointerPersonality];
-    for (id<XCUIElementSnapshot> match in typeMatches) {
-      if (![seen containsObject:match]) {
-        [seen addObject:match];
-        [deduped addObject:match];
+  };
+  if (roots.count > 1 && (FBClassChainAxisSibling == item.axis || FBClassChainAxisFollowingSibling == item.axis)) {
+    collect([self am_siblingSnapshotsOfRoots:roots axis:item.axis tree:tree]);
+  } else {
+    for (id<XCUIElementSnapshot> root in roots) {
+      if (AMIsAxisItem(item)) {
+        collect([self am_axisSnapshotsOfRoot:root axis:item.axis tree:tree]);
+      } else if (item.isDescendant) {
+        collect([tree descendantsOf:root]);
+      } else {
+        collect([tree childrenOf:root]);
       }
     }
-    typeMatches = deduped;
-    if (FBClassChainAxisParent != item.axis && FBClassChainAxisAncestor != item.axis && FBClassChainAxisPrecedingSibling != item.axis) {
-      // Positions of these steps count in document order of all the candidates, while
-      // the matches of the ancestor and preceding axes stay in the order of the axis
-      typeMatches = [[tree inDocumentOrder:typeMatches] mutableCopy];
-    }
+  }
+  if (roots.count > 1 && FBClassChainAxisParent != item.axis && FBClassChainAxisAncestor != item.axis && FBClassChainAxisPrecedingSibling != item.axis) {
+    // Positions of these steps count in document order of all the candidates, while
+    // the matches of the ancestor and preceding axes stay in the order of the axis
+    typeMatches = [[tree inDocumentOrder:typeMatches] mutableCopy];
   }
   for (FBAbstractPredicateItem *predicateItem in item.predicates) {
     if ([predicateItem isKindOfClass:FBSelfPredicateItem.class]) {
@@ -428,6 +424,53 @@ static BOOL AMIsAxisItem(FBClassChainItem *item)
     }
   }
   return typeMatches.copy;
+}
+
+// Siblings of several roots in document order, each parent is walked once however many roots it has
++ (NSArray<id<XCUIElementSnapshot>> *)am_siblingSnapshotsOfRoots:(NSArray<id<XCUIElementSnapshot>> *)roots
+                                                            axis:(FBClassChainAxis)axis
+                                                            tree:(AMSnapshotTree *)tree
+{
+  NSMapTable<id<XCUIElementSnapshot>, NSMutableArray<id<XCUIElementSnapshot>> *> *rootsByParent = [NSMapTable strongToStrongObjectsMapTable];
+  NSMutableArray<id<XCUIElementSnapshot>> *parents = [NSMutableArray array];
+  for (id<XCUIElementSnapshot> root in roots) {
+    id<XCUIElementSnapshot> parent = [tree parentOf:root];
+    if (nil == parent) {
+      continue;
+    }
+    NSMutableArray<id<XCUIElementSnapshot>> *siblingRoots = [rootsByParent objectForKey:parent];
+    if (nil == siblingRoots) {
+      siblingRoots = [NSMutableArray array];
+      [rootsByParent setObject:siblingRoots forKey:parent];
+      [parents addObject:parent];
+    }
+    [siblingRoots addObject:root];
+  }
+  NSMutableArray<id<XCUIElementSnapshot>> *result = [NSMutableArray array];
+  for (id<XCUIElementSnapshot> parent in parents) {
+    NSArray<id<XCUIElementSnapshot>> *siblingRoots = [rootsByParent objectForKey:parent];
+    NSArray<id<XCUIElementSnapshot>> *children = [tree childrenOf:parent];
+    if (FBClassChainAxisFollowingSibling == axis) {
+      // Everything after the first root, the other roots are followed by the first one's siblings anyway
+      NSUInteger first = children.count;
+      for (id<XCUIElementSnapshot> root in siblingRoots) {
+        first = MIN(first, [children indexOfObjectIdenticalTo:root]);
+      }
+      if (first < children.count) {
+        [result addObjectsFromArray:[children subarrayWithRange:NSMakeRange(first + 1, children.count - first - 1)]];
+      }
+    } else if (siblingRoots.count > 1) {
+      // With two roots, every child is a sibling of one of them
+      [result addObjectsFromArray:children];
+    } else {
+      for (id<XCUIElementSnapshot> child in children) {
+        if (child != siblingRoots.firstObject) {
+          [result addObject:child];
+        }
+      }
+    }
+  }
+  return result.copy;
 }
 
 // The snapshots on the axis in the order positions count along it

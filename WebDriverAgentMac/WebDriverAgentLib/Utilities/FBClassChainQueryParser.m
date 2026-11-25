@@ -370,7 +370,7 @@ static BOOL FBIsPositionCharacter(unichar character)
   }
   errno = 0;
   long long value = strtoll(string.UTF8String, NULL, 10);
-  if (ERANGE == errno || 0 == value || value < -INT_MAX || value > INT_MAX) {
+  if (ERANGE == errno || 0 == value || value < INT_MIN || value > INT_MAX) {
     return nil;
   }
   return @(value);

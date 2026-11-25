@@ -368,6 +368,7 @@ static NSString *FBDescribeChain(FBClassChain *chain)
     @"XCUIElementTypeWindow[`value == \"a\"\n`]": @"Window{1,0}",
     @"**/XCUIElementTypeWindow[`identifier == \"a\"`]/**/XCUIElementTypeButton[`identifier == \"b\"`][2]": @"**/Window{1,0} **/Button[2]{1,0}",
     @"XCUIElementTypeWindow[2147483647]/XCUIElementTypeButton[-2147483647]": @"Window[2147483647]{0,0} Button[-2147483647]{0,0}",
+    @"XCUIElementTypeWindow[-2147483648]": @"Window[-2147483648]{0,0}",
   };
   for (NSString *query in expectations) {
     NSError *error = nil;
@@ -469,7 +470,7 @@ static NSString *FBDescribeChain(FBClassChain *chain)
 
 - (void)testPositionIsAnAsciiInt
 {
-  NSArray<NSString *> *invalid = @[@"[٣]", @"[0]", @"[4294967296]", @"[99999999999999999999]", @"[-99999999999999999999]", @"[2147483648]", @"[-2147483648]", @"[-9223372036854775808]"];
+  NSArray<NSString *> *invalid = @[@"[٣]", @"[0]", @"[4294967296]", @"[99999999999999999999]", @"[-99999999999999999999]", @"[2147483648]", @"[-2147483649]", @"[-9223372036854775808]"];
   for (NSString *position in invalid) {
     NSString *query = [@"XCUIElementTypeWindow" stringByAppendingString:position];
     NSError *error = nil;
@@ -734,6 +735,23 @@ static NSString *FBDescribeChain(FBClassChain *chain)
   XCTAssertEqualObjects([self labelsForQuery:@"**/XCUIElementTypeOther/XCUIElementTypeButton[2]" from:app firstMatch:NO], @[@"y"]);
   XCTAssertEqualObjects([self labelsForQuery:@"**/XCUIElementTypeOther/XCUIElementTypeButton[-1]" from:app firstMatch:NO], @[@"x2"]);
   XCTAssertEqualObjects([self labelsForQuery:@"**/XCUIElementTypeOther/XCUIElementTypeButton" from:app firstMatch:NO], (@[@"x1", @"y", @"x2"]));
+}
+
+- (void)testSiblingsOfManyStartingElements
+{
+  // rows r1..r3 share the parent, so all of them are siblings of each other, while the lone cell has none
+  FBTreeSnapshotDouble *(^node)(XCUIElementType, NSString *) = ^FBTreeSnapshotDouble *(XCUIElementType type, NSString *label) {
+    return [FBTreeSnapshotDouble type:type label:label children:@[]];
+  };
+  FBTreeSnapshotDouble *table = [FBTreeSnapshotDouble type:XCUIElementTypeTable label:@"t" children:@[
+    node(XCUIElementTypeCell, @"c"), node(XCUIElementTypeTableRow, @"r1"), node(XCUIElementTypeTableRow, @"r2"), node(XCUIElementTypeTableRow, @"r3")]];
+  FBTreeSnapshotDouble *app = [FBTreeSnapshotDouble type:XCUIElementTypeApplication label:@"app" children:@[table]];
+  self.root = app;
+  XCTAssertEqualObjects([self labelsForQuery:@"**/XCUIElementTypeTableRow/~*" from:app firstMatch:NO], (@[@"c", @"r1", @"r2", @"r3"]));
+  XCTAssertEqualObjects([self labelsForQuery:@"**/XCUIElementTypeTableRow/~XCUIElementTypeTableRow" from:app firstMatch:NO], (@[@"r1", @"r2", @"r3"]));
+  XCTAssertEqualObjects([self labelsForQuery:@"**/XCUIElementTypeTableRow/>*" from:app firstMatch:NO], (@[@"r2", @"r3"]));
+  XCTAssertEqualObjects([self labelsForQuery:@"**/XCUIElementTypeTableRow/~*[2]" from:app firstMatch:NO], @[@"r1"]);
+  XCTAssertEqualObjects([self labelsForQuery:@"**/XCUIElementTypeCell/~*" from:app firstMatch:NO], (@[@"r1", @"r2", @"r3"]));
 }
 
 - (void)testNextStepFollowsAxisMatchesInDocumentOrder
