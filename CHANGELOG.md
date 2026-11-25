@@ -1,3 +1,9 @@
+## [5.1.1](https://github.com/appium/appium-mac2-driver/compare/v5.1.0...v5.1.1) (2026-11-25)
+
+### Performance Improvements
+
+* look up accessibility ids in a single snapshot ([#461](https://github.com/appium/appium-mac2-driver/issues/461)) ([02af9b0](https://github.com/appium/appium-mac2-driver/commit/02af9b09e50b9047e0efefc129db9e596277bca7))
+
 ## [5.1.0](https://github.com/appium/appium-mac2-driver/compare/v5.0.7...v5.1.0) (2026-11-25)
 
 ### Features
