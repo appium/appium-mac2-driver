@@ -369,12 +369,27 @@ method.
 | --- | --- | --- |
 | `elementId?`| `string` | Identifier of the element to send the keys to. If not set, keys are sent to the application under test. |
 | `keys` | `Array<string|Record>` | Array of keys to type. A single key can be either a string (the key itself or an [XCUIKeyboardKey constant](https://developer.apple.com/documentation/xcuiautomation/xcuikeyboardkey)), or an object with the `key` and `modifierFlags` entries. Refer to the [Key Modifier Flags guide](../guides/key-modifier-flags.md) for more details. |
+| `confirmationInterval?`| `number` | Seconds XCTest holds each key event waiting for an accessibility confirmation (several seconds by default). Applied for the duration of the call only. See the note below. |
 
 #### Key Examples
 
 * `['h', 'i']`
 * `[{key: 'h', modifierFlags: 1 << 1}, {key: 'i', modifierFlags: 1 << 2}]`
 * `['XCUIKeyboardKeyEscape']`
+* `{keys: [{key: 'XCUIKeyboardKeyUpArrow', modifierFlags: (1 << 2) | (1 << 5)}], confirmationInterval: 0.05}` (opens Mission Control)
+
+!!! note "System shortcuts"
+    Arrow-key shortcuts such as Control+UpArrow (Mission Control) only match if the `Function` modifier (`1 << 5`)
+    is set, like on a real keyboard. By default XCTest also holds the key for several seconds, so toggle-style
+    shortcuts close again on release. Set `confirmationInterval` to a small value (e.g. `0.05`) to tap the key quickly.
+
+    ```js
+    // Open Mission Control: Control + Function + UpArrow, tapped quickly
+    await driver.executeScript('macos: keys', [{
+      keys: [{key: 'XCUIKeyboardKeyUpArrow', modifierFlags: (1 << 2) | (1 << 5)}],
+      confirmationInterval: 0.05,
+    }]);
+    ```
 
 #### Response
 

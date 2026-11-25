@@ -72,7 +72,7 @@ export const executeMethodMap = {
     command: 'macosKeys',
     params: {
       required: ['keys'],
-      optional: ['elementId'],
+      optional: ['elementId', 'confirmationInterval'],
     },
   },
   'macos: tap': {
