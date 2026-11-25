@@ -92,15 +92,22 @@ static BOOL AMCollectSnapshotsWithHashes(id<XCUIElementSnapshot> snapshot,
   return NO;
 }
 
+// The private binding selector, or NULL if snapshots cannot be bound to elements directly
+static SEL AMSnapshotBindingSelector(XCUIElementQuery *query)
+{
+  SEL selector = NSSelectorFromString(@"_elementMatchingAccessibilityElementOfSnapshot:");
+  return FBSession.activeSession.boundElementsByIndex || ![query respondsToSelector:selector] ? NULL : selector;
+}
+
 @implementation AMSnapshotUtils
 
 + (nullable NSArray<XCUIElement *> *)elementsWithSnapshots:(NSArray<id<XCUIElementSnapshot>> *)snapshots
                                                rootElement:(XCUIElement *)rootElement
                                               rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot
 {
-  SEL selector = NSSelectorFromString(@"_elementMatchingAccessibilityElementOfSnapshot:");
   XCUIElementQuery *query = [rootElement descendantsMatchingType:XCUIElementTypeAny];
-  if (FBSession.activeSession.boundElementsByIndex || ![query respondsToSelector:selector]) {
+  SEL selector = AMSnapshotBindingSelector(query);
+  if (NULL == selector) {
     return nil;
   }
   NSMutableArray<XCUIElement *> *result = [NSMutableArray arrayWithCapacity:snapshots.count];
@@ -149,13 +156,15 @@ static BOOL AMCollectSnapshotsWithHashes(id<XCUIElementSnapshot> snapshot,
   }
 
   // Resolving the matches from the snapshot at hand saves one more snapshot of the root element
-  NSMutableArray<id<XCUIElementSnapshot>> *matchedSnapshots = [NSMutableArray array];
-  AMCollectSnapshotsWithHashes(rootSnapshot, hashes, firstMatch, matchedSnapshots);
-  NSArray<XCUIElement *> *boundElements = [self elementsWithSnapshots:matchedSnapshots
-                                                          rootElement:rootElement
-                                                         rootSnapshot:rootSnapshot];
-  if (nil != boundElements) {
-    return boundElements;
+  if (NULL != AMSnapshotBindingSelector([rootElement descendantsMatchingType:XCUIElementTypeAny])) {
+    NSMutableArray<id<XCUIElementSnapshot>> *matchedSnapshots = [NSMutableArray array];
+    AMCollectSnapshotsWithHashes(rootSnapshot, hashes, firstMatch, matchedSnapshots);
+    NSArray<XCUIElement *> *boundElements = [self elementsWithSnapshots:matchedSnapshots
+                                                            rootElement:rootElement
+                                                           rootSnapshot:rootSnapshot];
+    if (nil != boundElements) {
+      return boundElements;
+    }
   }
 
   NSMutableArray<XCUIElement *> *matchingElements = [NSMutableArray array];
