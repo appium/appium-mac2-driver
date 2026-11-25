@@ -87,8 +87,8 @@ describe('Mac2Driver - W3C key actions', {timeout: TEST_TIMEOUT}, () => {
 
   it('should honor pauses', async () => {
     const started = Date.now();
-    await driver!.performActions(keyActions([...press('a'), {type: 'pause', duration: 1500}, ...press('b')]));
-    assert.ok(Date.now() - started >= 1500);
+    await driver!.performActions(keyActions([...press('a'), {type: 'pause', duration: 300}, ...press('b')]));
+    assert.ok(Date.now() - started >= 300);
     assert.equal(await getText(), 'ab');
   });
 
