@@ -84,18 +84,9 @@ NS_ASSUME_NONNULL_BEGIN
                                               rootSnapshot:(id<XCUIElementSnapshot>)rootSnapshot;
 
 /**
- Looks up elements below (and including) the root element by walking one snapshot of it
- in memory and binding the matches without re-snapshotting, see elementsWithSnapshots:.
- Only worth it where the alternative takes several snapshots: a native type or predicate
- query is cheaper than a full snapshot.
-
- @param rootElement the element to search under, it is a candidate itself
- @param firstMatch whether to stop after the first match
- @param matcher called for every snapshot in document order, YES means a match
- @param fallbackMatcher optional, walks the same snapshot again if the matcher finds nothing
- @return The matching elements in document order (could be empty), or nil if this way is not
- applicable (no direct binding, snapshot failure, or the matcher threw). The caller should
- use the query-based lookup then.
+ Matches a single snapshot of the element (and its subtree) in memory and binds the matches.
+ Returns nil only if the snapshot cannot be taken or a matcher throws.
+ The fallbackMatcher, if any, walks the same snapshot when the matcher finds nothing.
  */
 + (nullable NSArray<XCUIElement *> *)elementsMatchingInSnapshotOfElement:(XCUIElement *)rootElement
                                                    includeOnlyFirstMatch:(BOOL)firstMatch

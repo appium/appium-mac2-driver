@@ -95,7 +95,7 @@ NSString *const AM_HAS_KEYBOARD_INPUT_FOCUS_ATTRIBUTE_NAME = @"amHasKeyboardInpu
     // domIdentifierWithSnapshot: relies on snapshot-only key paths (_accessibilityElement._token),
     // which a live XCUIElement does not have. Snapshot it once and read everything from there.
     id snapshotTarget = [target isKindOfClass:XCUIElement.class]
-      ? ([(XCUIElement *)target snapshotWithError:nil] ?: target)
+      ? [(XCUIElement *)target snapshotWithError:nil]
       : target;
     NSString *identifier = [snapshotTarget valueForKey:@"identifier"];
     if (identifier.length > 0) {
