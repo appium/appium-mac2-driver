@@ -41,8 +41,10 @@ describe('Mac2Driver - elements interaction', {timeout: TEST_TIMEOUT}, () => {
   });
 
   it('should click a button by absolute coordinate', async () => {
-    const [el] = await driver!.findElements('-ios predicate string', 'elementType == 12 AND label == "bold"');
+    const boldLocator = ['-ios predicate string', 'elementType == 12 AND label == "bold"'] as const;
+    const [el] = await driver!.findElements(...boldLocator);
     assert.ok(el);
+    assert.equal(await driver!.getElementAttribute(elementId(el), 'value'), '0');
     const {x, y, width, height} = (await driver!.getElementAttribute(elementId(el), 'frame')) as any;
     await driver!.executeScript('macos: click', [
       {
@@ -50,8 +52,8 @@ describe('Mac2Driver - elements interaction', {timeout: TEST_TIMEOUT}, () => {
         y: y + height / 2,
       },
     ]);
-    const els = await driver!.findElements('-ios predicate string', 'value == "Bold" AND label == "type face"');
-    assert.equal(els.length, 1);
+    const [boldButton] = await driver!.findElements(...boldLocator);
+    assert.equal(await driver!.getElementAttribute(elementId(boldButton), 'value'), '1');
   });
 
   it('should clear a text view', async () => {
@@ -92,7 +94,8 @@ describe('Mac2Driver - elements interaction', {timeout: TEST_TIMEOUT}, () => {
         keyModifierFlags: flagsCtrl,
       },
     ]);
-    const els = await driver!.findElements('-ios predicate string', `title == 'Import Image'`);
+    const els = await driver!.findElements('-ios predicate string', `title == 'Paste'`);
+    // the Edit menu item + the context menu one
     assert.ok(els.length > 1);
   });
 });
