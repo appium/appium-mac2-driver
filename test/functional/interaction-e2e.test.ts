@@ -4,7 +4,7 @@ import {describe, it, beforeEach, afterEach} from 'node:test';
 import {remote} from 'webdriverio';
 import type {Browser} from 'webdriverio';
 
-import {HOST, PORT, TEST_TIMEOUT, TEXT_EDIT_BUNDLE_ID} from '../utils.js';
+import {HOST, PORT, TEST_TIMEOUT, TEXT_EDIT_BUNDLE_ID, elementId} from '../utils.js';
 
 const CAPS = {
   platformName: 'mac',
@@ -36,14 +36,14 @@ describe('Mac2Driver - elements interaction', {timeout: TEST_TIMEOUT}, () => {
 
   it('should set a text to a text view', async () => {
     const el = await driver!.findElement('class name', 'XCUIElementTypeTextView');
-    await driver!.elementSendKeys(String(el), 'hello world');
-    assert.equal(await driver!.getElementText(String(el)), 'hello world');
+    await driver!.elementSendKeys(elementId(el), 'hello world');
+    assert.equal(await driver!.getElementText(elementId(el)), 'hello world');
   });
 
   it('should click a button by absolute coordinate', async () => {
     const [el] = await driver!.findElements('-ios predicate string', 'elementType == 12 AND label == "bold"');
     assert.ok(el);
-    const {x, y, width, height} = (await driver!.getElementAttribute(String(el), 'frame')) as any;
+    const {x, y, width, height} = (await driver!.getElementAttribute(elementId(el), 'frame')) as any;
     await driver!.executeScript('macos: click', [
       {
         x: x + width / 2,
@@ -56,15 +56,15 @@ describe('Mac2Driver - elements interaction', {timeout: TEST_TIMEOUT}, () => {
 
   it('should clear a text view', async () => {
     const el = await driver!.findElement('class name', 'XCUIElementTypeTextView');
-    await driver!.elementSendKeys(String(el), 'hello world');
-    assert.equal(await driver!.getElementText(String(el)), 'hello world');
-    await driver!.elementClear(String(el));
-    assert.equal(await driver!.getElementText(String(el)), '');
+    await driver!.elementSendKeys(elementId(el), 'hello world');
+    assert.equal(await driver!.getElementText(elementId(el)), 'hello world');
+    await driver!.elementClear(elementId(el));
+    assert.equal(await driver!.getElementText(elementId(el)), '');
   });
 
   it('should send keys with modifiers into a text view', async () => {
     const el = await driver!.findElement('class name', 'XCUIElementTypeTextView');
-    await driver!.elementClick(String(el));
+    await driver!.elementClick(elementId(el));
     const flagsShift = 1 << 1;
     await driver!.executeScript('macos: keys', [
       {
@@ -80,7 +80,7 @@ describe('Mac2Driver - elements interaction', {timeout: TEST_TIMEOUT}, () => {
         ],
       },
     ]);
-    assert.equal(await driver!.getElementText(String(el)), 'HI');
+    assert.equal(await driver!.getElementText(elementId(el)), 'HI');
   });
 
   it('should open context menu if left click with Ctrl depressed', async () => {
@@ -88,7 +88,7 @@ describe('Mac2Driver - elements interaction', {timeout: TEST_TIMEOUT}, () => {
     const flagsCtrl = 1 << 2;
     await driver!.executeScript('macos: click', [
       {
-        elementId: el,
+        elementId: elementId(el),
         keyModifierFlags: flagsCtrl,
       },
     ]);

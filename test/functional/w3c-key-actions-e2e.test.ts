@@ -6,7 +6,7 @@ import {promisify} from 'node:util';
 import {remote} from 'webdriverio';
 import type {Browser} from 'webdriverio';
 
-import {HOST, PORT, TEST_TIMEOUT, TEXT_EDIT_BUNDLE_ID} from '../utils.js';
+import {HOST, PORT, TEST_TIMEOUT, TEXT_EDIT_BUNDLE_ID, elementId} from '../utils.js';
 
 const execFileAsync = promisify(execFile);
 const CAPS = {
@@ -15,7 +15,6 @@ const CAPS = {
   'appium:bundleId': TEXT_EDIT_BUNDLE_ID,
   'appium:showServerLogs': true,
 };
-const W3C_ELEMENT_KEY = 'element-6066-11e4-a52e-4f735466cecf';
 const KEY_CONTROL = '\uE009';
 const KEY_SHIFT = '\uE008';
 const FLAG_MASK_CONTROL = 0x40000;
@@ -49,8 +48,7 @@ describe('Mac2Driver - W3C key actions', {timeout: TEST_TIMEOUT}, () => {
       port: PORT,
       capabilities: CAPS,
     });
-    const el = await driver.findElement('class name', 'XCUIElementTypeTextView');
-    textView = el[W3C_ELEMENT_KEY];
+    textView = elementId(await driver.findElement('class name', 'XCUIElementTypeTextView'));
     await driver.elementClick(textView);
   });
 
