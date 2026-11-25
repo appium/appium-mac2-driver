@@ -1,3 +1,9 @@
+## [5.1.0](https://github.com/appium/appium-mac2-driver/compare/v5.0.7...v5.1.0) (2026-11-25)
+
+### Features
+
+* add axis steps to class chain locators ([#459](https://github.com/appium/appium-mac2-driver/issues/459)) ([8b76d50](https://github.com/appium/appium-mac2-driver/commit/8b76d50278e94d8d6b619398aad821f468d610da))
+
 ## [5.0.7](https://github.com/appium/appium-mac2-driver/compare/v5.0.6...v5.0.7) (2026-11-21)
 
 ### Bug Fixes
