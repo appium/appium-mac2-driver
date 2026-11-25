@@ -17,14 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) BOOL isKeyOnly;
 
 /**
- Synthesizes the key actions as a sequence of XCSynthesizedEventRecord instances,
- which must be performed one after another. Delays between them are represented
- as NSNumber instances (seconds).
+ Performs the actions as a sequence of single-key event records, which keeps the modifiers pressed
+ for the time between their key down and key up. Only applicable if `isKeyOnly` is YES.
  */
-- (nullable NSArray *)synthesizeKeySequenceWithError:(NSError **)error;
-
-/*! The record, which releases all the modifiers and closes the persistent state */
-+ (XCSynthesizedEventRecord *)modifiersReleaseRecord;
+- (BOOL)performKeyActionsWithError:(NSError **)error;
 
 @end
 

@@ -17,8 +17,11 @@ const CAPS = {
 };
 const KEY_CONTROL = '\uE009';
 const KEY_SHIFT = '\uE008';
+const KEY_COMMAND = '\uE03D';
+const KEY_ARROW_LEFT = '\uE012';
 const FLAG_MASK_CONTROL = 0x40000;
 const FLAG_MASK_SHIFT = 0x20000;
+const FLAG_MASK_COMMAND = 0x100000;
 
 // Modifier flags of the current login session (kCGEventSourceStateCombinedSessionState)
 const JXA_SESSION_FLAGS = `
@@ -28,7 +31,9 @@ $.CGEventSourceFlagsState(0);
 
 async function sessionFlags(): Promise<number> {
   const {stdout} = await execFileAsync('osascript', ['-l', 'JavaScript', '-e', JXA_SESSION_FLAGS]);
-  return parseInt(stdout.trim(), 10);
+  const flags = parseInt(stdout.trim(), 10);
+  assert.ok(Number.isFinite(flags), `Cannot parse the session modifier flags from '${stdout}'`);
+  return flags;
 }
 
 const down = (value: string) => ({type: 'keyDown', value});
@@ -85,11 +90,35 @@ describe('Mac2Driver - W3C key actions', {timeout: TEST_TIMEOUT}, () => {
     assert.equal((await sessionFlags()) & FLAG_MASK_SHIFT, 0);
   });
 
+  it('should keep several modifiers held at once', async () => {
+    await driver!.elementSendKeys(textView, 'abc');
+    // Command+Shift+Left selects the text up to the line start, so the next key replaces it
+    await driver!.performActions(
+      keyActions([
+        down(KEY_COMMAND),
+        down(KEY_SHIFT),
+        ...press(KEY_ARROW_LEFT),
+        up(KEY_SHIFT),
+        up(KEY_COMMAND),
+        ...press('x'),
+      ]),
+    );
+    assert.equal(await getText(), 'x');
+    assert.equal((await sessionFlags()) & (FLAG_MASK_SHIFT | FLAG_MASK_COMMAND), 0);
+  });
+
   it('should honor pauses', async () => {
     const started = Date.now();
     await driver!.performActions(keyActions([...press('a'), {type: 'pause', duration: 300}, ...press('b')]));
     assert.ok(Date.now() - started >= 300);
     assert.equal(await getText(), 'ab');
+  });
+
+  it('should fail if the total duration of pauses is too long', async () => {
+    await assert.rejects(
+      driver!.performActions(keyActions([{type: 'pause', duration: 301000}, ...press('a')])),
+      /must not exceed 300 seconds/,
+    );
   });
 
   it('should fail if a key down has no matching key up', async () => {

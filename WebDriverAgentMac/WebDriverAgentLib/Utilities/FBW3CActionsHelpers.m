@@ -66,7 +66,7 @@ BOOL FBIsMetaModifier(NSString *value)
 
 NSNumber* AMToMetaModifier(NSString *value)
 {
-  if (0 == value.length) {
+  if (1 != value.length) {
     return nil;
   }
 
