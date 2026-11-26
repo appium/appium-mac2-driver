@@ -47,8 +47,9 @@ static const unsigned long long QUARANTINE_FLAG_USER_APPROVED = 0x40;
   value[length] = '\0';
   NSString *flagsString = [[@(value) componentsSeparatedByString:@";"] firstObject];
   unsigned long long flags = 0;
-  if (![[NSScanner scannerWithString:flagsString] scanHexLongLong:&flags]
-      || (flags & QUARANTINE_FLAG_USER_APPROVED)) {
+  NSScanner *scanner = [NSScanner scannerWithString:flagsString];
+  // A malformed value is inconclusive
+  if (![scanner scanHexLongLong:&flags] || !scanner.isAtEnd || (flags & QUARANTINE_FLAG_USER_APPROVED)) {
     return nil;
   }
   // Single-quote the path for the shell, escaping the quotes inside of it
