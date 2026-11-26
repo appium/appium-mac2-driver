@@ -31,6 +31,25 @@ async function windowManagerWindowCount(): Promise<number> {
   return parseInt(stdout.trim(), 10);
 }
 
+// Mission Control shortcut (symbolic hotkey 32) must be enabled and bound to Control+UpArrow
+const JXA_MISSION_CONTROL_SHORTCUT = `
+ObjC.import('Foundation');
+const d = ObjC.deepUnwrap($.NSUserDefaults.standardUserDefaults.persistentDomainForName('com.apple.symbolichotkeys'));
+JSON.stringify(((d || {}).AppleSymbolicHotKeys || {})['32'] || null);
+`;
+const KEYCODE_UP_ARROW = 126;
+
+async function isMissionControlShortcutAssigned(): Promise<boolean> {
+  try {
+    const {stdout} = await execFileAsync('osascript', ['-l', 'JavaScript', '-e', JXA_MISSION_CONTROL_SHORTCUT]);
+    const hotkey = JSON.parse(stdout.trim());
+    const [, keyCode, modifiers] = hotkey?.value?.parameters ?? [];
+    return Boolean(hotkey?.enabled) && keyCode === KEYCODE_UP_ARROW && Boolean(modifiers & (FLAG_CONTROL << 16));
+  } catch {
+    return false;
+  }
+}
+
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 describe('Mac2Driver - system shortcuts via keys', {timeout: TEST_TIMEOUT}, () => {
@@ -64,7 +83,11 @@ describe('Mac2Driver - system shortcuts via keys', {timeout: TEST_TIMEOUT}, () =
     assert.equal(await windowManagerWindowCount(), before);
   });
 
-  it('should keep Mission Control open with Control+Function+UpArrow and a short confirmationInterval', async () => {
+  it('should keep Mission Control open with Control+Function+UpArrow and a short confirmationInterval', async (t) => {
+    if (!(await isMissionControlShortcutAssigned())) {
+      t.skip('The Mission Control shortcut is not enabled or is not bound to Control+UpArrow');
+      return;
+    }
     const before = await windowManagerWindowCount();
     try {
       await driver!.executeScript('macos: keys', [
@@ -84,10 +107,15 @@ describe('Mac2Driver - system shortcuts via keys', {timeout: TEST_TIMEOUT}, () =
     assert.equal(await windowManagerWindowCount(), before);
   });
 
-  it('should fail if confirmationInterval is negative', async () => {
-    await assert.rejects(
-      driver!.executeScript('macos: keys', [{keys: ['a'], confirmationInterval: -1}]),
-      /non-negative number/,
-    );
-  });
+  for (const [title, value] of [
+    ['negative', -1],
+    ['a boolean', false],
+  ] as const) {
+    it(`should fail if confirmationInterval is ${title}`, async () => {
+      await assert.rejects(
+        driver!.executeScript('macos: keys', [{keys: ['a'], confirmationInterval: value}]),
+        /non-negative number/,
+      );
+    });
+  }
 });

@@ -536,7 +536,10 @@
                                                                        traceback:nil]);
   }
   id interval = request.arguments[@"confirmationInterval"];
-  if (nil != interval && !([interval isKindOfClass:NSNumber.class] && [(NSNumber *)interval doubleValue] >= 0)) {
+  // JSON booleans are decoded as NSNumber too
+  BOOL isNumber = [interval isKindOfClass:NSNumber.class]
+    && CFGetTypeID((__bridge CFTypeRef)interval) != CFBooleanGetTypeID();
+  if (nil != interval && !(isNumber && [(NSNumber *)interval doubleValue] >= 0)) {
     NSString *message = @"The 'confirmationInterval' argument must be a non-negative number";
     return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:message
                                                                        traceback:nil]);
