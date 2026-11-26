@@ -11,6 +11,7 @@
 
 #import "AMGeometryUtils.h"
 #import "AMKeyboardUtils.h"
+#import "AMXCUIDeviceWrapper.h"
 #import "FBConfiguration.h"
 #import "FBRoute.h"
 #import "FBRouteRequest.h"
@@ -492,6 +493,35 @@
   return FBResponseWithOK();
 }
 
++ (nullable id<FBResponsePayload>)typeKeys:(NSArray *)keys
+                                destination:(XCUIElement *)destination
+{
+  for (id item in keys) {
+    NSString *key;
+    NSUInteger modifierFlags = XCUIKeyModifierNone;
+    if ([item isKindOfClass:NSString.class]) {
+      key = item;
+    } else if ([item isKindOfClass:NSDictionary.class]) {
+      key = [(NSDictionary *)item objectForKey:@"key"];
+      if (![key isKindOfClass:NSString.class]) {
+        NSString *message = [NSString stringWithFormat:@"All dictionaries of 'keys' array must have the 'key' item of type string. Got '%@' instead in the item %@", key, item];
+        return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:message
+                                                                           traceback:nil]);
+      }
+      id modifiers = [(NSDictionary *)item objectForKey:@"modifierFlags"];
+      if ([modifiers isKindOfClass:NSNumber.class]) {
+        modifierFlags = [(NSNumber *)modifiers unsignedIntValue];
+      }
+    } else {
+      NSString *message = @"All items of the 'keys' array must be either dictionaries or strings";
+      return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:message
+                                                                         traceback:nil]);
+    }
+    [destination typeKey:(AMKeyValueForName(key) ?: key) modifierFlags:modifierFlags];
+  }
+  return nil;
+}
+
 + (id<FBResponsePayload>)handleKeys:(FBRouteRequest *)request
 {
   FBElementCache *elementCache = request.session.elementCache;
@@ -505,31 +535,26 @@
     return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:message
                                                                        traceback:nil]);
   }
-  for (id item in (NSArray *)keys) {
-    if ([item isKindOfClass:NSString.class]) {
-      NSString *keyValue = AMKeyValueForName(item) ?: item;
-      [destination typeKey:keyValue modifierFlags:XCUIKeyModifierNone];
-    } else if ([item isKindOfClass:NSDictionary.class]) {
-      id key = [(NSDictionary *)item objectForKey:@"key"];
-      if (![key isKindOfClass:NSString.class]) {
-        NSString *message = [NSString stringWithFormat:@"All dictionaries of 'keys' array must have the 'key' item of type string. Got '%@' instead in the item %@", key, item];
-        return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:message
-                                                                           traceback:nil]);
-      }
-      id modifiers = [(NSDictionary *)item objectForKey:@"modifierFlags"];
-      NSUInteger modifierFlags = XCUIKeyModifierNone;
-      if ([modifiers isKindOfClass:NSNumber.class]) {
-        modifierFlags = [(NSNumber *)modifiers unsignedIntValue];
-      }
-      NSString *keyValue = AMKeyValueForName(key) ?: key;
-      [destination typeKey:keyValue modifierFlags:modifierFlags];
-    } else {
-      NSString *message = @"All items of the 'keys' array must be either dictionaries or strings";
-      return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:message
-                                                                         traceback:nil]);
-    }
+  id interval = request.arguments[@"confirmationInterval"];
+  // JSON booleans are decoded as NSNumber too
+  BOOL isNumber = [interval isKindOfClass:NSNumber.class]
+    && CFGetTypeID((__bridge CFTypeRef)interval) != CFBooleanGetTypeID();
+  if (nil != interval && !(isNumber && [(NSNumber *)interval doubleValue] >= 0)) {
+    NSString *message = @"The 'confirmationInterval' argument must be a non-negative number";
+    return FBResponseWithStatus([FBCommandStatus invalidArgumentErrorWithMessage:message
+                                                                       traceback:nil]);
   }
-  return FBResponseWithOK();
+  __block id<FBResponsePayload> failure = nil;
+  void (^typeAll)(void) = ^{
+    failure = [self.class typeKeys:keys destination:destination];
+  };
+  if (nil != interval) {
+    [[AMXCUIDeviceWrapper sharedDevice] withImplicitEventConfirmationInterval:[(NSNumber *)interval doubleValue]
+                                                                        block:typeAll];
+  } else {
+    typeAll();
+  }
+  return failure ?: FBResponseWithOK();
 }
 
 + (id<FBResponsePayload>)handleTap:(FBRouteRequest *)request
