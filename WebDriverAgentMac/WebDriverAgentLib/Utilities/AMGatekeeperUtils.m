@@ -51,16 +51,19 @@ static const unsigned long long QUARANTINE_FLAG_USER_APPROVED = 0x40;
       || (flags & QUARANTINE_FLAG_USER_APPROVED)) {
     return nil;
   }
+  // Single-quote the path for the shell, escaping the quotes inside of it
+  NSString *quotedPath = [NSString stringWithFormat:@"'%@'", [appPath stringByReplacingOccurrencesOfString:@"'"
+                                                                                                withString:@"'\\''"]];
   return [NSString stringWithFormat:
           @"macOS Gatekeeper would block '%@' from launching. The app is quarantined (e.g. it has been "
           "downloaded from the internet) and has not been approved yet, so macOS would ask for a "
           "confirmation that nothing can dismiss during the test, and the launch would hang. "
           "To fix this, either open the app manually once and approve it, or remove the quarantine "
-          "flag on the machine that runs the tests: xattr -dr %s '%@'. "
+          "flag on the machine that runs the tests: xattr -dr %s %@. "
           "If that fails with 'Operation not permitted', the app may be signed by another developer; "
           "allow your terminal app in System Settings > Privacy & Security > App Management "
           "(or Full Disk Access) and retry.",
-          appPath, QUARANTINE_ATTR, appPath];
+          appPath, QUARANTINE_ATTR, quotedPath];
 }
 
 @end

@@ -112,15 +112,23 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
   } else if (nil != deepLink) {
     NSURL *url = [NSURL URLWithString:deepLink];
     NSError *error;
+    if (nil != bundleID) {
+      // Opening the URL launches the app if it is not running
+      app = [[XCUIApplication alloc] initWithBundleIdentifier:bundleID];
+      NSString *blockReason = app.state <= XCUIApplicationStateNotRunning
+        ? [AMGatekeeperUtils blockingReasonForAppWithBundleId:bundleID path:nil]
+        : nil;
+      if (nil != blockReason) {
+        return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:blockReason
+                                                                  traceback:nil]);
+      }
+    }
     BOOL success = nil == bundleID
       ? [AMXCUIDeviceWrapper.sharedDevice openUrl:url error:&error]
       : [AMXCUIDeviceWrapper.sharedDevice openUrl:url withApplication:bundleID error:&error];
     if (!success) {
       return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:error.localizedDescription
                                                                 traceback:nil]);
-    }
-    if (nil != bundleID) {
-      app = [[XCUIApplication alloc] initWithBundleIdentifier:bundleID];
     }
   } else {
     app = nil != appPath
@@ -129,10 +137,9 @@ const static NSString *CAPABILITIES_KEY = @"capabilities";
     if (noReset && app.state > XCUIApplicationStateNotRunning) {
       [app activate];
     } else {
-      // XCTest would wait for a blocking Gatekeeper dialog forever
-      NSString *blockReason = app.state <= XCUIApplicationStateNotRunning
-        ? [AMGatekeeperUtils blockingReasonForAppWithBundleId:bundleID path:appPath]
-        : nil;
+      // XCTest would wait for a blocking Gatekeeper dialog forever. A running app is relaunched
+      // unless noReset is set, so the (possibly updated) bundle is checked in any case.
+      NSString *blockReason = [AMGatekeeperUtils blockingReasonForAppWithBundleId:bundleID path:appPath];
       if (nil != blockReason) {
         return FBResponseWithStatus([FBCommandStatus sessionNotCreatedError:blockReason
                                                                   traceback:nil]);
