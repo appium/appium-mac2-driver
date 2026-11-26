@@ -1,3 +1,9 @@
+## [5.2.0](https://github.com/appium/appium-mac2-driver/compare/v5.1.2...v5.2.0) (2026-11-26)
+
+### Features
+
+* add confirmationInterval argument to macos: keys ([#462](https://github.com/appium/appium-mac2-driver/issues/462)) ([9d20bfd](https://github.com/appium/appium-mac2-driver/commit/9d20bfd9cea10f0e2b4f8bf54f9cb6c92eb65c66))
+
 ## [5.1.2](https://github.com/appium/appium-mac2-driver/compare/v5.1.1...v5.1.2) (2026-11-26)
 
 ### Miscellaneous Chores
