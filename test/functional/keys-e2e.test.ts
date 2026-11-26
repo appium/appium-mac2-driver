@@ -38,13 +38,18 @@ const d = ObjC.deepUnwrap($.NSUserDefaults.standardUserDefaults.persistentDomain
 JSON.stringify(((d || {}).AppleSymbolicHotKeys || {})['32'] || null);
 `;
 const KEYCODE_UP_ARROW = 126;
+// Require exactly Control among Shift/Control/Option/Command (other flags like Fn are ignored)
+const CONTROL_MASK = 0x40000;
+const USER_MODIFIERS_MASK = 0x20000 | 0x40000 | 0x80000 | 0x100000;
 
 async function isMissionControlShortcutAssigned(): Promise<boolean> {
   try {
     const {stdout} = await execFileAsync('osascript', ['-l', 'JavaScript', '-e', JXA_MISSION_CONTROL_SHORTCUT]);
     const hotkey = JSON.parse(stdout.trim());
     const [, keyCode, modifiers] = hotkey?.value?.parameters ?? [];
-    return Boolean(hotkey?.enabled) && keyCode === KEYCODE_UP_ARROW && Boolean(modifiers & (FLAG_CONTROL << 16));
+    return (
+      Boolean(hotkey?.enabled) && keyCode === KEYCODE_UP_ARROW && (modifiers & USER_MODIFIERS_MASK) === CONTROL_MASK
+    );
   } catch {
     return false;
   }
