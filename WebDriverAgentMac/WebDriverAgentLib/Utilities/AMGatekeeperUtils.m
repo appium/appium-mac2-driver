@@ -48,8 +48,9 @@ static const unsigned long long QUARANTINE_FLAG_USER_APPROVED = 0x40;
   NSString *flagsString = [[@(value) componentsSeparatedByString:@";"] firstObject];
   unsigned long long flags = 0;
   NSScanner *scanner = [NSScanner scannerWithString:flagsString];
-  // A malformed value is inconclusive
-  if (![scanner scanHexLongLong:&flags] || !scanner.isAtEnd || (flags & QUARANTINE_FLAG_USER_APPROVED)) {
+  BOOL isMalformed = ![scanner scanHexLongLong:&flags] || !scanner.isAtEnd;
+  // macOS shows a blocking "damaged" dialog for a malformed value, so it is treated as not approved
+  if (!isMalformed && (flags & QUARANTINE_FLAG_USER_APPROVED)) {
     return nil;
   }
   // Single-quote the path for the shell, escaping the quotes inside of it
@@ -57,14 +58,15 @@ static const unsigned long long QUARANTINE_FLAG_USER_APPROVED = 0x40;
                                                                                                 withString:@"'\\''"]];
   return [NSString stringWithFormat:
           @"macOS Gatekeeper would block '%@' from launching. The app is quarantined (e.g. it has been "
-          "downloaded from the internet) and has not been approved yet, so macOS would ask for a "
+          "downloaded from the internet) and has not been approved yet%@, so macOS would ask for a "
           "confirmation that nothing can dismiss during the test, and the launch would hang. "
           "To fix this, either open the app manually once and approve it, or remove the quarantine "
           "flag on the machine that runs the tests: xattr -dr %s %@. "
           "If that fails with 'Operation not permitted', the app may be signed by another developer; "
           "allow your terminal app in System Settings > Privacy & Security > App Management "
           "(or Full Disk Access) and retry.",
-          appPath, QUARANTINE_ATTR, quotedPath];
+          appPath, isMalformed ? @" (the quarantine attribute value is malformed)" : @"",
+          QUARANTINE_ATTR, quotedPath];
 }
 
 @end

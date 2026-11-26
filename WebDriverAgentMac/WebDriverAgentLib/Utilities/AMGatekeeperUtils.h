@@ -23,8 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Checks whether launching the given app would open a blocking Gatekeeper dialog
  ("downloaded from the internet" or "Not Opened"), which XCTest would wait on forever.
- That is the case if the bundle is quarantined and the user has not approved it yet.
- Inconclusive checks are treated as "not blocked".
+ That is the case if the bundle is quarantined and the user has not approved it yet,
+ or if the quarantine attribute is malformed. Inconclusive checks (e.g. the app cannot be located)
+ are treated as "not blocked".
 
  @param bundleId Bundle identifier of the app. Ignored if path is set
  @param path Full path to the app bundle
