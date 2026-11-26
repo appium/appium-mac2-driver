@@ -755,6 +755,7 @@ static NSUInteger FBApplyModifier(NSUInteger current, NSNumber *modifier, BOOL i
 
 // The key actions pauses are not covered by the timeout of the event synthesizer
 #define MAX_KEY_ACTIONS_PAUSES_MS 300000
+#define MAX_KEY_ACTIONS_DURATION_SEC 300
 
 @implementation FBW3CActionsSynthesizer
 
@@ -1116,14 +1117,22 @@ static NSUInteger FBApplyModifier(NSUInteger current, NSNumber *modifier, BOOL i
   }
 
   BOOL areModifiersPressed = NO;
+  // A single monotonic deadline for pauses and synthesis of all the records
+  NSTimeInterval deadline = NSProcessInfo.processInfo.systemUptime + MAX_KEY_ACTIONS_DURATION_SEC;
   @try {
     for (FBKeyActionStep *step in steps) {
+      NSTimeInterval remaining = deadline - NSProcessInfo.processInfo.systemUptime;
+      if (remaining <= 0 || (nil == step.record && step.delay > remaining)) {
+        return [[[FBErrorBuilder builder]
+                 withDescriptionFormat:@"Cannot perform actions within %@ seconds timeout", @(MAX_KEY_ACTIONS_DURATION_SEC)]
+                buildError:error];
+      }
       if (nil == step.record) {
         [NSThread sleepForTimeInterval:step.delay];
         continue;
       }
       areModifiersPressed |= step.beginsPersistentState;
-      if (![AMXCUIDeviceWrapper.sharedDevice synthesizeEvent:step.record error:error]) {
+      if (![AMXCUIDeviceWrapper.sharedDevice synthesizeEvent:step.record timeout:remaining error:error]) {
         return NO;
       }
       if (step.endsPersistentState) {

@@ -67,6 +67,18 @@ withApplication:(NSString *)bundleId
 - (BOOL)synthesizeEvent:(XCSynthesizedEventRecord *)event
                   error:(NSError **)error;
 
+/**
+ Synthesizes an input event according to the given event spec
+
+ @param event The event spec
+ @param timeout The maximum time in seconds to wait for the event to be performed
+ @param error If there is an error, upon return contains an NSError object that describes the problem.
+ @return YES if the operation was successful
+ */
+- (BOOL)synthesizeEvent:(XCSynthesizedEventRecord *)event
+                timeout:(NSTimeInterval)timeout
+                  error:(NSError **)error;
+
 @end
 
 NS_ASSUME_NONNULL_END

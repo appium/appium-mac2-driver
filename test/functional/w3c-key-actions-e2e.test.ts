@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';
 import {execFile} from 'node:child_process';
+import {mkdtemp, rm, writeFile} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
 import {describe, it, beforeEach, afterEach} from 'node:test';
 import {promisify} from 'node:util';
 
@@ -17,6 +20,7 @@ const CAPS = {
 };
 const KEY_CONTROL = '\uE009';
 const KEY_SHIFT = '\uE008';
+const KEY_RIGHT_SHIFT = '\uE050';
 const KEY_COMMAND = '\uE03D';
 const KEY_ARROW_LEFT = '\uE012';
 const FLAG_MASK_CONTROL = 0x40000;
@@ -36,6 +40,9 @@ async function sessionFlags(): Promise<number> {
   return flags;
 }
 
+const EMPTY_RTF = '{\\rtf1\\ansi\\deff0 }';
+const CLOSE_DOCUMENTS_JXA = `Application('TextEdit').documents().forEach((d) => d.close({saving: 'no'}));`;
+
 const down = (value: string) => ({type: 'keyDown', value});
 const up = (value: string) => ({type: 'keyUp', value});
 const press = (value: string) => [down(value), up(value)];
@@ -44,10 +51,16 @@ const keyActions = (actions: object[]) => [{type: 'key', id: 'keyboard', actions
 describe('Mac2Driver - W3C key actions', {timeout: TEST_TIMEOUT}, () => {
   let driver: Browser | null = null;
   let textView = '';
+  let tmpDir = '';
 
   const getText = async () => await driver!.getElementText(textView);
 
   beforeEach(async () => {
+    // Start with a fresh empty document, so there is always an editor with a known content
+    tmpDir = await mkdtemp(join(tmpdir(), 'w3c-keys-'));
+    const docPath = join(tmpDir, 'empty.rtf');
+    await writeFile(docPath, EMPTY_RTF);
+    await execFileAsync('open', ['-a', 'TextEdit', docPath]);
     driver = await remote({
       hostname: HOST,
       port: PORT,
@@ -58,12 +71,14 @@ describe('Mac2Driver - W3C key actions', {timeout: TEST_TIMEOUT}, () => {
   });
 
   afterEach(async () => {
-    if (driver) {
-      try {
+    try {
+      if (driver) {
         await driver.deleteSession();
-      } finally {
-        driver = null;
       }
+    } finally {
+      driver = null;
+      await execFileAsync('osascript', ['-l', 'JavaScript', '-e', CLOSE_DOCUMENTS_JXA]).catch(() => {});
+      await rm(tmpDir, {recursive: true, force: true});
     }
   });
 
@@ -107,10 +122,20 @@ describe('Mac2Driver - W3C key actions', {timeout: TEST_TIMEOUT}, () => {
     assert.equal((await sessionFlags()) & (FLAG_MASK_SHIFT | FLAG_MASK_COMMAND), 0);
   });
 
+  it('should apply a held right-hand modifier', async () => {
+    await driver!.performActions(
+      keyActions([down(KEY_RIGHT_SHIFT), ...press('a'), up(KEY_RIGHT_SHIFT), ...press('b')]),
+    );
+    assert.equal(await getText(), 'Ab');
+    assert.equal((await sessionFlags()) & FLAG_MASK_SHIFT, 0);
+  });
+
   it('should honor pauses', async () => {
+    // A pause-only request measures the pause itself, without key synthesis
     const started = Date.now();
-    await driver!.performActions(keyActions([...press('a'), {type: 'pause', duration: 300}, ...press('b')]));
+    await driver!.performActions(keyActions([{type: 'pause', duration: 300}]));
     assert.ok(Date.now() - started >= 300);
+    await driver!.performActions(keyActions([...press('a'), {type: 'pause', duration: 100}, ...press('b')]));
     assert.equal(await getText(), 'ab');
   });
 
