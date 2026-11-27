@@ -13,7 +13,7 @@ gesture must be constructed in order to be actually recognized by the operating 
 
     The Mac2 driver only has partial support for W3C Actions:
 
-    * Only the `pointer` input source is supported
+    * Only the `pointer` and `key` input sources are supported
     * Only the `mouse` pointing device type (`pointerType`) is supported
 
 Here is a short list of examples for the most common macOS pointer gestures:
@@ -90,3 +90,26 @@ second.
 
 In general, any `pointerMove` action while the cursor is not depressed (not preceded by a
 `pointerDown` action) is treated as a hover gesture, given sufficiently high `duration`.
+
+## Key Presses
+
+Send the `key` input source as a standalone action. Combining it with a `pointer` source in the
+same request is supported, but modifiers are not reliably kept pressed between the keys then.
+
+```json
+[
+  {"type": "keyDown", "value": "\uE009"},
+  {"type": "keyDown", "value": "d"},
+  {"type": "keyUp", "value": "d"},
+  {"type": "pause", "duration": 100},
+  {"type": "keyDown", "value": "e"},
+  {"type": "keyUp", "value": "e"},
+  {"type": "keyUp", "value": "\uE009"}
+]
+```
+
+This snippet presses the Control key (`\uE009`), types `d` and `e` while it is held, and then
+releases it. The supported modifiers are Control (`\uE009`), Shift (`\uE008`), Option (`\uE00A`)
+and Command (`\uE03D`). Every `keyDown` must have a matching `keyUp`.
+
+Regular keys are typed when their `keyUp` is processed.

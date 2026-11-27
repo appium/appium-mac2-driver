@@ -8,6 +8,7 @@
  */
 
 #import "FBW3CActionsSynthesizer.h"
+#import "AMXCUIDeviceWrapper.h"
 
 #import "FBErrorBuilder.h"
 #import "FBElementCache.h"
@@ -88,6 +89,9 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
 @interface FBKeyUpItem : FBW3CKeyItem
 
 @property (readonly, nonatomic) NSString *value;
+
+- (XCPointerEventPath *)typeKeyInEventPath:(nullable XCPointerEventPath *)eventPath
+                                 modifiers:(NSUInteger)modifiers;
 
 @end
 
@@ -418,6 +422,24 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
 @end
 
 
+// Left and right modifier keys share one flag, so the pressed keys are tracked by their values.
+// The NULL key (zero modifier) releases all modifiers
+static NSUInteger FBApplyModifier(NSMutableSet<NSString *> *pressedKeys, NSString *value, NSNumber *modifier, BOOL isKeyDown)
+{
+  if (0 == [modifier unsignedIntValue]) {
+    [pressedKeys removeAllObjects];
+  } else if (isKeyDown) {
+    [pressedKeys addObject:value];
+  } else {
+    [pressedKeys removeObject:value];
+  }
+  NSUInteger flags = 0;
+  for (NSString *key in pressedKeys) {
+    flags |= [AMToMetaModifier(key) unsignedIntValue];
+  }
+  return flags;
+}
+
 @implementation FBW3CKeyItem
 
 - (nullable instancetype)initWithActionItem:(NSDictionary<NSString *, id> *)actionItem
@@ -440,23 +462,21 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
                           lastItemIndex:(NSUInteger)lastItemIndex
 {
   NSUInteger result = 0;
+  NSMutableSet<NSString *> *pressedKeys = [NSMutableSet set];
   for (NSUInteger index = 0; index <= lastItemIndex; index++) {
     FBW3CKeyItem *item = [allItems objectAtIndex:index];
     NSNumber *modifier = nil;
+    NSString *value = nil;
     BOOL isKeyDown = [item isKindOfClass:FBKeyDownItem.class];
     BOOL isKeyUp = !isKeyDown && [item isKindOfClass:FBKeyUpItem.class];
     if (isKeyDown || isKeyUp) {
-      NSString *value = [item performSelector:@selector(value)];
+      value = [item performSelector:@selector(value)];
       modifier = AMToMetaModifier(value);
     }
     if (nil == modifier) {
       continue;
     }
-    if (isKeyDown) {
-      result |= [modifier unsignedIntValue];
-    } else {
-      result &= ~[modifier unsignedIntValue];
-    }
+    result = FBApplyModifier(pressedKeys, value, modifier, isKeyDown);
   }
   return result;
 }
@@ -540,18 +560,24 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
     return @[];
   }
 
+  return @[[self typeKeyInEventPath:eventPath
+                          modifiers:[self calculateModifiersForChain:allItems lastItemIndex:currentItemIndex]]];
+}
+
+- (XCPointerEventPath *)typeKeyInEventPath:(nullable XCPointerEventPath *)eventPath
+                                 modifiers:(NSUInteger)modifiers
+{
   NSTimeInterval offsetSeconds = FBMillisToSeconds(self.offset);
   XCPointerEventPath *result = nil == eventPath ? [[XCPointerEventPath alloc] initForTextInput] : eventPath;
 
   NSString *specialKey = AMToSpecialKey(self.value);
-  NSUInteger modifiers = [self calculateModifiersForChain:allItems lastItemIndex:currentItemIndex];
   if (nil != specialKey) {
     if (specialKey.length > 0) {
       [result typeKey:specialKey
             modifiers:modifiers
              atOffset:offsetSeconds];
     }
-    return @[result];
+    return result;
   }
 
   NSUInteger len = [self.value length];
@@ -576,7 +602,7 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
     }
   }
 
-  return @[result];
+  return result;
 }
 
 @end
@@ -664,7 +690,7 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
                             offset:offset
                              error:error];
   if (self) {
-    NSNumber *duration = FBOptDuration(actionItem, nil, error);
+    NSNumber *duration = FBOptDuration(actionItem, @0, error);
     if (nil == duration) {
       return nil;
     }
@@ -704,6 +730,22 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
 @end
 
 
+@interface FBKeyActionStep : NSObject
+
+/*! The record to perform. A delay is performed instead if the record is nil */
+@property (nullable, nonatomic) XCSynthesizedEventRecord *record;
+/*! The delay in seconds */
+@property (nonatomic) NSTimeInterval delay;
+@property (nonatomic) BOOL beginsPersistentState;
+@property (nonatomic) BOOL endsPersistentState;
+
+@end
+
+@implementation FBKeyActionStep
+
+@end
+
+
 @interface FBW3CKeyItemsChain : FBBaseActionItemsChain
 
 @end
@@ -712,11 +754,18 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
 
 - (void)addItem:(FBBaseActionItem *)item
 {
+  if ([item isKindOfClass:FBKeyPauseItem.class]) {
+    self.durationOffset += ((FBKeyPauseItem *)item).duration;
+  }
   [self.items addObject:item];
 }
 
 @end
 
+
+// The key actions pauses are not covered by the timeout of the event synthesizer
+#define MAX_KEY_ACTIONS_PAUSES_MS 300000
+#define MAX_KEY_ACTIONS_DURATION_SEC 300
 
 @implementation FBW3CActionsSynthesizer
 
@@ -771,9 +820,9 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
   return [[result reverseObjectEnumerator] allObjects];
 }
 
-- (nullable NSArray<XCPointerEventPath *> *)eventPathsWithKeyAction:(NSDictionary<NSString *, id> *)actionDescription
-                                                        forActionId:(NSString *)actionId
-                                                              error:(NSError **)error
+- (nullable FBW3CKeyItemsChain *)keyItemsChainWithKeyAction:(NSDictionary<NSString *, id> *)actionDescription
+                                                forActionId:(NSString *)actionId
+                                                      error:(NSError **)error
 {
   static NSDictionary<NSString *, Class> *keyItemsMapping;
   static NSArray<NSString *> *supportedActionItemTypes;
@@ -833,7 +882,15 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
     [chain addItem:keyItem];
   }
 
-  return [chain asEventPathsWithError:error];
+  return chain;
+}
+
+- (nullable NSArray<XCPointerEventPath *> *)eventPathsWithKeyAction:(NSDictionary<NSString *, id> *)actionDescription
+                                                        forActionId:(NSString *)actionId
+                                                              error:(NSError **)error
+{
+  FBW3CKeyItemsChain *chain = [self keyItemsChainWithKeyAction:actionDescription forActionId:actionId error:error];
+  return nil == chain ? nil : [chain asEventPathsWithError:error];
 }
 
 - (nullable NSArray<XCPointerEventPath *> *)eventPathsWithGestureAction:(NSDictionary<NSString *, id> *)actionDescription
@@ -938,10 +995,198 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
   return [self eventPathsWithKeyAction:actionDescription forActionId:actionId error:error];
 }
 
-- (nullable XCSynthesizedEventRecord *)synthesizeWithError:(NSError **)error
+- (BOOL)isKeyOnly
 {
-  XCSynthesizedEventRecord *eventRecord = [[XCSynthesizedEventRecord alloc] initWithName:@"W3C Touch Action"];
+  if (1 != self.actions.count) {
+    return NO;
+  }
+  id actionType = [self.actions.firstObject objectForKey:FB_KEY_TYPE];
+  return [actionType isKindOfClass:NSString.class] && [actionType isEqualToString:FB_ACTION_TYPE_KEY];
+}
+
+- (BOOL)verifyPairedKeyItems:(NSArray<FBW3CKeyItem *> *)items
+                       error:(NSError **)error
+{
+  NSMutableDictionary<NSString *, NSMutableArray<FBKeyDownItem *> *> *openItems = [NSMutableDictionary dictionary];
+  for (FBW3CKeyItem *item in items) {
+    if ([item isKindOfClass:FBKeyDownItem.class]) {
+      NSString *value = ((FBKeyDownItem *)item).value;
+      NSMutableArray *stack = openItems[value] ?: [NSMutableArray array];
+      [stack addObject:item];
+      openItems[value] = stack;
+    } else if ([item isKindOfClass:FBKeyUpItem.class]) {
+      FBKeyUpItem *upItem = (FBKeyUpItem *)item;
+      NSMutableArray *stack = openItems[upItem.value];
+      if (0 == stack.count) {
+        NSString *description = [NSString stringWithFormat:@"Key Up action '%@' is not balanced with a preceding Key Down one in '%@'", upItem.value, upItem.actionItem];
+        return [[FBErrorBuilder.builder withDescription:description] buildError:error];
+      }
+      [stack removeLastObject];
+    }
+  }
+  NSMutableSet<FBW3CKeyItem *> *unclosed = [NSMutableSet set];
+  for (NSArray *stack in openItems.allValues) {
+    [unclosed addObjectsFromArray:stack];
+  }
+  for (FBW3CKeyItem *item in items) {
+    if ([unclosed containsObject:item]) {
+      FBKeyDownItem *downItem = (FBKeyDownItem *)item;
+      NSString *description = [NSString stringWithFormat:@"Key Down action '%@' must have a closing Key Up successor in '%@'", downItem.value, downItem.actionItem];
+      return [[FBErrorBuilder.builder withDescription:description] buildError:error];
+    }
+  }
+  return YES;
+}
+
+- (nullable NSArray<FBKeyActionStep *> *)keyActionStepsWithError:(NSError **)error
+{
   NSMutableDictionary<NSString *, NSDictionary<NSString *, id> *> *actionsMapping = [NSMutableDictionary new];
+  NSArray<NSString *> *actionIds = [self validatedActionIdsWithMapping:actionsMapping error:error];
+  if (nil == actionIds) {
+    return nil;
+  }
+  if (0 == actionIds.count) {
+    return @[];
+  }
+  NSString *actionId = actionIds.firstObject;
+  FBW3CKeyItemsChain *chain = [self keyItemsChainWithKeyAction:actionsMapping[actionId]
+                                                   forActionId:actionId
+                                                         error:error];
+  if (nil == chain) {
+    return nil;
+  }
+  NSArray<FBW3CKeyItem *> *items = chain.items.copy;
+  if (![self verifyPairedKeyItems:items error:error]) {
+    return nil;
+  }
+
+  // Every key is typed in its own record, because XCTest calculates modifier key events for the whole
+  // record upfront, which makes multi-key records unreliable. Held modifiers survive between the records
+  // thanks to the persistent state.
+  NSMutableArray<FBKeyActionStep *> *result = [NSMutableArray array];
+  NSUInteger heldModifiers = 0;
+  NSMutableSet<NSString *> *pressedModifierKeys = [NSMutableSet set];
+  double totalPausesMs = 0;
+  for (FBW3CKeyItem *item in items) {
+    FBKeyActionStep *step = [FBKeyActionStep new];
+    if ([item isKindOfClass:FBKeyPauseItem.class]) {
+      double durationMs = ((FBKeyPauseItem *)item).duration;
+      totalPausesMs += durationMs;
+      if (totalPausesMs > MAX_KEY_ACTIONS_PAUSES_MS) {
+        NSString *description = [NSString stringWithFormat:@"The total duration of pauses in '%@' must not exceed %@ seconds",
+                                 actionId, @(MAX_KEY_ACTIONS_PAUSES_MS / 1000)];
+        [[FBErrorBuilder.builder withDescription:description] buildError:error];
+        return nil;
+      }
+      step.delay = durationMs / 1000.0;
+      [result addObject:step];
+      continue;
+    }
+
+    BOOL isKeyDown = [item isKindOfClass:FBKeyDownItem.class];
+    FBKeyUpItem *keyUpItem = isKeyDown ? nil : (FBKeyUpItem *)item;
+    NSString *value = isKeyDown ? ((FBKeyDownItem *)item).value : keyUpItem.value;
+    NSNumber *modifier = AMToMetaModifier(value);
+    XCSynthesizedEventRecord *record = [[XCSynthesizedEventRecord alloc] initWithName:@"W3C Key Action"];
+    if (nil != modifier) {
+      NSUInteger newModifiers = FBApplyModifier(pressedModifierKeys, value, modifier, isKeyDown);
+      if (newModifiers == heldModifiers) {
+        continue;
+      }
+      [record addPointerEventPath:[self.class modifiersPathWithFlags:newModifiers]];
+      step.beginsPersistentState = 0 == heldModifiers;
+      step.endsPersistentState = 0 == newModifiers;
+      heldModifiers = newModifiers;
+    } else if (!isKeyDown) {
+      // The records are performed one after another, so the offset must be relative to the record
+      keyUpItem.offset = 0;
+      XCPointerEventPath *path = [keyUpItem typeKeyInEventPath:nil modifiers:heldModifiers];
+      if (0 == path.pointerEvents.count) {
+        continue;
+      }
+      [record addPointerEventPath:path];
+    } else {
+      // Regular keys are typed on key up
+      continue;
+    }
+    if (step.beginsPersistentState) {
+      [self.class setPersistentState:@"beginsPersistentState" ofRecord:record];
+    } else if (step.endsPersistentState) {
+      [self.class setPersistentState:@"endsPersistentState" ofRecord:record];
+    }
+    step.record = record;
+    [result addObject:step];
+  }
+  return result.copy;
+}
+
+- (BOOL)performKeyActionsWithError:(NSError **)error
+{
+  NSArray<FBKeyActionStep *> *steps = [self keyActionStepsWithError:error];
+  if (nil == steps) {
+    return NO;
+  }
+
+  BOOL areModifiersPressed = NO;
+  // A single monotonic deadline for pauses and synthesis of all the records
+  NSTimeInterval deadline = NSProcessInfo.processInfo.systemUptime + MAX_KEY_ACTIONS_DURATION_SEC;
+  @try {
+    for (FBKeyActionStep *step in steps) {
+      NSTimeInterval remaining = deadline - NSProcessInfo.processInfo.systemUptime;
+      if (remaining <= 0 || (nil == step.record && step.delay > remaining)) {
+        return [[[FBErrorBuilder builder]
+                 withDescriptionFormat:@"Cannot perform actions within %@ seconds timeout", @(MAX_KEY_ACTIONS_DURATION_SEC)]
+                buildError:error];
+      }
+      if (nil == step.record) {
+        [NSThread sleepForTimeInterval:step.delay];
+        continue;
+      }
+      areModifiersPressed |= step.beginsPersistentState;
+      if (![AMXCUIDeviceWrapper.sharedDevice synthesizeEvent:step.record timeout:remaining error:error]) {
+        return NO;
+      }
+      if (step.endsPersistentState) {
+        areModifiersPressed = NO;
+      }
+    }
+    return YES;
+  } @finally {
+    if (areModifiersPressed) {
+      // Do not leave the modifiers pressed if something went wrong
+      [AMXCUIDeviceWrapper.sharedDevice synthesizeEvent:[self.class modifiersReleaseRecord] error:nil];
+    }
+  }
+}
+
++ (XCPointerEventPath *)modifiersPathWithFlags:(NSUInteger)flags
+{
+  XCPointerEventPath *path = [[XCPointerEventPath alloc] initForTextInput];
+  // Presses/releases the actual modifier keys
+  [path setModifiers:flags mergeWithCurrentModifierFlags:NO atOffset:0];
+  return path;
+}
+
++ (XCSynthesizedEventRecord *)modifiersReleaseRecord
+{
+  XCSynthesizedEventRecord *record = [[XCSynthesizedEventRecord alloc] initWithName:@"W3C Key Release"];
+  [record addPointerEventPath:[self modifiersPathWithFlags:0]];
+  [self setPersistentState:@"endsPersistentState" ofRecord:record];
+  return record;
+}
+
++ (void)setPersistentState:(NSString *)key ofRecord:(XCSynthesizedEventRecord *)record
+{
+  @try {
+    [record setValue:@YES forKey:key];
+  } @catch (NSException *exception) {
+    [FBLogger logFmt:@"Cannot set '%@' for the event record: %@", key, exception.reason];
+  }
+}
+
+- (nullable NSArray<NSString *> *)validatedActionIdsWithMapping:(NSMutableDictionary<NSString *, NSDictionary<NSString *, id> *> *)actionsMapping
+                                                          error:(NSError **)error
+{
   NSMutableArray<NSString *> *actionIds = [NSMutableArray new];
   for (NSDictionary<NSString *, id> *action in self.actions) {
     id actionId = [action objectForKey:FB_KEY_ID];
@@ -974,6 +1219,17 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
 
     [actionIds addObject:actionId];
     [actionsMapping setObject:action forKey:actionId];
+  }
+  return actionIds.copy;
+}
+
+- (nullable XCSynthesizedEventRecord *)synthesizeWithError:(NSError **)error
+{
+  XCSynthesizedEventRecord *eventRecord = [[XCSynthesizedEventRecord alloc] initWithName:@"W3C Touch Action"];
+  NSMutableDictionary<NSString *, NSDictionary<NSString *, id> *> *actionsMapping = [NSMutableDictionary new];
+  NSArray<NSString *> *actionIds = [self validatedActionIdsWithMapping:actionsMapping error:error];
+  if (nil == actionIds) {
+    return nil;
   }
   for (NSString *actionId in actionIds.copy) {
     NSDictionary<NSString *, id> *actionDescription = [actionsMapping objectForKey:actionId];

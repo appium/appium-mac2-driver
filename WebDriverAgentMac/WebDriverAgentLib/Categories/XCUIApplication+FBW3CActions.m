@@ -14,20 +14,21 @@
 #import "FBErrorBuilder.h"
 #import "FBW3CActionsSynthesizer.h"
 
-#define MAX_ACTIONS_DURATION_SEC 300
-
 @implementation XCUIApplication (FBW3CActions)
 
 - (BOOL)fb_performW3CActions:(NSArray *)actions
                 elementCache:(FBElementCache *)elementCache
                        error:(NSError **)error
 {
-  FBBaseActionsSynthesizer *synthesizer = [[FBW3CActionsSynthesizer alloc] initWithActions:actions
+  FBW3CActionsSynthesizer *synthesizer = [[FBW3CActionsSynthesizer alloc] initWithActions:actions
                                                                             forApplication:self
                                                                               elementCache:elementCache
                                                                                      error:error];
   if (nil == synthesizer) {
     return NO;
+  }
+  if (synthesizer.isKeyOnly) {
+    return [synthesizer performKeyActionsWithError:error];
   }
   XCSynthesizedEventRecord *eventRecord = [synthesizer synthesizeWithError:error];
   return nil == eventRecord ? NO : [AMXCUIDeviceWrapper.sharedDevice synthesizeEvent:eventRecord error:error];

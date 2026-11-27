@@ -140,6 +140,13 @@ withApplication:(NSString *)bundleId
 - (BOOL)synthesizeEvent:(XCSynthesizedEventRecord *)event
                   error:(NSError **)error
 {
+  return [self synthesizeEvent:event timeout:MAX_ACTIONS_DURATION_SEC error:error];
+}
+
+- (BOOL)synthesizeEvent:(XCSynthesizedEventRecord *)event
+                timeout:(NSTimeInterval)timeout
+                  error:(NSError **)error
+{
   __block NSError *internalError = nil;
   dispatch_semaphore_t sem = dispatch_semaphore_create(0);
   id<XCUIEventSynthesizing> eventSynthesizer = [self eventSynthesizer];
@@ -150,10 +157,10 @@ withApplication:(NSString *)bundleId
     }
     dispatch_semaphore_signal(sem);
   }];
-  BOOL didTimeout = 0 != dispatch_semaphore_wait(sem, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MAX_ACTIONS_DURATION_SEC * NSEC_PER_SEC)));
+  BOOL didTimeout = 0 != dispatch_semaphore_wait(sem, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC)));
   if (didTimeout) {
     return [[[FBErrorBuilder builder]
-             withDescriptionFormat:@"Cannot perform actions within %@ seconds timeout", @(MAX_ACTIONS_DURATION_SEC)]
+             withDescriptionFormat:@"Cannot perform actions within %@ seconds timeout", @(timeout)]
             buildError:error];;
   }
   if (nil != internalError) {

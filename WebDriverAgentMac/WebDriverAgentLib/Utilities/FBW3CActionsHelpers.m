@@ -66,7 +66,7 @@ BOOL FBIsMetaModifier(NSString *value)
 
 NSNumber* AMToMetaModifier(NSString *value)
 {
-  if (0 == value.length) {
+  if (1 != value.length) {
     return nil;
   }
 
@@ -75,12 +75,16 @@ NSNumber* AMToMetaModifier(NSString *value)
     case 0xE000:
       return @(XCUIKeyModifierNone);
     case 0xE03D:
+    case 0xE053:
       return @(XCUIKeyModifierCommand);
     case 0xE009:
+    case 0xE051:
       return @(XCUIKeyModifierControl);
     case 0xE00A:
+    case 0xE052:
       return @(XCUIKeyModifierOption);
     case 0xE008:
+    case 0xE050:
       return @(XCUIKeyModifierShift);
     default:
       return nil;

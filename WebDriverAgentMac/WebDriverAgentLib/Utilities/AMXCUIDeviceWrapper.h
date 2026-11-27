@@ -68,6 +68,18 @@ withApplication:(NSString *)bundleId
                   error:(NSError **)error;
 
 /**
+ Synthesizes an input event according to the given event spec
+
+ @param event The event spec
+ @param timeout The maximum time in seconds to wait for the event to be performed
+ @param error If there is an error, upon return contains an NSError object that describes the problem.
+ @return YES if the operation was successful
+ */
+- (BOOL)synthesizeEvent:(XCSynthesizedEventRecord *)event
+                timeout:(NSTimeInterval)timeout
+                  error:(NSError **)error;
+
+/**
  Runs the block with the given implicit event confirmation interval
  (how long XCTest holds an event waiting for an accessibility confirmation).
  The previous value is restored afterwards. No-op if the interval is not supported.
