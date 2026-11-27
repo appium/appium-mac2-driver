@@ -40,3 +40,7 @@ The values you can use for `keyModifierFlags` are therefore as follows:
 
 You can also combine multiple modifier keys using the bitwise OR (`|`) operator. For example, in
 order to apply the Control and Shift modifiers during a click, set `keyModifierFlags` to `(1 << 1) | (1 << 2)`.
+
+!!! note
+    Arrow-key shortcuts handled by the system, such as Control+UpArrow (Mission Control), only match if the
+    `Function` modifier (`1 << 5`) is set, like on a real keyboard. In this case set `modifierFlags` to `(1 << 2) | (1 << 5)`.

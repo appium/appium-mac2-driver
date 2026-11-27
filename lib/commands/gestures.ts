@@ -364,10 +364,21 @@ export async function macosClickAndDragAndHold(
  * @param elementId - Uuid of the element to send the keys to.
  *                 If unset then keys are sent to the current application
  *                 under test.
+ * @param confirmationInterval - Seconds XCTest holds each event waiting for an accessibility
+ *                 confirmation (a few seconds by default). Set a small value, e.g. 0.05, for
+ *                 shortcuts that must be tapped quickly, like Control+Function+UpArrow.
  */
-export async function macosKeys(this: Mac2Driver, keys: (KeyOptions | string)[], elementId?: string): Promise<unknown> {
+export async function macosKeys(
+  this: Mac2Driver,
+  keys: (KeyOptions | string)[],
+  elementId?: string,
+  confirmationInterval?: number,
+): Promise<unknown> {
   const url = elementId ? `/wda/element/${elementId}/keys` : '/wda/keys';
-  return await this.wda.proxy.command(url, 'POST', {keys});
+  return await this.wda.proxy.command(url, 'POST', {
+    keys,
+    ...(confirmationInterval === undefined ? {} : {confirmationInterval}),
+  });
 }
 
 /**

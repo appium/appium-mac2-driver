@@ -20,6 +20,7 @@
 #import "FBScreenRecordingContainer.h"
 #import "FBScreenRecordingPromise.h"
 #import "AMVideoRecorder.h"
+#import "AMGatekeeperUtils.h"
 
 NSString *const FINDER_BUNDLE_ID = @"com.apple.finder";
 
@@ -110,6 +111,7 @@ static FBSession *_activeSession = nil;
 {
   XCUIApplication *app = [self applicationWithBundleId:bundleIdentifier orPath:path];
   if (app.state <= XCUIApplicationStateNotRunning) {
+    [self.class assertLaunchIsNotBlockedForBundleId:bundleIdentifier path:path];
     app.launchArguments = arguments ?: @[];
     app.launchEnvironment = environment ?: @{};
     [app launch];
@@ -127,6 +129,9 @@ static FBSession *_activeSession = nil;
   XCUIApplication *app = isCurrentApp
     ? self.testedApplication
     : [self applicationWithBundleId:bundleIdentifier orPath:path];
+  if (app.state <= XCUIApplicationStateNotRunning) {
+    [self.class assertLaunchIsNotBlockedForBundleId:bundleIdentifier path:path];
+  }
   [app activate];
   if (!isCurrentApp) {
     self.testedApplication = app;
@@ -173,6 +178,14 @@ static FBSession *_activeSession = nil;
     return [appUrl.path compare:expectedUrl.path] == NSOrderedSame;
   }
   return nil != bundleId && [self.testedApplication.am_bundleID isEqualToString:bundleId];
+}
+
++ (void)assertLaunchIsNotBlockedForBundleId:(nullable NSString *)bundleId path:(nullable NSString *)path
+{
+  NSString *reason = [AMGatekeeperUtils blockingReasonForAppWithBundleId:bundleId path:path];
+  if (nil != reason) {
+    @throw [NSException exceptionWithName:FBApplicationBlockedException reason:reason userInfo:@{}];
+  }
 }
 
 - (XCUIApplication *)applicationWithBundleId:(nullable NSString *)bundleId

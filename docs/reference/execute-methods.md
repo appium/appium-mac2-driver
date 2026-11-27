@@ -369,12 +369,14 @@ method.
 | --- | --- | --- |
 | `elementId?`| `string` | Identifier of the element to send the keys to. If not set, keys are sent to the application under test. |
 | `keys` | `Array<string|Record>` | Array of keys to type. A single key can be either a string (the key itself or an [XCUIKeyboardKey constant](https://developer.apple.com/documentation/xcuiautomation/xcuikeyboardkey)), or an object with the `key` and `modifierFlags` entries. Refer to the [Key Modifier Flags guide](../guides/key-modifier-flags.md) for more details. |
+| `confirmationInterval?`| `number` | Seconds XCTest holds each key event waiting for an accessibility confirmation (several seconds by default). Toggle-style system shortcuts, such as Mission Control, close again when the key is released, so set a small value (e.g. `0.05`) to tap the key quickly. Applied for the duration of the call only. |
 
 #### Key Examples
 
 * `['h', 'i']`
 * `[{key: 'h', modifierFlags: 1 << 1}, {key: 'i', modifierFlags: 1 << 2}]`
 * `['XCUIKeyboardKeyEscape']`
+* `{keys: [{key: 'XCUIKeyboardKeyUpArrow', modifierFlags: (1 << 2) | (1 << 5)}], confirmationInterval: 0.05}` (opens Mission Control)
 
 #### Response
 
@@ -421,8 +423,8 @@ This method influences the state of the [Application Under Test](../guides/app-u
 
 ### macos: activateApp
 
-Activates the application with the given bundle identifier/path. An exception is thrown if the app
-cannot be found, or the app is not running. Based on XCTest's
+Activates the application with the given bundle identifier/path, or launches it if it is not
+running. An exception is thrown if the app cannot be found. Based on XCTest's
 [`activate`](https://developer.apple.com/documentation/xcuiautomation/xcuiapplication/activate())
 method.
 

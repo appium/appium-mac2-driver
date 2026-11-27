@@ -79,6 +79,17 @@ withApplication:(NSString *)bundleId
                 timeout:(NSTimeInterval)timeout
                   error:(NSError **)error;
 
+/**
+ Runs the block with the given implicit event confirmation interval
+ (how long XCTest holds an event waiting for an accessibility confirmation).
+ The previous value is restored afterwards. No-op if the interval is not supported.
+
+ @param seconds The interval in seconds
+ @param block The code to run
+ */
+- (void)withImplicitEventConfirmationInterval:(NSTimeInterval)seconds
+                                        block:(void (^)(void))block;
+
 @end
 
 NS_ASSUME_NONNULL_END

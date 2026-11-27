@@ -57,6 +57,23 @@
   return [self.xcuiDeviceInstance valueForKey:@"eventSynthesizer"];
 }
 
+- (void)withImplicitEventConfirmationInterval:(NSTimeInterval)seconds
+                                        block:(void (^)(void))block
+{
+  id<XCUIEventSynthesizing> synthesizer = [self eventSynthesizer];
+  if (![(NSObject *)synthesizer respondsToSelector:@selector(setImplicitEventConfirmationIntervalForCurrentContext:)]) {
+    block();
+    return;
+  }
+  double previous = synthesizer.implicitEventConfirmationIntervalForCurrentContext;
+  synthesizer.implicitEventConfirmationIntervalForCurrentContext = seconds;
+  @try {
+    block();
+  } @finally {
+    synthesizer.implicitEventConfirmationIntervalForCurrentContext = previous;
+  }
+}
+
 - (BOOL)openUrl:(NSURL *)url error:(NSError **)error
 {
   id<XCUIApplicationProcessManaging> platformApplicationManager = [self platformApplicationManager];
