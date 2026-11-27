@@ -1,3 +1,10 @@
+## [5.2.1](https://github.com/appium/appium-mac2-driver/compare/v5.2.0...v5.2.1) (2026-11-27)
+
+### Bug Fixes
+
+* Fail fast if the app launch is blocked by Gatekeeper ([#467](https://github.com/appium/appium-mac2-driver/issues/467)) ([fd0a8fd](https://github.com/appium/appium-mac2-driver/commit/fd0a8fda5e8532eebe40fa405f025783862857da))
+* make W3C key actions hold modifiers and honor pauses ([#465](https://github.com/appium/appium-mac2-driver/issues/465)) ([2aad90b](https://github.com/appium/appium-mac2-driver/commit/2aad90b317d4753533479c311ec1170ef119f79b))
+
 ## [5.2.0](https://github.com/appium/appium-mac2-driver/compare/v5.1.2...v5.2.0) (2026-11-26)
 
 ### Features
