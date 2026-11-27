@@ -422,14 +422,22 @@ static NSString *const FB_KEY_ACTIONS = @"actions";
 @end
 
 
+// Left and right modifier keys share one flag, so the pressed keys are tracked by their values.
 // The NULL key (zero modifier) releases all modifiers
-static NSUInteger FBApplyModifier(NSUInteger current, NSNumber *modifier, BOOL isKeyDown)
+static NSUInteger FBApplyModifier(NSMutableSet<NSString *> *pressedKeys, NSString *value, NSNumber *modifier, BOOL isKeyDown)
 {
-  NSUInteger flags = [modifier unsignedIntValue];
-  if (0 == flags) {
-    return 0;
+  if (0 == [modifier unsignedIntValue]) {
+    [pressedKeys removeAllObjects];
+  } else if (isKeyDown) {
+    [pressedKeys addObject:value];
+  } else {
+    [pressedKeys removeObject:value];
   }
-  return isKeyDown ? (current | flags) : (current & ~flags);
+  NSUInteger flags = 0;
+  for (NSString *key in pressedKeys) {
+    flags |= [AMToMetaModifier(key) unsignedIntValue];
+  }
+  return flags;
 }
 
 @implementation FBW3CKeyItem
@@ -454,19 +462,21 @@ static NSUInteger FBApplyModifier(NSUInteger current, NSNumber *modifier, BOOL i
                           lastItemIndex:(NSUInteger)lastItemIndex
 {
   NSUInteger result = 0;
+  NSMutableSet<NSString *> *pressedKeys = [NSMutableSet set];
   for (NSUInteger index = 0; index <= lastItemIndex; index++) {
     FBW3CKeyItem *item = [allItems objectAtIndex:index];
     NSNumber *modifier = nil;
+    NSString *value = nil;
     BOOL isKeyDown = [item isKindOfClass:FBKeyDownItem.class];
     BOOL isKeyUp = !isKeyDown && [item isKindOfClass:FBKeyUpItem.class];
     if (isKeyDown || isKeyUp) {
-      NSString *value = [item performSelector:@selector(value)];
+      value = [item performSelector:@selector(value)];
       modifier = AMToMetaModifier(value);
     }
     if (nil == modifier) {
       continue;
     }
-    result = FBApplyModifier(result, modifier, isKeyDown);
+    result = FBApplyModifier(pressedKeys, value, modifier, isKeyDown);
   }
   return result;
 }
@@ -1055,6 +1065,7 @@ static NSUInteger FBApplyModifier(NSUInteger current, NSNumber *modifier, BOOL i
   // thanks to the persistent state.
   NSMutableArray<FBKeyActionStep *> *result = [NSMutableArray array];
   NSUInteger heldModifiers = 0;
+  NSMutableSet<NSString *> *pressedModifierKeys = [NSMutableSet set];
   double totalPausesMs = 0;
   for (FBW3CKeyItem *item in items) {
     FBKeyActionStep *step = [FBKeyActionStep new];
@@ -1078,7 +1089,7 @@ static NSUInteger FBApplyModifier(NSUInteger current, NSNumber *modifier, BOOL i
     NSNumber *modifier = AMToMetaModifier(value);
     XCSynthesizedEventRecord *record = [[XCSynthesizedEventRecord alloc] initWithName:@"W3C Key Action"];
     if (nil != modifier) {
-      NSUInteger newModifiers = FBApplyModifier(heldModifiers, modifier, isKeyDown);
+      NSUInteger newModifiers = FBApplyModifier(pressedModifierKeys, value, modifier, isKeyDown);
       if (newModifiers == heldModifiers) {
         continue;
       }
